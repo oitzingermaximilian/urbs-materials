@@ -27,8 +27,8 @@ class decommissioned_capacity_rule(AbstractConstraint):
         else:
             _exogenous = 2 * 1000
 
-        # decide which branch
-        if stf - m.l[location, tech] >= value(m.y0):
+        # decide which branch - for wind technologies, we need to consider their 20-year lifetime
+        if stf >= value(m.y0) + m.l[location, tech]:  # Changed condition to properly handle lifetime
             expr = (
                 m.capacity_dec[stf, location, tech]
                 == m.capacity_ext_new[stf - m.l[location, tech], location, tech]

@@ -329,18 +329,23 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         6: 212572.8099,
     }
 
-    # Initialize m.P_sec TODO reenable as soon as problem was found! Propably equation 1 the problem with multi dimensional definition of P_sec
-    # m.P_sec = pyomo.Param(
-    #    m.nsteps_sec, m.tech, m.location, initialize=variation_14_updated
-    # )
+    # Cost reduction for wind onshore and offshore (tripled values)
+    wind_cost_reduction = {
+        0: 0,
+        1: 502030,
+        2: 855805,
+        3: 1105105,
+        4: 1280785,
+        5: 1404584,
+        6: 1491824,
+    }
 
     # Initialize WITHOUT stf dimension
     m.P_sec = pyomo.Param(
         m.location,  # Locations
         m.tech,  # Technologies
         m.nsteps_sec,  # Steps
-        initialize=lambda m, loc, tech, n: variation_10[n],
-        default=0,
+        initialize=lambda m, loc, tech, n: wind_cost_reduction[n] if tech in ['windon', 'windoff'] else variation_10[n]
     )
 
     # param def for Capacity needed to reach next step

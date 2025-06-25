@@ -463,7 +463,7 @@ def wait_for_excel_sheets(path, expected_sheets, timeout=60):  # TODO re-add if 
     raise TimeoutError(f"Expected sheets not found in {path} after {timeout} seconds.")
 
 
-plot_nzia_benchmark("result/urbs-20250611T1324/result_scenario_base.xlsx")
+#plot_nzia_benchmark("result/urbs-20250611T1324/result_scenario_base.xlsx")
 # plot_all_scenarios("result")
 # plot_scrap("result/urbs-20250520T1651/result_scenario_base.xlsx")
 # plot_installed_capacity("result/urbs-20250520T1651/result_scenario_base.xlsx")
