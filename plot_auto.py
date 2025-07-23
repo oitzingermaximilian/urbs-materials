@@ -8,16 +8,19 @@ import seaborn as sns
 import numpy as np
 
 # Set the font sizes for all plots
-plt.rcParams.update({
-    'font.size': 12,              # General font size
-    'axes.labelsize': 14,         # Axis labels
-    'axes.titlesize': 14,         # Title size reduced
-    'xtick.labelsize': 12,        # X-axis tick labels
-    'ytick.labelsize': 12,        # Y-axis tick labels
-    'legend.fontsize': 12,        # Legend font size
-    'figure.titlesize': 14,       # Figure title size reduced
-    'figure.figsize': (12, 8),    # Default figure size
-})
+plt.rcParams.update(
+    {
+        "font.size": 12,  # General font size
+        "axes.labelsize": 14,  # Axis labels
+        "axes.titlesize": 14,  # Title size reduced
+        "xtick.labelsize": 12,  # X-axis tick labels
+        "ytick.labelsize": 12,  # Y-axis tick labels
+        "legend.fontsize": 12,  # Legend font size
+        "figure.titlesize": 14,  # Figure title size reduced
+        "figure.figsize": (12, 8),  # Default figure size
+    }
+)
+
 
 ###########-------UNIT CONVERSION-------###########
 def mwh_to_bcm(mwh, energy_content_mj_per_m3=35.8):
@@ -55,7 +58,7 @@ def plot_nzia_benchmark(output_file_path):
         set().union(*(df["key_1"].unique() for df in data_frames.values()))
     )
 
-    years = [2025, 2030, 2035, 2040, 2045, 2050]
+    years = [2025, 2030, 2035, 2040]
 
     for tech in all_techs:
         data = {}
@@ -102,11 +105,11 @@ def plot_nzia_benchmark(output_file_path):
         )
         ax_rel.set_xlabel("Year", labelpad=10)
         ax_rel.set_xticks(range(len(years)))
-        ax_rel.set_xticklabels(years, rotation=45, ha='right')
+        ax_rel.set_xticklabels(years, rotation=45, ha="right")
         ax_rel.set_yticks([0, 0.25, 0.5, 0.75, 1.0])
         ax_rel.set_yticklabels(["0%", "10%", "20%", "30%", "40%"])
         ax_rel.set_ylim(0, 1.2)
-        ax_rel.legend(labels, frameon=True, loc='upper right')  # Legend inside
+        ax_rel.legend(labels, frameon=True, loc="upper right")  # Legend inside
         ax_rel.grid(axis="y", alpha=0.3)
 
         # ABSOLUTE PLOT
@@ -129,8 +132,8 @@ def plot_nzia_benchmark(output_file_path):
         ax_abs.set_ylabel("Capacity (GW)", labelpad=10)
         ax_abs.set_xlabel("Year", labelpad=10)
         ax_abs.set_xticks(range(len(years)))
-        ax_abs.set_xticklabels(years, rotation=45, ha='right')
-        ax_abs.legend(labels, frameon=True, loc='upper right')  # Legend inside
+        ax_abs.set_xticklabels(years, rotation=45, ha="right")
+        ax_abs.legend(labels, frameon=True, loc="upper right")  # Legend inside
         ax_abs.grid(axis="y", alpha=0.3)
 
         # Save figures
@@ -170,7 +173,7 @@ def plot_scrap(output_file_path):
     df["value"] = df["value"] / 1e6
 
     # Define the year range
-    years = list(range(2024, 2051))
+    years = list(range(2024, 2041))
 
     # Get unique technologies
     techs = df["key_1"].unique()
@@ -192,8 +195,8 @@ def plot_scrap(output_file_path):
         ax.set_title(f"Scrap volume – {tech}")
         ax.set_xlabel("Year")
         ax.set_ylabel("Scrap [Mt]")
-        ax.set_xlim(2023, 2051)
-        # ax.set_xticks(range(2024, 2051, 2))  # Only show actual data years
+        ax.set_xlim(2023, 2041)
+        ax.set_xticks([2025, 2030, 2035, 2040])  # Only show actual data years
         ax.set_ylim(0, max(series.values) * 1.1 if series.values.any() else 1)
         ax.grid(True, linestyle="--", alpha=0.3)
 
@@ -224,7 +227,7 @@ def plot_balance_created(output_file_path):
     )
     pivot_df = pivot_df.sort_index()
     pivot_df = pivot_df / 1000  # MWh to GWh
-    years = [2025, 2030, 2035, 2040, 2045, 2050]
+    years = [2025, 2030, 2035, 2040]
     pivot_df = pivot_df.reindex(years).fillna(0)
 
     # Sort columns consistently
@@ -251,9 +254,9 @@ def plot_balance_created(output_file_path):
     ax_abs.set_ylabel("Capacity (GW)")
     ax_abs.set_xlabel("Year")
     ax_abs.set_xticks(range(len(years)))
-    ax_abs.set_xticklabels(years, rotation=45, ha='right')
+    ax_abs.set_xticklabels(years, rotation=45, ha="right")
     ax_abs.grid(axis="y", alpha=0.3)
-    ax_abs.legend(title="Technology", frameon=True, loc='upper right')  # Legend inside
+    ax_abs.legend(title="Technology", frameon=True, loc="upper right")  # Legend inside
 
     fig_abs.tight_layout()
     fig_abs.savefig(
@@ -280,10 +283,10 @@ def plot_balance_created(output_file_path):
     ax_rel.set_ylabel("Share of Total Capacity")
     ax_rel.set_xlabel("Year")
     ax_rel.set_xticks(range(len(years)))
-    ax_rel.set_xticklabels(years, rotation=45, ha='right')
+    ax_rel.set_xticklabels(years, rotation=45, ha="right")
     ax_rel.set_yticklabels(["{:.0%}".format(y) for y in ax_rel.get_yticks()])
     ax_rel.grid(axis="y", alpha=0.3)
-    ax_rel.legend(title="Technology", frameon=True, loc='upper right')  # Legend inside
+    ax_rel.legend(title="Technology", frameon=True, loc="upper right")  # Legend inside
 
     fig_rel.tight_layout()
     fig_rel.savefig(
@@ -313,7 +316,7 @@ def lineplot_fuels(output_file_path):
     df = pd.read_excel(output_file_path, sheet_name=sheet_name)
 
     # Define the year range
-    years = list(range(2024, 2051))
+    years = list(range(2024, 2041))
 
     # Get unique technologies
     df["key_2"] = df["key_2"].astype(str).str.strip().str.upper()
@@ -342,7 +345,8 @@ def lineplot_fuels(output_file_path):
         ax.set_title(f"Fuel Demand – {fuel}")
         ax.set_xlabel("Year")
         ax.set_ylabel("Demand (bcm)")
-        ax.set_xlim(2023, 2051)
+        ax.set_xlim(2023, 2041)
+        ax.set_xticks([2025, 2030, 2035, 2040])
         ax.set_ylim(0, max(series.values) * 1.1)
         ax.grid(True, linestyle="--", alpha=0.3)
 
@@ -374,7 +378,7 @@ def commodities_demand(output_file_path):
     )
     pivot_df = pivot_df.sort_index()
     pivot_df = pivot_df
-    years = [2025, 2030, 2035, 2040, 2045, 2050]
+    years = [2025, 2030, 2035, 2040]
     pivot_df = pivot_df.reindex(years).fillna(0)
 
     # Sort columns consistently
@@ -401,9 +405,9 @@ def commodities_demand(output_file_path):
     ax_abs.set_ylabel("unit")
     ax_abs.set_xlabel("Year")
     ax_abs.set_xticks(range(len(years)))
-    ax_abs.set_xticklabels(years, rotation=45, ha='right')
+    ax_abs.set_xticklabels(years, rotation=45, ha="right")
     ax_abs.grid(axis="y", alpha=0.3)
-    ax_abs.legend(title="Fuel Type", frameon=True, loc='upper right')  # Legend inside
+    ax_abs.legend(title="Fuel Type", frameon=True, loc="upper right")  # Legend inside
 
     fig_abs.tight_layout()
     fig_abs.savefig(
@@ -424,23 +428,25 @@ def plot_facility_utilization(output_file_path):
     os.makedirs(output_dir, exist_ok=True)
 
     # Read data from both sheets
-    total_capacity = pd.read_excel(output_file_path, sheet_name='Total Cap Fac')
-    used_capacity = pd.read_excel(output_file_path, sheet_name='capacity_ext_eusecondary')
+    total_capacity = pd.read_excel(output_file_path, sheet_name="Total Cap Fac")
+    used_capacity = pd.read_excel(
+        output_file_path, sheet_name="capacity_ext_eusecondary"
+    )
 
     # Define the years we want to plot
-    years = [2025, 2030, 2035, 2040, 2045, 2050]
+    years = [2025, 2030, 2035, 2040]
 
     # Extract locations and technologies
-    locations = total_capacity['key_0'].unique()
-    technologies = total_capacity['key_1'].unique()
+    locations = total_capacity["key_0"].unique()
+    technologies = total_capacity["key_1"].unique()
 
     # Create a figure for each technology
     for tech in technologies:
         fig, ax = plt.subplots(figsize=(10, 6))
 
         # Filter data for current technology
-        tech_total = total_capacity[total_capacity['key_1'] == tech]
-        tech_used = used_capacity[used_capacity['key_1'] == tech]
+        tech_total = total_capacity[total_capacity["key_1"] == tech]
+        tech_used = used_capacity[used_capacity["key_1"] == tech]
 
         # Calculate positions for bars
         n_years = len(years)
@@ -453,56 +459,111 @@ def plot_facility_utilization(output_file_path):
         # Plot bars for each location
         for i, loc in enumerate(locations):
             # Calculate x positions for this location's bars
-            x = indices + (i - (n_locations-1)/2) * (width + 0.1)
+            x = indices + (i - (n_locations - 1) / 2) * (width + 0.1)
 
             # Get values for each year
-            total_vals = [tech_total[(tech_total['key_0'] == loc) &
-                                   (tech_total['year'] == year)]['value'].values[0] / 1000
-                         if len(tech_total[(tech_total['key_0'] == loc) &
-                                         (tech_total['year'] == year)]) > 0 else 0
-                         for year in years]
+            total_vals = [
+                tech_total[(tech_total["key_0"] == loc) & (tech_total["year"] == year)][
+                    "value"
+                ].values[0]
+                / 1000
+                if len(
+                    tech_total[
+                        (tech_total["key_0"] == loc) & (tech_total["year"] == year)
+                    ]
+                )
+                > 0
+                else 0
+                for year in years
+            ]
 
-            used_vals = [tech_used[(tech_used['key_0'] == loc) &
-                                  (tech_used['year'] == year)]['value'].values[0] / 1000
-                        if len(tech_used[(tech_used['key_0'] == loc) &
-                                       (tech_used['year'] == year)]) > 0 else 0
-                        for year in years]
+            used_vals = [
+                tech_used[(tech_used["key_0"] == loc) & (tech_used["year"] == year)][
+                    "value"
+                ].values[0]
+                / 1000
+                if len(
+                    tech_used[(tech_used["key_0"] == loc) & (tech_used["year"] == year)]
+                )
+                > 0
+                else 0
+                for year in years
+            ]
 
             # Plot bars with thicker outlines
-            ax.bar(x, total_vals, width, label=f'Total Capacity {loc}' if i == 0 else "",
-                  color='lightgray', alpha=0.7, edgecolor='black', linewidth=1.5)
-            ax.bar(x, used_vals, width, label=f'Used Capacity {loc}' if i == 0 else "",
-                  color='darkblue', alpha=0.7, edgecolor='black', linewidth=1.5)
+            ax.bar(
+                x,
+                total_vals,
+                width,
+                label=f"Total Capacity {loc}" if i == 0 else "",
+                color="lightgray",
+                alpha=0.7,
+                edgecolor="black",
+                linewidth=1.5,
+            )
+            ax.bar(
+                x,
+                used_vals,
+                width,
+                label=f"Used Capacity {loc}" if i == 0 else "",
+                color="darkblue",
+                alpha=0.7,
+                edgecolor="black",
+                linewidth=1.5,
+            )
 
         # Customize the plot
-        ax.set_xlabel('Year', labelpad=10)
-        ax.set_ylabel('Capacity (GW)', labelpad=10)
-        ax.set_title(f'Facility Capacity Utilization - {tech}', pad=15)
+        ax.set_xlabel("Year", labelpad=10)
+        ax.set_ylabel("Capacity (GW)", labelpad=10)
+        ax.set_title(f"Facility Capacity Utilization - {tech}", pad=15)
         ax.set_xticks(indices)
-        ax.set_xticklabels(years, rotation=45, ha='right')
+        ax.set_xticklabels(years, rotation=45, ha="right")
 
         # Add legend
         handles = []
         labels = []
         for loc in locations:
-            handles.extend([
-                plt.Rectangle((0,0),1,1, color='lightgray', alpha=0.7, edgecolor='black', linewidth=1.5),
-                plt.Rectangle((0,0),1,1, color='darkblue', alpha=0.7, edgecolor='black', linewidth=1.5)
-            ])
-            labels.extend([f'Total Capacity {loc}', f'Used Capacity {loc}'])
+            handles.extend(
+                [
+                    plt.Rectangle(
+                        (0, 0),
+                        1,
+                        1,
+                        color="lightgray",
+                        alpha=0.7,
+                        edgecolor="black",
+                        linewidth=1.5,
+                    ),
+                    plt.Rectangle(
+                        (0, 0),
+                        1,
+                        1,
+                        color="darkblue",
+                        alpha=0.7,
+                        edgecolor="black",
+                        linewidth=1.5,
+                    ),
+                ]
+            )
+            labels.extend([f"Total Capacity {loc}", f"Used Capacity {loc}"])
 
-        ax.legend(handles, labels, frameon=True, loc='upper left', bbox_to_anchor=(1, 1))
+        ax.legend(
+            handles, labels, frameon=True, loc="upper left", bbox_to_anchor=(1, 1)
+        )
 
         # Add grid for better readability
-        ax.grid(axis='y', alpha=0.3)
+        ax.grid(axis="y", alpha=0.3)
 
         # Adjust layout to prevent legend cutoff
         plt.tight_layout()
 
         # Save the figure
         safe_tech_name = tech.replace(" ", "_").replace("/", "_")
-        plt.savefig(os.path.join(output_dir, f'facility_utilization_{safe_tech_name}.png'),
-                   dpi=300, bbox_inches='tight')
+        plt.savefig(
+            os.path.join(output_dir, f"facility_utilization_{safe_tech_name}.png"),
+            dpi=300,
+            bbox_inches="tight",
+        )
         plt.close(fig)
 
     print(f"✅ Facility utilization plots saved in {output_dir}")
@@ -559,13 +620,13 @@ def wait_for_excel_sheets(path, expected_sheets, timeout=60):  # TODO re-add if 
     raise TimeoutError(f"Expected sheets not found in {path} after {timeout} seconds.")
 
 
-#plot_nzia_benchmark("result/urbs-20250611T1324/result_scenario_base.xlsx")
+# plot_nzia_benchmark("result/urbs-20250611T1324/result_scenario_base.xlsx")
 # plot_all_scenarios("result")
 # plot_scrap("result/urbs-20250520T1651/result_scenario_base.xlsx")
 # plot_installed_capacity("result/urbs-20250520T1651/result_scenario_base.xlsx")
 # plot_commodities_demand("result/urbs-20250604T1424/result_scenario_base.xlsx")
-# commodities_demand("result/urbs-20250604T1424/result_scenario_base.xlsx")
-# lineplot_fuels("result/urbs-20250604T1424/result_scenario_base.xlsx")
+# commodities_demand("result/urbs-20250716T1015/result_scenario_base.xlsx")
+# lineplot_fuels("result/urbs-20250716T1015/result_scenario_base.xlsx")
 
 # plot_balance_created("result/urbs-20250604T1538/result_scenario_base.xlsx")
-#plot_facility_utilization("result/urbs-20250625T2055/result_scenario_base.xlsx")
+# plot_facility_utilization("result/urbs-20250716T1015/result_scenario_base.xlsx")

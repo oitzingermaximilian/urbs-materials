@@ -41,7 +41,7 @@ def read_carry_over_from_excel(result_path, scenario_name):
         pricereduction_sec_sheet,
         scrap_sheet,
         facility_sheet,
-        facility_cap
+        facility_cap,
     ]:
         df["stf"] = df["stf"].fillna(method="ffill")
         if "location" in df.columns:
@@ -57,7 +57,7 @@ def read_carry_over_from_excel(result_path, scenario_name):
         "capacity_ext_stock",
         "capacity_ext_stock_imported",
         "newly_added_capacity",
-        "capacity_facility_eusecondary"
+        "capacity_facility_eusecondary",
     ]
     carryovers = {}
 

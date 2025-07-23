@@ -86,7 +86,9 @@ def get_constants(instance):
     print("Cumulative sum by (location, tech) over time:")
     print(secondary_cumulative_capacity_df)
 
-    facility_cumulative_capacity_df = get_entities(instance, ["capacity_facility_cumulative"])
+    facility_cumulative_capacity_df = get_entities(
+        instance, ["capacity_facility_cumulative"]
+    )
 
     bext = get_entity(instance, "balance_ext")
     # print("bext", bext)
@@ -111,11 +113,14 @@ def get_constants(instance):
     # print("e pro out df", e_pro_out_df)
     scrapdf = get_entity(instance, "capacity_scrap_total")
     decomdf = get_entity(instance, "capacity_dec")
-    facilitiesdf= get_entities(instance,[
+    facilitiesdf = get_entities(
+        instance,
+        [
             "capacity_facility_eusecondary",
             "capacity_ext_eusecondary",
             "capacity_inactive_eusecondary",
-        ])
+        ],
+    )
 
     #####Process df's to be used in report sheets
 
@@ -332,7 +337,7 @@ def get_constants(instance):
         pricereduction_sec,
         secondary_cumulative_capacity_df,
         facilitiesdf,
-        facility_cumulative_capacity_df
+        facility_cumulative_capacity_df,
     )
 
 

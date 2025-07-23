@@ -97,7 +97,7 @@ for filename in os.listdir(result_dir):
             # Label specific years, keeping other years unlabeled
             ax.set_xticklabels(
                 [
-                    str(year) if year in [2025, 2030, 2035, 2040, 2045, 2050] else ""
+                    str(year) if year in [2025, 2030, 2035, 2040] else ""
                     for year in years
                 ],
                 fontsize=17,
@@ -210,7 +210,7 @@ for filename in os.listdir(result_dir):
                 color=[colors.get(col, "#D3D3D3") for col in df_plot.columns],
             )
 
-            years_of_interest = [2024, 2030, 2035, 2040, 2045, 2050]
+            years_of_interest = [2024, 2030, 2035, 2040]
 
             ax.set_xticks(range(len(df_plot.index)))  # Set ticks for all years
             ax.set_xticklabels(
@@ -313,7 +313,7 @@ for filename in os.listdir(result_dir):
             plt.ylabel("Total Capacity (GW)", fontsize=16)
             plt.xlabel("")
 
-            years_of_interest = [2024, 2030, 2035, 2040, 2045, 2050]
+            years_of_interest = [2024, 2030, 2035, 2040]
             ax_solar.set_xticks(
                 range(len(df_solar_pivot.index))
             )  # Set ticks for all years
@@ -399,7 +399,7 @@ for filename in os.listdir(result_dir):
             plt.ylabel("Total Capacity (GW)", fontsize=16)
             plt.xlabel("")
 
-            years_of_interest = [2024, 2030, 2035, 2040, 2045, 2050]
+            years_of_interest = [2024, 2030, 2035, 2040]
             ax_solar.set_xticks(
                 range(len(df_solar_pivot.index))
             )  # Set ticks for all years
@@ -521,7 +521,7 @@ for filename in os.listdir(result_dir):
             plt.xlabel("")
 
             # Define the years for x-ticks
-            years_of_interest = [2024, 2030, 2035, 2040, 2045, 2050]
+            years_of_interest = [2024, 2030, 2035, 2040]
             # Set ticks and labels for the x-axis
             ax.set_xticks(range(len(df_pivot.index)))  # Set ticks for all years
             ax.set_xticklabels(
@@ -582,7 +582,7 @@ for filename in os.listdir(result_dir):
                 plt.ylabel("Total System Cost in Billion €", fontsize=16)
 
                 # Set ticks for specific years with empty labels for others
-                specific_years = [2024, 2030, 2035, 2040, 2045, 2050]
+                specific_years = [2024, 2030, 2035, 2040]
                 tick_labels = [
                     str(int(year)) if year in specific_years else ""
                     for year in df_total_costs["stf"]

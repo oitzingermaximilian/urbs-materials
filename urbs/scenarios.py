@@ -43,11 +43,21 @@ def scenario_base(data, data_urbsextensionv1):
     if "commodity" in data:
         co = data["commodity"]
         for stf in data["global_prop"].index.levels[0].tolist():
-            # Check if the year (stf) is before 2030
+            # Apply 4.052% yearly decrease for Piped Gas from 2024 to 2050
+            base_value = 319200000  # Starting value in 2024
+            yearly_decrease_factor = 0.95948  # 1 - 0.04052 = 0.95948
+
             if stf == 2024:
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = 319200000
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = 319200000
+                # Calculate the year difference from 2024
+                year_diff = stf - 2024
+                # Apply compound decrease
+                reduced_value = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = reduced_value
+                print(
+                    f"Set Piped Gas max for year {stf} to {reduced_value:.0f} (4.052% yearly decrease)"
+                )
 
     if "process-commodity" in data:
         proco = data["process-commodity"]
@@ -1406,6 +1416,8 @@ def scenario_21(
             instalable_capacity_dict,
             eu_primary_cost_dict,
             eu_secondary_cost_dict,
+            dcr_dict,
+            stocklvl_dict,
         )
     if "global_prop" in data:
         global_prop = data["global_prop"]
