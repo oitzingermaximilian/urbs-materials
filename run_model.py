@@ -263,44 +263,13 @@ for country, color in my_colors.items():
 
 # select scenarios to be run
 scenarios = [
-    ("scenario_base", urbs.scenario_base)
-    # urbs.scenario_base_minstock,
-    # urbs.scenario_1,
-    # urbs.scenario_2,
-    # urbs.scenario_3,
-    # urbs.scenario_4,
-    # urbs.scenario_6,
-    # urbs.scenario_7,
-    # urbs.scenario_8,
-    # urbs.scenario_10,
-    # urbs.scenario_11,
-    # urbs.scenario_12,
-    # urbs.scenario_13,
-    # urbs.scenario_14,
-    # urbs.scenario_15,
-    # urbs.scenario_16,
-    # urbs.scenario_17,
-    # urbs.scenario_18,
-    # urbs.scenario_19,
-    # urbs.scenario_20,
-    ##urbs.scenario_21,
-    # urbs.scenario_25,
-    # urbs.scenario_26,
-    # urbs.scenario_27,
-    # urbs.scenario_28,
-    # urbs.scenario_29,
-    # urbs.scenario_30,
-    # urbs.scenario_31,
-    # urbs.scenario_32,
-    # urbs.scenario_33,
-    # urbs.scenario_34
-    # urbs.scenario_35
-    # urbs.scenario_36,
-    # urbs.scenario_37
-    # urbs.scenario_38
-    # urbs.scenario_39
-    # urbs.scenario_40
-]
+    ("scenario_very_low", urbs.scenario_very_low),
+    ("scenario_low", urbs.scenario_low),
+    ("scenario_moderate", urbs.scenario_moderate),
+    ("scenario_high", urbs.scenario_high),
+    ("scenario_very_high", urbs.scenario_very_high),
+    #("scenario_base", urbs.scenario_base)
+    ]
 
 
 def run_perfect_foresight():
@@ -377,6 +346,16 @@ def run_myopic(window_length=5):
 
 
 def run_rolling_horizon(start_year=2024, end_year=2050, step=5):
+    # select scenarios to be run
+    scenarios = [
+        ("scenario_very_low", urbs.scenario_very_low),
+        ("scenario_low", urbs.scenario_low),
+        ("scenario_moderate", urbs.scenario_moderate),
+        ("scenario_high", urbs.scenario_high),
+        ("scenario_very_high", urbs.scenario_very_high),
+        # ("scenario_base", urbs.scenario_base)
+    ]
+
     for scenario_name, scenario in scenarios:
         all_carryovers = defaultdict(dict)
         windows = []
