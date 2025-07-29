@@ -161,10 +161,10 @@ class scrap_recycling_increase_rule(AbstractConstraint):
 class linearize_eu_secondary_cost_reduction(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
         # Apply scaling factor division for proper price reduction calculation using model parameter
-        # The reduction amount is: original_cost * (1 - remaining_price_factor)
+        # The reduction amount is: original_cost * remaining_price_factor
         expr = (
             m.eu_secondary_cost_reduction[stf, location, tech]
-            == m.EU_secondary_costs[stf, location, tech] * (1 - m.pricereduction_sec[stf, location, tech])
+            == m.EU_secondary_costs[stf, location, tech] * m.pricereduction_sec[stf, location, tech]
         )
         debug_print(f"[linearize_eu_cost] STF={stf} ➞ expr: {expr}")
         return expr
