@@ -22,18 +22,31 @@ plt.rcParams.update(
 # Define the base results path
 RESULTS_BASE_PATH = r"C:\Users\maxoi\OneDrive\Desktop\results_crm_paper"
 
-# Define learning rate scenarios - updated with all your LRs
+# Define learning rate scenarios - updated with all your LRs including LR6
 LEARNING_RATES = {
     "LR1": "1% Learning Rate",
     "LR3_5": "3.5% Learning Rate",
     "LR4": "4% Learning Rate",
     "LR5": "5% Learning Rate",
+    "LR6": "6% Learning Rate",
     "LR10": "10% Learning Rate",
     "LR25": "25% Learning Rate"
 }
 
-# Define price scenarios in order
-PRICE_SCENARIOS = ["very_low", "low", "moderate", "high", "very_high"]
+# Define price scenarios in order - updated to match CRM_Paper scenarios
+PRICE_SCENARIOS = [
+    "extremely_low",
+    "very_low",
+    "low",
+    "moderately_low",
+    "slightly_below_average",
+    "average",
+    "slightly_above_average",
+    "moderately_high",
+    "high",
+    "very_high",
+    "extremely_high"
+]
 
 def load_scenario_data(lr_folder, scenario, sheet_name):
     """Load data from a specific learning rate folder and scenario"""
