@@ -233,7 +233,7 @@ input_files = "urbs_intertemporal_2050"
 input_dir = "Input"
 input_path = os.path.join(input_dir, input_files)
 
-learning_rate = "LR6"
+learning_rate = "LR25"
 result_name = f"urbs-{learning_rate}"
 result_dir = urbs.prepare_result_directory(result_name)
 year = date.today().year

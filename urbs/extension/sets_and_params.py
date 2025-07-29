@@ -487,7 +487,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         m.location,  # Locations
         m.tech,  # Technologies
         m.nsteps_sec,  # Steps
-        initialize=lambda m, loc, tech, n: scaled_reduction6[n],
+        initialize=lambda m, loc, tech, n: scaled_reductions_25[n],
         doc="Scaled price reduction values (to be divided by scaling_factor in cost function)"
     )
 
