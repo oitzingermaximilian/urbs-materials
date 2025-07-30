@@ -51,7 +51,7 @@ def get_constants(instance):
     # print(decisionvalues_pri)
     decisionvalues_sec = get_entity(instance, "BD_sec")
     # print(decisionvalues_sec)
-    pricereduction_sec = get_entity(instance, "pricereduction_sec")
+    pricereduction_sec = get_entity(instance, "pricereduction_sec_investment")
     # print(pricereduction_sec)
     capacityprimary = get_entity(instance, "capacity_ext_euprimary")
     # print(capacityprimary)

@@ -139,7 +139,7 @@ def read_carry_over_from_excel(result_path, scenario_name):
                 for _, row in scrap_year.iterrows()
             },
             "Pricereduction": {
-                (row["location"], row["tech"]): row["pricereduction_sec"]
+                (row["location"], row["tech"]): row["pricereduction_sec_investment"]
                 for _, row in pricereduction_sec_year.iterrows()
             },
             "Balance": {

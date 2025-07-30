@@ -415,18 +415,18 @@ def run_scenario(
     )
 
     # BILINEAR CONSTRAINT DETECTION
-    print("\n" + "="*80)
-    print("DETECTING BILINEAR CONSTRAINTS")
-    print("="*80)
-
+    #print("\n" + "="*80)
+    #print("DETECTING BILINEAR CONSTRAINTS")
+    #print("="*80)
+    
     # Create output directory for bilinear analysis
-    bilinear_output_dir = os.path.join(result_dir, "bilinear_analysis")
-
+    #bilinear_output_dir = os.path.join(result_dir, "bilinear_analysis")
+    
     # Analyze model for bilinear constraints
-    bilinear_constraints = analyze_model_bilinearity(prob, bilinear_output_dir)
-
-    print(f"Bilinear constraint analysis complete. Found {len(bilinear_constraints)} bilinear constraints.")
-    print("="*80 + "\n")
+    #bilinear_constraints = analyze_model_bilinearity(prob, bilinear_output_dir)
+    
+    #print(f"Bilinear constraint analysis complete. Found {len(bilinear_constraints)} bilinear constraints.")
+    #print("="*80 + "\n")
 
     def summarize_constraints(model):
         print("\nConstraint Summary:")

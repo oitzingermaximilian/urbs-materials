@@ -58,7 +58,7 @@ class DefCostsNew(AbstractConstraint):
             total_eu_cost_secondary = sum(
                 (
                     # Linearized EU secondary costs: EU_secondary_costs - eu_secondary_cost_reduction
-                    (m.EU_secondary_costs[stf, site, tech] - m.eu_secondary_cost_reduction[stf, site, tech])
+                    (m.EU_secondary_costs[stf, site, tech] - m.pricereduction_sec_investment[stf, site, tech])
                     * m.capacity_ext_eusecondary[stf, site, tech]
                     + 1000 * m.capacity_facility_eusecondary[stf, site, tech]
                     # Scrap costs are now linear (no reduction applied here, it's in scrap.py)
@@ -118,7 +118,7 @@ class CalculateYearlyEUSecondary(AbstractConstraint):
         # Scrap costs are handled directly in scrap.py with pricereduction applied to f_scrap_rec
         eu_secondary_cost_value = (
             # Linearized EU secondary costs: EU_secondary_costs - eu_secondary_cost_reduction
-            (m.EU_secondary_costs[stf, location, tech] - m.eu_secondary_cost_reduction[stf, location, tech])
+            (m.EU_secondary_costs[stf, location, tech] - m.pricereduction_sec_investment[stf, location, tech])
             * m.capacity_ext_eusecondary[stf, location, tech]
             + 1000 * m.capacity_facility_eusecondary[stf, location, tech]
             # Scrap costs are now linear (no reduction applied here, it's in scrap.py)

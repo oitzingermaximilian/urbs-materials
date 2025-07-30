@@ -288,103 +288,81 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     }
 
     # ========================================
-    # SCALED REDUCTIONS (sorted by learning rate %)
-    # Convert percentage multipliers to scaled reduction amounts
-    # Since we want cost reduction to INCREASE from 0 to 6, we calculate (1 - percentage) and scale
+    # ABSOLUTE VALUE PRICE REDUCTION CALCULATION
     # ========================================
 
-    # 1% Learning Rate scaled reduction
-    scaled_reduction1 = {
-        n: (1 - reduction_percentage_1[n]) * scaling_factor
-        for n in reduction_percentage_1.keys()
+    # Get the cost data for absolute value calculations
+    remanufacturing_costs = data_urbsextensionv1["remanufacturingcost_dict"]
+    recycling_costs = data_urbsextensionv1["recyclingcost_dict"]
+
+    # Create absolute value dictionaries for investment costs (EU_secondary_costs)
+    def create_absolute_investment_dict(reduction_percentages):
+        absolute_dict = {}
+        for n in reduction_percentages.keys():
+            absolute_dict[n] = {}
+            for (stf, location, tech), cost in remanufacturing_costs.items():
+                absolute_dict[n][(stf, location, tech)] = cost * (1 - reduction_percentages[n])
+        return absolute_dict
+
+    # Create absolute value dictionaries for recycling costs (f_scrap_rec)
+    def create_absolute_recycling_dict(reduction_percentages):
+        absolute_dict = {}
+        for n in reduction_percentages.keys():
+            absolute_dict[n] = {}
+            for (stf, location, tech), cost in recycling_costs.items():
+                absolute_dict[n][(stf, location, tech)] = cost * (1 - reduction_percentages[n])
+        return absolute_dict
+
+    # Generate absolute value dictionaries for all learning rates
+    absolute_investment_reductions = {
+        'LR1': create_absolute_investment_dict(reduction_percentage_1),
+        'LR3_5': create_absolute_investment_dict(reduction_percentage_3_5),
+        'LR4': create_absolute_investment_dict(reduction_percentage_4),
+        'LR5': create_absolute_investment_dict(reduction_percentage_5),
+        'LR6': create_absolute_investment_dict(reduction_percentage_6),
+        'LR7': create_absolute_investment_dict(reduction_percentage_7),
+        'LR8': create_absolute_investment_dict(reduction_percentage_8),
+        'LR9': create_absolute_investment_dict(reduction_percentage_9),
+        'LR10': create_absolute_investment_dict(reduction_percentage_10),
+        'LR25': create_absolute_investment_dict(reduction_percentage_25)
     }
 
-    # 3.5% Learning Rate scaled reduction
-    scaled_reduction3_5 = {
-        n: (1 - reduction_percentage_3_5[n]) * scaling_factor
-        for n in reduction_percentage_3_5.keys()
+    absolute_recycling_reductions = {
+        'LR1': create_absolute_recycling_dict(reduction_percentage_1),
+        'LR3_5': create_absolute_recycling_dict(reduction_percentage_3_5),
+        'LR4': create_absolute_recycling_dict(reduction_percentage_4),
+        'LR5': create_absolute_recycling_dict(reduction_percentage_5),
+        'LR6': create_absolute_recycling_dict(reduction_percentage_6),
+        'LR7': create_absolute_recycling_dict(reduction_percentage_7),
+        'LR8': create_absolute_recycling_dict(reduction_percentage_8),
+        'LR9': create_absolute_recycling_dict(reduction_percentage_9),
+        'LR10': create_absolute_recycling_dict(reduction_percentage_10),
+        'LR25': create_absolute_recycling_dict(reduction_percentage_25)
     }
 
-    # 4% Learning Rate scaled reduction
-    scaled_reduction4 = {
-        n: (1 - reduction_percentage_4[n]) * scaling_factor
-        for n in reduction_percentage_4.keys()
-    }
+    # Select the appropriate reductions based on environment variable
+    selected_investment_reductions = absolute_investment_reductions.get(LEARNING_RATE, absolute_investment_reductions['LR5'])
+    selected_recycling_reductions = absolute_recycling_reductions.get(LEARNING_RATE, absolute_recycling_reductions['LR5'])
 
-    # 5% Learning Rate scaled reduction
-    scaled_reduction5 = {
-        n: (1 - reduction_percentage_5[n]) * scaling_factor
-        for n in reduction_percentage_5.keys()
-    }
+    print(f"Selected investment reduction values for {LEARNING_RATE}")
+    print(f"Selected recycling reduction values for {LEARNING_RATE}")
 
-    # 6% Learning Rate scaled reduction
-    scaled_reduction6 = {
-        n: (1 - reduction_percentage_6[n]) * scaling_factor
-        for n in reduction_percentage_6.keys()
-    }
-
-    # 7% Learning Rate scaled reduction
-    scaled_reduction7 = {
-        n: (1 - reduction_percentage_7[n]) * scaling_factor
-        for n in reduction_percentage_7.keys()
-    }
-
-    # 8% Learning Rate scaled reduction
-    scaled_reduction8 = {
-        n: (1 - reduction_percentage_8[n]) * scaling_factor
-        for n in reduction_percentage_8.keys()
-    }
-
-    # 9% Learning Rate scaled reduction
-    scaled_reduction9 = {
-        n: (1 - reduction_percentage_9[n]) * scaling_factor
-        for n in reduction_percentage_9.keys()
-    }
-
-    # 10% Learning Rate scaled reduction
-    scaled_reduction10 = {
-        n: (1 - reduction_percentage_10[n]) * scaling_factor
-        for n in reduction_percentage_10.keys()
-    }
-
-    # 25% Learning Rate scaled reduction
-    scaled_reduction25 = {
-        n: (1 - reduction_percentage_25[n]) * scaling_factor
-        for n in reduction_percentage_25.keys()
-    }
-
-    # ========================================
-    # DYNAMIC LEARNING RATE SELECTION
-    # ========================================
-
-    # Create learning rate mapping for dynamic selection
-    lr_mapping = {
-        'LR1': scaled_reduction1,
-        'LR3_5': scaled_reduction3_5,
-        'LR4': scaled_reduction4,
-        'LR5': scaled_reduction5,
-        'LR6': scaled_reduction6,
-        'LR7': scaled_reduction7,
-        'LR8': scaled_reduction8,
-        'LR9': scaled_reduction9,
-        'LR10': scaled_reduction10,
-        'LR25': scaled_reduction25
-    }
-
-    # Select the appropriate reduction based on environment variable
-    selected_reduction = lr_mapping.get(LEARNING_RATE, scaled_reduction5)
-    print(f"Selected reduction values: {selected_reduction}")
-
-    # Store the scaling factor as a parameter for use in cost calculations
-    m.scaling_factor = pyomo.Param(initialize=scaling_factor, doc="Scaling factor for price reductions")
-
-    # Initialize P_sec with dynamically selected scaled values
-    m.P_sec = pyomo.Param(
+    # Initialize P_sec_investment with absolute investment cost reductions
+    m.P_sec_investment = pyomo.Param(
         m.location,  # Locations
         m.tech,  # Technologies
         m.nsteps_sec,  # Steps
-        initialize=lambda m, loc, tech, n: selected_reduction[n],
-        doc=f"Scaled price reduction values for {LEARNING_RATE} (to be divided by scaling_factor in cost function)"
+        initialize=lambda m, loc, tech, n: selected_investment_reductions[n].get((2024, loc, tech), 0),  # Use 2024 as base year
+        doc=f"Absolute investment cost reduction values for {LEARNING_RATE}"
+    )
+
+    # Initialize P_sec_recycling with absolute recycling cost reductions
+    m.P_sec_recycling = pyomo.Param(
+        m.location,  # Locations
+        m.tech,  # Technologies
+        m.nsteps_sec,  # Steps
+        initialize=lambda m, loc, tech, n: selected_recycling_reductions[n].get((2024, loc, tech), 0),  # Use 2024 as base year
+        doc=f"Absolute recycling cost reduction values for {LEARNING_RATE}"
     )
 
 
@@ -465,12 +443,12 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     )
 
     ##########----------end urbs-scrap  -----------###############
-    # added for carry over.
+    # added for carry over - updated for new absolute value system
     m.pricereduction_sec_init = pyomo.Param(
         m.location,
         m.tech,
-        initialize=initialize_param("price_reduction_init", default_value=0),
-        doc="price_reduction_init",
+        initialize=initialize_param("price_reduction_investment_init", default_value=0),
+        doc="Initial investment price reduction for carryover (absolute values)",
     )
 
     m.cap_prim_prior = pyomo.Param(

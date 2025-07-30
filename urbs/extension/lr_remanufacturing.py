@@ -17,27 +17,46 @@ def debug_print(*args, **kwargs):
         print(*args, **kwargs)
 
 
-class costsavings_constraint_sec(AbstractConstraint):
+class costsavings_constraint_sec_investment(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
-        pricereduction_value_sec = sum(
-            m.P_sec[location, tech, n] * m.BD_sec[stf, location, tech, n]
+        investment_reduction_value = sum(
+            m.P_sec_investment[location, tech, n] * m.BD_sec[stf, location, tech, n]
             for n in m.nsteps_sec
         )
-        # Apply the scaling factor here to convert back to percentage reduction
-        scaled_pricereduction = pricereduction_value_sec / m.scaling_factor
-        expr = m.pricereduction_sec[stf, location, tech] == scaled_pricereduction
+        expr = m.pricereduction_sec_investment[stf, location, tech] == investment_reduction_value
 
         # Improved debug formatting - separate lines for better visibility
         if DEBUG:
             print("=" * 60)
-            print(f"[COSTSAVINGS DEBUG] STF={stf}, Location={location}, Tech={tech}")
-            print(f"  Raw pricereduction_value_sec: {pricereduction_value_sec}")
-            print(f"  Scaling factor: {m.scaling_factor}")
-            print(f"  Final scaled_pricereduction: {scaled_pricereduction}")
+            print(f"[INVESTMENT COSTSAVINGS DEBUG] STF={stf}, Location={location}, Tech={tech}")
+            print(f"  Investment reduction value: {investment_reduction_value}")
             print(
                 f"  BD_sec values: {[m.BD_sec[stf, location, tech, n].value if hasattr(m.BD_sec[stf, location, tech, n], 'value') else 'unset' for n in m.nsteps_sec]}"
             )
-            print(f"  P_sec values: {[m.P_sec[location, tech, n] for n in m.nsteps_sec]}")
+            print(f"  P_sec_investment values: {[m.P_sec_investment[location, tech, n] for n in m.nsteps_sec]}")
+            print(f"  Expression: {expr}")
+            print("=" * 60)
+
+        return expr
+
+
+class costsavings_constraint_sec_recycling(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech):
+        recycling_reduction_value = sum(
+            m.P_sec_recycling[location, tech, n] * m.BD_sec[stf, location, tech, n]
+            for n in m.nsteps_sec
+        )
+        expr = m.pricereduction_sec_recycling[stf, location, tech] == recycling_reduction_value
+
+        # Improved debug formatting - separate lines for better visibility
+        if DEBUG:
+            print("=" * 60)
+            print(f"[RECYCLING COSTSAVINGS DEBUG] STF={stf}, Location={location}, Tech={tech}")
+            print(f"  Recycling reduction value: {recycling_reduction_value}")
+            print(
+                f"  BD_sec values: {[m.BD_sec[stf, location, tech, n].value if hasattr(m.BD_sec[stf, location, tech, n], 'value') else 'unset' for n in m.nsteps_sec]}"
+            )
+            print(f"  P_sec_recycling values: {[m.P_sec_recycling[location, tech, n] for n in m.nsteps_sec]}")
             print(f"  Expression: {expr}")
             print("=" * 60)
 
@@ -61,16 +80,17 @@ class relation_pnew_to_pprior_constraint_sec(AbstractConstraint):
             debug_print(f"[relation_pnew] STF={stf} (2024) ➞ SKIP")
             return pyomo.Constraint.Skip
 
+        # Use investment price reduction as representative since both correlate perfectly
         if stf == value(m.y0):
-            lhs = m.pricereduction_sec[stf, location, tech]
-            rhs = m.pricereduction_sec_init[location, tech]
+            lhs = m.pricereduction_sec_investment[stf, location, tech]
+            rhs = m.pricereduction_sec_init[location, tech]  # Back to original parameter name
             expr = lhs >= rhs
             debug_print(
                 f"[relation_pnew-init] STF={stf} == y0 ➞ {lhs} >= {rhs} ? {expr}"
             )
         else:
-            lhs = m.pricereduction_sec[stf, location, tech]
-            rhs = m.pricereduction_sec[stf - 1, location, tech]
+            lhs = m.pricereduction_sec_investment[stf, location, tech]
+            rhs = m.pricereduction_sec_investment[stf - 1, location, tech]
             expr = lhs >= rhs
             debug_print(
                 f"[relation_pnew-recursive] STF={stf} ➞ {lhs} >= {rhs} ? {expr}"
@@ -197,7 +217,8 @@ class non_negativity_z_eq_sec(AbstractConstraint):
 
 def apply_combined_lr_constraints(m):
     constraints_rm1 = [
-        costsavings_constraint_sec(),
+        costsavings_constraint_sec_investment(),
+        costsavings_constraint_sec_recycling(),
         BD_limitation_constraint_sec(),
         relation_pnew_to_pprior_constraint_sec(),
         q_perstep_constraint_sec(),

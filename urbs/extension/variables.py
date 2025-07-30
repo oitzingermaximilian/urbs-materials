@@ -90,9 +90,14 @@ def apply_variables(m):
     """
     These Variables are used for the lr_remanufacturing.py script constraints.
     """
-    m.pricereduction_sec = pyomo.Var(
+    # New separate variables for investment and recycling cost reductions (absolute values)
+    m.pricereduction_sec_investment = pyomo.Var(
         m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
     )
+    m.pricereduction_sec_recycling = pyomo.Var(
+        m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
+    )
+
     m.BD_sec = pyomo.Var(m.stf, m.location, m.tech, m.nsteps_sec, domain=pyomo.Binary)
 
     m.auxiliary_product_BD_q = pyomo.Var(
@@ -115,14 +120,6 @@ def apply_variables(m):
     )
     m.cost_scrap = pyomo.Var(m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals)
 
-    # Auxiliary variables temporarily removed - not using linearization yet
-    # m.eu_secondary_cost_reduction = pyomo.Var(
-    #     m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
-    # )
-    # m.scrap_cost_reduction = pyomo.Var(
-    #     m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
-    # )
-
     """
     These Variables are used to simulate a imaginary BESS demand in order to cover the dynamics of battery energy storage systems as well
     """
@@ -136,13 +133,3 @@ def apply_variables(m):
     m.capacity_facility_cumulative = pyomo.Var(
         m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
     )
-
-    # Auxiliary variables for linearizing EU secondary cost reduction only
-    m.eu_secondary_cost_reduction = pyomo.Var(
-        m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
-    )
-
-    m.scrap_cost_reduction= pyomo.Var(
-        m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
-    )
-
