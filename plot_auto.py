@@ -668,4 +668,4 @@ def wait_for_excel_sheets(path, expected_sheets, timeout=60):  # TODO re-add if 
 
 # plot_balance_created("result/urbs-20250604T1538/result_scenario_base.xlsx")
 # plot_facility_utilization("result/urbs-20250716T1015/result_scenario_base.xlsx")
-plot_nzia_benchmark(r"C:\Users\maxoi\OneDrive\Desktop\results_crm_paper\LR7\result_scenario_extremely_high.xlsx")
+
