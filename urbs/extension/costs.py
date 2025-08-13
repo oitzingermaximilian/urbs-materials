@@ -53,16 +53,19 @@ class DefCostsNew(AbstractConstraint):
             return expr
 
         elif cost_type_new == "Eu Cost Secondary":
-            # Linearized version - only EU secondary costs need linearization now
-            # Scrap costs are handled directly in scrap.py with pricereduction applied to f_scrap_rec
+            # ✅ PROPERLY LINEARIZED: Use auxiliary variable to avoid bilinear terms
+            # Original: (EU_secondary_costs - price_reduction_per_unit) * capacity
+            # But price_reduction_per_unit = sum(P_sec * BD_sec) which is bilinear
+            # So we use: EU_secondary_costs * capacity - pricereduction_sec_investment
+            # where pricereduction_sec_investment = sum(P_sec * auxiliary_product_BD_q)
             total_eu_cost_secondary = sum(
                 (
-                    # Linearized EU secondary costs: EU_secondary_costs - eu_secondary_cost_reduction
-                    (m.EU_secondary_costs[stf, site, tech] - m.pricereduction_sec_investment[stf, site, tech])
-                    * m.capacity_ext_eusecondary[stf, site, tech]
+                    # Linear: base cost times capacity
+                    m.EU_secondary_costs[stf, site, tech] * m.capacity_ext_eusecondary[stf, site, tech]
                     + 1 * m.capacity_facility_eusecondary[stf, site, tech]
-                    # Scrap costs are now linear (no reduction applied here, it's in scrap.py)
                     + m.cost_scrap[stf, site, tech]
+                    # Subtract the linearized price reduction (total absolute reduction)
+                    - m.pricereduction_sec_investment[stf, site, tech]
                 )
                 for stf in m.stf
                 for site in m.location
@@ -114,15 +117,16 @@ class CalculateYearlyEUPrimary(AbstractConstraint):
 
 class CalculateYearlyEUSecondary(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
-        # Linearized version - only EU secondary costs need linearization now
-        # Scrap costs are handled directly in scrap.py with pricereduction applied to f_scrap_rec
+        # ✅ PROPERLY LINEARIZED: Use the linearized price reduction variable
+        # Original bilinear: (EU_secondary_costs - sum(P_sec * BD_sec)) * capacity
+        # Linearized: EU_secondary_costs * capacity - pricereduction_sec_investment
         eu_secondary_cost_value = (
-            # Linearized EU secondary costs: EU_secondary_costs - eu_secondary_cost_reduction
-            (m.EU_secondary_costs[stf, location, tech] - m.pricereduction_sec_investment[stf, location, tech])
-            * m.capacity_ext_eusecondary[stf, location, tech]
+            # Linear: base cost times capacity
+            m.EU_secondary_costs[stf, location, tech] * m.capacity_ext_eusecondary[stf, location, tech]
             + 1 * m.capacity_facility_eusecondary[stf, location, tech]
-            # Scrap costs are now linear (no reduction applied here, it's in scrap.py)
             + m.cost_scrap[stf, location, tech]
+            # Subtract the linearized price reduction (total absolute reduction)
+            - m.pricereduction_sec_investment[stf, location, tech]
         )
         expr = m.costs_EU_secondary[stf, location, tech] == eu_secondary_cost_value
         return expr

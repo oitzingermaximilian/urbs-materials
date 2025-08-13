@@ -5,7 +5,6 @@ from .features import *
 from .input import *
 from urbs.extension import (
     apply_scrap_constraints,
-    apply_m_constraints,
     apply_stockpiling_constraints,
     apply_balance_constraints,
     apply_costs_constraints,
@@ -396,8 +395,6 @@ def create_model(
     apply_scenario_constraints(m)
 
     apply_stockpiling_constraints(m)
-
-    # apply_m_constraints(m)
 
     apply_combined_lr_constraints(m)
 

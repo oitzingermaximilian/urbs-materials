@@ -19,10 +19,12 @@ def debug_print(*args, **kwargs):
 
 class costsavings_constraint_sec_investment(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
-        # Price reduction equals the sum of (step-specific price reduction * binary decision for that step)
-        # This ensures only the active step's price reduction is applied
+        # ✅ CORRECTED: Use auxiliary variable instead of bilinear product
+        # Original bilinear: P_sec_investment[n] * BD_sec[n] * capacity_ext_eusecondary
+        # Linearized: P_sec_investment[n] * auxiliary_product_BD_q[n]
+
         investment_reduction_value = sum(
-            m.P_sec_investment[location, tech, n] * m.BD_sec[stf, location, tech, n]
+            m.P_sec_investment[location, tech, n] * m.auxiliary_product_BD_q[stf, location, tech, n]
             for n in m.nsteps_sec
         )
         expr = m.pricereduction_sec_investment[stf, location, tech] == investment_reduction_value
@@ -141,24 +143,6 @@ class q_perstep_constraint_sec(AbstractConstraint):
         return expr
 
 
-class auxiliary_variable_calculation(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech, nsteps_sec):
-        """
-        Defines the auxiliary variable as equal to BD_sec * capacity_ext_eusecondary.
-        This constraint establishes the relationship between the auxiliary variable
-        and the bilinear product it represents.
-        """
-        expr = (
-            m.auxiliary_product_BD_q[stf, location, tech, nsteps_sec]
-            == m.BD_sec[stf, location, tech, nsteps_sec] * m.capacity_ext_eusecondary[stf, location, tech]
-        )
-        debug_print(
-            f"[auxiliary_variable] STF={stf}, step={nsteps_sec}  ➞ "
-            f"aux_BD_q == BD_sec * capacity_ext"
-        )
-        return expr
-
-
 class upper_bound_z_constraint_sec(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, nsteps_sec):
         """
@@ -240,10 +224,8 @@ def apply_combined_lr_constraints(m):
         non_negativity_z_eq_sec(),
     ]
 
-    # Add auxiliary variable constraint
-    constraints_auxiliary = [
-        auxiliary_variable_calculation(),
-    ]
+    # ❌ REMOVED: auxiliary_variable_calculation() - this makes the model bilinear again!
+    # The Big-M constraints (constraints_rm2) already fully define the auxiliary variable
 
     # Debug: Print the sets being used
     print(f"DEBUG: m.stf = {list(m.stf)}")
@@ -280,44 +262,25 @@ def apply_combined_lr_constraints(m):
             ),
         )
 
-    # Add auxiliary variable constraints with proper lambda closure
-    for i, constraint in enumerate(constraints_auxiliary):
-        constraint_name = f"constraint_auxiliary_{i + 1}"
-        setattr(
-            m,
-            constraint_name,
-            pyomo.Constraint(
-                m.stf,
-                m.location,
-                m.tech,
-                m.nsteps_sec,
-                rule=lambda m, stf, loc, tech, nsteps_sec, constraint=constraint: constraint.apply_rule(
-                    m, stf, loc, tech, nsteps_sec
-                ),
-            ),
-        )
-
-    # Replace the recycling price reduction variable with an expression that derives from BD_sec
-    # This ensures recycling reduction uses the same BD_sec values chosen by investment constraint
+    # ✅ FIXED: Replace the recycling expression to use auxiliary variable
     def recycling_reduction_rule(m, stf, location, tech):
+        # Use auxiliary variable instead of trilinear product
         recycling_reduction_value = sum(
-            m.P_sec_recycling[location, tech, n] * m.BD_sec[stf, location, tech, n]
+            m.P_sec_recycling[location, tech, n] * m.auxiliary_product_BD_q[stf, location, tech, n]
             for n in m.nsteps_sec
         )
         if DEBUG:
             print("=" * 60)
             print(f"[RECYCLING EXPRESSION DEBUG] STF={stf}, Location={location}, Tech={tech}")
-            print(f"  Recycling reduction value (DERIVED): {recycling_reduction_value}")
+            print(f"  Recycling reduction value (LINEARIZED): {recycling_reduction_value}")
             print("=" * 60)
         return recycling_reduction_value
 
-    # Override the recycling price reduction variable with an expression
-    # This will automatically calculate the value based on BD_sec without creating constraints
-    #m.del_component('pricereduction_sec_recycling')  # Remove the variable
+    # Override the recycling price reduction variable with a linear expression
     m.pricereduction_sec_recycling = pyomo.Expression(
         m.stf,
         m.location,
         m.tech,
         rule=recycling_reduction_rule,
-        doc="Recycling price reduction derived from BD_sec values determined by investment constraint"
+        doc="Recycling price reduction using linearized auxiliary variable"
     )

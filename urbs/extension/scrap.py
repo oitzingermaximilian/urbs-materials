@@ -110,11 +110,16 @@ class capacity_scrap_total_rule(AbstractConstraint):
 
 class cost_scrap_rule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
-        # Apply price reduction with proper scaling factor division using model parameter
-        reduced_scrap_price = m.f_scrap_rec[stf, location, tech] - m.pricereduction_sec_recycling[stf, location, tech]
+        # ✅ PROPERLY LINEARIZED: Use base cost minus linearized reduction
+        # Original would be: (f_scrap_rec - price_reduction_per_unit) * capacity_scrap_rec
+        # But price_reduction_per_unit involves bilinear terms
+        # So we use: f_scrap_rec * capacity_scrap_rec - pricereduction_sec_recycling
+        # where pricereduction_sec_recycling = sum(P_sec_recycling[n] * auxiliary_product_BD_q[n])
+
         expr = (
             m.cost_scrap[stf, location, tech]
-            == reduced_scrap_price * m.capacity_scrap_rec[stf, location, tech]
+            == m.f_scrap_rec[stf, location, tech] * m.capacity_scrap_rec[stf, location, tech]
+            - m.pricereduction_sec_recycling[stf, location, tech]
         )
         debug_print(f"[cost_scrap] STF={stf} ➞ expr: {expr}")
         return expr
