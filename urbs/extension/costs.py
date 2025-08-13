@@ -65,7 +65,7 @@ class DefCostsNew(AbstractConstraint):
                     + 1 * m.capacity_facility_eusecondary[stf, site, tech]
                     + m.cost_scrap[stf, site, tech]
                     # Subtract the linearized price reduction (total absolute reduction)
-                    - m.pricereduction_sec_investment[stf, site, tech]
+                    - m.PRICEREDUCTION_CAP_DEP_INV[stf, site, tech]
                 )
                 for stf in m.stf
                 for site in m.location
@@ -126,7 +126,7 @@ class CalculateYearlyEUSecondary(AbstractConstraint):
             + 1 * m.capacity_facility_eusecondary[stf, location, tech]
             + m.cost_scrap[stf, location, tech]
             # Subtract the linearized price reduction (total absolute reduction)
-            - m.pricereduction_sec_investment[stf, location, tech]
+            - m.PRICEREDUCTION_CAP_DEP_INV[stf, location, tech]
         )
         expr = m.costs_EU_secondary[stf, location, tech] == eu_secondary_cost_value
         return expr

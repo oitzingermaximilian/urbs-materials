@@ -119,7 +119,7 @@ class cost_scrap_rule(AbstractConstraint):
         expr = (
             m.cost_scrap[stf, location, tech]
             == m.f_scrap_rec[stf, location, tech] * m.capacity_scrap_rec[stf, location, tech]
-            - m.pricereduction_sec_recycling[stf, location, tech]
+            - m.PRICEREDUCTION_CAP_DEP_REC[stf, location, tech]
         )
         debug_print(f"[cost_scrap] STF={stf} ➞ expr: {expr}")
         return expr

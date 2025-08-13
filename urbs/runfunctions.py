@@ -46,14 +46,27 @@ def setup_solver(optim, logfile="solver.log"):
     """ """
     if optim.name == "gurobi":
         optim.set_options("logfile={}".format(logfile))
+        # ✅ SET BINARY TOLERANCE TO MINIMUM ALLOWED for exact binary values
+        optim.set_options("IntFeasTol=1e-09")  # Minimum allowed integer feasibility tolerance
+        optim.set_options("FeasibilityTol=1e-09")  # General feasibility tolerance
+        optim.set_options("OptimalityTol=1e-09")  # Optimality tolerance
+        optim.set_options("MIPGap=0")  # Set MIP gap to 0 for exact solutions
+        print("✅ Gurobi binary tolerance set to minimum (1e-09) for exact BD values")
     elif optim.name == "glpk":
         # reference with list of options
         # execute 'glpsol --help'
         optim.set_options("log={}".format(logfile))
+        # ✅ SET BINARY TOLERANCE TO 0 for GLPK
+        optim.set_options("--mipgap 0")  # Set MIP gap to 0
+        print("✅ GLPK binary tolerance set to 0 for exact BD values")
         # optim.set_options("tmlim=7200")  # seconds
         # optim.set_options("mipgap=.0005")
     elif optim.name == "cplex":
         optim.set_options("log={}".format(logfile))
+        # ✅ SET BINARY TOLERANCE TO 0 for CPLEX
+        optim.set_options("mip tolerances integrality 0")
+        optim.set_options("mip tolerances mipgap 0")
+        print("✅ CPLEX binary tolerance set to 0 for exact BD values")
     else:
         print(
             "Warning from setup_solver: no options set for solver '{}'!".format(
