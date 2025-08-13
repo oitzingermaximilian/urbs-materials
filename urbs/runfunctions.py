@@ -446,7 +446,7 @@ def run_scenario(
 
     # solve model and read results
     optim = SolverFactory("gurobi")  # cplex, glpk, gurobi, ...
-    solver.options['NumericFocus'] = 3
+    optim.options['NumericFocus'] = 3
     solver.options['ScaleFlag'] = 1
     optim = setup_solver(optim, logfile=log_filename)
     result = optim.solve(prob, tee=True)
