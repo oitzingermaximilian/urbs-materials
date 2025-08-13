@@ -394,7 +394,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     )
 
     # param for gamma
-    m.gamma_sec = pyomo.Param(initialize=1e10)
+    m.gamma_sec = pyomo.Param(initialize=1_100_000)
 
     m.total_secondary_cap_inital = pyomo.Param(
         m.location,
