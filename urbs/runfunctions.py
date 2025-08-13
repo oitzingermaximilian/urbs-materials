@@ -802,7 +802,7 @@ def slice_data_for_window(data, window_start, window_end, initial_conditions):
                     )
                     # Append the new Discount Rate row to the DataFrame
                     sliced_df = pd.concat([sliced_df, new_discount_row])
-                # Add CO2 budget = 4,000,000,000 for window_start year
+                # Add CO2 budget = infinity for window_start year
                 if (
                     "CO2 budget" not in sliced_df.index.get_level_values("Property")
                 ) and (
@@ -811,7 +811,7 @@ def slice_data_for_window(data, window_start, window_end, initial_conditions):
                 ):
                     # Create a new row for 'CO2 budget' at the window_start year
                     new_co2_budget_row = pd.DataFrame(
-                        {"value": [99999999999]},  # Set CO2 budget to 4,000,000,000
+                        {"value": ["inf"]},  # Set CO2 budget to infinity as string
                         index=pd.MultiIndex.from_tuples(
                             [(window_start, "CO2 budget")],
                             names=sliced_df.index.names,
