@@ -365,16 +365,16 @@ def run_rolling_horizon(start_year=2024, end_year=2050, step=5):
     # select scenarios to be run
     scenarios = [
         ("scenario_extremely_low", urbs.scenario_extremely_low),
-        ("scenario_very_low", urbs.scenario_very_low),
-        ("scenario_low", urbs.scenario_low),
-        ("scenario_moderately_low", urbs.scenario_moderately_low),
-        ("scenario_slightly_below_average", urbs.scenario_slightly_below_average),
-        ("scenario_average", urbs.scenario_average),
-        ("scenario_slightly_above_average", urbs.scenario_slightly_above_average),
-        ("scenario_moderately_high", urbs.scenario_moderately_high),
-        ("scenario_high", urbs.scenario_high),
-        ("scenario_very_high", urbs.scenario_very_high),
-        ("scenario_extremely_high", urbs.scenario_extremely_high),
+        #("scenario_very_low", urbs.scenario_very_low),
+        #("scenario_low", urbs.scenario_low),
+        #("scenario_moderately_low", urbs.scenario_moderately_low),
+        #("scenario_slightly_below_average", urbs.scenario_slightly_below_average),
+        #("scenario_average", urbs.scenario_average),
+        #("scenario_slightly_above_average", urbs.scenario_slightly_above_average),
+        #("scenario_moderately_high", urbs.scenario_moderately_high),
+        #("scenario_high", urbs.scenario_high),
+        #("scenario_very_high", urbs.scenario_very_high),
+        #("scenario_extremely_high", urbs.scenario_extremely_high),
         # ("scenario_base", urbs.scenario_base)
     ]
 
