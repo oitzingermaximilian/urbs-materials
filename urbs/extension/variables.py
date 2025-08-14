@@ -104,6 +104,9 @@ def apply_variables(m):
     m.pricereduction_sec_investment = pyomo.Var(
         m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
     )
+    m.PRICEREDUCTION_CAP_DEP_INV = pyomo.Var(
+        m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
+    )
     # pricereduction_sec_recycling is now defined as an Expression in lr_remanufacturing.py
     # to derive its value from BD_sec variables determined by investment constraint
 

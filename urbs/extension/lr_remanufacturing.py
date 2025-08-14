@@ -27,7 +27,7 @@ class costsavings_constraint_sec_investment(AbstractConstraint):
             m.P_sec_investment[location, tech, n] * m.auxiliary_product_BD_q[stf, location, tech, n]
             for n in m.nsteps_sec
         )
-        expr = m.pricereduction_sec_investment[stf, location, tech] == investment_reduction_value
+        expr = m.PRICEREDUCTION_CAP_DEP_INV[stf, location, tech] == investment_reduction_value
 
         # Improved debug formatting - separate lines for better visibility
         if DEBUG:
@@ -48,6 +48,16 @@ class costsavings_constraint_sec_investment(AbstractConstraint):
             print("=" * 60)
 
         return expr
+
+
+class pricereduction_stage_calc(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech):
+        investement_reduction_stage_value = sum(
+            m.P_sec_investment[location, tech, n] * m.BD_sec[stf, location, tech, n]
+            for n in m.nsteps_sec
+        )
+        expr = m.pricereduction_sec_investment[stf, location, tech] == investement_reduction_stage_value
+        return expr  # ✅ FIXED: Added missing return statement
 
 
 class BD_limitation_constraint_sec(AbstractConstraint):
@@ -89,13 +99,15 @@ class BD_limitation_constraint_sec(AbstractConstraint):
 class relation_pnew_to_pprior_constraint_sec(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
         if stf == 2024:
-            debug_print(f"[relation_pnew] STF={stf} (2024) ➞ SKIP")
+            # REVERTED: Skip 2024 as originally intended
+            # The BD numerical tolerance issue should be solved differently
+            debug_print(f"[relation_pnew] STF={stf} (2024) ➞ SKIP (no prior year)")
             return pyomo.Constraint.Skip
 
-        # Use investment price reduction as representative since both correlate perfectly
+        # Separate if-else block for all other years (not 2024)
         if stf == value(m.y0):
             lhs = m.pricereduction_sec_investment[stf, location, tech]
-            rhs = m.pricereduction_sec_init[location, tech]  # Back to original parameter name
+            rhs = m.pricereduction_sec_init[location, tech]
             expr = lhs >= rhs
             debug_print(
                 f"[relation_pnew-init] STF={stf} == y0 ➞ {lhs} >= {rhs} ? {expr}"
@@ -107,6 +119,7 @@ class relation_pnew_to_pprior_constraint_sec(AbstractConstraint):
             debug_print(
                 f"[relation_pnew-recursive] STF={stf} ➞ {lhs} >= {rhs} ? {expr}"
             )
+        
         return expr
 
 
@@ -212,6 +225,7 @@ class non_negativity_z_eq_sec(AbstractConstraint):
 def apply_combined_lr_constraints(m):
     constraints_rm1 = [
         costsavings_constraint_sec_investment(),
+        pricereduction_stage_calc(),  # ✅ Added back the fixed constraint
         BD_limitation_constraint_sec(),
         relation_pnew_to_pprior_constraint_sec(),
         q_perstep_constraint_sec(),

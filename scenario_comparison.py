@@ -6,6 +6,8 @@ import seaborn as sns
 from pathlib import Path
 from matplotlib.colors import to_hex  # <-- Robust color conversion
 from scipy.spatial import ConvexHull
+import matplotlib.patches as mpatches
+import seaborn as sns
 
 # Set the font sizes to match plot_auto.py style
 plt.rcParams.update(
@@ -22,7 +24,7 @@ plt.rcParams.update(
 )
 
 # Define the base results path
-RESULTS_BASE_PATH = r"C:\Users\maxoi\OneDrive\Desktop\results_crm_paper"
+RESULTS_BASE_PATH = r"C:\Users\Gerald\Desktop\crm_paper_Results" #r"C:\Users\maxoi\OneDrive\Desktop\results_crm_paper" #Dektop: r"C:\Users\Gerald\Desktop\crm_paper_Results
 
 # Define learning rate scenarios - updated with all your LRs including LR6
 LEARNING_RATES = {
@@ -1524,8 +1526,6 @@ def lng_lineplot_horizons(lr_code="LR25", price_scenario="extremely_low"):
     plt.tight_layout()
     output_path = output_dir / f"lng_lineplot_horizons_{lr_code}_{price_scenario}.png"
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
-    print(f"✓ Saved LNG demand rolling horizon line plot: {output_path}")
-
     plt.show()
 
 def plot_lng_demand_rolling_horizon_boxplots():
@@ -1755,6 +1755,326 @@ def plot_lng_demand_rolling_horizon_boxplots():
     plt.close(fig_2030)
     plt.close(fig_2040)
 
+def plot_capacity_mix_stacked_bars():
+    """Plot capacity mix as true stacked bar plots with all technologies stacked vertically,
+    using pastel Set3 palette for tech colors and hatches for supply options. Legend is separated:
+    one for tech (color), one for supply (hatch). 'Imported' is filled with process color, no hatch."""
+
+    tech_stack_order = ['solarPV', 'windon', 'windoff', 'Gas Plant (CCGT)', 'Gas Plant (CCGT) LNG']
+    renewable_technologies = ['solarPV', 'windon', 'windoff']
+    other_technologies = ['Gas Plant (CCGT)', 'Gas Plant (CCGT) LNG']
+    years_to_plot = [2030, 2040]
+
+    output_dir = Path("scenario_comparison")
+    output_dir.mkdir(exist_ok=True)
+
+    # Pastel color palette via seaborn
+    n_techs = len(tech_stack_order)
+    colors = sns.color_palette("Set3", n_colors=n_techs)
+    tech_colors = {tech: colors[i] for i, tech in enumerate(tech_stack_order)}
+
+    supply_sources = {
+        'capacity_ext_eusecondary': {'label': 'Remanufacturing', 'hatch': '..', 'alpha_adjust': 0.0},
+        'capacity_ext_stockout': {'label': 'Stock', 'hatch': '//', 'alpha_adjust': -0.1},
+        'capacity_ext_euprimary': {'label': 'Manufacturing', 'hatch': 'xx', 'alpha_adjust': -0.2},
+        'capacity_ext_imported': {'label': 'Imported', 'hatch': None, 'alpha_adjust': -0.3}
+    }
+    supply_order = ['capacity_ext_eusecondary', 'capacity_ext_stockout', 'capacity_ext_euprimary', 'capacity_ext_imported']
+
+    for lr_key, lr_name in LEARNING_RATES.items():
+        for target_year in years_to_plot:
+            fig, ax = plt.subplots(1, 1, figsize=(14, 8))
+
+            capacity_data = {tech: [] for tech in tech_stack_order}
+            supply_composition = {tech: {source: [] for source in supply_order} for tech in renewable_technologies}
+            scenario_labels = []
+
+            for price_scenario in PRICE_SCENARIOS:
+                try:
+                    file_path = Path(RESULTS_BASE_PATH) / f"{lr_key}" / "rolling_2024_to_2050" / f"scenario_{price_scenario}.xlsx"
+                    if not file_path.exists():
+                        for tech in tech_stack_order:
+                            capacity_data[tech].append(0)
+                        for tech in renewable_technologies:
+                            for source in supply_order:
+                                supply_composition[tech][source].append(0)
+                        continue
+
+                    try:
+                        extension_df = pd.read_excel(file_path, sheet_name='extension_only_caps')
+                        extension_df['stf'] = extension_df['stf'].fillna(method='ffill')
+                    except:
+                        for tech in renewable_technologies:
+                            capacity_data[tech].append(0)
+                            for source in supply_order:
+                                supply_composition[tech][source].append(0)
+                        try:
+                            total_caps_df = pd.read_excel(file_path, sheet_name='extension_total_caps')
+                            total_caps_df['stf'] = total_caps_df['stf'].fillna(method='ffill')
+                            target_year_caps = total_caps_df[total_caps_df['stf'] == target_year]
+                            for tech in other_technologies:
+                                tech_data = target_year_caps[target_year_caps['pro'] == tech]
+                                if not tech_data.empty:
+                                    capacity = tech_data['cap_pro'].iloc[0] / 1000
+                                    capacity_data[tech].append(capacity)
+                                else:
+                                    capacity_data[tech].append(0)
+                        except:
+                            for tech in other_technologies:
+                                capacity_data[tech].append(0)
+                        continue
+
+                    total_caps_df = pd.read_excel(file_path, sheet_name='extension_total_caps')
+                    total_caps_df['stf'] = total_caps_df['stf'].fillna(method='ffill')
+                    target_year_caps = total_caps_df[total_caps_df['stf'] == target_year]
+                    scenario_labels.append(price_scenario.replace('_', ' ').title())
+
+                    for tech in renewable_technologies:
+                        if tech in extension_df['tech'].unique():
+                            tech_data = extension_df[extension_df['tech'] == tech]
+                            cumulative_data = tech_data[tech_data['stf'] <= target_year]
+                            total_capacity = 0
+                            for source in supply_order:
+                                if source in cumulative_data.columns:
+                                    cumulative_value = cumulative_data[source].sum() / 1000
+                                    supply_composition[tech][source].append(cumulative_value)
+                                    total_capacity += cumulative_value
+                                else:
+                                    supply_composition[tech][source].append(0)
+                            capacity_data[tech].append(total_capacity)
+                        else:
+                            capacity_data[tech].append(0)
+                            for source in supply_order:
+                                supply_composition[tech][source].append(0)
+
+                    for tech in other_technologies:
+                        tech_data = target_year_caps[target_year_caps['pro'] == tech]
+                        if not tech_data.empty:
+                            capacity = tech_data['cap_pro'].iloc[0] / 1000
+                            capacity_data[tech].append(capacity)
+                        else:
+                            capacity_data[tech].append(0)
+
+                except Exception as e:
+                    for tech in tech_stack_order:
+                        capacity_data[tech].append(0)
+                    for tech in renewable_technologies:
+                        for source in supply_order:
+                            supply_composition[tech][source].append(0)
+
+            x_positions = np.arange(len(scenario_labels))
+            bar_width = 0.6
+            current_bottom = np.zeros(len(scenario_labels))
+
+            # Plot stacked bars (no labels, to keep legend clean)
+            for tech in tech_stack_order:
+                if tech in renewable_technologies:
+                    tech_bottom = current_bottom.copy()
+                    base_color = tech_colors[tech]
+                    for source in supply_order:
+                        values = np.array(supply_composition[tech][source])
+                        if np.any(values > 0):
+                            source_info = supply_sources[source]
+                            alpha = max(0.4, 0.9 + source_info['alpha_adjust'])
+                            if source == 'capacity_ext_imported':
+                                # Fill with tech color, no hatch, as requested
+                                bars = ax.bar(x_positions, values, bar_width, bottom=tech_bottom,
+                                              color=base_color,
+                                              alpha=alpha,
+                                              hatch=None,
+                                              edgecolor='black',
+                                              linewidth=0.5,
+                                              label=None)
+                            else:
+                                bars = ax.bar(x_positions, values, bar_width, bottom=tech_bottom,
+                                              color=base_color,
+                                              alpha=alpha,
+                                              hatch=source_info['hatch'],
+                                              edgecolor='black',
+                                              linewidth=0.5,
+                                              label=None)
+                            tech_bottom += values
+                    current_bottom = tech_bottom
+                else:
+                    values = np.array(capacity_data[tech])
+                    if np.any(values > 0):
+                        bars = ax.bar(x_positions, values, bar_width, bottom=current_bottom,
+                                      color=tech_colors[tech],
+                                      alpha=0.8,
+                                      edgecolor='black',
+                                      linewidth=0.5,
+                                      label=None)
+                        current_bottom += values
+
+            # Add value labels
+            for i, x_pos in enumerate(x_positions):
+                total_value = current_bottom[i]
+                if total_value > 0:
+                    ax.text(x_pos, total_value + total_value * 0.02,
+                            f'{total_value:.0f} GW',
+                            ha='center', va='bottom', fontsize=10, fontweight='bold')
+
+            ax.set_xlabel('Price Scenarios', fontsize=14)
+            ax.set_ylabel(f'Cumulative Capacity 2024-{target_year} (GW)', fontsize=14)
+            ax.set_title(f'{lr_name} - Technology Mix until {target_year}', fontsize=16)
+            ax.grid(True, alpha=0.3, axis='y')
+            ax.set_xticks(x_positions)
+            ax.set_xticklabels(scenario_labels, rotation=45, ha='right')
+
+            # ---- LEGEND PATCHES ----
+            tech_patches = [
+                mpatches.Patch(facecolor=tech_colors[tech], label=tech, edgecolor='black')
+                for tech in tech_stack_order
+            ]
+            supply_patches = [
+                mpatches.Patch(facecolor='lightgray', edgecolor='black', hatch=supply_sources[src]['hatch'],
+                               label=supply_sources[src]['label'])
+                for src in supply_order if supply_sources[src]['hatch']
+            ]
+            first_legend = ax.legend(handles=tech_patches, title="Technologie (Farbe)",
+                                     loc='upper left', bbox_to_anchor=(1.01, 1.0), fontsize=11, title_fontsize=12)
+            ax.add_artist(first_legend)
+            second_legend = ax.legend(handles=supply_patches, title="Supply Option (Muster)",
+                                      loc='upper left', bbox_to_anchor=(1.01, 0.52), fontsize=11, title_fontsize=12)
+
+            plt.tight_layout()
+            safe_lr_name = lr_key
+            output_path = output_dir / f"{safe_lr_name}_stacked_capacity_mix_{target_year}.png"
+            plt.savefig(output_path, dpi=300, bbox_inches='tight')
+            plt.show()
+            plt.close()
+
+        print(f"✓ Completed stacked analysis for {lr_name}")
+
+    print("✓ All stacked capacity plots completed!")
+
+def plot_stock_level_facet_per_technology():
+    """
+    Creates one PNG with 4 subplots (facets), one for each technology (solarPV, windon, windoff, Batteries).
+    Each subplot shows the yearly stock level (capacity_ext_stock) from 2024 to 2040.
+    Each scenario is a separate line in the subplot.
+    """
+    tech_stack_order = ['solarPV', 'windon', 'windoff', 'Batteries']
+    years = list(range(2024, 2041))
+    output_dir = Path("scenario_comparison")
+    output_dir.mkdir(exist_ok=True)
+
+    # Pastel color palette for techs (for subplot titles, etc)
+    n_techs = len(tech_stack_order)
+    colors = sns.color_palette("Set3", n_colors=n_techs)
+    tech_colors = {tech: colors[i] for i, tech in enumerate(tech_stack_order)}
+
+    # Use Set1 for scenarios (distinct lines)
+    scenario_colors = sns.color_palette("Set1", n_colors=len(PRICE_SCENARIOS))
+    scenario_color_map = {sc: scenario_colors[i] for i, sc in enumerate(PRICE_SCENARIOS)}
+
+    print(f"Processing stock levels for technologies: {tech_stack_order}")
+    print(f"Price scenarios: {PRICE_SCENARIOS}")
+    print(f"Results base path: {RESULTS_BASE_PATH}")
+
+    for lr_key, lr_name in LEARNING_RATES.items():
+        print(f"\nProcessing learning rate: {lr_name}")
+
+        fig, axes = plt.subplots(2, 2, figsize=(16, 10), sharex=True, sharey=False)
+        axes = axes.flatten()
+
+        for idx, tech in enumerate(tech_stack_order):
+            ax = axes[idx]
+            print(f"  Processing technology: {tech}")
+
+            lines_plotted = 0
+
+            for sc in PRICE_SCENARIOS:
+                file_path = Path(RESULTS_BASE_PATH) / f"{lr_key}" / "rolling_2024_to_2050" / f"scenario_{sc}.xlsx"
+                if not file_path.exists():
+                    print(f"    File not found: {file_path}")
+                    continue
+
+                try:
+                    # Load data
+                    df = pd.read_excel(file_path, sheet_name='extension_only_caps')
+
+                    # Forward fill stf column
+                    df['stf'] = df['stf'].fillna(method='ffill')
+
+                    # Filter for technology
+                    tech_df = df[df['tech'] == tech].copy()
+
+                    if tech_df.empty:
+                        print(f"    No data for {tech} in {sc}")
+                        continue
+
+                    # Filter for years 2024-2040
+                    year_df = tech_df[tech_df['stf'].between(2024, 2040)]
+
+                    if year_df.empty:
+                        print(f"    No year data for {tech} in {sc}")
+                        continue
+
+                    # Check if capacity_ext_stock column exists
+                    if 'capacity_ext_stock' not in year_df.columns:
+                        print(f"    'capacity_ext_stock' column not found for {tech} in {sc}")
+                        continue
+
+                    # DIREKTE WERTE pro Jahr verwenden - NICHT summieren!
+                    # Stock Level sind bereits aktuelle Bestände pro Jahr
+                    yearly_stock = year_df.set_index('stf')['capacity_ext_stock']
+
+                    # Convert MW to GW
+                    yearly_stock = yearly_stock / 1000
+
+                    # Reindex to ensure all years are present
+                    stock_per_year = yearly_stock.reindex(years, fill_value=0)
+
+                    # Check if we have any non-zero data
+                    if stock_per_year.sum() > 0:
+                        # Plot the line
+                        ax.plot(stock_per_year.index, stock_per_year.values,
+                               marker='o', markersize=4, linewidth=2,
+                               label=sc.replace('_', ' ').title(),
+                               color=scenario_color_map[sc],
+                               alpha=0.8)
+                        lines_plotted += 1
+                        print(f"    Plotted {tech} - {sc}: max={stock_per_year.max():.1f} GW")
+                    else:
+                        print(f"    No non-zero data for {tech} in {sc}")
+
+                except Exception as e:
+                    print(f"    Error for {sc} - {tech}: {e}")
+                    continue
+
+            # Customize subplot
+            ax.set_title(f'{tech}', fontsize=14, fontweight='bold', color=tech_colors[tech])
+            ax.grid(True, alpha=0.3)
+
+            if idx % 2 == 0:  # Left column
+                ax.set_ylabel('Stock Level (GW)', fontsize=12)
+            if idx >= 2:  # Bottom row
+                ax.set_xlabel('Year', fontsize=12)
+
+            ax.set_xticks(years[::2])  # Every 2 years
+            ax.set_xlim([2024, 2040])
+            ax.set_ylim(bottom=0)
+
+            print(f"    Plotted {lines_plotted} lines for {tech}")
+
+        # Add legend to the first subplot with better positioning
+        if len(PRICE_SCENARIOS) > 0:
+            axes[0].legend(title="Price Scenario", fontsize=9, title_fontsize=10,
+                          bbox_to_anchor=(1.05, 1), loc='upper left')
+
+        plt.suptitle(f'Stock Level Evolution 2024-2040\n{lr_name}', fontsize=16, fontweight='bold')
+        plt.tight_layout(rect=[0, 0, 1, 0.94])
+
+        output_path = output_dir / f"{lr_key}_stock_level_facets.png"
+        plt.savefig(output_path, dpi=300, bbox_inches='tight')
+        print(f"✓ Saved: {output_path}")
+
+        plt.show()
+        plt.close()
+
+    print("✓ Stock level facet plots completed!")
+
 def main():
     """Main function to generate all comparison plots"""
     print("Starting scenario comparison plotting...")
@@ -1770,20 +2090,23 @@ def main():
     #plot_eu_secondary_additions_2040()
     print("\n2. Generating LNG Demand comparison...")
     #generate_all_lng_line_plots()
-    plot_lng_demand_comparison()
-    plot_lng_demand_yearly_scatter()
-    plot_lng_demand_yearly_barplot()
-    lng_lineplot_horizons()
-    plot_lng_demand_rolling_horizon_boxplots()
+    #plot_lng_demand_comparison()
+    #plot_lng_demand_yearly_scatter()
+    #plot_lng_demand_yearly_barplot()
+    #lng_lineplot_horizons()
+    #plot_lng_demand_rolling_horizon_boxplots()
     print("\n3. Generating Cost Matrix...")
-    plot_total_system_cost_matrix_2024_2040()
-    plot_3d_cost_matrix_grid_style_fixed()
+    #plot_total_system_cost_matrix_2024_2040()
+    #plot_3d_cost_matrix_grid_style_fixed()
 
     print("\n4. Generating Pareto Plots...")
-    plot_pareto_cost_vs_remanufacturing()
-    plot_pareto_cost_vs_lng()
+    #plot_pareto_cost_vs_remanufacturing()
+    #plot_pareto_cost_vs_lng()
     print("\n5. Generating Scrap Plots...")
-    generate_all_scrap_visualizations()
+    #generate_all_scrap_visualizations()
+    print("\n6. Generating Capacity Mix Stacked Bar Plots...")
+    #plot_capacity_mix_stacked_bars()
+    plot_stock_level_facet_per_technology()
 
     print("\nScenario comparison plotting completed!")
 
