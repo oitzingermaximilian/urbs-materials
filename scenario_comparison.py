@@ -24,7 +24,7 @@ plt.rcParams.update(
 )
 
 # Define the base results path
-RESULTS_BASE_PATH = r"C:\Users\Gerald\Desktop\crm_paper_Results" #r"C:\Users\maxoi\OneDrive\Desktop\results_crm_paper" #Dektop: r"C:\Users\Gerald\Desktop\crm_paper_Results
+RESULTS_BASE_PATH = r"C:\Users\maxoi\OneDrive\Desktop\results_crm_paper" #Dektop: r"C:\Users\Gerald\Desktop\crm_paper_Results
 
 # Define learning rate scenarios - updated with all your LRs including LR6
 LEARNING_RATES = {
@@ -41,18 +41,34 @@ LEARNING_RATES = {
 }
 
 # Define price scenarios in order - updated to match CRM_Paper scenarios
-PRICE_SCENARIOS = [
-    "extremely_low",
-    "very_low",
-    "low",
-    "moderately_low",
-    "slightly_below_average",
-    "average",
-    "slightly_above_average",
-    "moderately_high",
-    "high",
-    "very_high",
-    "extremely_high"
+SCENARIO_COMBOS = [
+    "min_min_min",
+    "min_min_avg",
+    "min_min_high",
+    "min_avg_min",
+    "min_avg_avg",
+    "min_avg_high",
+    "min_high_min",
+    "min_high_avg",
+    "min_high_high",
+    "avg_min_min",
+    "avg_min_avg",
+    "avg_min_high",
+    "avg_avg_min",
+    "avg_avg_avg",
+    "avg_avg_high",
+    "avg_high_min",
+    "avg_high_avg",
+    "avg_high_high",
+    "high_min_min",
+    "high_min_avg",
+    "high_min_high",
+    "high_avg_min",
+    "high_avg_avg",
+    "high_avg_high",
+    "high_high_min",
+    "high_high_avg",
+    "high_high_high",
 ]
 
 # Define rolling horizon results path
@@ -2090,23 +2106,23 @@ def main():
     #plot_eu_secondary_additions_2040()
     print("\n2. Generating LNG Demand comparison...")
     #generate_all_lng_line_plots()
-    #plot_lng_demand_comparison()
-    #plot_lng_demand_yearly_scatter()
-    #plot_lng_demand_yearly_barplot()
-    #lng_lineplot_horizons()
-    #plot_lng_demand_rolling_horizon_boxplots()
+    plot_lng_demand_comparison()
+    plot_lng_demand_yearly_scatter()
+    plot_lng_demand_yearly_barplot()
+    lng_lineplot_horizons()
+    plot_lng_demand_rolling_horizon_boxplots()
     print("\n3. Generating Cost Matrix...")
-    #plot_total_system_cost_matrix_2024_2040()
-    #plot_3d_cost_matrix_grid_style_fixed()
+    plot_total_system_cost_matrix_2024_2040()
+    plot_3d_cost_matrix_grid_style_fixed()
 
     print("\n4. Generating Pareto Plots...")
-    #plot_pareto_cost_vs_remanufacturing()
-    #plot_pareto_cost_vs_lng()
+    plot_pareto_cost_vs_remanufacturing()
+    plot_pareto_cost_vs_lng()
     print("\n5. Generating Scrap Plots...")
-    #generate_all_scrap_visualizations()
+    generate_all_scrap_visualizations()
     print("\n6. Generating Capacity Mix Stacked Bar Plots...")
-    #plot_capacity_mix_stacked_bars()
-    plot_stock_level_facet_per_technology()
+    plot_capacity_mix_stacked_bars()
+    #plot_stock_level_facet_per_technology()
 
     print("\nScenario comparison plotting completed!")
 
