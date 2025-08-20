@@ -29,14 +29,14 @@ RESULTS_BASE_PATH = r"C:\Users\maxoi\OneDrive\Desktop\results_crm_paper" #Dektop
 # Define learning rate scenarios - updated with all your LRs including LR6
 LEARNING_RATES = {
     "LR1": "1% Learning Rate",
-    "LR3_5": "3.5% Learning Rate",
-    "LR4": "4% Learning Rate",
-    "LR5": "5% Learning Rate",
-    "LR6": "6% Learning Rate",
-    "LR7": "7% Learning Rate",
-    "LR8": "8% Learning Rate",
-    "LR9": "9% Learning Rate",
-    "LR10": "10% Learning Rate"
+    #"LR3_5": "3.5% Learning Rate",
+    #"LR4": "4% Learning Rate",
+    #"LR5": "5% Learning Rate",
+    #"LR6": "6% Learning Rate",
+    #"LR7": "7% Learning Rate",
+    #"LR8": "8% Learning Rate",
+    #"LR9": "9% Learning Rate",
+    #"LR10": "10% Learning Rate"
 }
 
 # Define price scenarios in order - split by LNG type
@@ -982,46 +982,6 @@ def plot_pareto_cost_vs_remanufacturing():
 
     plt.show()
 
-def get_fixed_price_labels():
-    """
-    Generate fixed price scenario labels to avoid duplicates
-    """
-    # FIXED price scenario labels - be more specific to avoid duplicates
-    price_labels_fixed = []
-    for scenario in SCENARIO_COMBOS_LNG:
-        scenario_lower = scenario.lower()
-        if 'extremely_low' in scenario_lower:
-            price_labels_fixed.append('Ext Low')
-        elif 'very_low' in scenario_lower:
-            price_labels_fixed.append('Very Low')
-        elif 'moderately_low' in scenario_lower:
-            price_labels_fixed.append('Mod Low')
-        elif 'slightly_below_average' in scenario_lower:
-            price_labels_fixed.append('Below Avg')
-        elif 'slightly_above_average' in scenario_lower:
-            price_labels_fixed.append('Above Avg')
-        elif 'moderately_high' in scenario_lower:
-            price_labels_fixed.append('Mod High')
-        elif 'very_high' in scenario_lower:
-            price_labels_fixed.append('Very High')
-        elif 'extremely_high' in scenario_lower:
-            price_labels_fixed.append('Ext High')
-        elif scenario_lower == 'low':  # Only exact match for 'low'
-            price_labels_fixed.append('Low')
-        elif scenario_lower == 'high':  # Only exact match for 'high'
-            price_labels_fixed.append('High')
-        elif 'average' in scenario_lower:
-            price_labels_fixed.append('Average')
-        else:
-            # Fallback: use first 8 characters
-            price_labels_fixed.append(scenario.replace('_', ' ').title()[:8])
-
-    # DEBUG: Print the fixed labels
-    print("\nFixed price labels:")
-    for i, label in enumerate(price_labels_fixed):
-        print(f"{i}: {SCENARIO_COMBOS_LNG[i]} -> {label}")
-
-    return price_labels_fixed
 
 def plot_3d_scrap_bars_cumulative():
     """
@@ -1484,70 +1444,49 @@ def lng_lineplot_horizons(lr_code="LR25", price_scenario="extremely_low"):
     # Create output directory
     output_dir = Path("scenario_comparison")
     output_dir.mkdir(exist_ok=True)
-    print(f"Creating LNG rolling horizon comparison for {lr_code} - {price_scenario}...")
+    print(f"Creating LNG rolling horizon comparison for all LRs and price scenarios...")
 
-    # Define all rolling horizon folders
     rolling_horizons = [
         "rolling_2024_to_2050",
         "rolling_2029_to_2050",
         "rolling_2034_to_2050",
         "rolling_2039_to_2050"
     ]
-
-    # Colors and markers for each rolling horizon
-    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']  # Blue, Orange, Green, Red
+    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']
     markers = ['o', 's', '^', 'D']
 
-    plt.figure(figsize=(14, 8))
+    all_price_scenarios = SCENARIO_COMBOS_LNG_NZ + SCENARIO_COMBOS_LNG_PF
 
-    # Collect data for each rolling horizon
-    for horizon_idx, rolling_horizon in enumerate(rolling_horizons):
-        print(f"  Processing {rolling_horizon}...")
-
-        # Load data for this rolling horizon
-        df = load_rolling_horizon_data(lr_code, rolling_horizon, price_scenario, "e_pro_in")
-
-        if df is not None:
-            # Strip whitespace from commodity names
-            df['com'] = df['com'].str.strip()
-
-            # Filter for LNG data and only years up to 2040
-            lng_data = df[(df['com'] == 'LNG') & (df['stf'] <= 2040)]
-
-            if not lng_data.empty:
-                # Group by year and sum LNG demand for each year
-                yearly_lng = lng_data.groupby('stf')['e_pro_in'].sum().reset_index()
-                yearly_lng['lng_bcm'] = yearly_lng['e_pro_in'].apply(mwh_to_bcm)
-
-                # Sort by year for proper line plotting
-                yearly_lng = yearly_lng.sort_values('stf')
-
-                # Plot line for this rolling horizon
-                plt.plot(yearly_lng['stf'], yearly_lng['lng_bcm'],
-                        color=colors[horizon_idx],
-                        marker=markers[horizon_idx],
-                        linewidth=2,
-                        markersize=6,
-                        label=f"{rolling_horizon.replace('_', ' ').title()}",
-                        alpha=0.8)
-
-                print(f"    Plotted {len(yearly_lng)} data points for {rolling_horizon}")
-            else:
-                print(f"    No LNG data found for {rolling_horizon}")
-        else:
-            print(f"    Could not load data for {rolling_horizon}")
-
-    plt.xlabel('Year')
-    plt.ylabel('LNG Demand (BCM)')
-    plt.title(f'LNG Demand Over Time: {lr_code} - {price_scenario.replace("_", " ").title()}')
-    plt.legend(title='Rolling Horizons', bbox_to_anchor=(1.05, 1), loc='upper left')
-    plt.grid(True, linestyle='--', alpha=0.7)
-    plt.xlim(None, 2041)  # Set x-axis limit to end at 2040
-
-    plt.tight_layout()
-    output_path = output_dir / f"lng_lineplot_horizons_{lr_code}_{price_scenario}.png"
-    plt.savefig(output_path, dpi=300, bbox_inches='tight')
-    plt.show()
+    for lr_code, lr_name in LEARNING_RATES.items():
+        for price_scenario in all_price_scenarios:
+            plt.figure(figsize=(14, 8))
+            print(f"LR: {lr_code}, Price scenario: {price_scenario}")
+            for horizon_idx, rolling_horizon in enumerate(rolling_horizons):
+                df = load_rolling_horizon_data(lr_code, rolling_horizon, price_scenario, "e_pro_in")
+                if df is not None:
+                    df['com'] = df['com'].str.strip()
+                    lng_data = df[(df['com'] == 'LNG') & (df['stf'] <= 2040)]
+                    if not lng_data.empty:
+                        yearly_lng = lng_data.groupby('stf')['e_pro_in'].sum().reset_index()
+                        yearly_lng['lng_bcm'] = yearly_lng['e_pro_in'].apply(mwh_to_bcm)
+                        yearly_lng = yearly_lng.sort_values('stf')
+                        plt.plot(yearly_lng['stf'], yearly_lng['lng_bcm'],
+                                 color=colors[horizon_idx],
+                                 marker=markers[horizon_idx],
+                                 linewidth=2,
+                                 markersize=6,
+                                 label=f"{rolling_horizon.replace('_', ' ').title()}",
+                                 alpha=0.8)
+            plt.xlabel('Year')
+            plt.ylabel('LNG Demand (BCM)')
+            plt.title(f'LNG Demand Over Time: {lr_code} - {price_scenario.replace("_", " ").title()}')
+            plt.legend(title='Rolling Horizons', bbox_to_anchor=(1.05, 1), loc='upper left')
+            plt.grid(True, linestyle='--', alpha=0.7)
+            plt.xlim(None, 2041)
+            plt.tight_layout()
+            output_path = output_dir / f"lng_lineplot_horizons_{lr_code}_{price_scenario}.png"
+            plt.savefig(output_path, dpi=300, bbox_inches='tight')
+            plt.close()
 
 def plot_lng_demand_rolling_horizon_boxplots():
     """
@@ -2152,22 +2091,23 @@ def main_lng_nz():
 
     # Generate plots using existing functions
     print("\n1. Generating LNG_NZ Demand comparison...")
-    plot_lng_demand_comparison()
-    plot_lng_demand_yearly_scatter()
-    plot_lng_demand_yearly_barplot()
+    #plot_lng_demand_comparison()
+    #plot_lng_demand_yearly_scatter()
+    #plot_lng_demand_yearly_barplot()
     lng_lineplot_horizons()
-    plot_lng_demand_rolling_horizon_boxplots()
+    #plot_lng_demand_rolling_horizon_boxplots()
+
 
     print("\n2. Generating LNG_NZ Cost Matrix...")
-    plot_total_system_cost_matrix_2024_2040()
-    plot_3d_cost_matrix_grid_style_fixed()
+    #plot_total_system_cost_matrix_2024_2040()
+    #plot_3d_cost_matrix_grid_style_fixed()
 
     print("\n3. Generating LNG_NZ Pareto Plots...")
-    plot_pareto_cost_vs_remanufacturing()
-    plot_pareto_cost_vs_lng()
+    #plot_pareto_cost_vs_remanufacturing()
+    #plot_pareto_cost_vs_lng()
 
     print("\n4. Generating LNG_NZ Scrap Plots...")
-    generate_all_scrap_visualizations()
+    #generate_all_scrap_visualizations()
 
     # Restore original scenarios
     SCENARIO_COMBOS_LNG = original_scenarios
