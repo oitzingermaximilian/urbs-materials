@@ -25,6 +25,7 @@ def generate_scenario_function(solar_lvl, wind_lvl, batt_lvl, lng_scenario):
     cost_str = ",\n            ".join([f'"{k}": {v}' for k, v in costs.items()])
     func = f'''
 def {func_name}(data, data_urbsextensionv1):
+    import pandas as pd  # Import pandas for NaN checking
     if "process" in data:
         pro = data["process"]
         for stf in data["global_prop"].index.levels[0].tolist():
@@ -50,21 +51,21 @@ def {func_name}(data, data_urbsextensionv1):
     if "commodity" in data:
         co = data["commodity"]
         
-        # LNG price data from 2024 to 2050
+        # LNG price data from 2024 to 2050 (27 values: indices 0-26)
         lng_prices_net_zero = [
-            19.15, 19.15, 19.15, 19.15, 19.15, 19.15, 19.15, 19.48, 19.81, 20.14, 20.43,
+            19.15, 19.15, 19.15, 19.15, 19.15, 19.15, 19.48, 19.81, 20.14, 20.43,
             20.76, 21.12, 21.45, 21.81, 22.18, 22.41, 22.77, 23.15, 23.51, 23.89,
-            24.27, 24.65, 25.07, 25.49, 25.87, 26.30
+            24.27, 24.65, 25.07, 25.49, 25.87, 26.30, 26.74
         ]
         
         lng_prices_persisting_fossil = [
-            19.15, 19.15, 19.15, 19.15, 19.15, 19.15, 19.15, 20.45, 21.87, 23.34, 24.93,
+            19.15, 19.15, 19.15, 19.15, 19.15, 19.15, 20.45, 21.87, 23.34, 24.93,
             26.44, 28.39, 30.35, 32.33, 32.33, 32.33, 34.56, 36.93, 39.45, 42.12,
-            44.95, 47.94, 51.10, 54.45, 57.99, 61.74
+            44.95, 47.94, 51.10, 54.45, 57.99, 61.74, 65.71
         ]
         
         for stf in data["global_prop"].index.levels[0].tolist():
-            # ...existing piped gas logic...
+            # Piped Gas logic
             base_value = 319200000
             yearly_decrease_factor = 0.95948
             if stf == 2024:
@@ -77,14 +78,34 @@ def {func_name}(data, data_urbsextensionv1):
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
                 year_index = int(stf - 2024)  # Convert to integer
+                
+                # Ensure year_index is within bounds
+                if year_index < 0 or year_index >= 27:
+                    continue
+                
                 if "{lng_scenario}" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
                     lng_price = lng_prices_persisting_fossil[year_index]
                 
-                # Set LNG commodity price
+                # Update LNG Stock price only
                 try:
-                    co.loc[(stf, "EU27", "LNG", "Stock"), "price"] = lng_price
+                    # First, ensure the max value is not NaN
+                    lng_key_with_space = (stf, "EU27", "LNG ", "Stock")
+                    lng_key_without_space = (stf, "EU27", "LNG", "Stock")
+                    
+                    if lng_key_with_space in co.index:
+                        # Ensure max is not NaN before setting price
+                        if pd.isna(co.loc[lng_key_with_space, "max"]):
+                            co.loc[lng_key_with_space, "max"] = float('inf')
+                        co.loc[lng_key_with_space, "price"] = lng_price
+                    elif lng_key_without_space in co.index:
+                        # Ensure max is not NaN before setting price
+                        if pd.isna(co.loc[lng_key_without_space, "max"]):
+                            co.loc[lng_key_without_space, "max"] = float('inf')
+                        co.loc[lng_key_without_space, "price"] = lng_price
+                    else:
+                        print(f"Warning: LNG Stock commodity not found for year {{stf}}")
                 except KeyError:
                     # If the exact location doesn't exist, try alternative indexing
                     pass
@@ -119,7 +140,7 @@ def {func_name}(data, data_urbsextensionv1):
                 key = (stf, location, tech)
                 if key in recyclingcost:
                     recyclingcost[key] = new_costs[tech]
-                    print(f"Updated recycling cost for {{tech}} in {{stf}} to {{new_costs[tech]}} EUR/ton")
+                    #print(f"Updated recycling cost for {{tech}} in {{stf}} to {{new_costs[tech]}} EUR/ton")
     return data, data_urbsextensionv1
 '''
     return func
