@@ -157,4 +157,3 @@ print("scenarios = [")
 for entry in scenario_list_entries:
     print(entry + ",")
 print("]")
-
