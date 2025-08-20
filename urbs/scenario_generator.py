@@ -76,7 +76,7 @@ def {func_name}(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "{lng_scenario}" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF

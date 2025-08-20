@@ -3732,6 +3732,7 @@ def scenario_eem_14(
         stocklvl_dict,
     )
 
+
 def scenario_min_min_min_LNG_NZ(data, data_urbsextensionv1):
     if "process" in data:
         pro = data["process"]
@@ -3784,7 +3785,7 @@ def scenario_min_min_min_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -3885,7 +3886,7 @@ def scenario_min_min_min_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -3986,7 +3987,7 @@ def scenario_min_min_avg_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -4087,7 +4088,7 @@ def scenario_min_min_avg_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -4095,7 +4096,7 @@ def scenario_min_min_avg_LNG_PF(data, data_urbsextensionv1):
                 
                 # Set LNG commodity price
                 try:
-                    co.loc[(stf, "EU27", "LNG", "Stock"), "price"] = lng_price
+                    co.loc[(stf, "EU27", "LNG", "Buy"), "price"] = lng_price
                 except KeyError:
                     # If the exact location doesn't exist, try alternative indexing
                     pass
@@ -4188,7 +4189,7 @@ def scenario_min_min_high_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -4289,7 +4290,7 @@ def scenario_min_min_high_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -4390,7 +4391,7 @@ def scenario_min_avg_min_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -4491,7 +4492,7 @@ def scenario_min_avg_min_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -4592,7 +4593,7 @@ def scenario_min_avg_avg_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -4693,7 +4694,7 @@ def scenario_min_avg_avg_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -4794,7 +4795,7 @@ def scenario_min_avg_high_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -4895,7 +4896,7 @@ def scenario_min_avg_high_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -4996,7 +4997,7 @@ def scenario_min_high_min_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -5097,7 +5098,7 @@ def scenario_min_high_min_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -5198,7 +5199,7 @@ def scenario_min_high_avg_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -5299,7 +5300,7 @@ def scenario_min_high_avg_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -5400,7 +5401,7 @@ def scenario_min_high_high_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -5501,7 +5502,7 @@ def scenario_min_high_high_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -5602,7 +5603,7 @@ def scenario_avg_min_min_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -5703,7 +5704,7 @@ def scenario_avg_min_min_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -5804,7 +5805,7 @@ def scenario_avg_min_avg_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -5905,7 +5906,7 @@ def scenario_avg_min_avg_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -6006,7 +6007,7 @@ def scenario_avg_min_high_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -6107,7 +6108,7 @@ def scenario_avg_min_high_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -6208,7 +6209,7 @@ def scenario_avg_avg_min_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -6309,7 +6310,7 @@ def scenario_avg_avg_min_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -6410,7 +6411,7 @@ def scenario_avg_avg_avg_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -6511,7 +6512,7 @@ def scenario_avg_avg_avg_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -6612,7 +6613,7 @@ def scenario_avg_avg_high_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -6713,7 +6714,7 @@ def scenario_avg_avg_high_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -6814,7 +6815,7 @@ def scenario_avg_high_min_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -6915,7 +6916,7 @@ def scenario_avg_high_min_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -7016,7 +7017,7 @@ def scenario_avg_high_avg_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -7117,7 +7118,7 @@ def scenario_avg_high_avg_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -7218,7 +7219,7 @@ def scenario_avg_high_high_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -7319,7 +7320,7 @@ def scenario_avg_high_high_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -7420,7 +7421,7 @@ def scenario_high_min_min_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -7521,7 +7522,7 @@ def scenario_high_min_min_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -7622,7 +7623,7 @@ def scenario_high_min_avg_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -7723,7 +7724,7 @@ def scenario_high_min_avg_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -7824,7 +7825,7 @@ def scenario_high_min_high_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -7925,7 +7926,7 @@ def scenario_high_min_high_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -8026,7 +8027,7 @@ def scenario_high_avg_min_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -8127,7 +8128,7 @@ def scenario_high_avg_min_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -8228,7 +8229,7 @@ def scenario_high_avg_avg_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -8329,7 +8330,7 @@ def scenario_high_avg_avg_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -8430,7 +8431,7 @@ def scenario_high_avg_high_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -8531,7 +8532,7 @@ def scenario_high_avg_high_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -8632,7 +8633,7 @@ def scenario_high_high_min_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -8733,7 +8734,7 @@ def scenario_high_high_min_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -8834,7 +8835,7 @@ def scenario_high_high_avg_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -8935,7 +8936,7 @@ def scenario_high_high_avg_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -9036,7 +9037,7 @@ def scenario_high_high_high_LNG_NZ(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_NZ" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
@@ -9137,7 +9138,7 @@ def scenario_high_high_high_LNG_PF(data, data_urbsextensionv1):
             
             # Set LNG prices based on year (2024-2050) and scenario type
             if 2024 <= stf <= 2050:
-                year_index = stf - 2024
+                year_index = int(stf - 2024)  # Convert to integer
                 if "LNG_PF" == "LNG_NZ":
                     lng_price = lng_prices_net_zero[year_index]
                 else:  # LNG_PF
