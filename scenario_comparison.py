@@ -2335,13 +2335,13 @@ def main_lng_pf():
 
 
 # For LNG Net Zero scenarios only (27 scenarios)
-main_lng_nz()
+#main_lng_nz()
 
 # For LNG Persisting Fossil scenarios only (27 scenarios)
 #main_lng_pf()
 
 # For all scenarios combined (54 scenarios)
-#main()
+main()
 
 
 
