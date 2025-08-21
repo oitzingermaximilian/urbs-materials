@@ -1875,7 +1875,7 @@ def plot_capacity_mix_stacked_bars():
 
             ax.set_xlabel('Price Scenarios', fontsize=14)
             ax.set_ylabel(f'Cumulative Capacity 2024-{target_year} (GW)', fontsize=14)
-            ax.set_title(f'{lr_name} - Technology Mix until {target_year}', fontsize=16)
+            ax.set_title(f'{lr_name} - Base Case Technology Mix until {target_year}', fontsize=16)
             ax.grid(True, alpha=0.3, axis='y')
             ax.set_xticks(x_positions)
             ax.set_xticklabels(scenario_labels, rotation=45, ha='right')
@@ -2234,7 +2234,7 @@ def main():
     plot_pareto_cost_vs_remanufacturing()
     plot_pareto_cost_vs_lng()
     print("\n5. Generating Scrap Plots...")
-    generate_all_scrap_visualizations()
+    #generate_all_scrap_visualizations()
     print("\n6. Generating Capacity Mix Stacked Bar Plots...")
     plot_capacity_mix_stacked_bars()
     plot_stock_level_facet_per_technology()
@@ -2318,7 +2318,7 @@ def main_lng_pf():
     plot_pareto_cost_vs_lng()
 
     print("\n4. Generating LNG_PF Scrap Plots...")
-    generate_all_scrap_visualizations()
+    #generate_all_scrap_visualizations()
 
     # Restore original scenarios
     SCENARIO_COMBOS_LNG = original_scenarios
