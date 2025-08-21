@@ -2268,19 +2268,19 @@ def main_lng_nz():
     #plot_lng_demand_yearly_barplot()
     #lng_lineplot_horizons()
     lng_lineplot_range()
-    #plot_lng_demand_rolling_horizon_boxplots()
+    plot_lng_demand_rolling_horizon_boxplots()
 
 
     print("\n2. Generating LNG_NZ Cost Matrix...")
-    #plot_total_system_cost_matrix_2024_2040()
-    #plot_3d_cost_matrix_grid_style_fixed()
+    plot_total_system_cost_matrix_2024_2040()
+    plot_3d_cost_matrix_grid_style_fixed()
 
     print("\n3. Generating LNG_NZ Pareto Plots...")
-    #plot_pareto_cost_vs_remanufacturing()
-    #plot_pareto_cost_vs_lng()
+    plot_pareto_cost_vs_remanufacturing()
+    plot_pareto_cost_vs_lng()
 
     print("\n4. Generating LNG_NZ Scrap Plots...")
-    #generate_all_scrap_visualizations()
+    generate_all_scrap_visualizations()
 
     # Restore original scenarios
     SCENARIO_COMBOS_LNG = original_scenarios
