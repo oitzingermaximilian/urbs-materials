@@ -24,19 +24,19 @@ plt.rcParams.update(
 )
 
 # Define the base results path
-RESULTS_BASE_PATH = r"C:\Users\maxoi\OneDrive\Desktop\results_crm_paper" #Dektop: r"C:\Users\Gerald\Desktop\crm_paper_Results
+RESULTS_BASE_PATH = r"/home/users/moitzinger/projects/max_workspace/urbs-extension/result/"#r"C:\Users\maxoi\OneDrive\Desktop\results_crm_paper" #Dektop: r"C:\Users\Gerald\Desktop\crm_paper_Results
 
 # Define learning rate scenarios - updated with all your LRs including LR6
 LEARNING_RATES = {
     "LR1": "1% Learning Rate",
-    #"LR3_5": "3.5% Learning Rate",
-    #"LR4": "4% Learning Rate",
-    #"LR5": "5% Learning Rate",
-    #"LR6": "6% Learning Rate",
-    #"LR7": "7% Learning Rate",
-    #"LR8": "8% Learning Rate",
-    #"LR9": "9% Learning Rate",
-    #"LR10": "10% Learning Rate"
+    "LR3_5": "3.5% Learning Rate",
+    "LR4": "4% Learning Rate",
+    "LR5": "5% Learning Rate",
+    "LR6": "6% Learning Rate",
+    "LR7": "7% Learning Rate",
+    "LR8": "8% Learning Rate",
+    "LR9": "9% Learning Rate",
+    "LR10": "10% Learning Rate"
 }
 
 # Define price scenarios in order - split by LNG type
@@ -101,7 +101,7 @@ SCENARIO_COMBOS_LNG_PF = [
 ]
 
 # Define rolling horizon results path
-ROLLING_HORIZON_BASE_PATH = r"C:\Users\maxoi\OneDrive\Desktop\results_crm_paper"
+ROLLING_HORIZON_BASE_PATH = r"/home/users/moitzinger/projects/max_workspace/urbs-extension/result/"#r"C:\Users\maxoi\OneDrive\Desktop\results_crm_paper"
 
 def create_compact_scenario_label(scenario):
     """
@@ -2095,6 +2095,7 @@ def main_lng_nz():
     #plot_lng_demand_yearly_scatter()
     #plot_lng_demand_yearly_barplot()
     lng_lineplot_horizons()
+    lng_lineplot_range()
     #plot_lng_demand_rolling_horizon_boxplots()
 
 
