@@ -2131,7 +2131,7 @@ def lng_lineplot_range():
         output_path_nz = output_dir / f"lng_range_plot_NZ_{lr_code}.png"
         plt.savefig(output_path_nz, dpi=300, bbox_inches='tight')
         print(f"✓ Saved NZ plot: {output_path_nz}")
-        plt.show()
+        #plt.show()
         plt.close()
 
         # ===== PLOT 2: LNG_PF SCENARIOS =====
@@ -2202,7 +2202,7 @@ def lng_lineplot_range():
         output_path_pf = output_dir / f"lng_range_plot_PF_{lr_code}.png"
         plt.savefig(output_path_pf, dpi=300, bbox_inches='tight')
         print(f"✓ Saved PF plot: {output_path_pf}")
-        plt.show()
+        #plt.show()
         plt.close()
 
     print("✓ LNG range plot generation completed!")
