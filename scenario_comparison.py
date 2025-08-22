@@ -1454,7 +1454,7 @@ def lng_lineplot_horizons(lr_code="LR25", price_scenario="extremely_low"):
     colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']
     markers = ['o', 's', '^', 'D']
 
-    all_price_scenarios = SCENARIO_COMBOS_LNG_PF#+SCENARIO_COMBOS_LNG_NZ #+ SCENARIO_COMBOS_LNG_PF
+    all_price_scenarios = SCENARIO_COMBOS_LNG_NZ #+ SCENARIO_COMBOS_LNG_PF
 
     for lr_code, lr_name in LEARNING_RATES.items():
         for price_scenario in all_price_scenarios:
@@ -2243,7 +2243,7 @@ def main():
 
 
 # Keep the combined list for backward compatibility
-SCENARIO_COMBOS_LNG = SCENARIO_COMBOS_LNG_PF #+SCENARIO_COMBOS_LNG_NZ + SCENARIO_COMBOS_LNG_PF
+SCENARIO_COMBOS_LNG = SCENARIO_COMBOS_LNG_NZ #+ SCENARIO_COMBOS_LNG_PF
 
 def main_lng_nz():
     """Main function to generate comparison plots for LNG_NZ scenarios only"""
