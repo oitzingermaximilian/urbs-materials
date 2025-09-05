@@ -2523,7 +2523,7 @@ def co2_lineplot_range_comp_basecase():
                 continue
 
             # Filter for years 2024-2050 and sum CO2 emissions per year
-            co2_df = df[(df['stf'] >= 2024) & (df['stf'] <= 2050)]
+            co2_df = df[(df['stf'] >= 2024) & (df['stf'] <= 2040)]
             if co2_df.empty:
                 continue
 
@@ -2590,7 +2590,7 @@ def co2_lineplot_range_comp_basecase():
         lr_short = lr_name.split('%')[0].replace('Learning Rate', '').strip() + '%'
         ax.set_title(f'{lr_short}', fontsize=12, fontweight='bold')
         ax.grid(True, linestyle='--', alpha=0.4)
-        ax.set_xlim(2024, 2050)
+        ax.set_xlim(2024, 2040)
 
         # Only show x-axis labels on bottom row
         if lr_idx >= 6:  # Bottom row (indices 6, 7, 8)
