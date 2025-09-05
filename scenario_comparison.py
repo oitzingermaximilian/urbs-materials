@@ -2746,6 +2746,7 @@ def plot_capacity_additions_by_technology_and_lr():
 
     print("✓ Completed cumulative capacity additions plots by technology and learning rate!")
 
+
 def plot_capacity_additions_by_technology_and_lr_nzia_split():
     """
     For each technology, create 2 PNGs (2030, 2040). Each PNG has 4 subplots:
@@ -2753,16 +2754,27 @@ def plot_capacity_additions_by_technology_and_lr_nzia_split():
     - NZ without NZIA
     - PF with NZIA
     - PF without NZIA
-    Each subplot: x-axis = learning rates, box = scenario spread (for that group).
+    Each subplot: x-axis = learning rates, 3 grouped boxplots per LR = Manufacturing, Remanufacturing, Stockpile
     """
     output_dir = Path("scenario_comparison")
     output_dir.mkdir(exist_ok=True)
 
     technologies = ['solarPV', 'windon', 'windoff', 'Batteries']
+
+    # All 3 supply sources with better labels
     supply_sources = {
+        'capacity_ext_euprimary': 'Manufacturing',
         'capacity_ext_eusecondary': 'Remanufacturing',
-        'capacity_ext_euprimary': 'Manufacturing'
+        'capacity_ext_stockout': 'Stockpile Withdrawals'
     }
+
+    # Colors for the 3 supply sources (light blues and complementary colors)
+    supply_colors = {
+        'Manufacturing': '#87CEEB',  # Sky blue
+        'Remanufacturing': '#4682B4',  # Steel blue
+        'Stockpile Withdrawals': '#B0C4DE'  # Light steel blue
+    }
+
     years = [2030, 2040]
 
     scenario_groups = [
@@ -2772,26 +2784,43 @@ def plot_capacity_additions_by_technology_and_lr_nzia_split():
         {"label": "PF without NZIA", "variant": "results_without_nzia", "scenarios": SCENARIO_COMBOS_LNG_PF},
     ]
 
-    print("Creating cumulative capacity additions plots by technology, learning rate, NZIA, and scenario group...")
+    print("Creating cumulative capacity additions plots with grouped supply sources...")
 
-    for supply_source, supply_label in supply_sources.items():
-        for target_year in years:
-            for technology in technologies:
-                print(f"Processing {technology} {supply_label} cumulative 2024-{target_year}...")
-                fig, axes = plt.subplots(2, 2, figsize=(16, 12))
-                axes = axes.flatten()
-                for group_idx, group in enumerate(scenario_groups):
-                    ax = axes[group_idx]
-                    print(f"  Subplot: {group['label']}")
-                    data_for_boxplot = []
-                    labels_for_boxplot = []
-                    for lr_code, lr_name in LEARNING_RATES.items():
+    for target_year in years:
+        for technology in technologies:
+            print(f"Processing {technology} cumulative 2024-{target_year}...")
+            fig, axes = plt.subplots(2, 2, figsize=(18, 14))  # Slightly wider for grouped boxes
+            axes = axes.flatten()
+
+            for group_idx, group in enumerate(scenario_groups):
+                ax = axes[group_idx]
+                print(f"  Subplot: {group['label']}")
+
+                # Collect data for all supply sources and learning rates
+                all_data_for_plot = []
+                all_positions = []
+                all_colors = []
+                all_labels = []
+
+                # Position parameters for grouped boxplots
+                box_width = 0.25
+                lr_positions = list(range(len(LEARNING_RATES)))
+
+                for supply_idx, (supply_source, supply_label) in enumerate(supply_sources.items()):
+                    data_for_this_supply = []
+                    positions_for_this_supply = []
+
+                    for lr_idx, (lr_code, lr_name) in enumerate(LEARNING_RATES.items()):
                         scenario_values = []
+
                         for scenario in group['scenarios']:
-                            file_path = Path(RESULTS_BASE_PATH) / group['variant'] / lr_code / "rolling_2024_to_2050" / f"scenario_{scenario}.xlsx"
+                            file_path = Path(RESULTS_BASE_PATH) / group[
+                                'variant'] / lr_code / "rolling_2024_to_2050" / f"scenario_{scenario}.xlsx"
+
                             if not file_path.exists():
                                 scenario_values.append(0)
                                 continue
+
                             try:
                                 extension_df = pd.read_excel(file_path, sheet_name='extension_only_caps')
                                 extension_df['stf'] = extension_df['stf'].fillna(method='ffill')
@@ -2800,51 +2829,83 @@ def plot_capacity_additions_by_technology_and_lr_nzia_split():
                             except Exception as e:
                                 scenario_values.append(0)
                                 continue
+
                             tech_data = extension_df[extension_df['tech'] == technology]
                             if tech_data.empty:
                                 scenario_values.append(0)
                                 continue
+
                             cumulative_data = tech_data[(tech_data['stf'] >= 2024) & (tech_data['stf'] <= target_year)]
                             if cumulative_data.empty or supply_source not in cumulative_data.columns:
                                 scenario_values.append(0)
                                 continue
-                            cumulative_capacity = cumulative_data[supply_source].sum() / 1000
+
+                            cumulative_capacity = cumulative_data[supply_source].sum() / 1000  # Convert to GW
                             scenario_values.append(cumulative_capacity)
-                        data_for_boxplot.append(scenario_values)
-                        lr_percent = lr_name.split('%')[0].replace('Learning Rate', '').strip()
-                        labels_for_boxplot.append(f"{lr_percent}%")
-                    # Boxplot
-                    colors_gradient = sns.color_palette("viridis", n_colors=len(LEARNING_RATES))
-                    colors_gradient = [to_hex(c) for c in colors_gradient]
-                    box_plot = ax.boxplot(data_for_boxplot,
-                                         labels=labels_for_boxplot,
-                                         patch_artist=True,
-                                         showmeans=True,
-                                         meanprops={'marker': 'D', 'markerfacecolor': 'red',
-                                                   'markeredgecolor': 'red', 'markersize': 6})
 
-                    # Color the boxes
-                    for patch, color in zip(box_plot['boxes'], colors_gradient):
-                        patch.set_facecolor(color)
-                        patch.set_alpha(0.7)
+                        data_for_this_supply.append(scenario_values)
+                        # Position offset: -0.25, 0, +0.25 for the 3 supply sources
+                        position = lr_idx + (supply_idx - 1) * box_width
+                        positions_for_this_supply.append(position)
 
-                    # Customize subplot
-                    ax.set_xlabel('Learning Rate', fontsize=12)
-                    ax.set_ylabel(f'Cumulative {supply_label} Additions (GW)', fontsize=12)
-                    ax.set_title(group['label'], fontsize=14, fontweight='bold')
-                    ax.grid(True, alpha=0.3)
-                    ax.set_ylim(bottom=0)
+                    all_data_for_plot.extend(data_for_this_supply)
+                    all_positions.extend(positions_for_this_supply)
+                    all_colors.extend([supply_colors[supply_label]] * len(data_for_this_supply))
 
-                # Add overall title
-                fig.suptitle(f'{technology} - Cumulative {supply_label} Additions 2024-{target_year} (NZIA/Scenario Split and non-Scenario Driven)',
-                            fontsize=16, fontweight='bold', y=0.98)
-                plt.tight_layout(rect=[0, 0, 1, 0.96])
-                safe_supply_name = supply_source.replace('capacity_ext_', '')
-                output_path = output_dir / f"{technology}_cumulative_capacity_additions_{safe_supply_name}_2024_{target_year}_by_lr_nzia_split.png"
-                plt.savefig(output_path, dpi=300, bbox_inches='tight')
-                print(f"✓ Saved: {output_path}")
-                plt.close()
-    print("✓ Completed all cumulative capacity additions plots by technology, learning rate, NZIA, and scenario group!")
+                    # Add label only once per supply source (for legend)
+                    if supply_idx == 0:
+                        all_labels.extend([supply_label] + [''] * (len(data_for_this_supply) - 1))
+                    else:
+                        all_labels.extend([supply_label] + [''] * (len(data_for_this_supply) - 1))
+
+                # Create the grouped boxplot
+                box_plot = ax.boxplot(all_data_for_plot,
+                                      positions=all_positions,
+                                      patch_artist=True,
+                                      showmeans=True,
+                                      meanprops={'marker': 'D', 'markerfacecolor': 'red',
+                                                 'markeredgecolor': 'red', 'markersize': 4},
+                                      widths=[box_width * 0.8] * len(all_data_for_plot))
+
+                # Color the boxes according to supply source
+                for patch, color in zip(box_plot['boxes'], all_colors):
+                    patch.set_facecolor(color)
+                    patch.set_alpha(0.8)
+                    patch.set_edgecolor('darkblue')
+                    patch.set_linewidth(1)
+
+                # Customize x-axis
+                lr_labels = [lr_name.split('%')[0].replace('Learning Rate', '').strip() + '%'
+                             for lr_name in LEARNING_RATES.values()]
+                ax.set_xticks(lr_positions)
+                ax.set_xticklabels(lr_labels)
+                ax.set_xlabel('Learning Rate', fontsize=12)
+                ax.set_ylabel('Cumulative Capacity Additions (GW)', fontsize=12)
+                ax.set_title(group['label'], fontsize=14, fontweight='bold')
+                ax.grid(True, alpha=0.3)
+                ax.set_ylim(bottom=0)
+
+                # Add legend only to first subplot
+                if group_idx == 0:
+                    from matplotlib.patches import Patch
+                    legend_elements = [Patch(facecolor=color, label=label, alpha=0.8)
+                                       for label, color in supply_colors.items()]
+                    ax.legend(handles=legend_elements, title='Supply Source',
+                              loc='upper left', bbox_to_anchor=(1.02, 1))
+
+            # Add overall title
+            fig.suptitle(
+                f'{technology} - Cumulative Capacity Additions 2024-{target_year}\n(Manufacturing, Remanufacturing, Stockpile Withdrawals - non Scenario Driven)',
+                fontsize=16, fontweight='bold', y=0.98)
+
+            plt.tight_layout(rect=[0, 0, 1, 0.96])
+
+            output_path = output_dir / f"{technology}_cumulative_capacity_additions_all_sources_2024_{target_year}_by_lr_nzia_split.png"
+            plt.savefig(output_path, dpi=300, bbox_inches='tight')
+            print(f"✓ Saved: {output_path}")
+            plt.close()
+
+    print("✓ Completed all cumulative capacity additions plots with grouped supply sources!")
 
 
 def plot_pareto_cost_vs_total_domestic_additions():
@@ -3726,8 +3787,8 @@ def main():
     Uncomment the desired plot functions to generate the corresponding plots.
     """
     # Example: Uncomment the plots you want to generate
-    #plot_capacity_additions_by_technology_and_lr_nzia_split()
-    #lng_lineplot_range_comp_basecase_3x3()
+    plot_capacity_additions_by_technology_and_lr_nzia_split()
+    lng_lineplot_range_comp_basecase_3x3()
     #plot_pareto_cost_vs_total_domestic_additions()
     plot_domestic_percentage_heatmap()
     #plot_domestic_percentage_heatmap_scenario_driven()
