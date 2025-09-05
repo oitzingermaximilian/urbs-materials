@@ -2777,7 +2777,7 @@ def plot_pareto_cost_vs_domestic_additions_by_technology():
                             tech_cost_filtered = tech_cost_data[
                                 (tech_cost_data['stf'] >= 2024) & (tech_cost_data['stf'] <= target_year)
                                 ]
-                            total_tech_cost = tech_cost_filtered['value'].sum() / 1e9  # Convert to billion EUR
+                            total_tech_cost = tech_cost_filtered['Total_Cost'].sum() / 1e9  # Convert to billion EUR
 
                             # Load domestic capacity additions data
                             extension_df = pd.read_excel(cost_file_path, sheet_name='extension_only_caps')
