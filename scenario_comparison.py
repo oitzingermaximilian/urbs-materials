@@ -2700,6 +2700,207 @@ def plot_capacity_additions_by_technology_and_lr_nzia_split():
                 plt.close()
     print("✓ Completed all cumulative capacity additions plots by technology, learning rate, NZIA, and scenario group!")
 
+
+def plot_pareto_cost_vs_domestic_additions_by_technology():
+    """Pareto plot: Technology-specific costs vs Domestic Additions by technology
+    4x4 grid: 4 technologies × 4 NZIA/scenario combinations
+    Creates plots for both 2030 and 2040"""
+
+    output_dir = Path("scenario_comparison")
+    output_dir.mkdir(exist_ok=True)
+
+    # Scenario groups definition
+    scenario_groups = [
+        {"label": "NZ with NZIA", "variant": "results_with_nzia", "scenarios": SCENARIO_COMBOS_LNG_NZ,
+         "color": "#1f77b4"},
+        {"label": "NZ without NZIA", "variant": "results_without_nzia", "scenarios": SCENARIO_COMBOS_LNG_NZ,
+         "color": "#6baed6"},
+        {"label": "PF with NZIA", "variant": "results_with_nzia", "scenarios": SCENARIO_COMBOS_LNG_PF,
+         "color": "#d62728"},
+        {"label": "PF without NZIA", "variant": "results_without_nzia", "scenarios": SCENARIO_COMBOS_LNG_PF,
+         "color": "#ff9896"},
+    ]
+
+    # Technologies to analyze
+    technologies = ['solarPV', 'windon', 'windoff', 'Batteries']
+
+    # Cost types for each technology
+    cost_types = ['_costs_EU_primary', '_costs_EU_secondary', '_costs_ext_import', '_costs_ext_storage']
+
+    # Domestic supply sources (excluding imported)
+    domestic_sources = ['capacity_ext_eusecondary', 'capacity_ext_euprimary', 'capacity_ext_stockout']
+
+    # Target years
+    target_years = [2030, 2040]
+
+    # Colors for learning rates
+    colors = sns.color_palette("tab10", n_colors=len(LEARNING_RATES))
+    lr_color_map = {lr_name: colors[i] for i, lr_name in enumerate(LEARNING_RATES.values())}
+
+    for target_year in target_years:
+        print(f"\nProcessing technology-specific plots for target year: {target_year}")
+
+        # Create figure with 4x4 subplots (4 technologies × 4 scenario groups)
+        fig, axes = plt.subplots(4, 4, figsize=(24, 20))
+
+        for tech_idx, technology in enumerate(technologies):
+            print(f"Processing technology: {technology}")
+
+            for group_idx, group in enumerate(scenario_groups):
+                ax = axes[tech_idx, group_idx]
+                print(f"  Processing group: {group['label']}")
+
+                results = []
+
+                for lr_code, lr_name in LEARNING_RATES.items():
+                    for scenario in group['scenarios']:
+                        # Load data from the Excel file
+                        cost_file_path = Path(RESULTS_BASE_PATH) / group[
+                            'variant'] / lr_code / "rolling_2024_to_2050" / f"scenario_{scenario}.xlsx"
+
+                        if not cost_file_path.exists():
+                            continue
+
+                        try:
+                            # Load cost data from extension_cost sheet
+                            df_cost = pd.read_excel(cost_file_path, sheet_name="extension_cost")
+
+                            # Filter for technology-specific costs in the 'pro' column
+                            technology_cost_patterns = [f"{technology}{cost_type}" for cost_type in cost_types]
+
+                            # Filter for this technology's costs
+                            tech_cost_data = df_cost[
+                                df_cost['pro'].str.contains('|'.join(technology_cost_patterns), case=False, na=False)
+                            ]
+
+                            # Filter for years 2024 to target_year and sum technology costs
+                            tech_cost_filtered = tech_cost_data[
+                                (tech_cost_data['stf'] >= 2024) & (tech_cost_data['stf'] <= target_year)
+                                ]
+                            total_tech_cost = tech_cost_filtered['value'].sum() / 1e9  # Convert to billion EUR
+
+                            # Load domestic capacity additions data
+                            extension_df = pd.read_excel(cost_file_path, sheet_name='extension_only_caps')
+                            extension_df['stf'] = extension_df['stf'].fillna(method='ffill')
+                            extension_df['stf'] = pd.to_numeric(extension_df['stf'], errors='coerce')
+                            extension_df = extension_df.dropna(subset=['stf'])
+
+                            # Calculate domestic additions for this specific technology in target year
+                            tech_domestic_target_year = 0
+
+                            tech_data = extension_df[extension_df['tech'] == technology]
+                            if not tech_data.empty:
+                                # Filter for target year data
+                                tech_target_year = tech_data[tech_data['stf'] == target_year]
+                                if not tech_target_year.empty:
+                                    # Sum domestic sources for this technology in target year
+                                    for source in domestic_sources:
+                                        if source in tech_target_year.columns:
+                                            tech_domestic = tech_target_year[source].sum() / 1000  # Convert MW to GW
+                                            tech_domestic_target_year += tech_domestic
+
+                            results.append({
+                                'Learning_Rate': lr_name,
+                                'Price_Scenario': scenario.replace('_', ' ').title(),
+                                'Technology_Cost_bEUR': total_tech_cost,
+                                f'Domestic_Additions_{target_year}_GW': tech_domestic_target_year,
+                                'LR_Code': lr_code,
+                                'Scenario_Code': scenario
+                            })
+
+                        except Exception as e:
+                            print(f"    Error processing {lr_code} - {scenario}: {e}")
+                            continue
+
+                if not results:
+                    ax.text(0.5, 0.5, f'No data\n{technology}\n{group["label"]}',
+                            horizontalalignment='center', verticalalignment='center',
+                            transform=ax.transAxes, fontsize=10)
+                    ax.set_title(f'{technology} - {group["label"][:8]}', fontsize=10)
+                    continue
+
+                df_results = pd.DataFrame(results)
+
+                # Skip if no valid data points
+                if df_results['Technology_Cost_bEUR'].sum() == 0 or df_results[
+                    f'Domestic_Additions_{target_year}_GW'].sum() == 0:
+                    ax.text(0.5, 0.5, f'No valid data\n{technology}\n{group["label"]}',
+                            horizontalalignment='center', verticalalignment='center',
+                            transform=ax.transAxes, fontsize=10)
+                    ax.set_title(f'{technology} - {group["label"][:8]}', fontsize=10)
+                    continue
+
+                # Find Pareto front (minimize cost, maximize domestic additions)
+                costs = df_results['Technology_Cost_bEUR'].values
+                domestic_additions = df_results[f'Domestic_Additions_{target_year}_GW'].values
+
+                pareto_mask = find_pareto_front(costs, domestic_additions, minimize_both=False)
+                pareto_points = df_results[pareto_mask].copy()
+                pareto_points = pareto_points.sort_values('Technology_Cost_bEUR')
+
+                # Plot all points colored by learning rate
+                for lr_name in LEARNING_RATES.values():
+                    subset = df_results[df_results['Learning_Rate'] == lr_name]
+                    if not subset.empty:
+                        ax.scatter(subset['Technology_Cost_bEUR'], subset[f'Domestic_Additions_{target_year}_GW'],
+                                   color=lr_color_map[lr_name],
+                                   label=lr_name if (tech_idx == 0 and group_idx == 0) else "",
+                                   alpha=0.7, s=40)
+
+                # Plot Pareto front
+                if len(pareto_points) > 1:
+                    ax.plot(pareto_points['Technology_Cost_bEUR'],
+                            pareto_points[f'Domestic_Additions_{target_year}_GW'],
+                            'r--', linewidth=2, alpha=0.8)
+
+                if len(pareto_points) > 0:
+                    ax.scatter(pareto_points['Technology_Cost_bEUR'],
+                               pareto_points[f'Domestic_Additions_{target_year}_GW'],
+                               color='red', s=60, marker='*', zorder=5, alpha=0.9)
+
+                # Customize subplot
+                ax.set_xlabel(f'{technology} Cost 2024-{target_year} (b€)', fontsize=9)
+                ax.set_ylabel(f'Domestic Cap. {target_year} (GW)', fontsize=9)
+                ax.set_title(f'{technology} - {group["label"][:12]}', fontsize=10, fontweight='bold')
+                ax.grid(True, alpha=0.3)
+                ax.tick_params(axis='both', which='major', labelsize=8)
+
+                # Print Pareto optimal points for this technology-group combination
+                if len(pareto_points) > 0:
+                    print(f"\nPareto Optimal Points for {technology} - {group['label']} ({target_year}):")
+                    for _, row in pareto_points.iterrows():
+                        print(f"  {row['Learning_Rate']} - {row['Price_Scenario']}: "
+                              f"Cost={row['Technology_Cost_bEUR']:.1f}b€, Domestic={row[f'Domestic_Additions_{target_year}_GW']:.1f}GW")
+
+        # Add legend to the top-left subplot only
+        if len(LEARNING_RATES) > 0:
+            axes[0, 0].legend(title="Learning Rates", bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=8)
+
+        # Add overall title
+        fig.suptitle(f'Technology-Specific Pareto Fronts: Cost vs. Domestic Capacity Additions {target_year}',
+                     fontsize=18, fontweight='bold', y=0.98)
+
+        # Add row labels (technologies)
+        for i, technology in enumerate(technologies):
+            fig.text(0.02, 0.85 - i * 0.22, technology, rotation=90, fontsize=14, fontweight='bold',
+                     verticalalignment='center')
+
+        # Add column labels (scenario groups)
+        for j, group in enumerate(scenario_groups):
+            fig.text(0.15 + j * 0.22, 0.95, group['label'], fontsize=12, fontweight='bold',
+                     horizontalalignment='center')
+
+        plt.tight_layout(rect=[0.03, 0, 0.97, 0.94])
+
+        # Save the plot
+        output_path = output_dir / f"pareto_cost_vs_domestic_additions_by_technology_{target_year}.png"
+        plt.savefig(output_path, dpi=300, bbox_inches='tight')
+        print(f"✓ Saved Technology-specific Pareto plot ({target_year}): {output_path}")
+
+        plt.close()
+
+    print(f"\n✓ Completed technology-specific Pareto analysis for both {target_years[0]} and {target_years[1]}")
+
 def main():
     """
     Main entry point for scenario_comparison.py.
@@ -2707,6 +2908,7 @@ def main():
     """
     # Example: Uncomment the plots you want to generate
     plot_capacity_additions_by_technology_and_lr_nzia_split()
+    plot_pareto_cost_vs_domestic_additions_by_technology()
     pass
 
 if __name__ == "__main__":
