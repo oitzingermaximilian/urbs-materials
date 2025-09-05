@@ -2461,13 +2461,13 @@ def co2_lineplot_range_comp_basecase():
 
 def plot_capacity_additions_by_technology_and_lr():
     """
-    Plot capacity additions by technology across learning rates.
+    Plot cumulative capacity additions by technology across learning rates.
     Creates plots with 4 subplots (one per technology: solarPV, windon, windoff, Batteries).
     X-axis: Learning Rates (1% to 10%)
-    Y-axis: Total capacity additions in GW
+    Y-axis: Cumulative capacity additions in GW (from 2024 to target year)
     Separate plots for:
-    - Remanufacturing additions (capacity_ext_eusecondary) for 2030 and 2040
-    - Manufacturing additions (capacity_ext_euprimary) for 2030 and 2040
+    - Remanufacturing additions (capacity_ext_eusecondary) cumulative 2024-2030 and 2024-2040
+    - Manufacturing additions (capacity_ext_euprimary) cumulative 2024-2030 and 2024-2040
     """
 
     output_dir = Path("scenario_comparison")
@@ -2483,11 +2483,11 @@ def plot_capacity_additions_by_technology_and_lr():
     }
     years = [2030, 2040]
 
-    print("Creating capacity additions plots by technology and learning rate...")
+    print("Creating cumulative capacity additions plots by technology and learning rate...")
 
     for supply_source, supply_label in supply_sources.items():
         for target_year in years:
-            print(f"Processing {supply_label} for {target_year}...")
+            print(f"Processing {supply_label} cumulative 2024-{target_year}...")
 
             # Create figure with 2x2 subplots for the 4 technologies
             fig, axes = plt.subplots(2, 2, figsize=(16, 12))
@@ -2526,16 +2526,16 @@ def plot_capacity_additions_by_technology_and_lr():
                                 capacity_values.append(0)
                                 continue
 
-                            # Filter for target year
-                            year_data = tech_data[tech_data['stf'] == target_year]
+                            # Filter for years from 2024 to target year (inclusive)
+                            cumulative_data = tech_data[(tech_data['stf'] >= 2024) & (tech_data['stf'] <= target_year)]
 
-                            if year_data.empty or supply_source not in year_data.columns:
+                            if cumulative_data.empty or supply_source not in cumulative_data.columns:
                                 capacity_values.append(0)
                                 continue
 
-                            # Get capacity addition for this year and supply source
-                            capacity_value = year_data[supply_source].sum() / 1000  # Convert MW to GW
-                            capacity_values.append(capacity_value)
+                            # Calculate cumulative capacity additions from 2024 to target year
+                            cumulative_capacity = cumulative_data[supply_source].sum() / 1000  # Convert MW to GW
+                            capacity_values.append(cumulative_capacity)
 
                         except Exception as e:
                             print(f"    Error processing {lr_code} - {price_scenario}: {e}")
@@ -2571,7 +2571,7 @@ def plot_capacity_additions_by_technology_and_lr():
 
                 # Customize subplot
                 ax.set_xlabel('Learning Rate', fontsize=12)
-                ax.set_ylabel(f'{supply_label} Additions (GW)', fontsize=12)
+                ax.set_ylabel(f'Cumulative {supply_label} Additions (GW)', fontsize=12)
                 ax.set_title(f'{technology}', fontsize=14, fontweight='bold')
                 ax.grid(True, alpha=0.3)
                 ax.set_ylim(bottom=0)
@@ -2586,20 +2586,19 @@ def plot_capacity_additions_by_technology_and_lr():
                     print(f"    {technology}: No non-zero data")
 
             # Add overall title
-            fig.suptitle(f'{supply_label} Capacity Additions in {target_year} by Learning Rate (Non-Scenario Driven)',
+            fig.suptitle(f'Cumulative {supply_label} Capacity Additions 2024-{target_year} by Learning Rate (Non-Scenario Driven)',
                         fontsize=16, fontweight='bold', y=0.98)
             plt.tight_layout(rect=[0, 0, 1, 0.96])
 
             # Save the plot
             safe_supply_name = supply_source.replace('capacity_ext_', '')
-            output_path = output_dir / f"capacity_additions_{safe_supply_name}_{target_year}_by_lr.png"
+            output_path = output_dir / f"cumulative_capacity_additions_{safe_supply_name}_2024_{target_year}_by_lr.png"
             plt.savefig(output_path, dpi=300, bbox_inches='tight')
             print(f"✓ Saved: {output_path}")
 
             plt.close()
 
-    print("✓ Completed capacity additions plots by technology and learning rate!")
-
+    print("✓ Completed cumulative capacity additions plots by technology and learning rate!")
 def main():
     """Main function to generate all comparison plots"""
     print("Starting scenario comparison plotting...")
@@ -2615,11 +2614,11 @@ def main():
     #plot_eu_secondary_additions_2040()
     print("\n2. Generating LNG Demand comparison...")
     #plot_lng_demand_yearly_scatter()
-    #lng_lineplot_range_comp_basecase()
-    #co2_lineplot_range_comp_basecase()
+    lng_lineplot_range_comp_basecase()
+    co2_lineplot_range_comp_basecase()
     print("\n3. Generating Cost Matrix...")
-    plot_total_system_cost_matrix_2024_2040()
-    plot_3d_cost_matrix_grid_style_fixed()
+    #plot_total_system_cost_matrix_2024_2040()
+    #plot_3d_cost_matrix_grid_style_fixed()
 
     print("\n4. Generating Pareto Plots...")
     #plot_pareto_cost_vs_remanufacturing()
