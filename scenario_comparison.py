@@ -2254,9 +2254,6 @@ def lng_lineplot_range_comp_basecase():
             except Exception as e:
                 print(f"  Error reading {file_path}: {e}")
                 continue
-            if 'com' not in df.columns or 'stf' not in df.columns or 'e_pro_in' not in df.columns:
-                print(f"  Columns missing in {file_path}")
-                continue
             df['com'] = df['com'].astype(str).str.strip()
             lng_df = df[(df['com'] == 'LNG') & (df['stf'] >= 2024) & (df['stf'] <= 2050)]
             if lng_df.empty:
@@ -2437,7 +2434,7 @@ def co2_lineplot_range_comp_basecase():
         plt.xlabel('Year')
         plt.ylabel('CO2 Emissions (Mt)')
         plt.title(f'CO2 Emissions Ranges 2024-2040 with/without NZIA\n{lr_name} (Non-Scenario Driven)')
-        plt.xlim(2024, 2041)
+        plt.xlim(2024, 2051)
         plt.grid(True, linestyle='--', alpha=0.6)
 
         # Deduplicate legend entries
@@ -2560,7 +2557,6 @@ def plot_capacity_additions_by_technology_and_lr():
                 # Create boxplot
                 colors_gradient = sns.color_palette("viridis", n_colors=len(LEARNING_RATES))
                 colors_gradient = [to_hex(c) for c in colors_gradient]
-
                 box_plot = ax.boxplot(data_for_boxplot,
                                      labels=labels_for_boxplot,
                                      patch_artist=True,
@@ -2603,39 +2599,115 @@ def plot_capacity_additions_by_technology_and_lr():
             plt.close()
 
     print("✓ Completed cumulative capacity additions plots by technology and learning rate!")
+
+def plot_capacity_additions_by_technology_and_lr_nzia_split():
+    """
+    For each technology, create 2 PNGs (2030, 2040). Each PNG has 4 subplots:
+    - NZ with NZIA
+    - NZ without NZIA
+    - PF with NZIA
+    - PF without NZIA
+    Each subplot: x-axis = learning rates, box = scenario spread (for that group).
+    """
+    output_dir = Path("scenario_comparison")
+    output_dir.mkdir(exist_ok=True)
+
+    technologies = ['solarPV', 'windon', 'windoff', 'Batteries']
+    supply_sources = {
+        'capacity_ext_eusecondary': 'Remanufacturing',
+        'capacity_ext_euprimary': 'Manufacturing'
+    }
+    years = [2030, 2040]
+
+    scenario_groups = [
+        {"label": "NZ with NZIA", "variant": "results_with_nzia", "scenarios": SCENARIO_COMBOS_LNG_NZ},
+        {"label": "NZ without NZIA", "variant": "results_without_nzia", "scenarios": SCENARIO_COMBOS_LNG_NZ},
+        {"label": "PF with NZIA", "variant": "results_with_nzia", "scenarios": SCENARIO_COMBOS_LNG_PF},
+        {"label": "PF without NZIA", "variant": "results_without_nzia", "scenarios": SCENARIO_COMBOS_LNG_PF},
+    ]
+
+    print("Creating cumulative capacity additions plots by technology, learning rate, NZIA, and scenario group...")
+
+    for supply_source, supply_label in supply_sources.items():
+        for target_year in years:
+            for technology in technologies:
+                print(f"Processing {technology} {supply_label} cumulative 2024-{target_year}...")
+                fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+                axes = axes.flatten()
+                for group_idx, group in enumerate(scenario_groups):
+                    ax = axes[group_idx]
+                    print(f"  Subplot: {group['label']}")
+                    data_for_boxplot = []
+                    labels_for_boxplot = []
+                    for lr_code, lr_name in LEARNING_RATES.items():
+                        scenario_values = []
+                        for scenario in group['scenarios']:
+                            file_path = Path(RESULTS_BASE_PATH) / group['variant'] / lr_code / "rolling_2024_to_2050" / f"scenario_{scenario}.xlsx"
+                            if not file_path.exists():
+                                scenario_values.append(0)
+                                continue
+                            try:
+                                extension_df = pd.read_excel(file_path, sheet_name='extension_only_caps')
+                                extension_df['stf'] = extension_df['stf'].fillna(method='ffill')
+                                extension_df['stf'] = pd.to_numeric(extension_df['stf'], errors='coerce')
+                                extension_df = extension_df.dropna(subset=['stf'])
+                            except Exception as e:
+                                scenario_values.append(0)
+                                continue
+                            tech_data = extension_df[extension_df['tech'] == technology]
+                            if tech_data.empty:
+                                scenario_values.append(0)
+                                continue
+                            cumulative_data = tech_data[(tech_data['stf'] >= 2024) & (tech_data['stf'] <= target_year)]
+                            if cumulative_data.empty or supply_source not in cumulative_data.columns:
+                                scenario_values.append(0)
+                                continue
+                            cumulative_capacity = cumulative_data[supply_source].sum() / 1000
+                            scenario_values.append(cumulative_capacity)
+                        data_for_boxplot.append(scenario_values)
+                        lr_percent = lr_name.split('%')[0].replace('Learning Rate', '').strip()
+                        labels_for_boxplot.append(f"{lr_percent}%")
+                    # Boxplot
+                    colors_gradient = sns.color_palette("viridis", n_colors=len(LEARNING_RATES))
+                    colors_gradient = [to_hex(c) for c in colors_gradient]
+                    box_plot = ax.boxplot(data_for_boxplot,
+                                         labels=labels_for_boxplot,
+                                         patch_artist=True,
+                                         showmeans=True,
+                                         meanprops={'marker': 'D', 'markerfacecolor': 'red',
+                                                   'markeredgecolor': 'red', 'markersize': 6})
+
+                    # Color the boxes
+                    for patch, color in zip(box_plot['boxes'], colors_gradient):
+                        patch.set_facecolor(color)
+                        patch.set_alpha(0.7)
+
+                    # Customize subplot
+                    ax.set_xlabel('Learning Rate', fontsize=12)
+                    ax.set_ylabel(f'Cumulative {supply_label} Additions (GW)', fontsize=12)
+                    ax.set_title(group['label'], fontsize=14, fontweight='bold')
+                    ax.grid(True, alpha=0.3)
+                    ax.set_ylim(bottom=0)
+
+                # Add overall title
+                fig.suptitle(f'{technology} - Cumulative {supply_label} Additions 2024-{target_year} (NZIA/Scenario Split)',
+                            fontsize=16, fontweight='bold', y=0.98)
+                plt.tight_layout(rect=[0, 0, 1, 0.96])
+                safe_supply_name = supply_source.replace('capacity_ext_', '')
+                output_path = output_dir / f"{technology}_cumulative_capacity_additions_{safe_supply_name}_2024_{target_year}_by_lr_nzia_split.png"
+                plt.savefig(output_path, dpi=300, bbox_inches='tight')
+                print(f"✓ Saved: {output_path}")
+                plt.close()
+    print("✓ Completed all cumulative capacity additions plots by technology, learning rate, NZIA, and scenario group!")
+
 def main():
-    """Main function to generate all comparison plots"""
-    print("Starting scenario comparison plotting...")
-    print(f"Results base path: {RESULTS_BASE_PATH}")
-
-    # Check if base path exists
-    if not Path(RESULTS_BASE_PATH).exists():
-        print(f"Error: Results path does not exist: {RESULTS_BASE_PATH}")
-        return
-
-    # Generate plots
-    print("\n1. Generating EU Secondary Additions 2040 comparison...")
-    #plot_eu_secondary_additions_2040()
-    print("\n2. Generating LNG Demand comparison...")
-    #plot_lng_demand_yearly_scatter()
-    #lng_lineplot_range_comp_basecase()
-    #co2_lineplot_range_comp_basecase()
-    print("\n3. Generating Cost Matrix...")
-    #plot_total_system_cost_matrix_2024_2040()
-    #plot_3d_cost_matrix_grid_style_fixed()
-
-    print("\n4. Generating Pareto Plots...")
-    #plot_pareto_cost_vs_remanufacturing()
-    #plot_pareto_cost_vs_lng()
-    print("\n5. Generating Scrap Plots...")
-    #generate_all_scrap_visualizations()
-    print("\n6. Generating Capacity Mix Stacked Bar Plots...")
-    #plot_capacity_mix_stacked_bars()
-    #plot_stock_level_facet_per_technology()
-    print("\n7. Generating Capacity Additions by Learning Rate...")
-    plot_capacity_additions_by_technology_and_lr()
-
-    print("\nScenario comparison plotting completed!")
+    """
+    Main entry point for scenario_comparison.py.
+    Uncomment the desired plot functions to generate the corresponding plots.
+    """
+    # Example: Uncomment the plots you want to generate
+    plot_capacity_additions_by_technology_and_lr_nzia_split()
+    pass
 
 if __name__ == "__main__":
     main()
