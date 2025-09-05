@@ -3073,8 +3073,8 @@ def plot_domestic_percentage_heatmap():
 
     # Scenario configurations
     scenario_types = [
-        {"name": "NZ", "scenarios": SCENARIO_COMBOS_LNG_NZ, "title": "New Zealand"},
-        {"name": "PF", "scenarios": SCENARIO_COMBOS_LNG_PF, "title": "Pacific Forum"}
+        {"name": "NZ", "scenarios": SCENARIO_COMBOS_LNG_NZ, "title": "Net Zero"},
+        {"name": "PF", "scenarios": SCENARIO_COMBOS_LNG_PF, "title": "Persistent Fossil"}
     ]
 
     # NZIA variants (now separate)
@@ -3217,7 +3217,7 @@ def plot_domestic_percentage_heatmap():
                         ax.set_yticklabels([])
 
                     # Clean title: remove LNG_NZ/LNG_PF, just show price combination
-                    price_clean = price_scenario.replace('LNG_NZ_', '').replace('LNG_PF_', '').replace('_', ' ').title()
+                    price_clean = price_scenario.replace('_LNG_NZ', '').replace('_LNG_PF', '').replace('_', ' ').title()
                     ax.set_title(price_clean, fontsize=9, fontweight='bold', pad=8)
 
                     # Add subtle grid for better readability
@@ -3249,7 +3249,7 @@ def plot_domestic_percentage_heatmap():
 
                 # Main title
                 fig.suptitle(
-                    f'Domestic Yearly Additions: {technology} - {scenario_type["title"]} - {nzia_config["title"]}',
+                    f'Domestic Yearly Additions: {technology} - {scenario_type["title"]} - {nzia_config["title"]} (non-Scenario Driven)',
                     fontsize=16, fontweight='bold', y=0.95)
 
                 # Adjust layout with space for horizontal colorbar
