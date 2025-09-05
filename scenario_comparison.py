@@ -3014,8 +3014,8 @@ def plot_pareto_cost_vs_total_domestic_additions():
                            color='red', s=100, marker='*', zorder=5, alpha=0.9)
 
             # Customize subplot
-            ax.set_xlabel(f'Total Technology Costs 2024-{target_year} (billion EUR)', fontsize=12)
-            ax.set_ylabel(f'Total Domestic Capacity 2024-{target_year} (GW)', fontsize=12)
+            ax.set_xlabel(f'Total RES Technology Costs (bEUR)', fontsize=12)
+            ax.set_ylabel(f'Total RES Capacity added (GW)', fontsize=12)
             ax.set_title(f'{group["label"]}', fontsize=14, fontweight='bold')
             ax.grid(True, alpha=0.3)
 
@@ -3032,7 +3032,7 @@ def plot_pareto_cost_vs_total_domestic_additions():
             axes[0].legend(title="Learning Rates", bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=10)
 
         # Add overall title
-        fig.suptitle(f'Pareto Front: Cumulative Technology Costs vs. Cumulative Domestic Capacity 2024-{target_year}',
+        fig.suptitle(f'Pareto Front: Cumulative RES Technology Costs vs. Cumulative domestic RES Capacity 2024-{target_year}',
                      fontsize=16, fontweight='bold', y=0.98)
         plt.tight_layout(rect=[0, 0, 1, 0.96])
 
