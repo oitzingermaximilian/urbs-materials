@@ -2309,7 +2309,7 @@ def lng_lineplot_range_comp_basecase():
 
         plt.xlabel('Year')
         plt.ylabel('LNG Demand (BCM)')
-        plt.title(f'LNG Demand Ranges 2024-2050 with/without NZIA\n{lr_name}')
+        plt.title(f'LNG Demand Ranges 2024-2050 with/without NZIA\n{lr_name} (Non-Scenario Driven)')
         plt.xlim(2024, 2050)
         plt.grid(True, linestyle='--', alpha=0.6)
 
@@ -2434,7 +2434,7 @@ def co2_lineplot_range_comp_basecase():
 
         plt.xlabel('Year')
         plt.ylabel('CO2 Emissions (Mt)')
-        plt.title(f'CO2 Emissions Ranges 2024-2040 with/without NZIA\n{lr_name}')
+        plt.title(f'CO2 Emissions Ranges 2024-2040 with/without NZIA\n{lr_name} (Non-Scenario Driven)')
         plt.xlim(2024, 2041)
         plt.grid(True, linestyle='--', alpha=0.6)
 
@@ -2459,6 +2459,147 @@ def co2_lineplot_range_comp_basecase():
 
     print("✓ Completed 2024-2050 NZIA comparison CO2 emissions range plots!")
 
+def plot_capacity_additions_by_technology_and_lr():
+    """
+    Plot capacity additions by technology across learning rates.
+    Creates plots with 4 subplots (one per technology: solarPV, windon, windoff, Batteries).
+    X-axis: Learning Rates (1% to 10%)
+    Y-axis: Total capacity additions in GW
+    Separate plots for:
+    - Remanufacturing additions (capacity_ext_eusecondary) for 2030 and 2040
+    - Manufacturing additions (capacity_ext_euprimary) for 2030 and 2040
+    """
+
+    output_dir = Path("scenario_comparison")
+    output_dir.mkdir(exist_ok=True)
+
+    # Technologies to analyze
+    technologies = ['solarPV', 'windon', 'windoff', 'Batteries']
+
+    # Supply sources to analyze
+    supply_sources = {
+        'capacity_ext_eusecondary': 'Remanufacturing',
+        'capacity_ext_euprimary': 'Manufacturing'
+    }
+    years = [2030, 2040]
+
+    print("Creating capacity additions plots by technology and learning rate...")
+
+    for supply_source, supply_label in supply_sources.items():
+        for target_year in years:
+            print(f"Processing {supply_label} for {target_year}...")
+
+            # Create figure with 2x2 subplots for the 4 technologies
+            fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+            axes = axes.flatten()
+
+            for tech_idx, technology in enumerate(technologies):
+                ax = axes[tech_idx]
+                print(f"  Processing technology: {technology}")
+
+                # Collect data for this technology across all LRs and price scenarios
+                lr_data = {}  # lr_code -> [values across all price scenarios]
+
+                for lr_code, lr_name in LEARNING_RATES.items():
+                    capacity_values = []
+
+                    for price_scenario in SCENARIO_COMBOS_LNG:
+                        try:
+                            file_path = Path(RESULTS_BASE_PATH) / lr_code / "rolling_2024_to_2050" / f"scenario_{price_scenario}.xlsx"
+
+                            if not file_path.exists():
+                                capacity_values.append(0)
+                                continue
+
+                            # Load extension data
+                            try:
+                                extension_df = pd.read_excel(file_path, sheet_name='extension_only_caps')
+                                extension_df['stf'] = extension_df['stf'].fillna(method='ffill')
+                            except:
+                                capacity_values.append(0)
+                                continue
+
+                            # Filter for specific technology
+                            tech_data = extension_df[extension_df['tech'] == technology]
+
+                            if tech_data.empty:
+                                capacity_values.append(0)
+                                continue
+
+                            # Filter for target year
+                            year_data = tech_data[tech_data['stf'] == target_year]
+
+                            if year_data.empty or supply_source not in year_data.columns:
+                                capacity_values.append(0)
+                                continue
+
+                            # Get capacity addition for this year and supply source
+                            capacity_value = year_data[supply_source].sum() / 1000  # Convert MW to GW
+                            capacity_values.append(capacity_value)
+
+                        except Exception as e:
+                            print(f"    Error processing {lr_code} - {price_scenario}: {e}")
+                            capacity_values.append(0)
+
+                    lr_data[lr_code] = capacity_values
+
+                # Prepare data for boxplot
+                data_for_boxplot = []
+                labels_for_boxplot = []
+
+                for lr_code, lr_name in LEARNING_RATES.items():
+                    data_for_boxplot.append(lr_data[lr_code])
+                    # Extract just the percentage number for cleaner labels
+                    lr_percent = lr_name.split('%')[0].replace('Learning Rate', '').strip()
+                    labels_for_boxplot.append(f"{lr_percent}%")
+
+                # Create boxplot
+                colors_gradient = sns.color_palette("viridis", n_colors=len(LEARNING_RATES))
+                colors_gradient = [to_hex(c) for c in colors_gradient]
+
+                box_plot = ax.boxplot(data_for_boxplot,
+                                     labels=labels_for_boxplot,
+                                     patch_artist=True,
+                                     showmeans=True,
+                                     meanprops={'marker': 'D', 'markerfacecolor': 'red',
+                                               'markeredgecolor': 'red', 'markersize': 6})
+
+                # Color the boxes
+                for patch, color in zip(box_plot['boxes'], colors_gradient):
+                    patch.set_facecolor(color)
+                    patch.set_alpha(0.7)
+
+                # Customize subplot
+                ax.set_xlabel('Learning Rate', fontsize=12)
+                ax.set_ylabel(f'{supply_label} Additions (GW)', fontsize=12)
+                ax.set_title(f'{technology}', fontsize=14, fontweight='bold')
+                ax.grid(True, alpha=0.3)
+                ax.set_ylim(bottom=0)
+
+                # Calculate and display some statistics
+                all_values = [val for sublist in data_for_boxplot for val in sublist if val > 0]
+                if all_values:
+                    max_val = max(all_values)
+                    mean_val = np.mean(all_values)
+                    print(f"    {technology}: max={max_val:.1f} GW, mean={mean_val:.1f} GW")
+                else:
+                    print(f"    {technology}: No non-zero data")
+
+            # Add overall title
+            fig.suptitle(f'{supply_label} Capacity Additions in {target_year} by Learning Rate (Non-Scenario Driven)',
+                        fontsize=16, fontweight='bold', y=0.98)
+            plt.tight_layout(rect=[0, 0, 1, 0.96])
+
+            # Save the plot
+            safe_supply_name = supply_source.replace('capacity_ext_', '')
+            output_path = output_dir / f"capacity_additions_{safe_supply_name}_{target_year}_by_lr.png"
+            plt.savefig(output_path, dpi=300, bbox_inches='tight')
+            print(f"✓ Saved: {output_path}")
+
+            plt.close()
+
+    print("✓ Completed capacity additions plots by technology and learning rate!")
+
 def main():
     """Main function to generate all comparison plots"""
     print("Starting scenario comparison plotting...")
@@ -2471,31 +2612,28 @@ def main():
 
     # Generate plots
     print("\n1. Generating EU Secondary Additions 2040 comparison...")
-    plot_eu_secondary_additions_2040()
+    #plot_eu_secondary_additions_2040()
     print("\n2. Generating LNG Demand comparison...")
-    #generate_all_lng_line_plots()
-    #plot_lng_demand_comparison()
-    plot_lng_demand_yearly_scatter()
-    #plot_lng_demand_yearly_barplot()
-    #lng_lineplot_horizons()
-    #plot_lng_demand_rolling_horizon_boxplots()
-    #lng_lineplot_range()
+    #plot_lng_demand_yearly_scatter()
     #lng_lineplot_range_comp_basecase()
-    co2_lineplot_range_comp_basecase()
+    #co2_lineplot_range_comp_basecase()
     print("\n3. Generating Cost Matrix...")
     plot_total_system_cost_matrix_2024_2040()
     plot_3d_cost_matrix_grid_style_fixed()
 
     print("\n4. Generating Pareto Plots...")
-    plot_pareto_cost_vs_remanufacturing()
-    plot_pareto_cost_vs_lng()
+    #plot_pareto_cost_vs_remanufacturing()
+    #plot_pareto_cost_vs_lng()
     print("\n5. Generating Scrap Plots...")
-    generate_all_scrap_visualizations()
+    #generate_all_scrap_visualizations()
     print("\n6. Generating Capacity Mix Stacked Bar Plots...")
-    plot_capacity_mix_stacked_bars()
-    plot_stock_level_facet_per_technology()
+    #plot_capacity_mix_stacked_bars()
+    #plot_stock_level_facet_per_technology()
+    print("\n7. Generating Capacity Additions by Learning Rate...")
+    plot_capacity_additions_by_technology_and_lr()
 
     print("\nScenario comparison plotting completed!")
 
 if __name__ == "__main__":
     main()
+
