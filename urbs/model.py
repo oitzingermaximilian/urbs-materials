@@ -10,7 +10,7 @@ from urbs.extension import (
     apply_costs_constraints,
     apply_variables,
     apply_sets_and_params,
-    #apply_scenario_constraints,
+    apply_scenario_constraints,
     apply_combined_lr_constraints,
 )
 
@@ -392,7 +392,7 @@ def create_model(
 
     apply_variables(m)
 
-    #apply_scenario_constraints(m)
+    apply_scenario_constraints(m)
 
     apply_stockpiling_constraints(m)
 
