@@ -3050,10 +3050,11 @@ def plot_pareto_cost_vs_total_domestic_additions():
 def plot_domestic_percentage_heatmap():
     """Create sophisticated heatmap showing domestic additions percentage over time
 
-    Creates 8 figures total:
-    - 4 technologies × 2 scenario types (NZ vs PF)
-    - Each figure has ~27 subplots (one per price scenario)
-    - Uses colored dots for yearly additions (not cumulative) in 2-year steps
+    Creates 16 figures total:
+    - 4 technologies × 2 scenario types × 2 NZIA variants
+    - Each figure has ~27 subplots (one per price scenario) in 3×9 grid
+    - Uses colored dots for yearly additions in 2-year steps
+    - Green color scheme: light pastel green (0%) to vibrant green (100%)
     """
 
     output_dir = Path("scenario_comparison")
@@ -3072,62 +3073,61 @@ def plot_domestic_percentage_heatmap():
 
     # Scenario configurations
     scenario_types = [
-        {"name": "NZ", "scenarios": SCENARIO_COMBOS_LNG_NZ, "title": "Net Zero"},
-        {"name": "PF", "scenarios": SCENARIO_COMBOS_LNG_PF, "title": "Persistent Fossil"}
+        {"name": "NZ", "scenarios": SCENARIO_COMBOS_LNG_NZ, "title": "New Zealand"},
+        {"name": "PF", "scenarios": SCENARIO_COMBOS_LNG_PF, "title": "Pacific Forum"}
     ]
 
-    # NZIA variants
+    # NZIA variants (now separate)
     nzia_variants = [
-        {"variant": "results_with_nzia", "label": "with NZIA", "marker": 'o'},
-        {"variant": "results_without_nzia", "label": "without NZIA", "marker": 's'}
+        {"variant": "results_with_nzia", "label": "with_NZIA", "title": "with NZIA"},
+        {"variant": "results_without_nzia", "label": "without_NZIA", "title": "without NZIA"}
     ]
 
-    # Color map for percentages (0-100%)
+    # Custom green color scheme: pastel light green (0%) to vibrant green (100%)
     from matplotlib.colors import LinearSegmentedColormap, Normalize
-    colors_list = ['#d73027', '#f46d43', '#fdae61', '#fee08b', '#e6f598', '#abdda4', '#66c2a5', '#3288bd']
-    cmap = LinearSegmentedColormap.from_list('custom_RdYlGn', colors_list, N=100)
+    green_colors = [
+        '#f7fcf5',  # Very light pastel green (0%)
+        '#e5f5e0',  # Light pastel green
+        '#c7e9c0',  # Soft green
+        '#a1d99b',  # Medium light green
+        '#74c476',  # Medium green
+        '#41ab5d',  # Medium dark green
+        '#238b45',  # Dark green
+        '#006d2c',  # Very dark green
+        '#00441b'  # Vibrant dark green (100%)
+    ]
+    cmap = LinearSegmentedColormap.from_list('green_gradient', green_colors, N=256)
     norm = Normalize(vmin=0, vmax=100)
 
     for technology in technologies:
         for scenario_type in scenario_types:
-            print(f"\nProcessing {technology} - {scenario_type['title']}...")
+            for nzia_config in nzia_variants:
+                print(f"\nProcessing {technology} - {scenario_type['title']} - {nzia_config['title']}...")
 
-            # Get all price scenarios for this scenario type
-            price_scenarios = scenario_type['scenarios']
-            n_scenarios = len(price_scenarios)
+                # Get all price scenarios for this scenario type
+                price_scenarios = scenario_type['scenarios']
+                n_scenarios = len(price_scenarios)
 
-            # Calculate grid dimensions
-            if n_scenarios <= 12:
-                n_cols = min(4, n_scenarios)
-                n_rows = (n_scenarios + n_cols - 1) // n_cols
-            elif n_scenarios <= 20:
-                n_cols = 5
-                n_rows = (n_scenarios + n_cols - 1) // n_cols
-            else:
-                n_cols = 6
-                n_rows = (n_scenarios + n_cols - 1) // n_cols
+                # Use 3×9 grid layout (3 rows, 9 columns)
+                n_rows = 3
+                n_cols = 9
 
-            # Create figure for this technology-scenario combination
-            fig, axes = plt.subplots(n_rows, n_cols, figsize=(4 * n_cols, 3 * n_rows))
+                # Create figure for this technology-scenario-nzia combination
+                fig, axes = plt.subplots(n_rows, n_cols, figsize=(18, 9))  # 3×9 layout
 
-            # Flatten axes array for easy indexing
-            if n_rows == 1 and n_cols == 1:
-                axes = np.array([axes])
-            elif n_rows == 1 or n_cols == 1:
-                axes = axes.flatten()
-            else:
+                # Flatten axes array for easy indexing
                 axes = axes.flatten()
 
-            # Process each price scenario as a subplot
-            for scenario_idx, price_scenario in enumerate(price_scenarios):
-                if scenario_idx >= len(axes):
-                    break
+                # Process each price scenario as a subplot
+                for scenario_idx, price_scenario in enumerate(price_scenarios):
+                    if scenario_idx >= len(axes):
+                        break
 
-                ax = axes[scenario_idx]
-                print(f"  Processing price scenario: {price_scenario}")
+                    ax = axes[scenario_idx]
+                    print(f"  Processing price scenario: {price_scenario}")
 
-                # Process both NZIA variants for this subplot
-                for nzia_idx, nzia_config in enumerate(nzia_variants):
+                    # Track if any data was plotted
+                    data_plotted = False
 
                     for lr_idx, (lr_code, lr_name) in enumerate(LEARNING_RATES.items()):
 
@@ -3177,90 +3177,87 @@ def plot_domestic_percentage_heatmap():
                                     domestic_percentage = (domestic_yearly / total_yearly) * 100
 
                                     # Create dot position
-                                    y_position = lr_idx + (nzia_idx * len(LEARNING_RATES))
+                                    y_position = lr_idx
                                     x_position = years.index(year)
 
-                                    # Plot colored dot
+                                    # Plot colored dot with green gradient
                                     color = cmap(norm(domestic_percentage))
                                     ax.scatter(x_position, y_position,
-                                               c=[color], s=80, marker=nzia_config['marker'],
-                                               alpha=0.8, edgecolors='black', linewidth=0.5)
+                                               c=[color], s=120, marker='o',
+                                               alpha=0.9, edgecolors='darkgreen', linewidth=0.8)
+                                    data_plotted = True
 
                         except Exception as e:
                             print(f"    Error processing {lr_code} - {price_scenario}: {e}")
                             continue
 
-                # Customize subplot
-                ax.set_xlim(-0.5, len(years) - 0.5)
-                ax.set_ylim(-0.5, len(LEARNING_RATES) * 2 - 0.5)
+                    # Customize subplot
+                    ax.set_xlim(-0.5, len(years) - 0.5)
+                    ax.set_ylim(-0.5, len(LEARNING_RATES) - 0.5)
 
-                # Set ticks and labels
-                ax.set_xticks(range(len(years)))
-                ax.set_xticklabels([str(year) for year in years], rotation=45, fontsize=8)
+                    # Set ticks
+                    ax.set_xticks(range(len(years)))
+                    ax.set_yticks(range(len(LEARNING_RATES)))
+                    ax.set_yticklabels(list(LEARNING_RATES.values()), fontsize=8)
 
-                # Y-axis: Learning rates + NZIA variants
-                y_labels = []
-                y_positions = []
-                for nzia_idx, nzia_config in enumerate(nzia_variants):
-                    for lr_idx, lr_name in enumerate(LEARNING_RATES.values()):
-                        y_labels.append(f"{lr_name} {nzia_config['label']}")
-                        y_positions.append(lr_idx + (nzia_idx * len(LEARNING_RATES)))
+                    # Only show x-axis labels on bottom row
+                    if scenario_idx >= (n_rows - 1) * n_cols:  # Bottom row
+                        ax.set_xticklabels([str(year) for year in years], rotation=45, fontsize=9)
+                        ax.set_xlabel('Year', fontsize=10)
+                    else:
+                        ax.set_xticklabels([])
 
-                ax.set_yticks(y_positions)
-                ax.set_yticklabels(y_labels, fontsize=7)
+                    # Only show y-axis label on left column
+                    if scenario_idx % n_cols == 0:  # Left column
+                        ax.set_ylabel('Learning Rate', fontsize=10)
+                    else:
+                        ax.set_yticklabels([])
 
-                # Title for each subplot (price scenario)
-                price_clean = price_scenario.replace('_', ' ').title()
-                ax.set_title(price_clean, fontsize=10, fontweight='bold', pad=10)
+                    # Title for each subplot (price scenario)
+                    price_clean = price_scenario.replace('_', ' ').title()
+                    ax.set_title(price_clean, fontsize=9, fontweight='bold', pad=8)
 
-                # Add grid for better readability
-                ax.grid(True, alpha=0.3, linestyle='-', linewidth=0.5)
+                    # Add subtle grid for better readability
+                    ax.grid(True, alpha=0.2, linestyle='-', linewidth=0.5, color='gray')
 
-                # Only show axis labels on outer subplots
-                if scenario_idx >= (n_rows - 1) * n_cols:  # Bottom row
-                    ax.set_xlabel('Year', fontsize=9)
-                else:
-                    ax.set_xticklabels([])
+                    # Show "No Data" message if no data was plotted
+                    if not data_plotted:
+                        ax.text(0.5, 0.5, 'No Data', transform=ax.transAxes,
+                                ha='center', va='center', fontsize=10, alpha=0.5, color='gray')
 
-                if scenario_idx % n_cols == 0:  # Left column
-                    ax.set_ylabel('Learning Rate & NZIA', fontsize=9)
-                else:
-                    ax.set_yticklabels([])
+                # Hide empty subplots
+                for empty_idx in range(n_scenarios, len(axes)):
+                    axes[empty_idx].set_visible(False)
 
-            # Hide empty subplots
-            for empty_idx in range(n_scenarios, len(axes)):
-                axes[empty_idx].set_visible(False)
+                # Add colorbar with green gradient
+                if n_scenarios > 0:
+                    sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
+                    sm.set_array([])
+                    cbar = fig.colorbar(sm, ax=axes[:n_scenarios].tolist() if n_scenarios > 1 else [axes[0]],
+                                        shrink=0.6, pad=0.02, aspect=40)
+                    cbar.set_label('Domestic Additions (% of yearly total)', rotation=270, labelpad=20, fontsize=12)
+                    cbar.ax.tick_params(labelsize=10)
 
-            # Add colorbar
-            if n_scenarios > 0:
-                sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
-                sm.set_array([])
-                cbar = fig.colorbar(sm, ax=axes[:n_scenarios].tolist() if n_scenarios > 1 else [axes[0]],
-                                    shrink=0.8, pad=0.02, aspect=30)
-                cbar.set_label('Domestic Additions (% of yearly total)', rotation=270, labelpad=20, fontsize=11)
-                cbar.ax.tick_params(labelsize=9)
+                    # Add percentage markers on colorbar
+                    cbar.set_ticks([0, 25, 50, 75, 100])
+                    cbar.set_ticklabels(['0%', '25%', '50%', '75%', '100%'])
 
-            # Add legend for markers
-            legend_elements = [plt.Line2D([0], [0], marker=nzia_config['marker'], color='gray',
-                                          label=nzia_config['label'], markersize=8, linestyle='None')
-                               for nzia_config in nzia_variants]
-            fig.legend(handles=legend_elements, loc='upper right', bbox_to_anchor=(0.98, 0.98))
+                # Main title
+                fig.suptitle(
+                    f'Domestic Yearly Additions: {technology} - {scenario_type["title"]} - {nzia_config["title"]}',
+                    fontsize=16, fontweight='bold', y=0.98)
 
-            # Main title
-            fig.suptitle(f'Domestic Yearly Additions Percentage: {technology} - {scenario_type["title"]}',
-                         fontsize=14, fontweight='bold', y=0.96)
+                # Adjust layout
+                plt.tight_layout(rect=[0, 0, 0.95, 0.96])
 
-            # Adjust layout
-            plt.tight_layout(rect=[0, 0, 0.95, 0.94])
-
-            # Save plot
-            output_path = output_dir / f"domestic_yearly_percentage_dots_{technology}_{scenario_type['name']}.png"
-            plt.savefig(output_path, dpi=300, bbox_inches='tight')
-            plt.close()
-            print(f"✓ Saved: {output_path}")
+                # Save plot
+                output_path = output_dir / f"domestic_yearly_dots_{technology}_{scenario_type['name']}_{nzia_config['label']}.png"
+                plt.savefig(output_path, dpi=300, bbox_inches='tight')
+                plt.close()
+                print(f"✓ Saved: {output_path}")
 
     print("\n✓ Completed all domestic yearly percentage dot plots!")
-    print(f"Created 8 figures total: 4 technologies × 2 scenario types")
+    print(f"Created 16 figures total: 4 technologies × 2 scenario types × 2 NZIA variants")
 
 def main():
     """
