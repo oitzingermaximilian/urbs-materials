@@ -2296,6 +2296,7 @@ def lng_lineplot_range_comp_basecase():
                          label=f"{group['label']} (Min)")
                 plt.plot(years_full, max_vals, color=group['color'], linestyle='-', linewidth=2,
                          label=f"{group['label']} (Max)")
+
                 print(f"    {group['label']}: {min([v for v in min_vals if v>0] or [0]):.2f} - {max(max_vals):.2f} BCM")
             else:
                 print(f"    Skipped (no non-zero data): {group['label']}")
@@ -2335,28 +2336,30 @@ def main():
 
     # Generate plots
     print("\n1. Generating EU Secondary Additions 2040 comparison...")
-    #plot_eu_secondary_additions_2040()
+    plot_eu_secondary_additions_2040()
     print("\n2. Generating LNG Demand comparison...")
     #generate_all_lng_line_plots()
     #plot_lng_demand_comparison()
-    #plot_lng_demand_yearly_scatter()
+    plot_lng_demand_yearly_scatter()
     #plot_lng_demand_yearly_barplot()
     #lng_lineplot_horizons()
     #plot_lng_demand_rolling_horizon_boxplots()
     #lng_lineplot_range()
-    lng_lineplot_range_comp_basecase()
+    #lng_lineplot_range_comp_basecase()
     print("\n3. Generating Cost Matrix...")
-    #plot_total_system_cost_matrix_2024_2040()
-    #plot_3d_cost_matrix_grid_style_fixed()
+    plot_total_system_cost_matrix_2024_2040()
+    plot_3d_cost_matrix_grid_style_fixed()
 
     print("\n4. Generating Pareto Plots...")
-    #plot_pareto_cost_vs_remanufacturing()
-    #plot_pareto_cost_vs_lng()
+    plot_pareto_cost_vs_remanufacturing()
+    plot_pareto_cost_vs_lng()
     print("\n5. Generating Scrap Plots...")
-    #generate_all_scrap_visualizations()
+    generate_all_scrap_visualizations()
     print("\n6. Generating Capacity Mix Stacked Bar Plots...")
-    #plot_capacity_mix_stacked_bars()
-    #plot_stock_level_facet_per_technology()
+    plot_capacity_mix_stacked_bars()
+    plot_stock_level_facet_per_technology()
 
     print("\nScenario comparison plotting completed!")
 
+if __name__ == "__main__":
+    main()
