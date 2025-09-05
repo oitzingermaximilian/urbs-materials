@@ -1765,6 +1765,8 @@ def plot_capacity_mix_stacked_bars():
                     try:
                         extension_df = pd.read_excel(file_path, sheet_name='extension_only_caps')
                         extension_df['stf'] = extension_df['stf'].fillna(method='ffill')
+                        extension_df['stf'] = pd.to_numeric(extension_df['stf'], errors='coerce')
+                        extension_df = extension_df.dropna(subset=['stf'])
                     except:
                         for tech in renewable_technologies:
                             capacity_data[tech].append(0)
@@ -2515,6 +2517,8 @@ def plot_capacity_additions_by_technology_and_lr():
                             try:
                                 extension_df = pd.read_excel(file_path, sheet_name='extension_only_caps')
                                 extension_df['stf'] = extension_df['stf'].fillna(method='ffill')
+                                extension_df['stf'] = pd.to_numeric(extension_df['stf'], errors='coerce')
+                                extension_df = extension_df.dropna(subset=['stf'])
                             except:
                                 capacity_values.append(0)
                                 continue
