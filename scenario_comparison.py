@@ -2467,7 +2467,7 @@ def lng_lineplot_range_comp_basecase_3x3():
         axes[idx].set_visible(False)
 
     # Add overall title
-    fig.suptitle('LNG Demand Ranges 2024-2050 with/without NZIA by Learning Rate (Base Case)',
+    fig.suptitle('LNG Demand Ranges 2024-2040 with/without NZIA by Learning Rate (non-Scenario Driven)',
                  fontsize=16, fontweight='bold', y=0.98)
 
     plt.tight_layout(rect=[0, 0, 1, 0.96])
@@ -2477,7 +2477,7 @@ def lng_lineplot_range_comp_basecase_3x3():
     plt.close()
     print(f"✓ Saved: {out_path}")
 
-    print("✓ Completed 2024-2050 NZIA comparison LNG range plots in 3x3 grid!")
+    print("✓ Completed 2024-2040 NZIA comparison LNG range plots in 3x3 grid!")
 
 def co2_lineplot_range_comp_basecase():
     """Plot CO2 emissions range (min/max envelope) for 2024-2050 horizon only, displaying
@@ -3497,7 +3497,7 @@ def plot_combined_domestic_percentage_heatmap():
     - 2 scenario types × 2 NZIA variants
     - Each figure has ~27 subplots (one per price scenario) in 3×9 grid
     - Uses squares for yearly additions in 2-year steps
-    - Shows COMBINED domestic percentage across all 4 technologies
+    - White to dark red color scheme for better 40% benchmark visibility
     """
 
     output_dir = Path("scenario_comparison")
@@ -3526,14 +3526,12 @@ def plot_combined_domestic_percentage_heatmap():
         {"variant": "results_without_nzia", "label": "without_NZIA", "title": "without NZIA"}
     ]
 
-    # Better color scheme: Blue to Red gradient for better contrast
+    # White to dark red color scheme (upper part only)
     from matplotlib.colors import LinearSegmentedColormap, Normalize
-    contrast_colors = [
-        '#08519c',  # Dark blue (0%)
-        '#3182bd',  # Medium blue
-        '#6baed6',  # Light blue
-        '#bdd7e7',  # Very light blue
-        '#f7fbff',  # White/neutral (50%)
+
+    # White (0%) to very dark red (100%) - much better contrast around 40%
+    white_to_red_colors = [
+        '#f7fbff',  # White/neutral (0%)
         '#fee5d9',  # Very light red
         '#fcae91',  # Light red
         '#fb6a4a',  # Medium red
@@ -3541,7 +3539,7 @@ def plot_combined_domestic_percentage_heatmap():
         '#a50f15'  # Very dark red (100%)
     ]
 
-    cmap = LinearSegmentedColormap.from_list('blue_to_red', contrast_colors, N=256)
+    cmap = LinearSegmentedColormap.from_list('white_to_red', white_to_red_colors, N=256)
     norm = Normalize(vmin=0, vmax=100)
 
     for scenario_type in scenario_types:
@@ -3658,7 +3656,7 @@ def plot_combined_domestic_percentage_heatmap():
                     ax.set_yticklabels([])
 
                 # Clean title: remove LNG_NZ/LNG_PF, just show price combination
-                price_clean = price_scenario.replace('_LNG_NZ', '').replace('_LNG_PF', '').replace('_', ' ').title()
+                price_clean = price_scenario.replace('LNG_NZ_', '').replace('LNG_PF_', '').replace('_', ' ').title()
                 ax.set_title(price_clean, fontsize=9, fontweight='bold', pad=8)
 
                 # Add subtle grid for better readability
@@ -3684,9 +3682,9 @@ def plot_combined_domestic_percentage_heatmap():
                 cbar.set_label('Total Domestic Additions (% of yearly total)', fontsize=12, labelpad=10)
                 cbar.ax.tick_params(labelsize=10)
 
-                # Add percentage markers on colorbar
-                cbar.set_ticks([0, 25, 50, 75, 100])
-                cbar.set_ticklabels(['0%', '25%', '50%', '75%', '100%'])
+                # Add percentage markers on colorbar, highlighting 40% benchmark
+                cbar.set_ticks([0, 20, 40, 60, 80, 100])
+                cbar.set_ticklabels(['0%', '20%', '40%\n(Benchmark)', '60%', '80%', '100%'])
 
             # Main title
             fig.suptitle(
