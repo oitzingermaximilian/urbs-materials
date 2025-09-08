@@ -3896,7 +3896,7 @@ def plot_capacity_mix_with_stock():
 
                 # --- CAPACITY DATA ---
                 try:
-                    df_caps = pd.read_excel(file_path_caps, sheet_name="extension_total_Caps")
+                    df_caps = pd.read_excel(file_path_caps, sheet_name="extension_total_caps")
                 except Exception as e:
                     print(f"Could not read {file_path_caps}: {e}")
                     continue
