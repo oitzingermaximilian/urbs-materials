@@ -536,10 +536,6 @@ def create_model(
         doc="main cost function of processes by cost type by process and stf",
     )
 
-    ##########################################################
-    add_lng_block_pricing(m)
-    ##########################################################
-
     # objective and global constraints
     if m.obj.value == "cost":
         m.res_global_co2_limit = pyomo.Constraint(
@@ -1019,7 +1015,7 @@ def def_costs_rule(m, cost_type):
             * m.commodity_dict["cost_factor"][c]
             for tm in m.tm
             for c in m.com_tuples
-            if c[2] in m.com_stock and (c[2] != "LNG")
+            if c[2] in m.com_stock
         )
 
     elif cost_type == "Environmental":
@@ -1093,7 +1089,7 @@ def def_specific_process_costs_rule(m, stf, sit, pro, cost_type):
             for (st, si, co, co_type) in m.com_tuples
             if st == stf
             if si == sit
-            if ((stf, sit, pro, co) in m.pro_input_tuples) and co_type == "Stock" and co != "LNG"
+            if ((stf, sit, pro, co) in m.pro_input_tuples) and co_type == "Stock"
         )
 
     elif cost_type == "Environmental":
@@ -1123,12 +1119,16 @@ def cost_rule(m):  # urbs_solar Extension
     # Calculate total base costs from m.costs
     total_base_costs = pyomo.summation(m.costs)
     total_ext_costs = pyomo.summation(m.costs_new)
-    total_lng_costs = m.LNG_cost
-    # print("Total Base Costs:", total_base_costs)  # Print base costs for debugging
-    # print("Total Urbs Solar Costs:", total_solar_costs)  # Print solar costs
-    # Calculate the total combined costs
-    total_costs = total_base_costs + total_ext_costs + total_lng_costs
-    # print("Total Combined Costs (Base + Solar):", total_costs)  # Print total costs
+    # For debugging: print symbolic expression
+    print("Cost expression before solving:")
+    print("Base costs:", total_base_costs)
+    print("External costs:", total_ext_costs)
+
+
+    # Calculate total combined costs
+    total_costs = total_base_costs + total_ext_costs
+    print("Total cost expression:", total_costs)
+
     return total_costs
 
 
