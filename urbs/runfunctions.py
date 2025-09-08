@@ -322,6 +322,32 @@ def run_scenario(
         # print(loadfactors_dict)
         return loadfactors_dict
 
+    def process_lng_block_sheet(sheet_data):
+        """
+         Reads the LNG blocks sheet directly as float values.
+         Assumes columns: 'block', 'limit', 'price'
+         """
+        block_limits_dict = {}
+        block_price_dict = {}
+
+        # Check required columns
+        required_cols = ["block", "limit", "price"]
+        for col in required_cols:
+            if col not in sheet_data.columns:
+                raise ValueError(f"LNG block sheet must have column '{col}'")
+
+        for _, row in sheet_data.iterrows():
+            block = int(row["block"])
+            limit_value = float(row["limit"])  # directly read, dot is decimal
+            price_value = float(row["price"])  # directly read, dot is decimal
+            block_limits_dict[block] = limit_value
+            block_price_dict[block] = price_value
+        print("Block limits dict:", block_limits_dict)
+        print("Block price dict:", block_price_dict)
+
+        return block_limits_dict, block_price_dict
+
+
     def load_data_from_excel(file_path):
         """Loads data from Excel and processes all relevant sheets."""
         # Read all sheets
@@ -335,6 +361,9 @@ def run_scenario(
         installable_capacity_data = pd.read_excel(
             file_path, sheet_name="installable_capacity"
         )
+        lng_block_data = pd.read_excel(file_path, sheet_name="lng_block")
+        # Process lng_blocks sheet
+        block_limits_dict, block_price_dict = process_lng_block_sheet(lng_block_data)
 
         # Process Technologies sheet
         technologies_dict = process_technology_sheet(technologies_data)
@@ -383,6 +412,9 @@ def run_scenario(
             "dcr_dict": dcr_dict,
             "stocklvl_dict": stocklvl_dict,
             "installable_capacity_dict": installable_capacity_dict,
+            # LNG block info
+            "lng_block_limits": block_limits_dict,
+            "lng_block_price": block_price_dict
         }
 
         return data_urbsextensionv1

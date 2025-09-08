@@ -13,6 +13,7 @@ from urbs.extension import (
     apply_scenario_constraints,
     apply_combined_lr_constraints,
 )
+from urbs.extension.lng_block_pricing import add_lng_block_pricing
 
 
 def create_model(
@@ -534,6 +535,10 @@ def create_model(
         rule=def_specific_process_costs_rule,
         doc="main cost function of processes by cost type by process and stf",
     )
+
+    ##########################################################
+    add_lng_block_pricing(m)
+    ##########################################################
 
     # objective and global constraints
     if m.obj.value == "cost":
@@ -1234,3 +1239,4 @@ def minimum_stock_level_rule(m, stf, location, tech):
     )
 
     return lhs <= rhs
+
