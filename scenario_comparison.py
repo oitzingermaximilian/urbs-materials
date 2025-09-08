@@ -3828,11 +3828,11 @@ def plot_combined_domestic_percentage_heatmap():
 
 def plot_capacity_mix_with_stock():
     """
-        For each scenario (LR, NZIA, scenario):
-        - Plots stacked bar for total installed capacities (excluding Batteries, positive y)
-        - Plots stacked bar for stock levels of solarPV, windon, windoff (negative y)
-        - Data from extension_total_Caps and extension_only_caps, up to 2040
-        """
+    For each scenario (LR, NZIA, scenario):
+    - Plots stacked bar for total installed capacities (excluding Batteries, positive y)
+    - Plots stacked bar for stock levels of solarPV, windon, windoff (negative y)
+    - Data from extension_total_caps and extension_only_caps, up to 2040
+    """
     years_of_interest = [2024, 2030, 2035, 2040]
     max_year = 2040
 
@@ -3882,8 +3882,7 @@ def plot_capacity_mix_with_stock():
         for lr_code, lr_name in LEARNING_RATES.items():
             for scenario in nzia['scenarios']:
                 print(f'Processing: {nzia["label"]} | {lr_code} | {scenario}')
-                file_path_caps = Path(RESULTS_BASE_PATH) / nzia[
-                    'variant'] / lr_code / "rolling_2024_to_2050" / f"scenario_{scenario}.xlsx"
+                file_path_caps = Path(RESULTS_BASE_PATH) / nzia['variant'] / lr_code / "rolling_2024_to_2050" / f"scenario_{scenario}.xlsx"
                 file_path_stock = file_path_caps  # same file
 
                 if not file_path_caps.exists():
@@ -3910,8 +3909,7 @@ def plot_capacity_mix_with_stock():
                 df_caps = df_caps[~df_caps['PlotTech'].isna()]
 
                 df_grouped = df_caps.groupby(['stf', 'PlotTech'])['cap_pro'].sum().reset_index()
-                df_pivot = df_grouped.pivot_table(index='stf', columns='PlotTech', values='cap_pro', aggfunc='sum',
-                                                  fill_value=0)
+                df_pivot = df_grouped.pivot_table(index='stf', columns='PlotTech', values='cap_pro', aggfunc='sum', fill_value=0)
                 df_pivot_gw = df_pivot / 1e3  # MW to GW
                 cols_to_plot = [col for col in df_pivot_gw.columns if col in colors]
                 df_plot = df_pivot_gw[cols_to_plot]
@@ -3941,20 +3939,26 @@ def plot_capacity_mix_with_stock():
                 df_plot = df_plot.reindex(all_years, fill_value=0)
                 df_stock_gw = df_stock_gw.reindex(all_years, fill_value=0)
 
-                # --- Plot ---
+                # --- Plot using manual stacking for negative bars ---
                 fig, ax = plt.subplots(figsize=(12, 8))
+                bar_width = 0.8
+                x = range(len(df_plot.index))
 
-                # Capacity bars (positive, stacked)
-                df_plot.plot(kind='bar', stacked=True, ax=ax, width=0.8,
-                             color=[colors[col] for col in cols_to_plot], legend=False, zorder=3)
+                # POSITIVE STACKED BARS
+                bottoms = [0] * len(df_plot.index)
+                for col in df_plot.columns:
+                    ax.bar(x, df_plot[col], bar_width, bottom=bottoms, label=col, color=colors[col])
+                    bottoms = [b + v for b, v in zip(bottoms, df_plot[col].values)]
 
-                # Stock bars (negative, stacked)
-                (-df_stock_gw[STOCK_PLOT_NAMES]).plot(kind='bar', stacked=True, ax=ax, width=0.8,
-                                                      color=[colors[col] for col in STOCK_PLOT_NAMES], legend=False,
-                                                      zorder=2, alpha=0.7)
+                # NEGATIVE STACKED BARS
+                neg_bottoms = [0] * len(df_stock_gw.index)
+                for col in STOCK_PLOT_NAMES:
+                    values = -df_stock_gw[col].values
+                    ax.bar(x, values, bar_width, bottom=neg_bottoms, label=f"{col} Stock", color=colors[col], alpha=0.7)
+                    neg_bottoms = [b + v for b, v in zip(neg_bottoms, values)]
 
                 # X-ticks and labels
-                ax.set_xticks(range(len(df_plot.index)))
+                ax.set_xticks(list(x))
                 ax.set_xticklabels([int(year) if year in years_of_interest else '' for year in df_plot.index],
                                    rotation=0, fontsize=13)
                 ax.set_xlim(-0.5, len(df_plot.index) - 0.5)
@@ -3967,14 +3971,15 @@ def plot_capacity_mix_with_stock():
                 # Legend
                 from matplotlib.patches import Patch
                 legend_patches = [Patch(facecolor=colors[col], label=col) for col in cols_to_plot]
-                legend_stock = [Patch(facecolor=colors[col], label=f"{col} Stock", alpha=0.7) for col in
-                                STOCK_PLOT_NAMES]
+                legend_stock = [Patch(facecolor=colors[col], label=f"{col} Stock", alpha=0.7) for col in STOCK_PLOT_NAMES]
                 handles = legend_patches + legend_stock
                 ax.legend(handles=handles, loc='lower center', ncol=3, fontsize=12, bbox_to_anchor=(0.5, 1.06),
                           framealpha=0.9, borderpad=0.8, edgecolor="black")
                 plt.tight_layout()
                 plt.xlim(-0.5, len(df_plot.index) - 0.5)
-                plt.ylim(bottom=-1.1 * df_stock_gw[STOCK_PLOT_NAMES].max().max(), top=1.1 * df_plot.max().max())
+                min_neg = min(neg_bottoms) if neg_bottoms else 0
+                max_pos = max(bottoms) if bottoms else 0
+                plt.ylim(bottom=min_neg*1.1, top=max_pos*1.1)
 
                 # Output
                 output_file = output_dir / f'us_capacity_and_stock_{scenario}.png'
