@@ -145,3 +145,4 @@ def apply_variables(m):
     m.capacity_facility_cumulative = pyomo.Var(
         m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
     )
+
