@@ -3845,6 +3845,7 @@ def plot_capacity_and_stock_separately():
         'Hydro (reservoir)': '#74B3D6',
         'Solar PV': '#FDFD96',
         'Gas Plant (CCGT)': '#FF6961',
+        'Gas Plant (CCGT) LNG': '#brown',
         'Coal Plant': '#B0B0B0',
         'Coal Lignite': '#808080',
         'Gas Plant (CCGT) CCUS': 'black',
@@ -3861,7 +3862,7 @@ def plot_capacity_and_stock_separately():
         "Coal Plant": "Coal Plant",
         "Gas Plant (CCGT)": "Gas Plant (CCGT)",
         "Gas Plant (CCGT) CCUS": "Gas Plant (CCGT) CCUS",
-        "Gas Plant (CCGT) LNG": "Gas Plant (CCGT)",
+        "Gas Plant (CCGT) LNG": "Gas Plant (CCGT) LNG",
         "Hydro (reservoir)": "Hydro (reservoir)",
         "Hydro (run-of-river)": "Hydro (run-of-river)",
         "Nuclear Plant": "Nuclear Plant",
@@ -3995,21 +3996,7 @@ def summarize_capacity_and_stock_all_LRs():
     years_of_interest = [2024, 2030, 2035, 2040]
     max_year = 2040
 
-    colors = {
-        'Biomass Plant': '#FFB347',
-        'Wind (onshore)': '#77DD77',
-        'Wind (offshore)': '#006400',
-        'Nuclear Plant': '#FFB6C1',
-        'Hydro (run-of-river)': '#A0C4E1',
-        'Hydro (reservoir)': '#74B3D6',
-        'Solar PV': '#FDFD96',
-        'Gas Plant (CCGT)': '#FF6961',
-        'Coal Plant': '#B0B0B0',
-        'Coal Lignite': '#808080',
-        'Gas Plant (CCGT) CCUS': 'black',
-        'Coal CCUS': 'black',
-        'Coal Lignite CCUS': 'black'
-    }
+
     techs_exclude = ['Batteries']
 
     TECH_NAME_MAP = {
@@ -4020,7 +4007,7 @@ def summarize_capacity_and_stock_all_LRs():
         "Coal Plant": "Coal Plant",
         "Gas Plant (CCGT)": "Gas Plant (CCGT)",
         "Gas Plant (CCGT) CCUS": "Gas Plant (CCGT) CCUS",
-        "Gas Plant (CCGT) LNG": "Gas Plant (CCGT)",
+        "Gas Plant (CCGT) LNG": "Gas Plant (CCGT) LNG",
         "Hydro (reservoir)": "Hydro (reservoir)",
         "Hydro (run-of-river)": "Hydro (run-of-river)",
         "Nuclear Plant": "Nuclear Plant",
@@ -4114,7 +4101,7 @@ def main():
     #plot_domestic_percentage_heatmap_scenario_driven()
     #plot_combined_domestic_percentage_heatmap()
     #co2_lineplot_range_comp_basecase()
-    #plot_capacity_and_stock_separately()
+    plot_capacity_and_stock_separately()
     summarize_capacity_and_stock_all_LRs()
     pass
 
