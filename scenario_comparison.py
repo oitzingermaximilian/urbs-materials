@@ -587,67 +587,84 @@ def plot_total_system_cost_matrix(): #TODO Disabled reenable if needed
 
 def plot_total_system_cost_matrix_2024_2040():
     """
-    Create a matrix heatmap of total system cost from 2024 to 2040 for both with_NZIA and without_NZIA.
-    Rows: price scenarios
-    Columns: learning rate scenarios
-    Cell value: sum of 'value' column for years 2024 to 2040 in the 'Total_Cost' sheet
+    Create sophisticated heatmaps of total system cost (2024–2040) for both Net Zero and Persistent Fossil scenario types,
+    showing with_NZIA (top) and without_NZIA (bottom). One PNG per scenario type.
     """
-    nzia_variants = [
-        {'label': 'with_NZIA', 'variant': 'results_with_nzia', 'scenarios': SCENARIO_COMBOS_LNG},
-        {'label': 'without_NZIA', 'variant': 'results_without_nzia', 'scenarios': SCENARIO_COMBOS_LNG},
+
+    output_dir = Path("scenario_comparison")
+    output_dir.mkdir(exist_ok=True)
+
+    # Scenario configurations
+    scenario_types = [
+        {"name": "NZ", "scenarios": SCENARIO_COMBOS_LNG_NZ, "title": "Net Zero"},
+        {"name": "PF", "scenarios": SCENARIO_COMBOS_LNG_PF, "title": "Persistent Fossil"}
     ]
 
-    for nzia in nzia_variants:
-        cost_matrix = np.zeros((len(nzia['scenarios']), len(LEARNING_RATES)))
-        for i, scenario in enumerate(nzia['scenarios']):
-            for j, (lr_code, lr_name) in enumerate(LEARNING_RATES.items()):
-                # Construct file path as in your other functions
-                file_path = (
-                    Path(RESULTS_BASE_PATH)
-                    / nzia['variant']
-                    / lr_code
-                    / "rolling_2024_to_2050"
-                    / f"scenario_{scenario}.xlsx"
-                )
-                if not file_path.exists():
-                    cost_matrix[i, j] = np.nan
-                    continue
-                try:
-                    df = pd.read_excel(file_path, sheet_name="Total_Cost")
-                except Exception:
-                    cost_matrix[i, j] = np.nan
-                    continue
-                if "year" not in df or "value" not in df:
-                    cost_matrix[i, j] = np.nan
-                    continue
-                df_period = df[(df['year'] >= 2024) & (df['year'] <= 2040)]
-                total_cost = df_period['value'].sum() / 1e9  # Convert to bEUR if value in EUR
-                cost_matrix[i, j] = total_cost
+    # NZIA variants (top: with NZIA, bottom: without NZIA)
+    nzia_variants = [
+        {"variant": "results_with_nzia", "label": "with_NZIA", "title": "with NZIA"},
+        {"variant": "results_without_nzia", "label": "without_NZIA", "title": "without NZIA"}
+    ]
 
-        # Plot
-        fig, ax = plt.subplots(figsize=(14, 8))
-        sns.heatmap(
-            cost_matrix,
-            annot=True,
-            fmt=".1f",
-            cmap="YlOrRd",
-            linewidths=0.5,
-            linecolor='gray',
-            cbar_kws={'label': 'Total System Cost (2024–2040, bEUR)'},
-            ax=ax
-        )
-        ax.set_xticks(np.arange(len(LEARNING_RATES)) + 0.5)
-        ax.set_yticks(np.arange(len(nzia['scenarios'])) + 0.5)
-        ax.set_xticklabels([v for v in LEARNING_RATES.values()], rotation=45, ha='right')
-        ax.set_yticklabels([create_compact_scenario_label(s) for s in nzia['scenarios']], rotation=0)
-        ax.set_xlabel("Learning Rate Scenario")
-        ax.set_ylabel("Price Scenario")
-        ax.set_title(f"Total System Cost Matrix (2024–2040) [{nzia['label']}]")
+    for scenario_type in scenario_types:
+        print(f"Processing total system cost matrix for scenario type: {scenario_type['title']}")
+        matrices = []
+        for nzia in nzia_variants:
+            cost_matrix = np.full((len(scenario_type['scenarios']), len(LEARNING_RATES)), np.nan)
+            for i, scenario in enumerate(scenario_type['scenarios']):
+                for j, (lr_code, lr_name) in enumerate(LEARNING_RATES.items()):
+                    file_path = (
+                        Path(RESULTS_BASE_PATH)
+                        / nzia["variant"]
+                        / lr_code
+                        / "rolling_2024_to_2050"
+                        / f"scenario_{scenario}.xlsx"
+                    )
+                    if not file_path.exists():
+                        continue
+                    try:
+                        df = pd.read_excel(file_path, sheet_name="Total_Cost")
+                    except Exception:
+                        continue
+                    if "year" not in df or "value" not in df:
+                        continue
+                    df_period = df[(df['year'] >= 2024) & (df['year'] <= 2040)]
+                    total_cost = df_period['value'].sum() / 1e9  # Convert to bEUR if value in EUR
+                    cost_matrix[i, j] = total_cost
+            matrices.append(cost_matrix)
+
+        # Plot: with_NZIA on top, without_NZIA below
+        fig, axes = plt.subplots(2, 1, figsize=(14, 11), sharex=True)
+        vmin = min(np.nanmin(mat) for mat in matrices)
+        vmax = max(np.nanmax(mat) for mat in matrices)
+        for ax, cost_matrix, nzia in zip(axes, matrices, nzia_variants):
+            sns.heatmap(
+                cost_matrix,
+                annot=True,
+                fmt=".1f",
+                cmap="YlOrRd",
+                linewidths=0.5,
+                linecolor='gray',
+                cbar=ax == axes[0],
+                vmin=vmin, vmax=vmax,
+                cbar_kws={'label': 'Total System Cost (2024–2040, bEUR)'} if ax == axes[0] else None,
+                ax=ax
+            )
+            ax.set_xticks(np.arange(len(LEARNING_RATES)) + 0.5)
+            ax.set_yticks(np.arange(len(scenario_type['scenarios'])) + 0.5)
+            ax.set_xticklabels([v for v in LEARNING_RATES.values()], rotation=45, ha='right')
+            ax.set_yticklabels([create_compact_scenario_label(s) for s in scenario_type['scenarios']], rotation=0)
+            ax.set_ylabel(f"{nzia['title']} – Price Scenario")
+            if ax == axes[0]:
+                ax.set_title(f"Total System Cost Matrix (2024–2040)\n{scenario_type['title']}")
+            else:
+                ax.set_xlabel("Learning Rate Scenario")
         plt.tight_layout()
-        output_path = Path("scenario_comparison") / f"total_system_cost_matrix_2024_2040_{nzia['label']}.png"
+        output_path = output_dir / f"total_system_cost_matrix_2024_2040_{scenario_type['name']}.png"
         plt.savefig(output_path, dpi=300, bbox_inches='tight')
         plt.close(fig)
-        print(f"Saved total system cost matrix plot (2024–2040) [{nzia['label']}]: {output_path}")
+        print(f"Saved total system cost matrix plot (2024–2040) for {scenario_type['title']}: {output_path}")
+        
 def plot_3d_cost_matrix_grid_style_fixed():
     """
     Create a 3D plot with corrected price scenario labels using the new compact labeling.
