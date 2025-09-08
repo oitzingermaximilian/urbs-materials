@@ -3991,7 +3991,7 @@ def plot_capacity_and_stock_separately():
     print("✓ All US capacity and stock stacked bar plots completed!")
 
 def summarize_capacity_and_stock_all_LRs():
-    # Define your mappings and constants here
+    # Define mappings and constants
     years_of_interest = [2024, 2030, 2035, 2040]
     max_year = 2040
 
@@ -4031,8 +4031,11 @@ def summarize_capacity_and_stock_all_LRs():
     STOCK_TECHS = ["solarPV", "windon", "windoff"]
     STOCK_PLOT_NAMES = [TECH_NAME_MAP[t] for t in STOCK_TECHS]
 
-    # You must define these in your script or pass as arguments:
-    # LEARNING_RATES, nzia_variants, SCENARIO_COMBOS_LNG, RESULTS_BASE_PATH
+    # Define variants as in your plotting function
+    nzia_variants = [
+        {'label': 'with_NZIA', 'variant': 'results_with_nzia', 'scenarios': SCENARIO_COMBOS_LNG},
+        {'label': 'without_NZIA', 'variant': 'results_without_nzia', 'scenarios': SCENARIO_COMBOS_LNG},
+    ]
 
     cap_records = []
     stock_records = []
