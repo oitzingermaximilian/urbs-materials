@@ -3904,13 +3904,13 @@ def plot_capacity_mix_with_stock():
                 df_caps['stf'] = df_caps['stf'].fillna(method='ffill')
                 df_caps['stf'] = pd.to_numeric(df_caps['stf'], errors='coerce').astype(int)
                 df_caps = df_caps[df_caps['stf'] <= max_year]
-                df_caps = df_caps[~df_caps['tech'].isin(techs_exclude)]
+                df_caps = df_caps[~df_caps['pro'].isin(techs_exclude)]
 
-                df_caps['PlotTech'] = df_caps['tech'].map(TECH_NAME_MAP)
+                df_caps['PlotTech'] = df_caps['pro'].map(TECH_NAME_MAP)
                 df_caps = df_caps[~df_caps['PlotTech'].isna()]
 
-                df_grouped = df_caps.groupby(['stf', 'PlotTech'])['Total'].sum().reset_index()
-                df_pivot = df_grouped.pivot_table(index='stf', columns='PlotTech', values='Total', aggfunc='sum',
+                df_grouped = df_caps.groupby(['stf', 'PlotTech'])['cap_pro'].sum().reset_index()
+                df_pivot = df_grouped.pivot_table(index='stf', columns='PlotTech', values='cap_pro', aggfunc='sum',
                                                   fill_value=0)
                 df_pivot_gw = df_pivot / 1e3  # MW to GW
                 cols_to_plot = [col for col in df_pivot_gw.columns if col in colors]
