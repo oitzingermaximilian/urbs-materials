@@ -3845,7 +3845,7 @@ def plot_capacity_and_stock_separately():
         'Hydro (reservoir)': '#74B3D6',
         'Solar PV': '#FDFD96',
         'Gas Plant (CCGT)': '#FF6961',
-        'Gas Plant (CCGT) LNG': '#brown',
+        'Gas Plant (CCGT) LNG': 'brown',
         'Coal Plant': '#B0B0B0',
         'Coal Lignite': '#808080',
         'Gas Plant (CCGT) CCUS': 'black',
