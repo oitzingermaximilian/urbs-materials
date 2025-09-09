@@ -73,7 +73,6 @@ class DefCostsNew(AbstractConstraint):
             )
             expr = m.costs_new[cost_type_new] == total_eu_cost_secondary
             return expr
-
         else:
             raise NotImplementedError(f"Unknown cost type: {cost_type_new}")
 

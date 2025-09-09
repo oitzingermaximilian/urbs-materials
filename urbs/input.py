@@ -267,7 +267,6 @@ def pyomo_model_prep(data, timesteps, window_start, window_end):
     print("All levels in m.global_prop:", m.global_prop.index.levels[0].tolist())
     print("--------------------------\n")
     # creating list wih cost types
-    ##TODO: solar cost type list
     m.cost_type_list = ["Invest", "Fixed", "Variable", "Fuel", "Environmental"]
     m.cost_new_list = [
         "Importcost",

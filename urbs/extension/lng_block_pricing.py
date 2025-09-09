@@ -1,45 +1,111 @@
+from abc import ABC, abstractmethod
 import pyomo.core as pyomo
 
-def add_lng_block_pricing(m, commodity="LNG", com_type="Stock"):
+class AbstractConstraint(ABC):
+    @abstractmethod
+    def apply_rule(self, m, *args):
+        pass
 
-    # ----- Filter LNG tuples only -----
-    lng_tuples = [c for c in m.com_tuples if c[3] == commodity and c[2] == com_type]
 
-    # ----- Variables per block -----
-    m.e_co_stock_block = pyomo.Var(
-        lng_tuples, m.blocks,
-        within=pyomo.NonNegativeReals,
-        doc="LNG usage per block per year"
-    )
-
-    # ----- Link LNG blocks to e_pro_in -----
-    def link_blocks_to_pro_in_rule(m, c, b):
-        stf, sit, pro, com = c
-        return m.e_pro_in[(stf, (stf, sit, pro, com))] == sum(
-            m.e_co_stock_block[c, bb] for bb in m.blocks
+class LNGYearlyDemandConstraint(AbstractConstraint):
+    def apply_rule(self, m, stf, sit, com, com_type):
+        # Sum LNG demand for this year from all processes
+        yearly_demand = sum(
+            m.e_pro_in[tm, stf, sit, pro, com]
+            for tm in m.tm
+            for pro in m.pro
+            if (tm, stf, sit, pro, com) in m.e_pro_in.index_set()
         )
-    m.link_lng_to_pro_in = pyomo.Constraint(
-        [(c, b) for c in lng_tuples for b in m.blocks],
-        rule=link_blocks_to_pro_in_rule
-    )
 
-    # ----- Per-year block caps -----
-    def block_cap_per_year_rule(m, stf, b):
-        # Get all LNG tuples for this year
-        tuples_this_year = [c for c in lng_tuples if c[0] == stf]
+        # Debug print
+        print(f"[LNG Demand] Year {stf}, site {sit}, demand = {yearly_demand}")
+
+        return sum(m.e_co_stock_block[(stf, sit, com, com_type), b] for b in m.blocks) == yearly_demand
+
+
+class LNGBlockCapConstraint(AbstractConstraint):
+    def apply_rule(self, m, stf, b):
+        tuples_this_year = [(stf, sit, com, com_type) for (stf, sit, com, com_type) in m.LNG_tuples if stf == stf]
         if not tuples_this_year:
-            return pyomo.Constraint.Feasible  # Skip if no LNG for this year
-        return sum(m.e_co_stock_block[c, b] for c in tuples_this_year) <= m.block_limits[b, stf]
+            return pyomo.Constraint.Skip
 
-    m.block_cap_per_year = pyomo.Constraint(m.stf, m.blocks, rule=block_cap_per_year_rule)
+        lhs = sum(m.e_co_stock_block[c, b] for c in tuples_this_year)
+        rhs = m.block_limits[b]
 
-    # ----- Total LNG cost -----
-    m.LNG_cost = pyomo.Expression(
-        expr=sum(
+        # Debug print
+        print(f"[Block Cap] Year {stf}, block {b}, allocated = {lhs}, cap = {rhs}")
+
+        return lhs <= rhs
+
+
+class LNGCostConstraint(AbstractConstraint):
+    def apply_rule(self, m, stf):
+        """Calculate LNG costs for a specific year (stf)"""
+        # Filter LNG tuples for this specific year
+        tuples_this_year = [c for c in m.LNG_tuples if c[0] == stf]
+
+        if not tuples_this_year:
+            return m.lng_costs[stf] == 0
+
+        # Calculate LNG cost for this year
+        yearly_lng_cost = sum(
             m.block_price[b] * m.e_co_stock_block[c, b]
-            for c in lng_tuples
+            for c in tuples_this_year
             for b in m.blocks
         )
+
+        # Debug print
+        print(f"[LNG Cost] Year {stf}, cost = {yearly_lng_cost}")
+
+        return m.lng_costs[stf] == yearly_lng_cost
+
+
+def apply_lng_block_pricing(m, data):
+    # --- Sets and Params ---
+    m.years_lng = pyomo.Set(initialize=list(range(2024, 2051)))
+    m.blocks = pyomo.Set(initialize=list(range(1, 9)))
+    m.LNG_tuples = pyomo.Set(
+        within=m.years_lng * m.sit * m.com * m.com_type,
+        initialize=[(y, "EU27", "LNG", "Stock") for y in m.years_lng
+                    if y in m.years_lng and "EU27" in m.sit and "LNG" in m.com and "Stock" in m.com_type],
+        doc="LNG tuples (year, site, commodity, type)"
     )
 
-    return m
+    m.block_limits = pyomo.Param(
+        m.blocks,
+        initialize={b: data["lng_block_limits"][b] for b in m.blocks},
+        doc="Max LNG volume per block (same for all years)"
+    )
+    m.block_price = pyomo.Param(
+        m.blocks, initialize=data["lng_block_price"], doc="LNG block price €/MWh"
+    )
+
+    # --- Variables ---
+    m.e_co_stock_block = pyomo.Var(
+        m.LNG_tuples, m.blocks, within=pyomo.NonNegativeReals, doc="LNG usage per block per year"
+    )
+
+    # NEW: Separate LNG cost variable for each year
+    m.lng_costs = pyomo.Var(
+        m.stf, within=pyomo.NonNegativeReals, doc="LNG costs per year"
+    )
+
+    # --- Constraints ---
+    m.lng_yearly_demand = pyomo.Constraint(
+        m.LNG_tuples,
+        rule=lambda m, y, site, com, com_type:
+        LNGYearlyDemandConstraint().apply_rule(m, y, site, com, com_type)
+    )
+
+    m.lng_block_caps = pyomo.Constraint(
+        m.years_lng, m.blocks,
+        rule=lambda m, y, b: LNGBlockCapConstraint().apply_rule(m, y, b)
+    )
+
+    # NEW: LNG cost constraint using abstract function
+    m.lng_cost_constraint = pyomo.Constraint(
+        m.stf,
+        rule=lambda m, stf: LNGCostConstraint().apply_rule(m, stf)
+    )
+
+    print("✅ LNG block pricing applied successfully.")

@@ -6,6 +6,7 @@ from .variables import apply_variables
 from .sets_and_params import apply_sets_and_params
 from .lr_remanufacturing import apply_combined_lr_constraints
 from .scenario_constraints import apply_scenario_constraints
+from .lng_block_pricing  import apply_lng_block_pricing
 
 __all__ = [
     "apply_scrap_constraints",
@@ -16,4 +17,5 @@ __all__ = [
     "apply_sets_and_params",
     "apply_combined_lr_constraints",
     "apply_scenario_constraints",
+    "apply_lng_block_pricing",
 ]

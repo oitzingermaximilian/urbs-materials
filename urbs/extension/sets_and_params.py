@@ -484,36 +484,4 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc="total_facility_cap_initial",
     )
 
-###########################################LNG-Block-Pricing#####################################################
 
-    m.blocks = pyomo.Set(initialize=list(data_urbsextensionv1["lng_block_limits"].keys()))
-
-    m.block_limits = pyomo.Param(
-        m.blocks, m.stf,
-        initialize={(b, stf): data_urbsextensionv1["lng_block_limits"][b]
-                    for b in m.blocks
-                    for stf in m.stf},
-        doc="Maximum LNG volume per block per year (MWh)"
-    )
-
-    m.block_price = pyomo.Param(
-        m.blocks,
-        initialize=data_urbsextensionv1["lng_block_price"],
-        doc="LNG block price in €/MWh"
-    )
-
-    # Print blocks
-    print("Blocks:")
-    for b in m.blocks:
-        print(b)
-
-    # Print block limits per year
-    print("\nBlock limits per year:")
-    for b in m.blocks:
-        for stf in m.stf:
-            print(f"Block {b}, Year {stf}: Limit = {m.block_limits[b, stf]}")
-
-    # Print block prices
-    print("\nBlock prices:")
-    for b in m.blocks:
-        print(f"Block {b}: Price = {m.block_price[b]}")

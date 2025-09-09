@@ -12,8 +12,8 @@ from urbs.extension import (
     apply_sets_and_params,
     apply_scenario_constraints,
     apply_combined_lr_constraints,
+    apply_lng_block_pricing,
 )
-from urbs.extension.lng_block_pricing import add_lng_block_pricing
 
 
 def create_model(
@@ -389,9 +389,12 @@ def create_model(
         
     """
 
+
     apply_sets_and_params(m, data_urbsextensionv1)
 
     apply_variables(m)
+
+    apply_lng_block_pricing(m, data_urbsextensionv1)
 
     apply_scenario_constraints(m)
 
@@ -593,6 +596,11 @@ def create_model(
 
     if dual:
         m.dual = pyomo.Suffix(direction=pyomo.Suffix.IMPORT)
+
+
+
+
+
 
     return m
 
@@ -1009,8 +1017,9 @@ def def_costs_rule(m, cost_type):
 
 
     elif cost_type == "Fuel":
-        print("m.com_stock contains:", sorted(list(m.com_stock)))
-        print("m.com_tuples contains:", sorted(list(m.com_tuples)))
+        #print("m.com_stock contains:", sorted(list(m.com_stock)))
+        #print("m.com_tuples contains:", sorted(list(m.com_tuples)))
+        #print("m.e_pro_in contains:", sorted(list(m.e_pro_in.index_set())))
         return m.costs[cost_type] == sum(
             m.e_co_stock[(tm,) + c]
             * m.weight
@@ -1123,14 +1132,16 @@ def cost_rule(m):  # urbs_solar Extension
     # Calculate total base costs from m.costs
     total_base_costs = pyomo.summation(m.costs)
     total_ext_costs = pyomo.summation(m.costs_new)
+    total_lng_costs = pyomo.summation(m.lng_costs)  # NEW: Add LNG costs
     # For debugging: print symbolic expression
     print("Cost expression before solving:")
     print("Base costs:", total_base_costs)
     print("External costs:", total_ext_costs)
+    print("LNG costs:", total_lng_costs)
 
 
     # Calculate total combined costs
-    total_costs = total_base_costs + total_ext_costs
+    total_costs = total_base_costs + total_ext_costs + total_lng_costs
     print("Total cost expression:", total_costs)
 
     return total_costs
