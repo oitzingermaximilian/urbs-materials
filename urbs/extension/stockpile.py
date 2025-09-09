@@ -134,7 +134,7 @@ class CapacityExtNewLimitRule(AbstractConstraint):
             capacity_value = m.capacity_ext_new[stf, location, tech]
             ext_new_value = (
                 m.Q_ext_new[stf, location, tech]
-                #+ m.capacity_dec[stf - 1, location, tech]
+                + m.capacity_dec[stf - 1, location, tech]
             )
             debug_print(
                 f"Debug: STF = {stf}, Location = {location}, Tech = {tech}, LHS = {capacity_value}, RHS = {ext_new_value}"
