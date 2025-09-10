@@ -271,10 +271,7 @@ my_colors = {"EU27": (200, 230, 200)}
 for country, color in my_colors.items():
     urbs.COLORS[country] = color
 
-# select scenarios to be run
-scenarios = [
-    ("scenario_min_min_min_LNG_NZ", urbs.scenario_min_min_min_LNG_NZ)
-]
+
 
 
 def run_perfect_foresight():
@@ -354,32 +351,6 @@ def run_rolling_horizon(start_year=2024, end_year=2050, step=5):
     # select scenarios to be run
     scenarios = [
         ("scenario_min_min_min", urbs.scenario_min_min_min),
-        ("scenario_min_min_avg", urbs.scenario_min_min_avg),
-        ("scenario_min_min_high", urbs.scenario_min_min_high),
-        ("scenario_min_avg_min", urbs.scenario_min_avg_min),
-        ("scenario_min_avg_avg", urbs.scenario_min_avg_avg),
-        ("scenario_min_avg_high", urbs.scenario_min_avg_high),
-        ("scenario_min_high_min", urbs.scenario_min_high_min),
-        ("scenario_min_high_avg", urbs.scenario_min_high_avg),
-        ("scenario_min_high_high", urbs.scenario_min_high_high),
-        ("scenario_avg_min_min", urbs.scenario_avg_min_min),
-        ("scenario_avg_min_avg", urbs.scenario_avg_min_avg),
-        ("scenario_avg_min_high", urbs.scenario_avg_min_high),
-        ("scenario_avg_avg_min", urbs.scenario_avg_avg_min),
-        ("scenario_avg_avg_avg", urbs.scenario_avg_avg_avg),
-        ("scenario_avg_avg_high", urbs.scenario_avg_avg_high),
-        ("scenario_avg_high_min", urbs.scenario_avg_high_min),
-        ("scenario_avg_high_avg", urbs.scenario_avg_high_avg),
-        ("scenario_avg_high_high", urbs.scenario_avg_high_high),
-        ("scenario_high_min_min", urbs.scenario_high_min_min),
-        ("scenario_high_min_avg", urbs.scenario_high_min_avg),
-        ("scenario_high_min_high", urbs.scenario_high_min_high),
-        ("scenario_high_avg_min", urbs.scenario_high_avg_min),
-        ("scenario_high_avg_avg", urbs.scenario_high_avg_avg),
-        ("scenario_high_avg_high", urbs.scenario_high_avg_high),
-        ("scenario_high_high_min", urbs.scenario_high_high_min),
-        ("scenario_high_high_avg", urbs.scenario_high_high_avg),
-        ("scenario_high_high_high", urbs.scenario_high_high_high),
     ]
 
     for scenario_name, scenario in scenarios:

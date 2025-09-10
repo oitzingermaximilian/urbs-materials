@@ -14,9 +14,9 @@ def scenario_min_min_min(data, data_urbsextensionv1):
                 pro.loc[(stf, "EU27", "Gas Plant (CCGT)"), "min-fraction"] = 0
                 pro.loc[(stf, "EU27", "Gas Plant (CCGT) CCUS"), "min-fraction"] = 0
                 pro.loc[(stf, "EU27", "Gas Plant (CCGT) LNG"), "min-fraction"] = 0
-                pro.loc[(stf, "EU27", "Biomass Plant"), "cap-up"] = 60000
+                pro.loc[(stf, "EU27", "Biomass Plant"), "cap-up"] = 9999999
             else:
-                pro.loc[(stf, "EU27", "Biomass Plant"), "cap-up"] = 60000
+                pro.loc[(stf, "EU27", "Biomass Plant"), "cap-up"] = 9999999
                 pro.loc[(stf, "EU27", "Coal Plant"), "cap-up"] = 53560
                 pro.loc[(stf, "EU27", "Coal Lignite"), "cap-up"] = 43590
                 pro.loc[(stf, "EU27", "Gas Plant (CCGT)"), "cap-up"] = 132230
@@ -27,14 +27,39 @@ def scenario_min_min_min(data, data_urbsextensionv1):
     # Commodity updates
     if "commodity" in data:
         co = data["commodity"]
+
+        # Piped Gas logic
         base_value = 319200000
         yearly_decrease_factor = 0.95948
+
+        # CO2 prices per year (€/t)
+        co2_prices = {}
+
+        # Linear interpolation from 65 in 2024 to 75 in 2030
+        for stf in range(2024, 2031):
+            co2_prices[stf] = 65 + (stf - 2024) * (75 - 65) / (2030 - 2024)
+
+        # Fixed values from 2031 onward
+        fixed_co2_prices = {
+            2031: 81.3, 2032: 87.6, 2033: 93.9, 2034: 100.2, 2035: 106.5,
+            2036: 112.8, 2037: 119.1, 2038: 125.4, 2039: 131.7, 2040: 138,
+            2041: 228.5, 2042: 364.25, 2043: 466.0625, 2044: 500,
+            2045: 500, 2046: 500, 2047: 500, 2048: 500, 2049: 500, 2050: 500
+        }
+        co2_prices.update(fixed_co2_prices)
+
         for stf in data["global_prop"].index.levels[0].tolist():
+            # Piped Gas max
             if stf == 2024:
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+
+            # CO2 price update
+            if stf in co2_prices:
+                co.loc[(stf, "EU27", "CO2", "Env"), "price"] = co2_prices[stf]
+                print(f"Year {stf}: CO2 price set to {co2_prices[stf]:.2f} €/t")
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -1756,9 +1781,9 @@ def scenario_high_high_high(data, data_urbsextensionv1):
                 pro.loc[(stf, "EU27", "Gas Plant (CCGT)"), "min-fraction"] = 0
                 pro.loc[(stf, "EU27", "Gas Plant (CCGT) CCUS"), "min-fraction"] = 0
                 pro.loc[(stf, "EU27", "Gas Plant (CCGT) LNG"), "min-fraction"] = 0
-                pro.loc[(stf, "EU27", "Biomass Plant"), "cap-up"] = 60000
+                pro.loc[(stf, "EU27", "Biomass Plant"), "cap-up"] = 9999999
             else:
-                pro.loc[(stf, "EU27", "Biomass Plant"), "cap-up"] = 60000
+                pro.loc[(stf, "EU27", "Biomass Plant"), "cap-up"] = 9999999
                 pro.loc[(stf, "EU27", "Coal Plant"), "cap-up"] = 53560
                 pro.loc[(stf, "EU27", "Coal Lignite"), "cap-up"] = 43590
                 pro.loc[(stf, "EU27", "Gas Plant (CCGT)"), "cap-up"] = 132230

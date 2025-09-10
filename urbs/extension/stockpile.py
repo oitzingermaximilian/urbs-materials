@@ -118,29 +118,16 @@ class AntiDumpingMeasuresRule(AbstractConstraint):  # NOTE disabled atm
 
 class CapacityExtNewLimitRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
-        if stf == value(m.y0):
-            debug_print(
-                f"Running constraint CapacityExtNewLimitRule for stf={stf} (start year)"
-            )
-            cap_val = m.capacity_ext_new[stf, location, tech]
-            ext_val = (
-                m.Q_ext_new[
-                    stf, location, tech
-                ]  #+ m.capacity_dec_start[location, tech]
-            )
+        cap_val = m.capacity_ext_new[stf, location, tech]
+        if tech == "windoff":
+            ext_val = m.Q_ext_new[stf, location, tech] * 2.0
+            return cap_val <= ext_val
+        elif tech == "windon":
+            ext_val = m.Q_ext_new[stf, location, tech] * 1.25
             return cap_val <= ext_val
         else:
-            debug_print(f"Running constraint CapacityExtNewLimitRule for stf={stf}")
-            capacity_value = m.capacity_ext_new[stf, location, tech]
-            ext_new_value = (
-                m.Q_ext_new[stf, location, tech]
-                #+ m.capacity_dec[stf - 1, location, tech]
-            )
-            debug_print(
-                f"Debug: STF = {stf}, Location = {location}, Tech = {tech}, LHS = {capacity_value}, RHS = {ext_new_value}"
-            )
-            return capacity_value <= ext_new_value
-
+            ext_val = m.Q_ext_new[stf, location, tech] * 1.1
+            return cap_val <= ext_val
 
 class TimedelayEUPrimaryProductionRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):

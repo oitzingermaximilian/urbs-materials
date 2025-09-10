@@ -470,63 +470,6 @@ def run_scenario(
         indexlist=indexlist,
     )
 
-    # CONSTRAINT ANALYSIS - Check for large RHS values
-    print("\n" + "="*60)
-    print("CONSTRAINT RHS ANALYSIS")
-    print("="*60)
-    try:
-        # Quick check for large RHS constraints
-        find_largest_rhs(prob, top_n=10)
-        print("\n" + "-"*40)
-        quick_rhs_check(prob, threshold=1e7)
-        
-        # Enhanced analysis to find the 3e+11 values that Gurobi is seeing
-        print("\n" + "-"*40)
-        print("ENHANCED ANALYSIS - Searching for 3e+11 values...")
-        try:
-            from urbs.enhanced_constraint_analyzer import comprehensive_rhs_analysis
-            comprehensive_rhs_analysis(prob, thresholds=[1e9, 1e10, 1e11, 3e11])
-        except ImportError:
-            print("Enhanced analyzer not available, using basic analysis")
-            
-        # NEW: Comprehensive scaling analysis for costs and coefficients
-        print("\n" + "-"*40)
-        print("ANALYZING COSTS AND COEFFICIENTS - This is likely where the 3e+11 values are!")
-        try:
-            from urbs.comprehensive_scaling_analyzer import comprehensive_scaling_analysis
-            comprehensive_scaling_analysis(prob)
-        except ImportError:
-            print("Comprehensive scaling analyzer not available")
-            
-    except Exception as e:
-        print(f"Error during constraint analysis: {e}")
-    print("="*60 + "\n")
-
-    # BILINEAR CONSTRAINT DETECTION
-    #print("\n" + "="*80)
-    #print("DETECTING BILINEAR CONSTRAINTS")
-    #print("="*80)
-    
-    # Create output directory for bilinear analysis
-    #bilinear_output_dir = os.path.join(result_dir, "bilinear_analysis")
-    
-    # Analyze model for bilinear constraints
-    #bilinear_constraints = analyze_model_bilinearity(prob, bilinear_output_dir)
-    
-    #print(f"Bilinear constraint analysis complete. Found {len(bilinear_constraints)} bilinear constraints.")
-    #print("="*80 + "\n")
-
-    def summarize_constraints(model):
-        print("\nConstraint Summary:")
-        for cname in model.component_map(pyomo.Constraint, active=True):
-            constraint = getattr(model, cname)
-            print(
-                f"{cname}: indexed by {list(constraint.index_set())[:3]}... (total: {len(constraint)} items)"
-            )
-
-    # summarize_constraints(prob)
-    # prob_filename = os.path.join(result_dir, 'model.lp')
-    # prob.write(prob_filename, io_options={'symbolic_solver_labels':True})
 
 
     # refresh time stamp string and create filename for logfile
@@ -898,42 +841,6 @@ def slice_data_for_window(data, window_start, window_end, initial_conditions):
                 # Get scenario-specific prices
                 scenario_prices = read_scenario_prices(window_start)
 
-                # Update LNG prices
-                for year, price in scenario_prices["lng"].items():
-                    if window_start <= year <= window_end:
-                        lng_mask = (
-                            (
-                                sliced_df.index.get_level_values("support_timeframe")
-                                == year
-                            )
-                            & (sliced_df.index.get_level_values("Site") == "EU27")
-                            & (sliced_df.index.get_level_values("Commodity") == "LNG")
-                            & (sliced_df.index.get_level_values("Type") == "Stock")
-                        )
-                        if lng_mask.any():
-                            sliced_df.loc[lng_mask, "price"] = price
-                            print(f"Updated LNG price for {year} to {price}")
-                        else:
-                            # Create new row if it doesn't exist
-                            new_lng_row = pd.DataFrame(
-                                {
-                                    "price": [price],
-                                    "max": [float("inf")],
-                                    "maxperhour": [float("inf")],
-                                },
-                                index=pd.MultiIndex.from_tuples(
-                                    [(year, "EU27", "LNG", "Stock")],
-                                    names=[
-                                        "support_timeframe",
-                                        "Site",
-                                        "Commodity",
-                                        "Type",
-                                    ],
-                                ),
-                            )
-                            sliced_df = pd.concat([sliced_df, new_lng_row])
-                            print(f"Added new LNG price entry for {year}: {price}")
-
                 # Update Piped Gas prices
                 for year, price in scenario_prices["piped_gas"].items():
                     if window_start <= year <= window_end:
@@ -1009,7 +916,6 @@ def read_scenario_prices(window_start):
         manufacturing_prices = pd.read_excel(
             scenario_file, sheet_name="manufacturing_prices", index_col="Stf"
         )
-        lng_prices = pd.read_excel(scenario_file, sheet_name="lng_prices", index_col="Stf")
         piped_gas_prices = pd.read_excel(
             scenario_file, sheet_name="piped_gas_prices", index_col="Stf"
         )
@@ -1018,21 +924,18 @@ def read_scenario_prices(window_start):
         print("\nAvailable columns in each sheet:")
         print("Import prices columns:", import_prices.columns.tolist())
         print("Manufacturing prices columns:", manufacturing_prices.columns.tolist())
-        print("LNG prices columns:", lng_prices.columns.tolist())
         print("Piped gas prices columns:", piped_gas_prices.columns.tolist())
 
         # Define the technologies we want to track
         technologies = ["solarPV", "windon", "windoff", "Batteries"]
 
         # Get the correct column names based on window_start
-        lng_col = f"lng_{window_start}"
         gas_col = f"piped_gas_{window_start}"
 
         print(f"\nLooking for price columns for window_start {window_start}")
 
         result = {
             "tech_prices": {},
-            "lng": lng_prices[lng_col].to_dict() if lng_col in lng_prices else {},
             "piped_gas": piped_gas_prices[gas_col].to_dict()
             if gas_col in piped_gas_prices
             else {},
@@ -1305,20 +1208,7 @@ def sliced_dataurbsextensionv1(
                     f"Updated {tech} manufacturing price for {year}: {old_price} -> {manufacturing_price}"
                 )
 
-    # Update LNG and Piped Gas prices (if needed)
-    # for year, price in scenario_prices['lng'].items():
-    #    if window_start <= year <= window_end:
-    #        key = (year, 'EU27', 'Gas (LNG)')
-    #        old_price = data_urbsextensionv1["importcost_dict"].get(key, "not set")
-    #        data_urbsextensionv1["importcost_dict"][key] = price
-    #        print(f"Updated LNG price for {year}: {old_price} -> {price}")
-    #
-    #    for year, price in scenario_prices['piped_gas'].items():
-    #        if window_start <= year <= window_end:
-    #            key = (year, 'EU27', 'Gas')
-    #            old_price = data_urbsextensionv1["importcost_dict"].get(key, "not set")
-    #            data_urbsextensionv1["importcost_dict"][key] = price
-    #            print(f"Updated Piped Gas price for {year}: {old_price} -> {price}")
+
 
     print("\n=== Debug Costs After Update ===")
     print("Updated cost entries for this window:")
@@ -1350,6 +1240,11 @@ def sliced_dataurbsextensionv1(
     data_urbsextensionv1["recyclingcost_dict"] = {
         key: value
         for key, value in data_urbsextensionv1["recyclingcost_dict"].items()
+        if window_start <= key[0] <= window_end
+    }
+    data_urbsextensionv1["o_and_m_dict"] = {
+        key: value
+        for key, value in data_urbsextensionv1["o_and_m_dict"].items()
         if window_start <= key[0] <= window_end
     }
     data_urbsextensionv1["loadfactors_dict"] = {

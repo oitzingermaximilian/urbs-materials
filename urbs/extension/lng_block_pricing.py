@@ -3,7 +3,7 @@ import pyomo.core as pyomo
 def apply_lng_block_pricing(m, data):
     # --- Sets ---
     # keep whatever block count you have; here 1..14
-    m.blocks = pyomo.Set(initialize=list(range(1, 15)))  # 14 blocks
+    m.blocks = pyomo.Set(initialize=list(range(1, 4)))  # 3 blocks
 
     # --- Parameters ---
     # block_limits: yearly volume limit per block (same indexing as data)
