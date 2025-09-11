@@ -120,14 +120,26 @@ class CapacityExtNewLimitRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
         cap_val = m.capacity_ext_new[stf, location, tech]
         if tech == "windoff":
-            ext_val = m.Q_ext_new[stf, location, tech] * 2.0
-            return cap_val <= ext_val
+            if stf <= 2030:
+                ext_val = m.Q_ext_new[stf, location, tech] * 3
+                return cap_val <= ext_val
+            else:
+                ext_val = m.Q_ext_new[stf, location, tech] * 2
+                return cap_val <= ext_val
         elif tech == "windon":
-            ext_val = m.Q_ext_new[stf, location, tech] * 1.25
-            return cap_val <= ext_val
+            if stf <= 2030:
+                ext_val = m.Q_ext_new[stf, location, tech] * 1.5
+                return cap_val <= ext_val
+            else:
+                ext_val = m.Q_ext_new[stf, location, tech] * 1.2
+                return cap_val <= ext_val
         else:
-            ext_val = m.Q_ext_new[stf, location, tech] * 1.1
-            return cap_val <= ext_val
+            if stf <= 2030:
+                ext_val = m.Q_ext_new[stf, location, tech] * 1.2
+                return cap_val <= ext_val
+            else:
+                ext_val = m.Q_ext_new[stf, location, tech] * 1.1
+                return cap_val <= ext_val
 
 class TimedelayEUPrimaryProductionRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
