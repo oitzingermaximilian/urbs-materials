@@ -1908,5 +1908,25 @@ def scenario_high_high_high(data, data_urbsextensionv1):
             pro.loc[(stf, "EU27", "Biomass Plant"), "inv-cost"] = 3487.6605 * 1000
             pro.loc[(stf, "EU27", "Biomass Plant"), "var-cost"] = 2.2255
 
+            # Min-fractions (capacity factors)
+            pro.loc[(stf, "EU27", "Coal Plant"), "min-fraction"] = 0.50
+            pro.loc[(stf, "EU27", "Lignite Plant"), "min-fraction"] = 0.6
+            pro.loc[(stf, "EU27", "Gas Plant (CCGT)"), "min-fraction"] = 0.5
+            pro.loc[(stf, "EU27", "Other non-res"), "min-fraction"] = 0.20
+            pro.loc[(stf, "EU27", "Oil Plant"), "min-fraction"] = 0.15
+            pro.loc[(stf, "EU27", "Coal Plant CCUS"), "min-fraction"] = 0.5
+            pro.loc[(stf, "EU27", "Lignite Plant CCUS"), "min-fraction"] = 0.6
+            pro.loc[(stf, "EU27", "Gas Plant (CCGT) CCUS"), "min-fraction"] = 0.50
+            pro.loc[(stf, "EU27", "Nuclear Plant"), "min-fraction"] = 0.8
+            pro.loc[(stf, "EU27", "Hydro (run-of-river)"), "min-fraction"] = 0
+            pro.loc[(stf, "EU27", "Hydro (reservoir)"), "min-fraction"] = 0
+            pro.loc[(stf, "EU27", "Biomass Plant"), "min-fraction"] = 0.7
+
+    if "process_commodity" in data:
+        proco = data["process_commodity"]
+        for stf in data["global_prop"].index.levels[0].tolist():
+            mask = proco.index.get_level_values("support_timeframe") == stf
+            proco.loc[mask, "ratio-min"] = proco.loc[mask, "ratio"]
+            print("✅ proco - ratio-min updated from 2024–2050")
 
     return data, data_urbsextensionv1
