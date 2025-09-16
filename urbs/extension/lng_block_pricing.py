@@ -1,108 +1,107 @@
 import pyomo.core as pyomo
 
-def apply_lng_block_pricing(m, data):
+def apply_gas_block_pricing(m, data):
     # --- Sets ---
-    # keep whatever block count you have; here 1..14
-    m.blocks = pyomo.Set(initialize=list(range(1, 4)))  # 3 blocks
+    block_keys = list(data["limit"].keys())  # list of (stf, block_name)
+    m.blocks = pyomo.Set(dimen=2, initialize=block_keys)
+
+    # Convenience: blocks available per year
+    def blocks_per_year_init(m, stf):
+        return [blk for (y, blk) in m.blocks if y == stf]
+
+    m.blocks_per_year = pyomo.Set(m.stf, initialize=blocks_per_year_init)
 
     # --- Parameters ---
-    # block_limits: yearly volume limit per block (same indexing as data)
-    m.block_limits = pyomo.Param(
-        m.blocks,
-        initialize={b: data["lng_block_limits"][b] for b in m.blocks},
-        doc="Max LNG volume per block (yearly)"
-    )
-
-    # block_price: price per block (€/MWh) - same indexing as data["lng_block_price"]
-    m.block_price = pyomo.Param(
-        m.blocks,
-        initialize=data["lng_block_price"],
-        doc="LNG block price €/MWh"
-    )
+    # --- Parameters ---
+    m.block_limits = pyomo.Param(m.blocks, initialize=data["limits"], doc="Max volume per block per year (MWh)")
+    m.block_price = pyomo.Param(m.blocks, initialize=data["prices"], doc="Price €/MWh per block per year")
 
     # --- Variables ---
-    # LNG usage split across blocks (per-timestep)
     m.e_co_stock_block = pyomo.Var(
-        m.tm, m.stf, m.sit, m.com, m.com_type, m.blocks,
+        m.tm, m.stf, m.sit, m.com, m.com_type, m.blocks_per_year[m.stf],
         within=pyomo.NonNegativeReals,
-        doc="LNG usage per timestep, site, commodity, type, block"
+        doc="Gas usage per timestep, site, block"
     )
 
-    # LNG costs per year
-    m.lng_costs = pyomo.Var(
+    m.block_costs = pyomo.Var(
         m.stf,
         within=pyomo.NonNegativeReals,
-        doc="LNG costs per year"
+        doc="Yearly gas costs across all blocks"
     )
 
-    # Total LNG cost (scalar)
-    m.lng_total_costs = pyomo.Var(
+    m.total_block_costs = pyomo.Var(
         within=pyomo.NonNegativeReals,
-        doc="Total LNG cost over all years"
+        doc="Total gas cost across all years"
+    )
+
+    m.block_usage = pyomo.Var(
+        m.stf, m.blocks_per_year[m.stf],
+        within=pyomo.NonNegativeReals,
+        doc="Total Gas usage per block per year"
+    )
+
+    m.total_usage = pyomo.Var(
+        m.stf,
+        within=pyomo.NonNegativeReals,
+        doc="Total Gas usage per year"
     )
 
     # --- Constraints ---
 
-    # 1) Yearly block capacity: sum over tm & sit for each year and block <= block limit
-    def yearly_block_limit_rule(m, stf, b):
+    # 1) Yearly block capacity
+    def yearly_block_limit_rule(m, stf, blk):
         return sum(
-            m.e_co_stock_block[tm, stf, sit, "LNG", "Stock", b]
+            m.e_co_stock_block[tm, stf, sit, "Gas", "Stock", blk]
             for tm in m.tm for sit in m.sit
-        ) <= m.block_limits[b]
-    m.lng_block_yearly_caps = pyomo.Constraint(m.stf, m.blocks, rule=yearly_block_limit_rule)
+        ) <= m.block_limits[blk]
 
-    # 2) Link: the sum across blocks must equal the original e_co_stock for LNG/Stock
-    #    Keep the same index pattern as m.e_co_stock
+    m.block_yearly_caps = pyomo.Constraint(
+        m.stf, lambda m, stf: m.blocks_per_year[stf],
+        rule=yearly_block_limit_rule
+    )
+
+    # 2) Link blocks to total Gas stock
     def link_blocks_to_total_rule(m, tm, stf, sit, com, com_type):
-        if com != "LNG" or com_type != "Stock":
+        if com != "Gas" or com_type != "Stock":
             return pyomo.Constraint.Skip
-        return m.e_co_stock[tm, stf, sit, com, com_type] == \
-               sum(m.e_co_stock_block[tm, stf, sit, com, com_type, b] for b in m.blocks)
-    # create the constraint over all e_co_stock indices (tm,stf,sit,com,com_type)
-    m.lng_block_link = pyomo.Constraint(m.tm, m.stf, m.sit, m.com, m.com_type, rule=link_blocks_to_total_rule)
-
-    # 3) Yearly LNG cost: cost = sum_{tm,sit,b} block_price[b] * e_co_stock_block[tm,stf,sit,"LNG","Stock",b]
-    def yearly_lng_cost_rule(m, stf):
-        yearly_lng_cost = sum(
-            m.block_price[b] * m.e_co_stock_block[tm, stf, sit, "LNG", "Stock", b]
-            for tm in m.tm
-            for sit in m.sit
-            for b in m.blocks
+        return m.e_co_stock[tm, stf, sit, com, com_type] == sum(
+            m.e_co_stock_block[tm, stf, sit, com, com_type, blk]
+            for blk in m.blocks_per_year[stf]
         )
-        return m.lng_costs[stf] == yearly_lng_cost
-    m.lng_cost_constraint = pyomo.Constraint(m.stf, rule=yearly_lng_cost_rule)
 
-    # 4) Total LNG cost across all years
-    def total_lng_cost_rule(m):
-        return m.lng_total_costs == sum(m.lng_costs[stf] for stf in m.stf)
-    m.lng_total_cost_constraint = pyomo.Constraint(rule=total_lng_cost_rule)
+    m.block_link = pyomo.Constraint(m.tm, m.stf, m.sit, m.com, m.com_type, rule=link_blocks_to_total_rule)
 
-    # 5) Total LNG usage each year
-    # New variable: yearly LNG usage per block
-    m.lng_usage_block = pyomo.Var(
-        m.stf, m.blocks,
-        within=pyomo.NonNegativeReals,
-        doc="Total LNG usage per block per year (MWh)"
-    )
+    # 3) Yearly block cost
+    def yearly_block_cost_rule(m, stf):
+        return m.block_costs[stf] == sum(
+            m.block_price[stf, blk] * m.e_co_stock_block[tm, stf, sit, "Gas", "Stock", blk]
+            for tm in m.tm for sit in m.sit for blk in m.blocks_per_year[stf]
+        )
 
-    def yearly_usage_block_rule(m, stf, b):
-        return m.lng_usage_block[stf, b] == sum(
-            m.e_co_stock_block[tm, stf, sit, "LNG", "Stock", b]
+    m.block_cost_constraint = pyomo.Constraint(m.stf, rule=yearly_block_cost_rule)
+
+    # 4) Total gas cost
+    def total_block_cost_rule(m):
+        return m.total_block_costs == sum(m.block_costs[stf] for stf in m.stf)
+
+    m.total_block_cost_constraint = pyomo.Constraint(rule=total_block_cost_rule)
+
+    # 5) Yearly usage per block
+    def block_usage_rule(m, stf, blk):
+        return m.block_usage[stf, blk] == sum(
+            m.e_co_stock_block[tm, stf, sit, "Gas", "Stock", blk]
             for tm in m.tm for sit in m.sit
         )
 
-    m.lng_usage_block_constraint = pyomo.Constraint(m.stf, m.blocks, rule=yearly_usage_block_rule)
-
-    m.lng_usage_total = pyomo.Var(
-        m.stf,
-        within=pyomo.NonNegativeReals,
-        doc="Total LNG usage per year (MWh)"
+    m.block_usage_constraint = pyomo.Constraint(
+        m.stf, lambda m, stf: m.blocks_per_year[stf],
+        rule=block_usage_rule
     )
 
-    def yearly_usage_total_rule(m, stf):
-        return m.lng_usage_total[stf] == sum(m.lng_usage_block[stf, b] for b in m.blocks)
+    # 6) Total usage per year
+    def total_usage_rule(m, stf):
+        return m.total_usage[stf] == sum(m.block_usage[stf, blk] for blk in m.blocks_per_year[stf])
 
-    m.lng_usage_total_constraint = pyomo.Constraint(m.stf, rule=yearly_usage_total_rule)
+    m.total_usage_constraint = pyomo.Constraint(m.stf, rule=total_usage_rule)
 
-    # Small sanity print (optional)
-    print("✅ LNG block pricing applied (continuous allocation, yearly caps).")
+    print("✅ Gas block pricing applied (continuous allocation, yearly caps, blocks indexed by stf).")

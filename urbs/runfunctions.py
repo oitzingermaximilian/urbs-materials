@@ -326,34 +326,30 @@ def run_scenario(
         # print(loadfactors_dict)
         return loadfactors_dict
 
-    def process_lng_block_sheet(sheet_data):
+    def process_gas_block_sheet(sheet_data):
         """
-         Reads the LNG blocks sheet directly as float values.
-         Assumes columns: 'block', 'limit', 'price'
-         """
-        block_limits_dict = {}
-        block_price_dict = {}
-        block_emissions_dict = {}
+        Reads gas blocks with yearly variation.
+        Returns dictionaries keyed by (stf, block_name)
+        """
+        block_limits = {}
+        block_prices = {}
+        #block_emissions = {}
 
-        # Check required columns
-        required_cols = ["block", "limit", "price"]
+        required_cols = ["stf", "block", "limit", "price"]
         for col in required_cols:
             if col not in sheet_data.columns:
-                raise ValueError(f"LNG block sheet must have column '{col}'")
-
+                raise ValueError(f"Gas block sheet must have column '{col}'")
+        sheet_data["stf"] = sheet_data["stf"].ffill().astype(int)
         for _, row in sheet_data.iterrows():
-            block = int(row["block"])
-            limit_value = float(row["limit"])  # directly read, dot is decimal
-            price_value = float(row["price"])  # directly read, dot is decimal
-            emissions_value = float(row["emissions"])  # directly read, dot is decimal
-            block_limits_dict[block] = limit_value
-            block_price_dict[block] = price_value
-            block_emissions_dict[block] = emissions_value
-        #print("Block limits dict:", block_limits_dict)
-        #print("Block price dict:", block_price_dict)
-        #print("Block emissions dict:", block_emissions_dict)
+            stf = row["stf"]
+            block = str(row["block"])
+            block_limits[(stf, block)] = float(row["limit"])
+            block_prices[(stf, block)] = float(row["price"])
+            #block_emissions[(stf, block)] = float(row["emissions"])
 
-        return block_limits_dict, block_price_dict, block_emissions_dict
+        print(block_limits)
+
+        return block_limits, block_prices#, block_emissions
 
 
     def load_data_from_excel(file_path):
@@ -369,9 +365,9 @@ def run_scenario(
         installable_capacity_data = pd.read_excel(
             file_path, sheet_name="installable_capacity"
         )
-        lng_block_data = pd.read_excel(file_path, sheet_name="lng_block")
+        gas_block_data = pd.read_excel(file_path, sheet_name="gas_block")
         # Process lng_blocks sheet
-        block_limits_dict, block_price_dict, block_emissions_dict = process_lng_block_sheet(lng_block_data)
+        block_limits_dict, block_price_dict= process_gas_block_sheet(gas_block_data)
 
         # Process Technologies sheet
         technologies_dict = process_technology_sheet(technologies_data)
@@ -425,7 +421,6 @@ def run_scenario(
             # LNG block info
             "lng_block_limits": block_limits_dict,
             "lng_block_price": block_price_dict,
-            "lng_block_emissions": block_emissions_dict
         }
 
         return data_urbsextensionv1

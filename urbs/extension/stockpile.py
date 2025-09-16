@@ -121,24 +121,24 @@ class CapacityExtNewLimitRule(AbstractConstraint):
         cap_val = m.capacity_ext_new[stf, location, tech]
         if tech == "windoff":
             if stf <= 2030:
-                ext_val = m.Q_ext_new[stf, location, tech] * 10#3
+                ext_val = m.Q_ext_new[stf, location, tech] #* 10#3
                 return cap_val <= ext_val
             else:
-                ext_val = m.Q_ext_new[stf, location, tech] * 2
+                ext_val = m.Q_ext_new[stf, location, tech] #* 2
                 return cap_val <= ext_val
         elif tech == "windon":
             if stf <= 2030:
-                ext_val = m.Q_ext_new[stf, location, tech] * 1.5
+                ext_val = m.Q_ext_new[stf, location, tech] #* 1.5
                 return cap_val <= ext_val
             else:
-                ext_val = m.Q_ext_new[stf, location, tech] * 1.2
+                ext_val = m.Q_ext_new[stf, location, tech] #* 1.2
                 return cap_val <= ext_val
         else:
             if stf <= 2030:
-                ext_val = m.Q_ext_new[stf, location, tech] * 1.2
+                ext_val = m.Q_ext_new[stf, location, tech] #* 1.2
                 return cap_val <= ext_val
             else:
-                ext_val = m.Q_ext_new[stf, location, tech] * 1.1
+                ext_val = m.Q_ext_new[stf, location, tech] #* 1.1
                 return cap_val <= ext_val
 
 class TimedelayEUPrimaryProductionRule(AbstractConstraint):

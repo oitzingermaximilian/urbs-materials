@@ -350,7 +350,7 @@ def run_myopic(window_length=5):
 def run_rolling_horizon(start_year=2024, end_year=2050, step=5):
     # select scenarios to be run
     scenarios = [
-        ("scenario_min_min_min", urbs.scenario_min_min_min),
+        ("scenario_high_high_high", urbs.scenario_high_high_high),
     ]
 
     for scenario_name, scenario in scenarios:

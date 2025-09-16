@@ -12,7 +12,7 @@ from urbs.extension import (
     apply_sets_and_params,
     apply_scenario_constraints,
     apply_combined_lr_constraints,
-    apply_lng_block_pricing,
+    apply_gas_block_pricing,
 )
 
 
@@ -394,9 +394,9 @@ def create_model(
 
     apply_variables(m)
 
-    apply_lng_block_pricing(m, data_urbsextensionv1)
+    apply_gas_block_pricing(m, data_urbsextensionv1)
 
-    #apply_scenario_constraints(m)
+    apply_scenario_constraints(m)
 
     apply_stockpiling_constraints(m)
 
