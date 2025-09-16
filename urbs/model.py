@@ -1040,10 +1040,10 @@ def def_costs_rule(m, cost_type):
             * m.commodity_dict["cost_factor"][c]
             for tm in m.tm
             for c in m.com_tuples
-            if c[2] in m.com_stock if c[2]!="LNG"
+            if c[2] in m.com_stock if c[2]!="Gas"
         )
         # LNG: block-priced
-        + m.lng_total_costs)
+        + m.gas_total_cost)
 
         #print("Calculated Fuel Cost:", calc)
         return m.costs[cost_type] == calc
@@ -1122,7 +1122,7 @@ def def_specific_process_costs_rule(m, stf, sit, pro, cost_type):
             if st == stf
             if si == sit
             if ((stf, sit, pro, co) in m.pro_input_tuples) and co_type == "Stock"
-            if co != "LNG"
+            if co != "Gas"
         )
 
     elif cost_type == "Environmental":

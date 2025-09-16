@@ -329,27 +329,28 @@ def run_scenario(
     def process_gas_block_sheet(sheet_data):
         """
         Reads gas blocks with yearly variation.
-        Returns dictionaries keyed by (stf, block_name)
+        Returns:
+            - set of all block names
+            - block_limits dict keyed by (stf, block_name)
+            - block_prices dict keyed by (stf, block_name)
         """
         block_limits = {}
         block_prices = {}
-        #block_emissions = {}
-
         required_cols = ["stf", "block", "limit", "price"]
         for col in required_cols:
             if col not in sheet_data.columns:
                 raise ValueError(f"Gas block sheet must have column '{col}'")
+
         sheet_data["stf"] = sheet_data["stf"].ffill().astype(int)
+        block_names = set(sheet_data["block"].astype(str).unique())
         for _, row in sheet_data.iterrows():
             stf = row["stf"]
             block = str(row["block"])
             block_limits[(stf, block)] = float(row["limit"])
             block_prices[(stf, block)] = float(row["price"])
-            #block_emissions[(stf, block)] = float(row["emissions"])
 
         print(block_limits)
-
-        return block_limits, block_prices#, block_emissions
+        return  block_names,block_limits, block_prices
 
 
     def load_data_from_excel(file_path):
@@ -367,7 +368,7 @@ def run_scenario(
         )
         gas_block_data = pd.read_excel(file_path, sheet_name="gas_block")
         # Process lng_blocks sheet
-        block_limits_dict, block_price_dict= process_gas_block_sheet(gas_block_data)
+        block_names, block_limits_dict, block_price_dict= process_gas_block_sheet(gas_block_data)
 
         # Process Technologies sheet
         technologies_dict = process_technology_sheet(technologies_data)
@@ -419,8 +420,9 @@ def run_scenario(
             "stocklvl_dict": stocklvl_dict,
             "installable_capacity_dict": installable_capacity_dict,
             # LNG block info
-            "lng_block_limits": block_limits_dict,
-            "lng_block_price": block_price_dict,
+            "block_limits": block_limits_dict,
+            "block_price": block_price_dict,
+            "block_names": block_names
         }
 
         return data_urbsextensionv1
