@@ -1897,7 +1897,10 @@ def scenario_high_high_high(data, data_urbsextensionv1):
         # CO2 prices per year (€/t)
         co2_prices = {}
         # Linear interpolation from 65 in 2024 to 75 in 2030
-        for stf in range(2024, 2031):
+        for stf in range(2024, 2051):
+            # Set CO2 price to 0 €/t
+            #co.loc[(stf, "EU27", "CO2", "Env"), "price"] = 0.0
+            #print(f"Year {stf}: CO2 price set to 0 €/t")
             co2_prices[stf] = 65 + (stf - 2024) * (75 - 65) / (2030 - 2024)
         # Fixed values from 2031 onward
         fixed_co2_prices_seb = {
@@ -1952,12 +1955,14 @@ def scenario_high_high_high(data, data_urbsextensionv1):
             2049: 165.9,
             2050: 168.0,
         }
-        co2_prices.update(fixed_co2_prices_seb)
+        co2_prices.update(fixed_co2_prices_tyndp)
         for stf in data["global_prop"].index.levels[0].tolist():
             # CO2 price update
             if stf in co2_prices:
                 co.loc[(stf, "EU27", "CO2", "Env"), "price"] = co2_prices[stf]
-                print(f"Year {stf}: CO2 price set to {co2_prices[stf]:.2f} €/t")
+
+
+                #print(f"Year {stf}: CO2 price set to {co2_prices[stf]:.2f} €/t")
     if "demand" in data:
         demand = data["demand"]
         print("✅ Demand Columns", demand.columns)

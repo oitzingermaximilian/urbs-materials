@@ -142,6 +142,13 @@ class CalculateYearlyEUSecondary(AbstractConstraint):
         expr = m.costs_EU_secondary[stf, location, tech] == eu_secondary_cost_value
         return expr
 
+class CalculateYearlyOMCost(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech):
+        o_and_m_cost_value = (
+            m.O_and_M_costs[stf, location, tech] * m.capacity_ext[stf, location, tech]
+        )
+        expr = m.costs_O_and_M[stf, location, tech] == o_and_m_cost_value
+        return expr
 
 def apply_costs_constraints(m):
     constraints = [
@@ -149,6 +156,7 @@ def apply_costs_constraints(m):
         CalculateYearlyStorageCost(),
         CalculateYearlyEUPrimary(),
         CalculateYearlyEUSecondary(),
+        CalculateYearlyOMCost(),
     ]
 
     for i, constraint in enumerate(constraints):
