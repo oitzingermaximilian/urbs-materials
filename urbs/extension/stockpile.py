@@ -131,44 +131,24 @@ class CapacityExtNewLimitRule(AbstractConstraint):
 
 class TimedelayEUPrimaryProductionRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
-        if stf == 2024:
+        start_year = 2023  # reference start year TODO fix porperly for runing rolling horizon!
+        if stf == start_year:
+            # Start year: compare with existing prior capacity
+            lhs = m.capacity_ext_euprimary[stf, location, tech] - m.cap_prim_prior[location, tech]
+            rhs = m.deltaQ_EUprimary[location, tech]
             debug_print(
-                f"Skipping TimedelayEUPrimaryProductionRule constraint for stf={stf} (global start year)"
-            )
-            return pyomo.Constraint.Skip
-
-        elif stf == value(m.y0):
-            debug_print(
-                f"Running constraint TimedelayEUPrimaryProductionRule for stf={stf} (start year)"
-            )
-            lhs = (
-                m.capacity_ext_euprimary[stf, location, tech]
-                - m.cap_prim_prior[location, tech]
-            )
-            rhs = (
-                m.deltaQ_EUprimary[location, tech]
-                + m.IR_EU_primary[location, tech] * m.cap_prim_prior[location, tech]
-            )
-            debug_print(
-                f"Debug: STF = {stf}, Location = {location}, Tech = {tech}, LHS = {lhs}, RHS = {rhs}"
+                f"Start year constraint: STF={stf}, LHS={lhs}, RHS={rhs}"
             )
             return lhs <= rhs
 
         else:
-            lhs = (
-                m.capacity_ext_euprimary[stf, location, tech]
-                - m.capacity_ext_euprimary[stf - 1, location, tech]
-            )
-            rhs = (
-                m.deltaQ_EUprimary[location, tech]
-                + m.IR_EU_primary[location, tech]
-                * m.capacity_ext_euprimary[stf - 1, location, tech]
-            )
-
+            # Growth-limited constraint for subsequent years
+            years_since_start = stf - start_year
+            lhs = m.capacity_ext_euprimary[stf, location, tech] + m.capacity_ext_eusecondary[stf,location,tech]
+            rhs = m.deltaQ_EUprimary[location, tech] * (1 + m.IR_EU_primary[location, tech]) ** years_since_start
             debug_print(
-                f"Debug: STF = {stf}, Location = {location}, Tech = {tech}, LHS = {lhs}, RHS = {rhs}"
+                f"Growth-limited constraint: STF={stf}, Location={location}, Tech={tech}, LHS={lhs}, RHS={rhs}"
             )
-
             return lhs <= rhs
 
 

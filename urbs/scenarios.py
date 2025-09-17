@@ -1952,7 +1952,7 @@ def scenario_high_high_high(data, data_urbsextensionv1):
             2049: 165.9,
             2050: 168.0,
         }
-        co2_prices.update(fixed_co2_prices_seb)
+        co2_prices.update(fixed_co2_prices_tyndp)
         for stf in data["global_prop"].index.levels[0].tolist():
             # CO2 price update
             if stf in co2_prices:
