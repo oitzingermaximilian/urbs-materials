@@ -61,14 +61,14 @@ class CapacityExtStockRule(AbstractConstraint):
             )
             return m.capacity_ext_stock[stf, location, tech] == (
                 m.Existing_Stock_Q_stock[location, tech]
-                # + m.capacity_ext_stock_imported[stf, location, tech]
+                + m.capacity_ext_stock_imported[stf, location, tech]
                 - m.capacity_ext_stockout[stf, location, tech]
             )
         else:
             # debug_print(f"Running constraint CapacityExtStockRule for stf={stf}")
             return m.capacity_ext_stock[stf, location, tech] == (
                 m.capacity_ext_stock[stf - 1, location, tech]
-                # + m.capacity_ext_stock_imported[stf, location, tech]
+                + m.capacity_ext_stock_imported[stf, location, tech]
                 - m.capacity_ext_stockout[stf, location, tech]
             )
 
