@@ -273,7 +273,7 @@ def pyomo_model_prep(data, timesteps, window_start, window_end):
         "Storagecost",
         "Eu Cost Primary",
         "Eu Cost Secondary",
-        "O_and_M"
+        "O_and_M",
     ]
 
     # Converting Data frames to dict

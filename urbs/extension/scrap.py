@@ -29,7 +29,9 @@ class decommissioned_capacity_rule(AbstractConstraint):
         # --- determine exogenous ---
         if tech == "solarPV":
             _exogenous = 7.5 * 1000
-        elif tech == "windon": #file:///C:/Users/maxoi/OneDrive/Desktop/urbs_crm_data/WindEurope-European-Stats-2024.pdf page 17: 1.3 GW dec
+        elif (
+            tech == "windon"
+        ):  # file:///C:/Users/maxoi/OneDrive/Desktop/urbs_crm_data/WindEurope-European-Stats-2024.pdf page 17: 1.3 GW dec
             _exogenous = 1 * 1000
         elif tech == "windoff":
             _exogenous = 0.3 * 1000
@@ -69,7 +71,6 @@ class decommissioned_capacity_rule(AbstractConstraint):
             )
 
         return expr
-
 
 
 class capacity_scrap_dec_rule(AbstractConstraint):
@@ -136,10 +137,11 @@ class cost_scrap_rule(AbstractConstraint):
         # But price_reduction_per_unit involves bilinear terms
         # So we use: f_scrap_rec * capacity_scrap_rec - pricereduction_sec_recycling
         # where pricereduction_sec_recycling = sum(P_sec_recycling[n] * auxiliary_product_BD_q[n])
-        
+
         expr = (
             m.cost_scrap[stf, location, tech]
-            == m.f_scrap_rec[stf, location, tech] * m.capacity_scrap_rec[stf, location, tech]
+            == m.f_scrap_rec[stf, location, tech]
+            * m.capacity_scrap_rec[stf, location, tech]
         )
         # - m.pricereduction_sec_recycling[stf, location, tech] #todo reeactivate when pricereduction_sec_recycling is defined
         debug_print(f"[cost_scrap] STF={stf} ➞ expr: {expr}")

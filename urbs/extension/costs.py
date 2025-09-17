@@ -61,7 +61,8 @@ class DefCostsNew(AbstractConstraint):
             total_eu_cost_secondary = sum(
                 (
                     # Linear: base cost times capacity
-                    m.EU_secondary_costs[stf, site, tech] * m.capacity_ext_eusecondary[stf, site, tech]
+                    m.EU_secondary_costs[stf, site, tech]
+                    * m.capacity_ext_eusecondary[stf, site, tech]
                     + 1 * m.capacity_facility_eusecondary[stf, site, tech]
                     + m.cost_scrap[stf, site, tech]
                     # Subtract the linearized price reduction (total absolute reduction)
@@ -76,9 +77,7 @@ class DefCostsNew(AbstractConstraint):
 
         elif cost_type_new == "O_and_M":
             total_o_and_m_cost = sum(
-                (
-                m.O_and_M_costs[stf, site, tech] * m.capacity_ext[stf, site, tech]
-                )
+                (m.O_and_M_costs[stf, site, tech] * m.capacity_ext[stf, site, tech])
                 for stf in m.stf
                 for site in m.location
                 for tech in m.tech
@@ -133,7 +132,8 @@ class CalculateYearlyEUSecondary(AbstractConstraint):
         # Linearized: EU_secondary_costs * capacity - pricereduction_sec_investment
         eu_secondary_cost_value = (
             # Linear: base cost times capacity
-            m.EU_secondary_costs[stf, location, tech] * m.capacity_ext_eusecondary[stf, location, tech]
+            m.EU_secondary_costs[stf, location, tech]
+            * m.capacity_ext_eusecondary[stf, location, tech]
             + 1 * m.capacity_facility_eusecondary[stf, location, tech]
             + m.cost_scrap[stf, location, tech]
             # Subtract the linearized price reduction (total absolute reduction)

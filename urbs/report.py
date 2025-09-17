@@ -41,7 +41,7 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         secondary_cumulative_capacity_df,
         facilitiesdf,
         facility_cumulative_capacity_df,
-        gas_usage_block
+        gas_usage_block,
     ) = get_constants(instance)
 
     # create spreadsheet writer object

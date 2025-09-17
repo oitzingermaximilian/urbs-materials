@@ -8,7 +8,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     ###############################################
 
     # Learning rate selection via environment variable
-    LEARNING_RATE = os.environ.get('URBS_LR', 'LR5')  # Default to LR5
+    LEARNING_RATE = os.environ.get("URBS_LR", "LR5")  # Default to LR5
     print(f"Using Learning Rate: {LEARNING_RATE}")
 
     # Excel read in
@@ -132,7 +132,6 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         m.tech,
         initialize=data_urbsextensionv1["o_and_m_dict"],
     )
-
 
     # instalable_capacity_sheet read in
     m.Q_ext_new = pyomo.Param(
@@ -302,15 +301,15 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     remanufacturing_costs = data_urbsextensionv1["remanufacturingcost_dict"]
     recycling_costs = data_urbsextensionv1["recyclingcost_dict"]
 
-
-
     # Create absolute value dictionaries for investment costs (EU_secondary_costs)
     def create_absolute_investment_dict(reduction_percentages):
         absolute_dict = {}
         for n in reduction_percentages.keys():
             absolute_dict[n] = {}
             for (stf, location, tech), cost in remanufacturing_costs.items():
-                absolute_dict[n][(stf, location, tech)] = cost * (1 - reduction_percentages[n])
+                absolute_dict[n][(stf, location, tech)] = cost * (
+                    1 - reduction_percentages[n]
+                )
         return absolute_dict
 
     # Create absolute value dictionaries for recycling costs (f_scrap_rec)
@@ -319,39 +318,45 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         for n in reduction_percentages.keys():
             absolute_dict[n] = {}
             for (stf, location, tech), cost in recycling_costs.items():
-                absolute_dict[n][(stf, location, tech)] = cost * (1 - reduction_percentages[n])
+                absolute_dict[n][(stf, location, tech)] = cost * (
+                    1 - reduction_percentages[n]
+                )
         return absolute_dict
 
     # Generate absolute value dictionaries for all learning rates
     absolute_investment_reductions = {
-        'LR1': create_absolute_investment_dict(reduction_percentage_1),
-        'LR3_5': create_absolute_investment_dict(reduction_percentage_3_5),
-        'LR4': create_absolute_investment_dict(reduction_percentage_4),
-        'LR5': create_absolute_investment_dict(reduction_percentage_5),
-        'LR6': create_absolute_investment_dict(reduction_percentage_6),
-        'LR7': create_absolute_investment_dict(reduction_percentage_7),
-        'LR8': create_absolute_investment_dict(reduction_percentage_8),
-        'LR9': create_absolute_investment_dict(reduction_percentage_9),
-        'LR10': create_absolute_investment_dict(reduction_percentage_10),
-        'LR25': create_absolute_investment_dict(reduction_percentage_25)
+        "LR1": create_absolute_investment_dict(reduction_percentage_1),
+        "LR3_5": create_absolute_investment_dict(reduction_percentage_3_5),
+        "LR4": create_absolute_investment_dict(reduction_percentage_4),
+        "LR5": create_absolute_investment_dict(reduction_percentage_5),
+        "LR6": create_absolute_investment_dict(reduction_percentage_6),
+        "LR7": create_absolute_investment_dict(reduction_percentage_7),
+        "LR8": create_absolute_investment_dict(reduction_percentage_8),
+        "LR9": create_absolute_investment_dict(reduction_percentage_9),
+        "LR10": create_absolute_investment_dict(reduction_percentage_10),
+        "LR25": create_absolute_investment_dict(reduction_percentage_25),
     }
 
     absolute_recycling_reductions = {
-        'LR1': create_absolute_recycling_dict(reduction_percentage_1),
-        'LR3_5': create_absolute_recycling_dict(reduction_percentage_3_5),
-        'LR4': create_absolute_recycling_dict(reduction_percentage_4),
-        'LR5': create_absolute_recycling_dict(reduction_percentage_5),
-        'LR6': create_absolute_recycling_dict(reduction_percentage_6),
-        'LR7': create_absolute_recycling_dict(reduction_percentage_7),
-        'LR8': create_absolute_recycling_dict(reduction_percentage_8),
-        'LR9': create_absolute_recycling_dict(reduction_percentage_9),
-        'LR10': create_absolute_recycling_dict(reduction_percentage_10),
-        'LR25': create_absolute_recycling_dict(reduction_percentage_25)
+        "LR1": create_absolute_recycling_dict(reduction_percentage_1),
+        "LR3_5": create_absolute_recycling_dict(reduction_percentage_3_5),
+        "LR4": create_absolute_recycling_dict(reduction_percentage_4),
+        "LR5": create_absolute_recycling_dict(reduction_percentage_5),
+        "LR6": create_absolute_recycling_dict(reduction_percentage_6),
+        "LR7": create_absolute_recycling_dict(reduction_percentage_7),
+        "LR8": create_absolute_recycling_dict(reduction_percentage_8),
+        "LR9": create_absolute_recycling_dict(reduction_percentage_9),
+        "LR10": create_absolute_recycling_dict(reduction_percentage_10),
+        "LR25": create_absolute_recycling_dict(reduction_percentage_25),
     }
 
     # Select the appropriate reductions based on environment variable
-    selected_investment_reductions = absolute_investment_reductions.get(LEARNING_RATE, absolute_investment_reductions['LR5'])
-    selected_recycling_reductions = absolute_recycling_reductions.get(LEARNING_RATE, absolute_recycling_reductions['LR5'])
+    selected_investment_reductions = absolute_investment_reductions.get(
+        LEARNING_RATE, absolute_investment_reductions["LR5"]
+    )
+    selected_recycling_reductions = absolute_recycling_reductions.get(
+        LEARNING_RATE, absolute_recycling_reductions["LR5"]
+    )
 
     print(f"Selected investment reduction values for {LEARNING_RATE}")
     print(f"Selected recycling reduction values for {LEARNING_RATE}")
@@ -361,8 +366,10 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         m.location,  # Locations
         m.tech,  # Technologies
         m.nsteps_sec,  # Steps
-        initialize=lambda m, loc, tech, n: selected_investment_reductions[n].get((2024, loc, tech), 0),  # Use 2024 as base year
-        doc=f"Absolute investment cost reduction values for {LEARNING_RATE}"
+        initialize=lambda m, loc, tech, n: selected_investment_reductions[n].get(
+            (2024, loc, tech), 0
+        ),  # Use 2024 as base year
+        doc=f"Absolute investment cost reduction values for {LEARNING_RATE}",
     )
 
     # Initialize P_sec_recycling with absolute recycling cost reductions
@@ -370,10 +377,11 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         m.location,  # Locations
         m.tech,  # Technologies
         m.nsteps_sec,  # Steps
-        initialize=lambda m, loc, tech, n: selected_recycling_reductions[n].get((2024, loc, tech), 0),  # Use 2024 as base year
-        doc=f"Absolute recycling cost reduction values for {LEARNING_RATE}"
+        initialize=lambda m, loc, tech, n: selected_recycling_reductions[n].get(
+            (2024, loc, tech), 0
+        ),  # Use 2024 as base year
+        doc=f"Absolute recycling cost reduction values for {LEARNING_RATE}",
     )
-
 
     # Define the step values (same for all technologies)
     uniform_step_values = {
@@ -492,5 +500,3 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         initialize=initialize_param("total_facility_cap_initial", default_value=0),
         doc="total_facility_cap_initial",
     )
-
-

@@ -339,7 +339,7 @@ def get_constants(instance):
         secondary_cumulative_capacity_df,
         facilitiesdf,
         facility_cumulative_capacity_df,
-        gas_usage_block
+        gas_usage_block,
     )
 
 

@@ -1,6 +1,6 @@
-
 def scenario_min_min_min(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -30,7 +30,7 @@ def scenario_min_min_min(data, data_urbsextensionv1):
 
         # Piped Gas logic
         base_value = 319200000
-        yearly_decrease_factor = 0.95948 #Test with stable Gas supply
+        yearly_decrease_factor = 0.95948  # Test with stable Gas supply
 
         # CO2 prices per year (€/t)
         co2_prices = {}
@@ -41,10 +41,26 @@ def scenario_min_min_min(data, data_urbsextensionv1):
 
         # Fixed values from 2031 onward
         fixed_co2_prices = {
-            2031: 81.3, 2032: 87.6, 2033: 93.9, 2034: 100.2, 2035: 106.5,
-            2036: 112.8, 2037: 119.1, 2038: 125.4, 2039: 131.7, 2040: 138,
-            2041: 228.5, 2042: 364.25, 2043: 466.0625, 2044: 500,
-            2045: 600, 2046: 750, 2047: 900, 2048: 1000, 2049: 1000, 2050: 1000
+            2031: 81.3,
+            2032: 87.6,
+            2033: 93.9,
+            2034: 100.2,
+            2035: 106.5,
+            2036: 112.8,
+            2037: 119.1,
+            2038: 125.4,
+            2039: 131.7,
+            2040: 138,
+            2041: 228.5,
+            2042: 364.25,
+            2043: 466.0625,
+            2044: 500,
+            2045: 600,
+            2046: 750,
+            2047: 900,
+            2048: 1000,
+            2049: 1000,
+            2050: 1000,
         }
         co2_prices.update(fixed_co2_prices)
 
@@ -54,7 +70,9 @@ def scenario_min_min_min(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
             # CO2 price update
             if stf in co2_prices:
@@ -63,9 +81,9 @@ def scenario_min_min_min(data, data_urbsextensionv1):
     if "supim" in data:
         supim = data["supim"]
         for t in data["global_prop"].index.levels[0].tolist():
-            if t >0:
-                supim.loc[t,("EU27", "Hydro")] = 0.3375
-                #print("SUPIM:", supim)
+            if t > 0:
+                supim.loc[t, ("EU27", "Hydro")] = 0.3375
+                # print("SUPIM:", supim)
     # Process-commodity ratios
     if "process-commodity" in data:
         proco = data["process-commodity"]
@@ -86,7 +104,7 @@ def scenario_min_min_min(data, data_urbsextensionv1):
             "solarPV": 838.7,
             "windon": 4673.4,
             "windoff": 5563.4,
-            "Batteries": 1344.3
+            "Batteries": 1344.3,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -95,9 +113,11 @@ def scenario_min_min_min(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_min_min_avg(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -131,7 +151,9 @@ def scenario_min_min_avg(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -153,7 +175,7 @@ def scenario_min_min_avg(data, data_urbsextensionv1):
             "solarPV": 838.7,
             "windon": 4673.4,
             "windoff": 5563.4,
-            "Batteries": 2016.45
+            "Batteries": 2016.45,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -162,9 +184,11 @@ def scenario_min_min_avg(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_min_min_high(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -198,7 +222,9 @@ def scenario_min_min_high(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -220,7 +246,7 @@ def scenario_min_min_high(data, data_urbsextensionv1):
             "solarPV": 838.7,
             "windon": 4673.4,
             "windoff": 5563.4,
-            "Batteries": 2688.6
+            "Batteries": 2688.6,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -229,9 +255,11 @@ def scenario_min_min_high(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_min_avg_min(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -265,7 +293,9 @@ def scenario_min_avg_min(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -287,7 +317,7 @@ def scenario_min_avg_min(data, data_urbsextensionv1):
             "solarPV": 838.7,
             "windon": 7010.1,
             "windoff": 8345.15,
-            "Batteries": 1344.3
+            "Batteries": 1344.3,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -296,9 +326,11 @@ def scenario_min_avg_min(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_min_avg_avg(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -332,7 +364,9 @@ def scenario_min_avg_avg(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -354,7 +388,7 @@ def scenario_min_avg_avg(data, data_urbsextensionv1):
             "solarPV": 838.7,
             "windon": 7010.1,
             "windoff": 8345.15,
-            "Batteries": 2016.45
+            "Batteries": 2016.45,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -363,9 +397,11 @@ def scenario_min_avg_avg(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_min_avg_high(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -399,7 +435,9 @@ def scenario_min_avg_high(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -421,7 +459,7 @@ def scenario_min_avg_high(data, data_urbsextensionv1):
             "solarPV": 838.7,
             "windon": 7010.1,
             "windoff": 8345.15,
-            "Batteries": 2688.6
+            "Batteries": 2688.6,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -430,9 +468,11 @@ def scenario_min_avg_high(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_min_high_min(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -466,7 +506,9 @@ def scenario_min_high_min(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -488,7 +530,7 @@ def scenario_min_high_min(data, data_urbsextensionv1):
             "solarPV": 838.7,
             "windon": 9346.8,
             "windoff": 11126.8,
-            "Batteries": 1344.3
+            "Batteries": 1344.3,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -497,9 +539,11 @@ def scenario_min_high_min(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_min_high_avg(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -533,7 +577,9 @@ def scenario_min_high_avg(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -555,7 +601,7 @@ def scenario_min_high_avg(data, data_urbsextensionv1):
             "solarPV": 838.7,
             "windon": 9346.8,
             "windoff": 11126.8,
-            "Batteries": 2016.45
+            "Batteries": 2016.45,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -564,9 +610,11 @@ def scenario_min_high_avg(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_min_high_high(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -600,7 +648,9 @@ def scenario_min_high_high(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -622,7 +672,7 @@ def scenario_min_high_high(data, data_urbsextensionv1):
             "solarPV": 838.7,
             "windon": 9346.8,
             "windoff": 11126.8,
-            "Batteries": 2688.6
+            "Batteries": 2688.6,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -631,9 +681,11 @@ def scenario_min_high_high(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_avg_min_min(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -667,7 +719,9 @@ def scenario_avg_min_min(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -689,7 +743,7 @@ def scenario_avg_min_min(data, data_urbsextensionv1):
             "solarPV": 1258.05,
             "windon": 4673.4,
             "windoff": 5563.4,
-            "Batteries": 1344.3
+            "Batteries": 1344.3,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -698,9 +752,11 @@ def scenario_avg_min_min(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_avg_min_avg(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -734,7 +790,9 @@ def scenario_avg_min_avg(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -756,7 +814,7 @@ def scenario_avg_min_avg(data, data_urbsextensionv1):
             "solarPV": 1258.05,
             "windon": 4673.4,
             "windoff": 5563.4,
-            "Batteries": 2016.45
+            "Batteries": 2016.45,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -765,9 +823,11 @@ def scenario_avg_min_avg(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_avg_min_high(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -801,7 +861,9 @@ def scenario_avg_min_high(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -823,7 +885,7 @@ def scenario_avg_min_high(data, data_urbsextensionv1):
             "solarPV": 1258.05,
             "windon": 4673.4,
             "windoff": 5563.4,
-            "Batteries": 2688.6
+            "Batteries": 2688.6,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -832,9 +894,11 @@ def scenario_avg_min_high(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_avg_avg_min(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -868,7 +932,9 @@ def scenario_avg_avg_min(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -890,7 +956,7 @@ def scenario_avg_avg_min(data, data_urbsextensionv1):
             "solarPV": 1258.05,
             "windon": 7010.1,
             "windoff": 8345.15,
-            "Batteries": 1344.3
+            "Batteries": 1344.3,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -899,9 +965,11 @@ def scenario_avg_avg_min(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_avg_avg_avg(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -935,7 +1003,9 @@ def scenario_avg_avg_avg(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -957,7 +1027,7 @@ def scenario_avg_avg_avg(data, data_urbsextensionv1):
             "solarPV": 1258.05,
             "windon": 7010.1,
             "windoff": 8345.15,
-            "Batteries": 2016.45
+            "Batteries": 2016.45,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -966,9 +1036,11 @@ def scenario_avg_avg_avg(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_avg_avg_high(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -1002,7 +1074,9 @@ def scenario_avg_avg_high(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -1024,7 +1098,7 @@ def scenario_avg_avg_high(data, data_urbsextensionv1):
             "solarPV": 1258.05,
             "windon": 7010.1,
             "windoff": 8345.15,
-            "Batteries": 2688.6
+            "Batteries": 2688.6,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -1033,9 +1107,11 @@ def scenario_avg_avg_high(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_avg_high_min(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -1069,7 +1145,9 @@ def scenario_avg_high_min(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -1091,7 +1169,7 @@ def scenario_avg_high_min(data, data_urbsextensionv1):
             "solarPV": 1258.05,
             "windon": 9346.8,
             "windoff": 11126.8,
-            "Batteries": 1344.3
+            "Batteries": 1344.3,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -1100,9 +1178,11 @@ def scenario_avg_high_min(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_avg_high_avg(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -1136,7 +1216,9 @@ def scenario_avg_high_avg(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -1158,7 +1240,7 @@ def scenario_avg_high_avg(data, data_urbsextensionv1):
             "solarPV": 1258.05,
             "windon": 9346.8,
             "windoff": 11126.8,
-            "Batteries": 2016.45
+            "Batteries": 2016.45,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -1167,9 +1249,11 @@ def scenario_avg_high_avg(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_avg_high_high(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -1203,7 +1287,9 @@ def scenario_avg_high_high(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -1225,7 +1311,7 @@ def scenario_avg_high_high(data, data_urbsextensionv1):
             "solarPV": 1258.05,
             "windon": 9346.8,
             "windoff": 11126.8,
-            "Batteries": 2688.6
+            "Batteries": 2688.6,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -1234,9 +1320,11 @@ def scenario_avg_high_high(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_high_min_min(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -1270,7 +1358,9 @@ def scenario_high_min_min(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -1292,7 +1382,7 @@ def scenario_high_min_min(data, data_urbsextensionv1):
             "solarPV": 1677.4,
             "windon": 4673.4,
             "windoff": 5563.4,
-            "Batteries": 1344.3
+            "Batteries": 1344.3,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -1301,9 +1391,11 @@ def scenario_high_min_min(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_high_min_avg(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -1337,7 +1429,9 @@ def scenario_high_min_avg(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -1359,7 +1453,7 @@ def scenario_high_min_avg(data, data_urbsextensionv1):
             "solarPV": 1677.4,
             "windon": 4673.4,
             "windoff": 5563.4,
-            "Batteries": 2016.45
+            "Batteries": 2016.45,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -1368,9 +1462,11 @@ def scenario_high_min_avg(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_high_min_high(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -1404,7 +1500,9 @@ def scenario_high_min_high(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -1426,7 +1524,7 @@ def scenario_high_min_high(data, data_urbsextensionv1):
             "solarPV": 1677.4,
             "windon": 4673.4,
             "windoff": 5563.4,
-            "Batteries": 2688.6
+            "Batteries": 2688.6,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -1435,9 +1533,11 @@ def scenario_high_min_high(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_high_avg_min(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -1471,7 +1571,9 @@ def scenario_high_avg_min(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -1493,7 +1595,7 @@ def scenario_high_avg_min(data, data_urbsextensionv1):
             "solarPV": 1677.4,
             "windon": 7010.1,
             "windoff": 8345.15,
-            "Batteries": 1344.3
+            "Batteries": 1344.3,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -1502,9 +1604,11 @@ def scenario_high_avg_min(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_high_avg_avg(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -1538,7 +1642,9 @@ def scenario_high_avg_avg(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -1560,7 +1666,7 @@ def scenario_high_avg_avg(data, data_urbsextensionv1):
             "solarPV": 1677.4,
             "windon": 7010.1,
             "windoff": 8345.15,
-            "Batteries": 2016.45
+            "Batteries": 2016.45,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -1569,9 +1675,11 @@ def scenario_high_avg_avg(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_high_avg_high(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -1605,7 +1713,9 @@ def scenario_high_avg_high(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -1627,7 +1737,7 @@ def scenario_high_avg_high(data, data_urbsextensionv1):
             "solarPV": 1677.4,
             "windon": 7010.1,
             "windoff": 8345.15,
-            "Batteries": 2688.6
+            "Batteries": 2688.6,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -1636,9 +1746,11 @@ def scenario_high_avg_high(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_high_high_min(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -1672,7 +1784,9 @@ def scenario_high_high_min(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -1694,7 +1808,7 @@ def scenario_high_high_min(data, data_urbsextensionv1):
             "solarPV": 1677.4,
             "windon": 9346.8,
             "windoff": 11126.8,
-            "Batteries": 1344.3
+            "Batteries": 1344.3,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -1703,9 +1817,11 @@ def scenario_high_high_min(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_high_high_avg(data, data_urbsextensionv1):
     import pandas as pd
+
     # Process updates
     if "process" in data:
         pro = data["process"]
@@ -1739,7 +1855,9 @@ def scenario_high_high_avg(data, data_urbsextensionv1):
                 co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value
             else:
                 year_diff = stf - 2024
-                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (yearly_decrease_factor ** year_diff)
+                co.loc[(stf, "EU27", "Piped Gas", "Stock"), "max"] = base_value * (
+                    yearly_decrease_factor**year_diff
+                )
 
     # Process-commodity ratios
     if "process-commodity" in data:
@@ -1761,7 +1879,7 @@ def scenario_high_high_avg(data, data_urbsextensionv1):
             "solarPV": 1677.4,
             "windon": 9346.8,
             "windoff": 11126.8,
-            "Batteries": 2016.45
+            "Batteries": 2016.45,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -1770,6 +1888,7 @@ def scenario_high_high_avg(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_high_high_high(data, data_urbsextensionv1):
     # Commodity updates
@@ -1782,10 +1901,26 @@ def scenario_high_high_high(data, data_urbsextensionv1):
             co2_prices[stf] = 65 + (stf - 2024) * (75 - 65) / (2030 - 2024)
         # Fixed values from 2031 onward
         fixed_co2_prices_seb = {
-            2031: 81.3, 2032: 87.6, 2033: 93.9, 2034: 100.2, 2035: 106.5,
-            2036: 112.8, 2037: 119.1, 2038: 125.4, 2039: 131.7, 2040: 138,
-            2041: 228.5, 2042: 364.25, 2043: 466.0625, 2044: 500,
-            2045: 500, 2046: 500, 2047: 500, 2048: 500, 2049: 500, 2050: 500
+            2031: 81.3,
+            2032: 87.6,
+            2033: 93.9,
+            2034: 100.2,
+            2035: 106.5,
+            2036: 112.8,
+            2037: 119.1,
+            2038: 125.4,
+            2039: 131.7,
+            2040: 138,
+            2041: 228.5,
+            2042: 364.25,
+            2043: 466.0625,
+            2044: 500,
+            2045: 500,
+            2046: 500,
+            2047: 500,
+            2048: 500,
+            2049: 500,
+            2050: 500,
         }
 
         fixed_co2_prices_tyndp = {
@@ -1815,7 +1950,7 @@ def scenario_high_high_high(data, data_urbsextensionv1):
             2047: 161.7,
             2048: 163.8,
             2049: 165.9,
-            2050: 168.0
+            2050: 168.0,
         }
         co2_prices.update(fixed_co2_prices_seb)
         for stf in data["global_prop"].index.levels[0].tolist():
@@ -1825,16 +1960,36 @@ def scenario_high_high_high(data, data_urbsextensionv1):
                 print(f"Year {stf}: CO2 price set to {co2_prices[stf]:.2f} €/t")
     if "demand" in data:
         demand = data["demand"]
-        print("✅ Demand Columns",demand.columns)
+        print("✅ Demand Columns", demand.columns)
 
         yearly_profile = [
-            207658333.3, 218766666.7, 229875000, 240983333.3,
-            252091666.7, 263208333.3, 255236445.9, 262008333.3,
-            268783333.3, 275558333.3, 282333333.3, 289108333.3,
-            295891666.7, 302666666.7, 309441666.7, 316216666.7,
-            294534045.3, 304233333.3, 313933333.3, 323633333.3,
-            333333333.3, 343033333.3, 352733333.3, 362433333.3,
-            372133333.3, 381858333.3, 338580792.8,
+            207658333.3,
+            218766666.7,
+            229875000,
+            240983333.3,
+            252091666.7,
+            263208333.3,
+            255236445.9,
+            262008333.3,
+            268783333.3,
+            275558333.3,
+            282333333.3,
+            289108333.3,
+            295891666.7,
+            302666666.7,
+            309441666.7,
+            316216666.7,
+            294534045.3,
+            304233333.3,
+            313933333.3,
+            323633333.3,
+            333333333.3,
+            343033333.3,
+            352733333.3,
+            362433333.3,
+            372133333.3,
+            381858333.3,
+            338580792.8,
         ]
 
         yearly_profile_with_electrolyser = [
@@ -1864,17 +2019,16 @@ def scenario_high_high_high(data, data_urbsextensionv1):
             574666666.7,
             599916666.7,
             610166666.7,
-            537083333.3
+            537083333.3,
         ]
 
         years = range(2024, 2051)  # 2024–2050 inclusive
         for year, per_timestep in zip(years, yearly_profile_with_electrolyser):
             # update t = 1..12, leave t=0 untouched
-            #demand.loc[(float(year), slice(1, 12)), ("EU27", "Elec")] = per_timestep
+            # demand.loc[(float(year), slice(1, 12)), ("EU27", "Elec")] = per_timestep
             print("hi")
 
-
-        #print("✅ Demand updated for EU27 Elec from 2024–2050")
+        # print("✅ Demand updated for EU27 Elec from 2024–2050")
 
     if "supim" in data:
         supim = data["supim"]
@@ -1891,7 +2045,7 @@ def scenario_high_high_high(data, data_urbsextensionv1):
             "solarPV": 1677.4,
             "windon": 9346.8,
             "windoff": 11126.8,
-            "Batteries": 2688.6
+            "Batteries": 2688.6,
         }
         for stf in range(2024, 2051):
             for tech in technologies:

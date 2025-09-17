@@ -44,7 +44,7 @@ def plot_nzia_benchmark(output_file_path):
         "capacity_ext_stockout",
         "capacity_ext_euprimary",
         "capacity_ext_eusecondary",
-        "capacity_ext_imported"  # Add imported to read the data
+        "capacity_ext_imported",  # Add imported to read the data
     ]
 
     # Show actual sheet names
@@ -80,9 +80,15 @@ def plot_nzia_benchmark(output_file_path):
 
         # Calculate each component as percentage of TOTAL additions
         rel_data = pd.DataFrame()
-        rel_data["capacity_ext_eusecondary"] = abs_data["capacity_ext_eusecondary"] / total_additions
-        rel_data["capacity_ext_stockout"] = abs_data["capacity_ext_stockout"] / total_additions
-        rel_data["capacity_ext_euprimary"] = abs_data["capacity_ext_euprimary"] / total_additions
+        rel_data["capacity_ext_eusecondary"] = (
+            abs_data["capacity_ext_eusecondary"] / total_additions
+        )
+        rel_data["capacity_ext_stockout"] = (
+            abs_data["capacity_ext_stockout"] / total_additions
+        )
+        rel_data["capacity_ext_euprimary"] = (
+            abs_data["capacity_ext_euprimary"] / total_additions
+        )
 
         # Handle division by zero
         rel_data = rel_data.fillna(0)
@@ -124,15 +130,19 @@ def plot_nzia_benchmark(output_file_path):
 
         # Set y-axis as percentage (max 100% since it's part of total)
         ax_rel.set_ylim(0, 1.0)
-        ax_rel.yaxis.set_major_formatter(plt.FuncFormatter(lambda y, _: '{:.0%}'.format(y)))
+        ax_rel.yaxis.set_major_formatter(
+            plt.FuncFormatter(lambda y, _: "{:.0%}".format(y))
+        )
 
         # Add 40% reference line for NZIA benchmark
-        benchmark_line = ax_rel.axhline(y=0.4, color='red', linestyle='--', alpha=0.7, linewidth=2)
+        benchmark_line = ax_rel.axhline(
+            y=0.4, color="red", linestyle="--", alpha=0.7, linewidth=2
+        )
 
         # Create combined legend with correct labels
         bar_handles = [container[0] for container in bar_container.containers]
         all_handles = bar_handles + [benchmark_line]
-        all_labels = labels + ['NZIA Benchmark']
+        all_labels = labels + ["NZIA Benchmark"]
         ax_rel.legend(all_handles, all_labels, frameon=True, loc="upper right")
 
         ax_rel.grid(axis="y", alpha=0.3)
@@ -160,7 +170,9 @@ def plot_nzia_benchmark(output_file_path):
         ax_abs.set_xlabel("Year", labelpad=10)
         ax_abs.set_xticks(range(len(years)))
         ax_abs.set_xticklabels(years, rotation=45, ha="right")
-        ax_abs.legend(labels, frameon=True, loc="upper right")  # Only bar labels for absolute plot
+        ax_abs.legend(
+            labels, frameon=True, loc="upper right"
+        )  # Only bar labels for absolute plot
         ax_abs.grid(axis="y", alpha=0.3)
 
         # Save figures
@@ -190,7 +202,8 @@ def plot_nzia_benchmark(output_file_path):
                 imported = abs_data["capacity_ext_imported"][year]
                 local_percentage = (local_total / total) * 100
                 print(
-                    f"     {year}: Local={local_total:.1f}GW, Imported={imported:.1f}GW, Total={total:.1f}GW, Local%={local_percentage:.1f}%")
+                    f"     {year}: Local={local_total:.1f}GW, Imported={imported:.1f}GW, Total={total:.1f}GW, Local%={local_percentage:.1f}%"
+                )
 
 
 def plot_scrap(output_file_path):
@@ -668,4 +681,3 @@ def wait_for_excel_sheets(path, expected_sheets, timeout=60):  # TODO re-add if 
 
 # plot_balance_created("result/urbs-20250604T1538/result_scenario_base.xlsx")
 # plot_facility_utilization("result/urbs-20250716T1015/result_scenario_base.xlsx")
-

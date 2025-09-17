@@ -235,7 +235,7 @@ parser.add_argument(
 args = parser.parse_args()
 
 # Set environment variable for learning rate BEFORE importing urbs
-os.environ['URBS_LR'] = args.lr
+os.environ["URBS_LR"] = args.lr
 
 # Original setup (unchanged)
 input_files = "urbs_intertemporal_2050"
@@ -270,8 +270,6 @@ plot_periods = {"all": timesteps[1:]}
 my_colors = {"EU27": (200, 230, 200)}
 for country, color in my_colors.items():
     urbs.COLORS[country] = color
-
-
 
 
 def run_perfect_foresight():

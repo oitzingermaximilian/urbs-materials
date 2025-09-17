@@ -86,9 +86,12 @@ def apply_variables(m):
     This replaces the product: BD_sec * capacity_ext_eusecondary
     """
     m.auxiliary_product_BD_q = pyomo.Var(
-        m.stf, m.location, m.tech, m.nsteps_sec,
+        m.stf,
+        m.location,
+        m.tech,
+        m.nsteps_sec,
         within=pyomo.NonNegativeReals,
-        doc="Auxiliary variable for linearizing BD_sec * capacity_ext_eusecondary"
+        doc="Auxiliary variable for linearizing BD_sec * capacity_ext_eusecondary",
     )
 
     """
@@ -145,4 +148,3 @@ def apply_variables(m):
     m.capacity_facility_cumulative = pyomo.Var(
         m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
     )
-

@@ -14,10 +14,12 @@ from collections import defaultdict
 import pyomo.environ as pyomo
 import pandas as pd
 import numpy as np
+
 # Import bilinear constraint detection
 import sys
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-#from detect_bilinear_constraints import analyze_model_bilinearity
+# from detect_bilinear_constraints import analyze_model_bilinearity
 
 
 def prepare_result_directory(result_name):
@@ -46,7 +48,9 @@ def setup_solver(optim, logfile="solver.log"):
     if optim.name == "gurobi":
         optim.set_options("logfile={}".format(logfile))
         # ✅ SET BINARY TOLERANCE TO MINIMUM ALLOWED for exact binary values
-        optim.set_options("IntFeasTol=1e-09")  # Minimum allowed integer feasibility tolerance
+        optim.set_options(
+            "IntFeasTol=1e-09"
+        )  # Minimum allowed integer feasibility tolerance
         optim.set_options("FeasibilityTol=1e-09")  # General feasibility tolerance
         optim.set_options("OptimalityTol=1e-09")  # Optimality tolerance
         optim.set_options("MIPGap=0")  # Set MIP gap to 0 for exact solutions
@@ -140,7 +144,7 @@ def run_scenario(
         manufacturingcost_dict = {}  # Dictionary to store manufacturing costs
         remanufacturingcost_dict = {}  # Dictionary to store remanufacturing costs
         recyclingcost_dict = {}
-        o_and_m_dict = {} # Dictionary to store o&m costs
+        o_and_m_dict = {}  # Dictionary to store o&m costs
 
         # Extract the 'Stf' column (year)
         years = cost_sheet[
@@ -187,7 +191,7 @@ def run_scenario(
             manufacturingcost_dict,
             remanufacturingcost_dict,
             recyclingcost_dict,
-            o_and_m_dict
+            o_and_m_dict,
         )
 
     def process_technology_sheet(technologies_data):
@@ -350,8 +354,7 @@ def run_scenario(
             block_prices[(stf, block)] = float(row["price"])
 
         print(block_limits)
-        return  block_names,block_limits, block_prices
-
+        return block_names, block_limits, block_prices
 
     def load_data_from_excel(file_path):
         """Loads data from Excel and processes all relevant sheets."""
@@ -368,7 +371,9 @@ def run_scenario(
         )
         gas_block_data = pd.read_excel(file_path, sheet_name="gas_block")
         # Process lng_blocks sheet
-        block_names, block_limits_dict, block_price_dict= process_gas_block_sheet(gas_block_data)
+        block_names, block_limits_dict, block_price_dict = process_gas_block_sheet(
+            gas_block_data
+        )
 
         # Process Technologies sheet
         technologies_dict = process_technology_sheet(technologies_data)
@@ -402,7 +407,7 @@ def run_scenario(
             manufacturingcost_dict,
             remanufacturingcost_dict,
             recyclingcost_dict,
-            o_and_m_dict
+            o_and_m_dict,
         ) = process_cost_sheet(cost_sheet)
 
         # Now we create the 'data_urbsextensionv1' dictionary to return all data
@@ -422,7 +427,7 @@ def run_scenario(
             # LNG block info
             "block_limits": block_limits_dict,
             "block_price": block_price_dict,
-            "block_names": block_names
+            "block_names": block_names,
         }
 
         return data_urbsextensionv1
@@ -467,15 +472,13 @@ def run_scenario(
         indexlist=indexlist,
     )
 
-
-
     # refresh time stamp string and create filename for logfile
     log_filename = os.path.join(result_dir, "{}.log").format(sce)
 
     # solve model and read results
     optim = SolverFactory("gurobi")  # cplex, glpk, gurobi, ...
-    #optim.options['NumericFocus'] = 3
-    #optim.options['ScaleFlag'] = 1
+    # optim.options['NumericFocus'] = 3
+    # optim.options['ScaleFlag'] = 1
     optim = setup_solver(optim, logfile=log_filename)
     result = optim.solve(prob, tee=True)
     # assert str(result.solver.termination_condition) == "optimal"
@@ -794,9 +797,9 @@ def slice_data_for_window(data, window_start, window_end, initial_conditions):
                 ) & (sliced_df.index.get_level_values("Property") == "CO2 limit")
 
                 if co2_limit_mask.any():
-                    sliced_df.loc[co2_limit_mask, "value"] = (
-                        float("inf")  # or 9999999999 or any other large number
-                    )
+                    sliced_df.loc[co2_limit_mask, "value"] = float(
+                        "inf"
+                    )  # or 9999999999 or any other large number
                     print(f"Set CO2 limit to inf for years {window_start}–{window_end}")
 
                 # Add Discount Rate = 0.03 for window_start year
@@ -825,7 +828,9 @@ def slice_data_for_window(data, window_start, window_end, initial_conditions):
                 ):
                     # Create a new row for 'CO2 budget' at the window_start year
                     new_co2_budget_row = pd.DataFrame(
-                        {"value": [float("inf")]},  # Set CO2 budget to infinity as string
+                        {
+                            "value": [float("inf")]
+                        },  # Set CO2 budget to infinity as string
                         index=pd.MultiIndex.from_tuples(
                             [(window_start, "CO2 budget")],
                             names=sliced_df.index.names,
@@ -1204,8 +1209,6 @@ def sliced_dataurbsextensionv1(
                 print(
                     f"Updated {tech} manufacturing price for {year}: {old_price} -> {manufacturing_price}"
                 )
-
-
 
     print("\n=== Debug Costs After Update ===")
     print("Updated cost entries for this window:")

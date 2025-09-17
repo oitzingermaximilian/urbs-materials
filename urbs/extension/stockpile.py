@@ -61,14 +61,14 @@ class CapacityExtStockRule(AbstractConstraint):
             )
             return m.capacity_ext_stock[stf, location, tech] == (
                 m.Existing_Stock_Q_stock[location, tech]
-                #+ m.capacity_ext_stock_imported[stf, location, tech]
+                # + m.capacity_ext_stock_imported[stf, location, tech]
                 - m.capacity_ext_stockout[stf, location, tech]
             )
         else:
             # debug_print(f"Running constraint CapacityExtStockRule for stf={stf}")
             return m.capacity_ext_stock[stf, location, tech] == (
                 m.capacity_ext_stock[stf - 1, location, tech]
-                #+ m.capacity_ext_stock_imported[stf, location, tech]
+                # + m.capacity_ext_stock_imported[stf, location, tech]
                 - m.capacity_ext_stockout[stf, location, tech]
             )
 
@@ -123,8 +123,11 @@ class CapacityExtNewLimitRule(AbstractConstraint):
             ext_val = m.Q_ext_new[stf, location, tech]  # * 10#3
             return cap_val <= ext_val
         else:
-            ext_val = m.Q_ext_new[stf, location, tech] #+ m.capacity_dec[stf-1,location,tech]  # * 10#3
+            ext_val = m.Q_ext_new[
+                stf, location, tech
+            ]  # + m.capacity_dec[stf-1,location,tech]  # * 10#3
             return cap_val <= ext_val
+
 
 class TimedelayEUPrimaryProductionRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):

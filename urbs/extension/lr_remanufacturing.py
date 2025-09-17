@@ -22,27 +22,44 @@ class costsavings_constraint_sec_investment(AbstractConstraint):
         # ✅ CORRECTED: Use auxiliary variable instead of bilinear product
         # Original bilinear: P_sec_investment[n] * BD_sec[n] * capacity_ext_eusecondary
         # Linearized: P_sec_investment[n] * auxiliary_product_BD_q[n]
-        
+
         investment_reduction_value = sum(
-            m.P_sec_investment[location, tech, n] * m.auxiliary_product_BD_q[stf, location, tech, n]
+            m.P_sec_investment[location, tech, n]
+            * m.auxiliary_product_BD_q[stf, location, tech, n]
             for n in m.nsteps_sec
         )
-        expr = m.PRICEREDUCTION_CAP_DEP_INV[stf, location, tech] == investment_reduction_value
+        expr = (
+            m.PRICEREDUCTION_CAP_DEP_INV[stf, location, tech]
+            == investment_reduction_value
+        )
 
         # Improved debug formatting - separate lines for better visibility
         if DEBUG:
             print("=" * 60)
-            print(f"[INVESTMENT COSTSAVINGS DEBUG] STF={stf}, Location={location}, Tech={tech}")
+            print(
+                f"[INVESTMENT COSTSAVINGS DEBUG] STF={stf}, Location={location}, Tech={tech}"
+            )
             print(f"  Investment reduction value: {investment_reduction_value}")
-            bd_values = [m.BD_sec[stf, location, tech, n].value if hasattr(m.BD_sec[stf, location, tech, n], 'value') else 'unset' for n in m.nsteps_sec]
+            bd_values = [
+                m.BD_sec[stf, location, tech, n].value
+                if hasattr(m.BD_sec[stf, location, tech, n], "value")
+                else "unset"
+                for n in m.nsteps_sec
+            ]
             print(f"  BD_sec values: {bd_values}")
             p_values = [m.P_sec_investment[location, tech, n] for n in m.nsteps_sec]
             print(f"  P_sec_investment values: {p_values}")
             # Simplified active step contributions without nested quotes
             contributions = []
             for n in m.nsteps_sec:
-                bd_val = m.BD_sec[stf, location, tech, n].value if hasattr(m.BD_sec[stf, location, tech, n], 'value') else 'unset'
-                contributions.append((n, m.P_sec_investment[location, tech, n], f'BD_sec={bd_val}'))
+                bd_val = (
+                    m.BD_sec[stf, location, tech, n].value
+                    if hasattr(m.BD_sec[stf, location, tech, n], "value")
+                    else "unset"
+                )
+                contributions.append(
+                    (n, m.P_sec_investment[location, tech, n], f"BD_sec={bd_val}")
+                )
             print(f"  Active step contributions: {contributions}")
             print(f"  Expression: {expr}")
             print("=" * 60)
@@ -56,7 +73,10 @@ class pricereduction_stage_calc(AbstractConstraint):
             m.P_sec_investment[location, tech, n] * m.BD_sec[stf, location, tech, n]
             for n in m.nsteps_sec
         )
-        expr = m.pricereduction_sec_investment[stf, location, tech] == investement_reduction_stage_value
+        expr = (
+            m.pricereduction_sec_investment[stf, location, tech]
+            == investement_reduction_stage_value
+        )
         return expr  # ✅ FIXED: Added missing return statement
 
 
@@ -76,13 +96,19 @@ class BD_limitation_constraint_sec(AbstractConstraint):
             # Check if this constraint might cause infeasibility
             try:
                 # Check P_sec values to see if there are incentives
-                p_inv_values = [m.P_sec_investment[location, tech, n] for n in m.nsteps_sec]
-                p_rec_values = [m.P_sec_recycling[location, tech, n] for n in m.nsteps_sec]
+                p_inv_values = [
+                    m.P_sec_investment[location, tech, n] for n in m.nsteps_sec
+                ]
+                p_rec_values = [
+                    m.P_sec_recycling[location, tech, n] for n in m.nsteps_sec
+                ]
                 print(f"  P_sec_investment values: {p_inv_values}")
                 print(f"  P_sec_recycling values: {p_rec_values}")
 
                 # Check capacity requirements
-                cap_values = [m.capacityperstep_sec[location, tech, n] for n in m.nsteps_sec]
+                cap_values = [
+                    m.capacityperstep_sec[location, tech, n] for n in m.nsteps_sec
+                ]
                 print(f"  Capacity per step values: {cap_values}")
 
             except Exception as e:
@@ -119,7 +145,7 @@ class relation_pnew_to_pprior_constraint_sec(AbstractConstraint):
             debug_print(
                 f"[relation_pnew-recursive] STF={stf} ➞ {lhs} >= {rhs} ? {expr}"
             )
-        
+
         return expr
 
 
@@ -256,7 +282,11 @@ def apply_combined_lr_constraints(m):
                 m.stf,
                 m.location,
                 m.tech,
-                rule=lambda m, stf, loc, tech, constraint=constraint: constraint.apply_rule(m, stf, loc, tech),
+                rule=lambda m,
+                stf,
+                loc,
+                tech,
+                constraint=constraint: constraint.apply_rule(m, stf, loc, tech),
             ),
         )
 
@@ -270,14 +300,19 @@ def apply_combined_lr_constraints(m):
                 m.location,
                 m.tech,
                 m.nsteps_sec,
-                rule=lambda m, stf, loc, tech, nsteps_sec, constraint=constraint: constraint.apply_rule(
+                rule=lambda m,
+                stf,
+                loc,
+                tech,
+                nsteps_sec,
+                constraint=constraint: constraint.apply_rule(
                     m, stf, loc, tech, nsteps_sec
                 ),
             ),
         )
 
     # ✅ FIXED: Replace the recycling expression to use auxiliary variable #TODO reenable pricereduction on Scrap if needed
-    #def recycling_reduction_rule(m, stf, location, tech):
+    # def recycling_reduction_rule(m, stf, location, tech):
     #    # Use auxiliary variable instead of trilinear product
     #    recycling_reduction_value = sum(
     #        m.P_sec_recycling[location, tech, n] * m.auxiliary_product_BD_q[stf, location, tech, n]
@@ -291,10 +326,10 @@ def apply_combined_lr_constraints(m):
     #    return recycling_reduction_value
 
     # Override the recycling price reduction variable with a linear expression
-    #m.pricereduction_sec_recycling = pyomo.Expression(
+    # m.pricereduction_sec_recycling = pyomo.Expression(
     #    m.stf,
     #    m.location,
     #    m.tech,
     #   rule=recycling_reduction_rule,
     #    doc="Recycling price reduction using linearized auxiliary variable"
-    #)
+    # )
