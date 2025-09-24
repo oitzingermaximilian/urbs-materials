@@ -22,6 +22,7 @@ LEARNING_RATES = {
     "LR10": "10% Learning Rate",
 }
 
+
 def mwh_to_bcm(mwh):
     """
     Convert MWh to BCM using same basis as EU demand conversion in Sebs Paper:
@@ -31,6 +32,7 @@ def mwh_to_bcm(mwh):
     mmbtu = mwh * 3.412
     bcm = mmbtu / 35_315_000
     return bcm
+
 
 def lng_lineplot_range_comp_scenarios():
     """Plot LNG demand range (min/max envelope) for 2024-2050 horizon using new scenario tuples.
@@ -68,11 +70,11 @@ def lng_lineplot_range_comp_scenarios():
 
         for scenario_name, scenario_obj in scenarios:
             file_path = (
-                    Path(RESULTS_BASE_PATH)
-                    / base_variant
-                    / lr_code
-                    / "rolling_2024_to_2050"
-                    / f"scenario_{scenario_name}.xlsx"
+                Path(RESULTS_BASE_PATH)
+                / base_variant
+                / lr_code
+                / "rolling_2024_to_2050"
+                / f"scenario_{scenario_name}.xlsx"
             )
             if not file_path.exists():
                 print(f"  Missing file: {file_path}")
@@ -86,7 +88,9 @@ def lng_lineplot_range_comp_scenarios():
 
             df["blocks"] = df["blocks"].astype(str).str.strip()
             # Select only LNG blocks
-            lng_df = df[df["blocks"].str.endswith("LNG") & df["stf"].between(2024, 2050)]
+            lng_df = df[
+                df["blocks"].str.endswith("LNG") & df["stf"].between(2024, 2050)
+            ]
             if lng_df.empty:
                 continue
 
@@ -134,10 +138,26 @@ def lng_lineplot_range_comp_scenarios():
                     edgecolor=group["color"],
                     label=f"{group['label']} (Range)",
                 )
-                plt.plot(years_full, min_vals, color=group["color"], linestyle="--", linewidth=1.2, label=f"{group['label']} (Min)")
-                plt.plot(years_full, max_vals, color=group["color"], linestyle="-", linewidth=2, label=f"{group['label']} (Max)")
+                plt.plot(
+                    years_full,
+                    min_vals,
+                    color=group["color"],
+                    linestyle="--",
+                    linewidth=1.2,
+                    label=f"{group['label']} (Min)",
+                )
+                plt.plot(
+                    years_full,
+                    max_vals,
+                    color=group["color"],
+                    linestyle="-",
+                    linewidth=2,
+                    label=f"{group['label']} (Max)",
+                )
 
-                print(f"    {group['label']}: {min([v for v in min_vals if v > 0] or [0]):.2f} - {max(max_vals):.2f} BCM")
+                print(
+                    f"    {group['label']}: {min([v for v in min_vals if v > 0] or [0]):.2f} - {max(max_vals):.2f} BCM"
+                )
             else:
                 print(f"    Skipped (no non-zero data): {group['label']}")
 
@@ -155,7 +175,13 @@ def lng_lineplot_range_comp_scenarios():
                 seen.add(l)
                 dedup_handles.append(h)
                 dedup_labels.append(l)
-        plt.legend(dedup_handles, dedup_labels, bbox_to_anchor=(1.05, 1), loc="upper left", fontsize=9)
+        plt.legend(
+            dedup_handles,
+            dedup_labels,
+            bbox_to_anchor=(1.05, 1),
+            loc="upper left",
+            fontsize=9,
+        )
         plt.tight_layout()
 
         out_path = output_dir / f"lng_range_plot_scenarios_{lr_code}.png"

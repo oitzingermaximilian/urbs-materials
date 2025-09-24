@@ -8,8 +8,13 @@ price_values = {
     "solarPV": {"min": 838.7, "avg": 1258.05, "high": 1677.4},
     "windon": {"min": 4673.4, "avg": 7010.1, "high": 9346.8},
     "windoff": {"min": 5563.4, "avg": 8345.15, "high": 11126.8},
-    "Batteries": {"min": 1344.3, "avg": 2016.45, "high": 2688.6},  # can be fixed if you want
+    "Batteries": {
+        "min": 1344.3,
+        "avg": 2016.45,
+        "high": 2688.6,
+    },  # can be fixed if you want
 }
+
 
 def get_cost_combo(solar_lvl, wind_lvl, batt_lvl):
     return {
@@ -18,6 +23,7 @@ def get_cost_combo(solar_lvl, wind_lvl, batt_lvl):
         "windoff": price_values["windoff"][wind_lvl],
         "Batteries": price_values["Batteries"][batt_lvl],
     }
+
 
 def generate_scenario_function(solar_lvl, wind_lvl, batt_lvl):
     func_name = f"scenario_{solar_lvl}_{wind_lvl}_{batt_lvl}"
@@ -109,7 +115,9 @@ try:
 except FileNotFoundError:
     existing_code = ""
 
-all_combos = list(itertools.product(price_levels, repeat=3))  # 3 techs: solarPV, windon, windoff
+all_combos = list(
+    itertools.product(price_levels, repeat=3)
+)  # 3 techs: solarPV, windon, windoff
 to_write = []
 scenario_list_entries = []
 

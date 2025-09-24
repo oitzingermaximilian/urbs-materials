@@ -4,34 +4,45 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from matplotlib import ticker as mticker
 import numpy as np
+
 # -------------------------------
 # Configuration
 # -------------------------------
 RESULTS_BASE_PATH = Path("result")
-SCENARIOS = {
-    "With NZIA": "NZIA_newest",
-    "Without NZIA": "withoutNZIA_newest"
-}
+SCENARIOS = {"With NZIA": "NZIA_newest", "Without NZIA": "withoutNZIA_newest"}
 ROLLING_HORIZON = "rolling_2024_to_2050"
 YEARS = list(range(2024, 2041))
 SCENARIO_FILE = "costsnew.xlsx"
-LINE_COLORS = {
-    "With NZIA": "seagreen",
-    "Without NZIA": "darkred"
-}
+LINE_COLORS = {"With NZIA": "seagreen", "Without NZIA": "darkred"}
 
 GROUPS = {
-    "Fossil fuels generation": ["Coal Plant", "Coal Plant CCUS", "Gas Plant (CCGT)", "Gas Plant (CCGT) CCUS",
-                     "Lignite Plant", "Lignite Plant CCUS", "Oil Plant", "Other non-res"],
-    "Renewable generation": ["Hydro (reservoir)", "Hydro (run-of-river)", "solarPV", "windoff", "windon"],
-    "Thermal nuclear generation": ["Nuclear Plant"]
+    "Fossil fuels generation": [
+        "Coal Plant",
+        "Coal Plant CCUS",
+        "Gas Plant (CCGT)",
+        "Gas Plant (CCGT) CCUS",
+        "Lignite Plant",
+        "Lignite Plant CCUS",
+        "Oil Plant",
+        "Other non-res",
+    ],
+    "Renewable generation": [
+        "Hydro (reservoir)",
+        "Hydro (run-of-river)",
+        "solarPV",
+        "windoff",
+        "windon",
+    ],
+    "Thermal nuclear generation": ["Nuclear Plant"],
 }
 
 GROUP_COLORS = {
-    "Fossil fuels generation": "#F4C20D",   # yellow
-    "Renewable generation": "#009688",      # teal
-    "Thermal nuclear generation": "#F57C00" # orange
+    "Fossil fuels generation": "#F4C20D",  # yellow
+    "Renewable generation": "#009688",  # teal
+    "Thermal nuclear generation": "#F57C00",  # orange
 }
+
+
 # -------------------------------
 # Conversion
 # -------------------------------
@@ -39,6 +50,7 @@ def mwh_to_bcm(mwh):
     mmbtu = mwh * 3.412
     bcm = mmbtu / 35_315_000
     return bcm
+
 
 # -------------------------------
 # Load LNG data
@@ -74,6 +86,7 @@ def load_lng_data(scenario_dir):
 
     return total_by_year
 
+
 # -------------------------------
 # Plotting
 # -------------------------------
@@ -89,7 +102,7 @@ def plot_lng_totals():
             series.values,  # plot BCM values directly
             label=label,
             color=LINE_COLORS[label],
-            linewidth=2
+            linewidth=2,
         )
         max_value = max(max_value, series.max())
 
@@ -110,6 +123,7 @@ def plot_lng_totals():
     plt.show()
     print(f"✔ LNG plot saved → {out_file}")
 
+
 # -------------------------------
 # CSV output
 # -------------------------------
@@ -122,6 +136,8 @@ def save_lng_table():
     output_csv = Path("scenario_comparison") / "lng_totals_2024_2040.csv"
     table.to_csv(output_csv, index=False)
     print(f"✔ LNG totals CSV saved → {output_csv}")
+
+
 # -------------------------------
 # Step Plotting
 # -------------------------------
@@ -135,10 +151,10 @@ def plot_lng_totals_step():
         plt.step(
             series.index,
             series.values,  # plot BCM values directly
-            where='mid',  # 'pre', 'post', or 'mid' for step position
+            where="mid",  # 'pre', 'post', or 'mid' for step position
             label=label,
             color=LINE_COLORS[label],
-            linewidth=2
+            linewidth=2,
         )
         max_value = max(max_value, series.max())
 
@@ -163,8 +179,13 @@ def plot_lng_totals_step():
 # -------------------------------
 # Function to plot donut charts
 # -------------------------------
-def plot_generation_mix(file_path, sheet_name="extension_balance", years=range(2025, 2041),
-                        output_file="generation_mix.png", convert_to_twh=True):
+def plot_generation_mix(
+    file_path,
+    sheet_name="extension_balance",
+    years=range(2025, 2041),
+    output_file="generation_mix.png",
+    convert_to_twh=True,
+):
     """
     Plots 4x4 donut charts of generation mix per year.
 
@@ -203,7 +224,7 @@ def plot_generation_mix(file_path, sheet_name="extension_balance", years=range(2
             labels=list(data.keys()),
             colors=[GROUP_COLORS[k] for k in data.keys()],
             startangle=90,
-            wedgeprops=dict(width=0.4, edgecolor='w')
+            wedgeprops=dict(width=0.4, edgecolor="w"),
         )
         axes[i].set_title(f"{year} (TWh)" if convert_to_twh else str(year), fontsize=12)
 
@@ -211,7 +232,9 @@ def plot_generation_mix(file_path, sheet_name="extension_balance", years=range(2
     for j in range(i + 1, 16):
         fig.delaxes(axes[j])
 
-    plt.suptitle("Generation Mix (TWh)" if convert_to_twh else "Generation Mix", fontsize=16)
+    plt.suptitle(
+        "Generation Mix (TWh)" if convert_to_twh else "Generation Mix", fontsize=16
+    )
     plt.tight_layout(rect=[0, 0, 1, 0.96])
 
     # Save figure
@@ -220,6 +243,7 @@ def plot_generation_mix(file_path, sheet_name="extension_balance", years=range(2
     plt.savefig(output_file, dpi=300)
     plt.show()
     print(f"✔ Donut plots saved → {output_file}")
+
 
 def plot_generation_share_by_year_100pct(
     file_path,
@@ -279,14 +303,14 @@ def plot_generation_share_by_year_100pct(
     bar_height = 0.6
 
     for g in group_order:
-        width = (data[g].values * 100.0)
+        width = data[g].values * 100.0
         ax.barh(
             y_pos,
             width,
             left=left,
             height=bar_height,
             color=GROUP_COLORS[g],
-            edgecolor="white",     # white separator between segments
+            edgecolor="white",  # white separator between segments
             linewidth=1.2,
             zorder=5,
         )
@@ -318,7 +342,9 @@ def plot_generation_share_by_year_100pct(
     ax.grid(False)
 
     # Title (left-aligned, bold)
-    ax.set_title(title, loc="left", fontsize=18, fontweight="bold", color="#1F4E79", pad=14)
+    ax.set_title(
+        title, loc="left", fontsize=18, fontweight="bold", color="#1F4E79", pad=14
+    )
 
     # Legend at the bottom, horizontal
     handles = [plt.Rectangle((0, 0), 1, 1, color=GROUP_COLORS[g]) for g in group_order]
@@ -342,12 +368,18 @@ def plot_generation_share_by_year_100pct(
     plt.savefig(output_file, dpi=300)
     plt.show()
     print(f"✔ Stacked share chart saved → {output_file}")
+
+
 # -------------------------------
 # Main
 # -------------------------------
 if __name__ == "__main__":
     plot_lng_totals()
-    #save_lng_table()
+    # save_lng_table()
     plot_lng_totals_step()
-    plot_generation_mix(file_path="result/withoutNZIA_newest/rolling_2024_to_2050/scenario_high_high_high.xlsx")
-    plot_generation_share_by_year_100pct(file_path="result/withoutNZIA_newest/rolling_2024_to_2050/scenario_high_high_high.xlsx")
+    plot_generation_mix(
+        file_path="result/withoutNZIA_newest/rolling_2024_to_2050/scenario_high_high_high.xlsx"
+    )
+    plot_generation_share_by_year_100pct(
+        file_path="result/withoutNZIA_newest/rolling_2024_to_2050/scenario_high_high_high.xlsx"
+    )

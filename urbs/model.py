@@ -395,7 +395,7 @@ def create_model(
 
     apply_gas_block_pricing(m, data_urbsextensionv1)
 
-    #apply_scenario_constraints(m)
+    # apply_scenario_constraints(m)
 
     apply_stockpiling_constraints(m)
 
@@ -524,7 +524,6 @@ def create_model(
     #        ,
     #        rule=res_global_co2_limit_rule,
     #        doc='total co2 commodity output <= global.prop CO2 limit')
-
 
     # costs
     m.def_costs = pyomo.Constraint(
@@ -985,7 +984,7 @@ def def_costs_rule(m, cost_type):
                 * m.process_dict["overpay-factor"][p]
                 for p in m.pro_tuples
             )
-            #print('Invest Cost',cost)
+            # print('Invest Cost',cost)
         if m.mode["tra"]:
             # transmission_cost is defined in transmission.py
             cost += transmission_cost(m, cost_type)
@@ -1106,9 +1105,7 @@ def def_specific_process_costs_rule(m, stf, sit, pro, cost_type):
 
         return m.process_costs[stf, sit, pro, cost_type] == cost_spec
 
-
     elif cost_type == "Fuel":
-
         # Base fuel costs (exclude Gas)
 
         base_cost = sum(
@@ -1129,7 +1126,9 @@ def def_specific_process_costs_rule(m, stf, sit, pro, cost_type):
 
         gas_cost_for_ccgt = m.gas_cost[stf] if pro == "Gas Plant (CCGT)" else 0
 
-        return m.process_costs[stf, sit, pro, cost_type] == base_cost + gas_cost_for_ccgt
+        return (
+            m.process_costs[stf, sit, pro, cost_type] == base_cost + gas_cost_for_ccgt
+        )
 
     elif cost_type == "Environmental":
         return m.process_costs[stf, sit, pro, cost_type] == sum(
@@ -1285,9 +1284,6 @@ def minimum_stock_level_rule(m, stf, location, tech):
 
     return lhs <= rhs
 
+
 ##################################
-#Nuclear minimum 80% activity
-
-
-
-
+# Nuclear minimum 80% activity

@@ -1,5 +1,7 @@
 import pyomo.core as pyomo
-from .costs import discount_factor
+from .costs import discount_factor, effective_distance
+from urbs.features.modelhelper import stf_dist
+
 
 def apply_gas_block_pricing(m, data):
     """
@@ -96,7 +98,12 @@ def apply_gas_block_pricing(m, data):
             for blk in m.blocks
         )
         # Apply discount factor per year
-        return m.gas_cost[stf] == yearly_gas_cost * discount_factor(stf)
+        dist = stf_dist(stf, m)
+        gas_cost_factor = discount_factor(stf) * effective_distance(dist)
+        #print("#"*60)
+        #print(gas_cost_factor)
+
+        return m.gas_cost[stf] == yearly_gas_cost * gas_cost_factor
 
     m.yearly_cost_constraint = pyomo.Constraint(m.stf, rule=yearly_cost_rule)
 

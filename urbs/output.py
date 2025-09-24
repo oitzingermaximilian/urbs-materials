@@ -100,7 +100,7 @@ def get_constants(instance):
             "costs_ext_storage",
             "costs_EU_primary",
             "costs_EU_secondary",
-            "costs_O_and_M"
+            "costs_O_and_M",
         ],
     )
     # print("yearly ext cost", yearly_cost_ext)
@@ -250,7 +250,7 @@ def get_constants(instance):
         "costs_ext_storage",
         "costs_EU_primary",
         "costs_EU_secondary",
-        "costs_O_and_M"
+        "costs_O_and_M",
     ]
     df_ext_melted_filtered = df_ext_melted[
         df_ext_melted["cost_type"].isin(cost_types_ext)

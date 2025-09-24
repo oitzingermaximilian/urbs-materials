@@ -131,21 +131,30 @@ class CapacityExtNewLimitRule(AbstractConstraint):
 
 class TimedelayEUPrimaryProductionRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
-        start_year = 2023  # reference start year TODO fix porperly for runing rolling horizon!
+        start_year = (
+            2023  # reference start year TODO fix porperly for runing rolling horizon!
+        )
         if stf == start_year:
             # Start year: compare with existing prior capacity
-            lhs = m.capacity_ext_euprimary[stf, location, tech] - m.cap_prim_prior[location, tech]
-            rhs = m.deltaQ_EUprimary[location, tech]
-            debug_print(
-                f"Start year constraint: STF={stf}, LHS={lhs}, RHS={rhs}"
+            lhs = (
+                m.capacity_ext_euprimary[stf, location, tech]
+                - m.cap_prim_prior[location, tech]
             )
+            rhs = m.deltaQ_EUprimary[location, tech]
+            debug_print(f"Start year constraint: STF={stf}, LHS={lhs}, RHS={rhs}")
             return lhs <= rhs
 
         else:
             # Growth-limited constraint for subsequent years
             years_since_start = stf - start_year
-            lhs = m.capacity_ext_euprimary[stf, location, tech] + m.capacity_ext_eusecondary[stf,location,tech]
-            rhs = m.deltaQ_EUprimary[location, tech] * (1 + m.IR_EU_primary[location, tech]) ** years_since_start
+            lhs = (
+                m.capacity_ext_euprimary[stf, location, tech]
+                + m.capacity_ext_eusecondary[stf, location, tech]
+            )
+            rhs = (
+                m.deltaQ_EUprimary[location, tech]
+                * (1 + m.IR_EU_primary[location, tech]) ** years_since_start
+            )
             debug_print(
                 f"Growth-limited constraint: STF={stf}, Location={location}, Tech={tech}, LHS={lhs}, RHS={rhs}"
             )
