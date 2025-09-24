@@ -86,6 +86,23 @@ class ConvertCapacity4Rule(AbstractConstraint):
             == balance_value
         )
 
+class ComputeElectricityNeeds(AbstractConstraint):
+    def apply_rule(self, m, timesteps_ext, stf, location, tech):
+        balance_needs_value = (
+            (
+            m.capacity_ext_euprimary[stf, location, tech]
+            * m.needs[tech]
+            / m.timesteps[timesteps_ext])
+            + (m.capacity_ext_eusecondary[stf, location, tech]
+            * m.needs[tech]
+            / m.timesteps[timesteps_ext])
+        )
+        # print(
+        #    f"Debug: time = {timesteps_ext}, STF = {stf}, Location = {location}, Tech = {tech}"
+        # )
+        # print(f"Total Capacity to Balance (Solar) = {balance_value}")
+        return m.demand_production[timesteps_ext, stf, location, tech] == balance_needs_value
+
 
 def apply_balance_constraints(m):
     constraints = [
@@ -94,6 +111,7 @@ def apply_balance_constraints(m):
         ConvertCapacity2Rule(),
         ConvertCapacity3Rule(),
         ConvertCapacity4Rule(),
+        ComputeElectricityNeeds()
     ]
 
     for i, constraint in enumerate(constraints):

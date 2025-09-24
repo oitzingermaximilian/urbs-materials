@@ -9,10 +9,10 @@ import numpy as np
 # Configuration
 # -------------------------------
 RESULTS_BASE_PATH = Path("result")
-SCENARIOS = {"With NZIA": "NZIA_newest", "Without NZIA": "withoutNZIA_newest"}
+SCENARIOS = {"With NZIA": "NZIA_new", "Without NZIA": "withoutNZIA_newest"}
 ROLLING_HORIZON = "rolling_2024_to_2050"
 YEARS = list(range(2024, 2041))
-SCENARIO_FILE = "costsnew.xlsx"
+SCENARIO_FILE = "scenario_high_high_high.xlsx"
 LINE_COLORS = {"With NZIA": "seagreen", "Without NZIA": "darkred"}
 
 GROUPS = {
@@ -378,8 +378,8 @@ if __name__ == "__main__":
     # save_lng_table()
     plot_lng_totals_step()
     plot_generation_mix(
-        file_path="result/withoutNZIA_newest/rolling_2024_to_2050/scenario_high_high_high.xlsx"
+        file_path="result/withoutNZIA_old/rolling_2024_to_2050/scenario_high_high_high.xlsx"
     )
     plot_generation_share_by_year_100pct(
-        file_path="result/withoutNZIA_newest/rolling_2024_to_2050/scenario_high_high_high.xlsx"
+        file_path="result/withoutNZIA_old/rolling_2024_to_2050/scenario_high_high_high.xlsx"
     )

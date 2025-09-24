@@ -151,3 +151,5 @@ def apply_variables(m):
     m.costs_O_and_M = pyomo.Var(
         m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
     )
+
+    m.demand_production = pyomo.Var(m.timesteps_ext, m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals)

@@ -149,7 +149,7 @@ class TimedelayEUPrimaryProductionRule(AbstractConstraint):
             years_since_start = stf - start_year
             lhs = (
                 m.capacity_ext_euprimary[stf, location, tech]
-                + m.capacity_ext_eusecondary[stf, location, tech]
+                #+ m.capacity_ext_eusecondary[stf, location, tech]
             )
             rhs = (
                 m.deltaQ_EUprimary[location, tech]

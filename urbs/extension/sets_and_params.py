@@ -500,3 +500,13 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         initialize=initialize_param("total_facility_cap_initial", default_value=0),
         doc="total_facility_cap_initial",
     )
+
+    embedded_energy = {
+        'solarPV': 2452,  # MWh/MW (from 12-24 months EPBT)
+        'windon': 1277,# MWh/MW (from 5-8 months EPBT)
+        'windoff': 1277,
+        'Batteries': 1500  # MWh/MW
+    }
+
+    # Pyomo Param to store embedded electricity needs
+    m.needs = pyomo.Param(m.tech, initialize=embedded_energy,doc="Embedded electricity needs in MWh per MW of capacity")
