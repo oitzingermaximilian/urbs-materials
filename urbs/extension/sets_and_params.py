@@ -350,6 +350,24 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         "LR25": create_absolute_recycling_dict(reduction_percentage_25),
     }
 
+    # Mapping from learning rate labels to the existing step dicts
+    all_relative_reductions = {
+        "LR1": reduction_percentage_1,
+        "LR3_5": reduction_percentage_3_5,
+        "LR4": reduction_percentage_4,
+        "LR5": reduction_percentage_5,
+        "LR6": reduction_percentage_6,
+        "LR7": reduction_percentage_7,
+        "LR8": reduction_percentage_8,
+        "LR9": reduction_percentage_9,
+        "LR10": reduction_percentage_10,
+        "LR25": reduction_percentage_25,
+    }
+
+    selected_relative_reductions = all_relative_reductions.get(
+        LEARNING_RATE, all_relative_reductions["LR5"]
+    )
+
     # Select the appropriate reductions based on environment variable
     selected_investment_reductions = absolute_investment_reductions.get(
         LEARNING_RATE, absolute_investment_reductions["LR5"]
@@ -370,6 +388,14 @@ def apply_sets_and_params(m, data_urbsextensionv1):
             (2024, loc, tech), 0
         ),  # Use 2024 as base year
         doc=f"Absolute investment cost reduction values for {LEARNING_RATE}",
+    )
+
+    # Define a Pyomo Param for the selected relative reductions
+    m.P_sec_relative = pyomo.Param(
+        m.nsteps_sec,  # Steps
+        initialize=lambda m, n: selected_relative_reductions.get(n, 0),
+        mutable=False,
+        doc=f"Selected relative reductions for --lr {LEARNING_RATE}"
     )
 
     # Initialize P_sec_recycling with absolute recycling cost reductions

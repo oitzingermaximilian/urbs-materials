@@ -9,7 +9,7 @@ import numpy as np
 # Configuration
 # -------------------------------
 RESULTS_BASE_PATH = Path("result")
-SCENARIOS = {"With NZIA": "NZIA_new", "Without NZIA": "withoutNZIA_newest"}
+SCENARIOS = {"With NZIA": "NZIA_withLR", "Without NZIA": "withoutNZIA_newest"}
 ROLLING_HORIZON = "rolling_2024_to_2050"
 YEARS = list(range(2024, 2041))
 SCENARIO_FILE = "scenario_high_high_high.xlsx"

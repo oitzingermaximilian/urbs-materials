@@ -247,6 +247,34 @@ class non_negativity_z_eq_sec(AbstractConstraint):
         )
         return expr
 
+class upper_bound_z_constraint_primary(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, nsteps_sec):
+        lhs_value = m.auxiliary_product_BD_q_primary[stf, location, tech, nsteps_sec]
+        rhs_value = m.gamma_sec * m.BD_sec[stf, location, tech, nsteps_sec]
+        return lhs_value <= rhs_value
+
+
+class upper_bound_z_q1_eq_primary(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, nsteps_sec):
+        lhs_value = m.auxiliary_product_BD_q_primary[stf, location, tech, nsteps_sec]
+        rhs_value = m.capacity_ext_euprimary[stf, location, tech]
+        return lhs_value <= rhs_value
+
+
+class lower_bound_z_eq_primary(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, nsteps_sec):
+        lhs_value = m.auxiliary_product_BD_q_primary[stf, location, tech, nsteps_sec]
+        rhs_value = m.capacity_ext_euprimary[stf, location, tech] - (
+            1 - m.BD_sec[stf, location, tech, nsteps_sec]
+        ) * m.gamma_sec
+        return lhs_value >= rhs_value
+
+
+class non_negativity_z_eq_primary(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, nsteps_sec):
+        lhs_value = m.auxiliary_product_BD_q_primary[stf, location, tech, nsteps_sec]
+        return lhs_value >= 0
+
 
 def apply_combined_lr_constraints(m):
     constraints_rm1 = [
@@ -262,6 +290,13 @@ def apply_combined_lr_constraints(m):
         upper_bound_z_q1_eq_sec(),
         lower_bound_z_eq_sec(),
         non_negativity_z_eq_sec(),
+    ]
+
+    primary_constraints = [
+        upper_bound_z_constraint_primary(),
+        upper_bound_z_q1_eq_primary(),
+        lower_bound_z_eq_primary(),
+        non_negativity_z_eq_primary(),
     ]
 
     # ❌ REMOVED: auxiliary_variable_calculation() - this makes the model bilinear again!
@@ -309,6 +344,17 @@ def apply_combined_lr_constraints(m):
                     m, stf, loc, tech, nsteps_sec
                 ),
             ),
+        )
+
+    for i, constraint in enumerate(primary_constraints):
+        constraint_name = f"constraint_primary_{i + 1}"
+        setattr(
+            m,
+            constraint_name,
+            pyomo.Constraint(
+                m.stf, m.location, m.tech, m.nsteps_sec,
+                rule=lambda m, stf, loc, tech, n, constraint=constraint: constraint.apply_rule(m, stf, loc, tech, n)
+            )
         )
 
     # ✅ FIXED: Replace the recycling expression to use auxiliary variable #TODO reenable pricereduction on Scrap if needed
