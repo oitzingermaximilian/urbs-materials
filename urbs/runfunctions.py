@@ -55,6 +55,10 @@ def setup_solver(optim, logfile="solver.log"):
         optim.set_options("OptimalityTol=1e-09")  # Optimality tolerance
         optim.set_options("MIPGap=0")  # Set MIP gap to 0 for exact solutions
         print("✅ Gurobi binary tolerance set to minimum (1e-09) for exact BD values")
+        # ✅ Enable IIS computation if model is infeasible
+        optim.set_options("ResultFile=infeasible.ilp")
+        optim.set_options("IISMethod=1")  # Compute IIS using method 1
+        print("✅ Gurobi binary tolerance set to minimum (1e-09) and IIS enabled")
     elif optim.name == "glpk":
         # reference with list of options
         # execute 'glpsol --help'
