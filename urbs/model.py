@@ -1106,8 +1106,12 @@ def def_specific_process_costs_rule(m, stf, sit, pro, cost_type):
 
         return m.process_costs[stf, sit, pro, cost_type] == cost_spec
 
+
     elif cost_type == "Fuel":
-        return m.process_costs[stf, sit, pro, cost_type] == sum(
+
+        # Base fuel costs (exclude Gas)
+
+        base_cost = sum(
             m.e_pro_in[(tm, st, si, pro, co)]
             * m.weight
             * m.commodity_dict["price"][st, si, co, co_type]
@@ -1116,9 +1120,16 @@ def def_specific_process_costs_rule(m, stf, sit, pro, cost_type):
             for (st, si, co, co_type) in m.com_tuples
             if st == stf
             if si == sit
-            if ((stf, sit, pro, co) in m.pro_input_tuples) and co_type == "Stock"
+            if ((stf, sit, pro, co) in m.pro_input_tuples)
+            if co_type == "Stock"
             if co != "Gas"
         )
+
+        # Add gas cost if this is the CCGT process
+
+        gas_cost_for_ccgt = m.gas_cost[stf] if pro == "Gas Plant (CCGT)" else 0
+
+        return m.process_costs[stf, sit, pro, cost_type] == base_cost + gas_cost_for_ccgt
 
     elif cost_type == "Environmental":
         return m.process_costs[stf, sit, pro, cost_type] == sum(

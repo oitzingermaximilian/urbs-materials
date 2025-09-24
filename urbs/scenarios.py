@@ -2024,7 +2024,7 @@ def scenario_high_high_high(data, data_urbsextensionv1):
 
         # ------------------ FIX ------------------
         # Set WACC = 0 for all processes and all years
-        pro["WACC"] = 0
+        pro["WACC"] = 0.071
 
         pro_2024 = pro.xs(2024, level="support_timeframe", drop_level=False)
 

@@ -73,7 +73,7 @@ def calc_discount_factor(stf, discount, stf_min):
 # -----------------------------
 # Hardcoded financial parameters
 # -----------------------------
-WACC = 0
+WACC = 0.071
 DISCOUNT = 0.03
 STF_MIN = 2024
 STF_END = 2050
