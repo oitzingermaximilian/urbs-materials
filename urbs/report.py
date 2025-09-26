@@ -42,6 +42,8 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         facilitiesdf,
         facility_cumulative_capacity_df,
         gas_usage_block,
+        pricereduction_scrap,
+        demand_production
     ) = get_constants(instance)
 
     # create spreadsheet writer object
@@ -71,6 +73,8 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
             writer, sheet_name="Facility_Cumulative_Capacity"
         )
         gas_usage_block.to_excel(writer, sheet_name="gas demand per block")
+        pricereduction_scrap.to_excel(writer, sheet_name="pricereduction_scrap")
+        demand_production.to_excel(writer, sheet_name="production_elec_demand")
 
         #################################################################################
 

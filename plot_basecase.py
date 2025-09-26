@@ -9,7 +9,7 @@ import numpy as np
 # Configuration
 # -------------------------------
 RESULTS_BASE_PATH = Path("result")
-SCENARIOS = {"With NZIA": "NZIA_withLR10", "Without NZIA": "withoutNZIA_newest"}
+SCENARIOS = {"With NZIA": "NZIA_newscrap", "Without NZIA": "without_NZIA_26"}
 ROLLING_HORIZON = "rolling_2024_to_2050"
 YEARS = list(range(2024, 2041))
 SCENARIO_FILE = "scenario_high_high_high.xlsx"
@@ -398,6 +398,107 @@ def plot_lng_deviation_from_base(base_label="Without NZIA"):
     plt.show()
     print(f"✔ LNG deviation plot saved → {out_file}")
 
+def plot_fossil_fuels_stack(
+    file_path,
+    sheet_name="extension_balance",
+    years=range(2025, 2041),
+    output_file="fossil_fuels_stack.png",
+    convert_to_twh=True,
+):
+    """
+    Plots stacked bar chart of fossil fuel generation by technology per year.
+
+    Args:
+        file_path (str or Path): Path to the Excel file.
+        sheet_name (str): Sheet containing generation data.
+        years (list): List of years to plot.
+        output_file (str or Path): Where to save the figure.
+        convert_to_twh (bool): Convert values to TWh (divide by 1e6 if values in MWh).
+    """
+    df = pd.read_excel(file_path, sheet_name=sheet_name)
+
+    # Filter only fossil processes
+    fossil_processes = GROUPS["Fossil fuels generation"]
+    df_fossil = df[df["Process"].isin(fossil_processes)]
+
+    # Aggregate values per year and process
+    data = (
+        df_fossil.groupby(["Stf", "Process"])["Value"]
+        .sum()
+        .unstack(fill_value=0)
+        .loc[years]
+    )
+
+    if convert_to_twh:
+        data = data / 1_000_000  # assuming input is MWh
+
+    # Plot stacked bar
+    ax = data.plot(
+        kind="bar",
+        stacked=True,
+        figsize=(12, 6),
+        colormap="tab20",
+    )
+
+    ax.set_ylabel("Energy produced (TWh)")
+    ax.set_xlabel("Year")
+    ax.set_title("Fossil Fuels Generation by Technology")
+    plt.tight_layout()
+
+    output_file = Path(output_file)
+    output_file.parent.mkdir(exist_ok=True, parents=True)
+    plt.savefig(output_file, dpi=300)
+    plt.show()
+    print(f"✔ Stacked bar chart saved → {output_file}")
+
+def plot_total_generation_split(
+    file_path,
+    sheet_name="extension_balance",
+    years=range(2025, 2041),
+    output_file="generation_split.png",
+    convert_to_twh=True,
+):
+    """
+    Plots a stacked area chart of total generation split into
+    fossil fuels, renewables, and nuclear.
+
+    Args:
+        file_path (str or Path): Path to the Excel file.
+        sheet_name (str): Sheet containing generation data.
+        years (list): List of years to plot.
+        output_file (str or Path): Where to save the figure.
+        convert_to_twh (bool): Convert values to TWh (divide by 1e6 if values in MWh).
+    """
+    df = pd.read_excel(file_path, sheet_name=sheet_name)
+
+    # Prepare aggregated data by group
+    results = {g: [] for g in GROUPS}
+    for year in years:
+        year_df = df[df["Stf"] == year]
+        for group, processes in GROUPS.items():
+            value = year_df[year_df["Process"].isin(processes)]["Value"].sum()
+            if convert_to_twh:
+                value /= 1_000_000  # assuming MWh input
+            results[group].append(value)
+
+    data = pd.DataFrame(results, index=years)
+
+    # Plot stacked area
+    ax = data.plot.area(
+        figsize=(12, 6),
+        colormap="Set2",
+        alpha=0.8,
+    )
+    ax.set_ylabel("Energy produced (TWh)")
+    ax.set_xlabel("Year")
+    ax.set_title("Total Generation Split by Source")
+    plt.tight_layout()
+
+    output_file = Path(output_file)
+    output_file.parent.mkdir(exist_ok=True, parents=True)
+    plt.savefig(output_file, dpi=300)
+    plt.show()
+    print(f"✔ Stacked area chart saved → {output_file}")
 # -------------------------------
 # Main
 # -------------------------------
@@ -405,10 +506,17 @@ if __name__ == "__main__":
     plot_lng_totals()
     # save_lng_table()
     plot_lng_totals_step()
-    plot_lng_deviation_from_base()
+    #plot_lng_deviation_from_base()
     plot_generation_mix(
-        file_path="result/withoutNZIA_old/rolling_2024_to_2050/scenario_high_high_high.xlsx"
+        file_path="result/without_NZIA_26/rolling_2024_to_2050/scenario_high_high_high.xlsx"
     )
     plot_generation_share_by_year_100pct(
-        file_path="result/withoutNZIA_old/rolling_2024_to_2050/scenario_high_high_high.xlsx"
+        file_path="result/without_NZIA_26/rolling_2024_to_2050/scenario_high_high_high.xlsx"
+    )
+
+    plot_total_generation_split(
+        file_path="result/without_NZIA_26/rolling_2024_to_2050/scenario_high_high_high.xlsx"
+    )
+    plot_fossil_fuels_stack(
+        file_path="result/without_NZIA_26/rolling_2024_to_2050/scenario_high_high_high.xlsx"
     )

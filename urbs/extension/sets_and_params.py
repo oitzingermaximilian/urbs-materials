@@ -536,3 +536,5 @@ def apply_sets_and_params(m, data_urbsextensionv1):
 
     # Pyomo Param to store embedded electricity needs
     m.needs = pyomo.Param(m.tech, initialize=embedded_energy,doc="Embedded electricity needs in MWh per MW of capacity")
+
+
