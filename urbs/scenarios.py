@@ -1,6 +1,7 @@
+import pandas as pd
+
 
 def scenario_min_min_min(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -160,7 +161,6 @@ def scenario_min_min_min(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_min_min_avg(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -320,7 +320,6 @@ def scenario_min_min_avg(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_min_min_high(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -480,7 +479,6 @@ def scenario_min_min_high(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_min_avg_min(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -640,7 +638,6 @@ def scenario_min_avg_min(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_min_avg_avg(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -800,7 +797,6 @@ def scenario_min_avg_avg(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_min_avg_high(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -960,7 +956,6 @@ def scenario_min_avg_high(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_min_high_min(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -1120,7 +1115,6 @@ def scenario_min_high_min(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_min_high_avg(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -1280,7 +1274,6 @@ def scenario_min_high_avg(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_min_high_high(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -1440,7 +1433,6 @@ def scenario_min_high_high(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_avg_min_min(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -1600,7 +1592,6 @@ def scenario_avg_min_min(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_avg_min_avg(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -1760,7 +1751,6 @@ def scenario_avg_min_avg(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_avg_min_high(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -1920,7 +1910,6 @@ def scenario_avg_min_high(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_avg_avg_min(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -2080,7 +2069,6 @@ def scenario_avg_avg_min(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_avg_avg_avg(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -2240,7 +2228,6 @@ def scenario_avg_avg_avg(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_avg_avg_high(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -2400,7 +2387,6 @@ def scenario_avg_avg_high(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_avg_high_min(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -2560,7 +2546,6 @@ def scenario_avg_high_min(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_avg_high_avg(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -2720,7 +2705,6 @@ def scenario_avg_high_avg(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_avg_high_high(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -2880,7 +2864,6 @@ def scenario_avg_high_high(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_high_min_min(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -3040,7 +3023,6 @@ def scenario_high_min_min(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_high_min_avg(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -3200,7 +3182,6 @@ def scenario_high_min_avg(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_high_min_high(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -3360,7 +3341,6 @@ def scenario_high_min_high(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_high_avg_min(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -3520,7 +3500,6 @@ def scenario_high_avg_min(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_high_avg_avg(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -3680,7 +3659,6 @@ def scenario_high_avg_avg(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_high_avg_high(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -3840,7 +3818,6 @@ def scenario_high_avg_high(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_high_high_min(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -4000,7 +3977,6 @@ def scenario_high_high_min(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_high_high_avg(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
@@ -4160,7 +4136,6 @@ def scenario_high_high_avg(data, data_urbsextensionv1):
     return data, data_urbsextensionv1
 
 def scenario_high_high_high(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:

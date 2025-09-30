@@ -32,7 +32,6 @@ def generate_scenario_function(solar_lvl, wind_lvl, batt_lvl):
 
     func = f"""
 def {func_name}(data, data_urbsextensionv1):
-    import pandas as pd
 
     # ---------------- CO2 prices ----------------
         if "commodity" in data:
