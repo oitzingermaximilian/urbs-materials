@@ -55,7 +55,7 @@ for lr in LR_FOLDERS:
         NZIA_SCENARIOS[(lr, scenario)] = scenario_file
 
 # Base scenario
-BASE_SCENARIO = BASE_PATH / "scenario_high_high_high.xlsx"
+BASE_SCENARIO = BASE_PATH / "LR1" / "scenario_high_high_high.xlsx"
 
 GROUPS = {
     "Fossil fuels generation": [
@@ -74,6 +74,13 @@ GROUP_COLORS = {
     "Thermal nuclear generation": "#F57C00"
 }
 
+def mwh_to_bcm(mwh):
+    """
+    Convert MWh to BCM (billion cubic meters of natural gas equivalent).
+    """
+    mmbtu = mwh * 3.412         # 1 MWh = 3.412 MMBtu
+    bcm = mmbtu / 35_315_000    # 1 BCM = 35,315,000 MMBtu
+    return bcm
 
 def plot_base_scenario(
         base_file: Path,
@@ -279,6 +286,67 @@ def plot_scrap_with_nzia_range(base_file: Path, nzia_files: list, sheet_name: st
 
         print(f"✔ Plot saved for: {tech} → scrap_range_{tech}.png")
 
+def plot_lng_spaghetti(base_file, nzia_files, years=range(2024, 2041), output_file="lng_spaghetti.png"):
+    """
+    Plot LNG demand across all NZIA scenarios as thin lines,
+    highlighting the base scenario.
+
+    Args:
+        base_file (Path): Path to the base scenario Excel file.
+        nzia_files (list[Path]): List of NZIA scenario Excel files.
+        years (range): Year range to plot.
+        output_file (str): Where to save the figure.
+    """
+
+    # Helper to load LNG demand from a file
+    def load_lng(file_path):
+        df = pd.read_excel(file_path, sheet_name="gas demand per block")
+        df["blocks"] = df["blocks"].astype(str).str.strip()
+        df["stf"] = df["stf"].ffill()
+        lng_df = df[~df["blocks"].str.lower().str.contains("pipegas")]
+        lng_df = lng_df[lng_df["stf"].between(min(years), max(years))]
+
+        yearly = lng_df.groupby("stf")["gas_usage_block"].sum().reset_index()
+        yearly["lng_bcm"] = yearly["gas_usage_block"].apply(mwh_to_bcm)
+
+        series = pd.Series(0, index=years, dtype=float)
+        for _, row in yearly.iterrows():
+            series[int(row["stf"])] = row["lng_bcm"]
+        return series
+
+    plt.figure(figsize=(8, 5))
+
+    # Plot NZIA scenarios as thin grey lines
+    for f in nzia_files:
+        series = load_lng(f)
+        plt.plot(series.index, series.values, color="grey", alpha=0.3, linewidth=1)
+
+    # Plot base scenario bold
+    base_series = load_lng(base_file)
+    plt.plot(
+        base_series.index,
+        base_series.values,
+        color="seagreen",
+        linewidth=2.5,
+        label="Base scenario"
+    )
+
+    # Labels & style
+    plt.xlabel("Year")
+    plt.ylabel("LNG Demand [BCM]")
+    plt.title("LNG Demand – NZIA scenarios vs. Base")
+    plt.xlim(min(years) - 1, max(years) + 1)
+    plt.xticks([2025, 2030, 2035, 2040])
+    plt.grid(True, linestyle="--", alpha=0.3)
+    plt.legend()
+
+    # Save
+    output_file = Path(output_file)
+    output_file.parent.mkdir(exist_ok=True, parents=True)
+    plt.savefig(output_file, dpi=300)
+    plt.show()
+    print(f"✔ LNG spaghetti plot saved → {output_file}")
+
 
 
 nzia_files = list(NZIA_SCENARIOS.values())
@@ -287,4 +355,11 @@ plot_base_scenario(base_file=BASE_SCENARIO)
 plot_scrap_with_nzia_range(
     base_file=BASE_SCENARIO,
     nzia_files=nzia_files
+)
+
+plot_lng_spaghetti(
+    base_file=BASE_FILE,
+    nzia_files=list(NZIA_SCENARIOS.values()),
+    years=range(2024, 2041),
+    output_file="scenario_comparison/lng_spaghetti.png"
 )
