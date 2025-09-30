@@ -87,18 +87,16 @@ class ConvertCapacity4Rule(AbstractConstraint):
         )
 
 class ComputeElectricityNeedsTotal(AbstractConstraint):
-    def apply_rule(self, m, timesteps_ext, stf, location, tech):
-        # Total capacity (primary + secondary), scaled by relative reductions
-        total_demand = sum(
-            (m.auxiliary_product_BD_q_primary[stf, location, tech, n] +
-             m.auxiliary_product_BD_q[stf, location, tech, n])  # secondary
-            * m.P_sec_relative[n]  # relative reduction
-            * m.needs[tech]
-            / m.timesteps[timesteps_ext]
-            for n in m.nsteps_sec
+    def apply_rule(self, m, t, stf, location, tech):
+        annual_demand = (
+                sum(m.auxiliary_product_BD_q_primary[stf, location, tech, n] * m.needs[tech] * m.P_sec_relative[n]
+                    for n in m.nsteps_sec)
+                +
+                sum(m.auxiliary_product_BD_q[stf, location, tech, n] * m.needs[tech] * m.P_sec_relative[n]
+                    for n in m.nsteps_sec)
         )
-        return m.demand_production[timesteps_ext, stf, location, tech] == total_demand
 
+        return m.demand_production[t, stf, location, tech] == annual_demand / 12  # or use num_timesteps
 
 
 def apply_balance_constraints(m):

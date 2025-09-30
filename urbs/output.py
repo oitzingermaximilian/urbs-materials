@@ -55,7 +55,9 @@ def get_constants(instance):
     # print(pricereduction_sec)
     pricereduction_scrap = get_entity(instance, "pricereduction_sec_recycling")
     demand_production = get_entity(instance, "demand_production")
+    P_sec_relative = get_entity(instance, "P_sec_relative")
     capacityprimary = get_entity(instance, "capacity_ext_euprimary")
+    auxiliary_product_BD_q_primary = get_entity(instance, "auxiliary_product_BD_q_primary")
     # print(capacityprimary)
     # Print the values of BD
     # print("Decision variable values for BD:")
@@ -345,7 +347,9 @@ def get_constants(instance):
         facility_cumulative_capacity_df,
         gas_usage_block,
         pricereduction_scrap,
-        demand_production
+        demand_production,
+        P_sec_relative,
+        auxiliary_product_BD_q_primary
     )
 
 
