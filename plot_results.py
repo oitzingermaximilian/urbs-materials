@@ -471,6 +471,70 @@ def plot_lng_spaghetti(base_file, nzia_files, years=range(2024, 2041), output_fi
     print(f"✔ LNG spaghetti plot saved → {output_file}")
 
 
+def plot_lng_cumulative_pct_deviation_pretty(base_file, nzia_files, years=range(2024, 2041),
+                                             target_years=[2025, 2030, 2035, 2040],
+                                             output_file="lng_cumulative_pct_boxplot_pretty.png"):
+    """
+    Beautiful boxplots of cumulative LNG percentage deviations from base,
+    with scatter points for individual scenarios.
+    """
+
+    # --- Load base cumulative ---
+    base_series = load_lng(base_file, years).cumsum()
+
+    # --- Load NZIA cumulative ---
+    nzia_series = [load_lng(f, years).cumsum() for f in nzia_files]
+
+    # --- Build DataFrame ---
+    data = pd.DataFrame({i: s for i, s in enumerate(nzia_series)}).T
+
+    # --- Percentage deviations ---
+    pct_dev = pd.DataFrame({
+        y: 100 * (data[y] - base_series[y]) / base_series[y] for y in target_years
+    })
+
+    # --- Plot ---
+    plt.figure(figsize=(8, 5))
+
+    # Boxplots with soft colors
+    box_data = [pct_dev[y].dropna() for y in target_years]
+    bp = plt.boxplot(
+        box_data,
+        positions=target_years,
+        widths=1.0,
+        patch_artist=True,
+        boxprops=dict(facecolor="lightsteelblue", alpha=0.6, linewidth=1.2),
+        medianprops=dict(color="darkblue", linewidth=2),
+        whiskerprops=dict(color="grey", linestyle="--", linewidth=1.2),
+        capprops=dict(color="grey", linewidth=1.2),
+        flierprops=dict(marker="o", markersize=4, markerfacecolor="lightgrey", alpha=0.5)
+    )
+
+    # Scatter points for each scenario (jittered)
+    for year in target_years:
+        y_vals = pct_dev[year].dropna().values
+        x_vals = [year + 0.08*(np.random.rand() - 0.5) for _ in y_vals]  # jitter
+        plt.scatter(x_vals, y_vals, color="grey", alpha=0.6, s=30, zorder=3)
+
+    # Base scenario reference line
+    plt.axhline(0, color="seagreen", linewidth=2.5, linestyle="-", label="Base scenario")
+
+    # --- Style ---
+    plt.title("Cumulative LNG Demand – Percentage Deviation from Base", fontsize=14, weight="bold")
+    plt.xlabel("Year", fontsize=12)
+    plt.ylabel("Deviation from Base [%]", fontsize=12)
+    plt.xticks(target_years, fontsize=11)
+    plt.yticks(fontsize=11)
+    plt.grid(axis="y", linestyle="--", alpha=0.4)
+    plt.legend(frameon=False, fontsize=11)
+
+    plt.tight_layout()
+    output_file = Path(output_file)
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(output_file, dpi=300)
+    plt.show()
+    print(f"✔ Pretty cumulative LNG % deviation boxplot saved → {output_file}")
+
 def plot_lng_boxplot(base_file, nzia_files, target_years=[2025, 2030, 2035, 2040],
                      output_file="plot/lng_boxplot.png", deviations=False):
     """
@@ -848,7 +912,7 @@ BASE_FILE = BASE_SCENARIO
 #    output_file="figures/system_costs_cumulative_boxplot.png"
 #)
 
-plot_lng_boxplot_with_base_and_scatter(
+plot_lng_cumulative_pct_deviation_pretty(
     base_file=BASE_FILE,
     nzia_files=nzia_files,
     output_file="figures/lng_boxplots_cumulative.png"
