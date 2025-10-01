@@ -527,6 +527,75 @@ def plot_lng_boxplot(base_file, nzia_files, target_years=[2025, 2030, 2035, 2040
     plt.show()
     print(f"✔ LNG boxplot saved → {output_file}")
 
+def plot_lng_cumulative_boxplot(base_file, nzia_files, years=range(2024, 2041),
+                                target_years=[2025, 2030, 2035, 2040],
+                                output_file="lng_cumulative_boxplot.png"):
+    """
+    Plot boxplots of cumulative LNG demand deviations from the base scenario
+    for selected target years.
+
+    Args:
+        base_file (Path): Path to the base scenario Excel file.
+        nzia_files (list[Path]): List of NZIA scenario Excel files.
+        years (range): Full year range for cumulative calculation.
+        target_years (list[int]): Years for which to show cumulative demand.
+        output_file (str): File path to save the plot.
+    """
+
+    # --- Helper to load LNG demand as series ---
+    def load_lng(file_path, years):
+        df = pd.read_excel(file_path, sheet_name="gas demand per block")
+        df["blocks"] = df["blocks"].astype(str).str.strip()
+        df["stf"] = df["stf"].ffill()
+        lng_df = df[~df["blocks"].str.lower().str.contains("pipegas")]
+        lng_df = lng_df[lng_df["stf"].between(min(years), max(years))]
+
+        yearly = lng_df.groupby("stf")["gas_usage_block"].sum().reset_index()
+        yearly["lng_bcm"] = yearly["gas_usage_block"].apply(mwh_to_bcm)
+
+        series = pd.Series(0, index=years, dtype=float)
+        for _, row in yearly.iterrows():
+            series[int(row["stf"])] = row["lng_bcm"]
+        return series
+
+    # --- Load base ---
+    base_series = load_lng(base_file, years).cumsum()
+
+    # --- Load all NZIA scenarios ---
+    nzia_series = [load_lng(f, years).cumsum() for f in nzia_files]
+
+    # --- Build dataframe (scenarios as rows, target years as columns) ---
+    data = pd.DataFrame(
+        {i: s for i, s in enumerate(nzia_series)}
+    ).T[target_years]
+
+    # --- Convert to deviations from base ---
+    deviations = pd.DataFrame({
+        y: data[y] - base_series[y] for y in target_years
+    })
+
+    # --- Base values (always 0 deviation) ---
+    base_vals = [0 for _ in target_years]
+
+    # --- Plot ---
+    plt.figure(figsize=(7, 5))
+    deviations.boxplot(column=target_years)
+    plt.plot(range(1, len(target_years)+1), base_vals, "o-", color="seagreen",
+             label="Base scenario", linewidth=2, markersize=6)
+
+    plt.title("Cumulative LNG Demand – Deviation from Base Scenario")
+    plt.ylabel("Deviation from Base [BCM]")
+    plt.xticks(range(1, len(target_years)+1), target_years)
+    plt.grid(axis="y", linestyle="--", alpha=0.3)
+    plt.legend()
+
+    # Save
+    output_file = Path(output_file)
+    output_file.parent.mkdir(exist_ok=True, parents=True)
+    plt.savefig(output_file, dpi=300)
+    plt.show()
+    print(f"✔ Cumulative LNG boxplot saved → {output_file}")
+
 
 def plot_system_costs_boxplot(base_file, nzia_files, years=range(2024, 2041), output_file="system_costs_boxplot.png"):
     """
@@ -706,8 +775,8 @@ BASE_FILE = BASE_SCENARIO
 #    output_file="figures/system_costs_cumulative_boxplot.png"
 #)
 
-plot_lng_boxplot(
+plot_lng_cumulative_boxplot(
     base_file=BASE_FILE,
     nzia_files=nzia_files,
-    output_file="figures/lng_boxplots.png"
+    output_file="figures/lng_boxplots_cumulative.png"
 )
