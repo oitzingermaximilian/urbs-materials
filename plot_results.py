@@ -592,7 +592,7 @@ def plot_lng_cumulative_pct_deviation_comparison(base_file, nzia_files, years=ra
     output_file = Path(output_file)
     output_file.parent.mkdir(parents=True, exist_ok=True)
     plt.savefig(output_file, dpi=300)
-    plt.show()
+    plt.close()
     print(f"✔ Scatter+median comparison plot saved → {output_file}")
 
 
