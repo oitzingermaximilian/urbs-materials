@@ -120,12 +120,12 @@ class CapacityExtNewLimitRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
         cap_val = m.capacity_ext_new[stf, location, tech]
         if stf == 2024:
-            ext_val = m.Q_ext_new[stf, location, tech]  # * 10#3
+            ext_val = m.Q_ext_new[stf, location, tech] * 1.5  # * 10#3
             return cap_val <= ext_val
         else:
             ext_val = m.Q_ext_new[
                 stf, location, tech
-            ]  # + m.capacity_dec[stf-1,location,tech]  # * 10#3
+            ] * 1.5 # + m.capacity_dec[stf-1,location,tech]  # * 10#3
             return cap_val <= ext_val
 
 

@@ -4,12 +4,17 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import DBSCAN
+import plotly.graph_objects as go
+import matplotlib.patches as mpatches
 
 # -------------------------------
 # Configuration
 # -------------------------------
 BASE_PATH = Path("C:/Users/maxoi/OneDrive/Desktop/results_crm_paper/base")
 NZIA_PATH = Path("C:/Users/maxoi/OneDrive/Desktop/results_crm_paper/NZIA")
+LNG_LOWEST_PATH = Path("C:/Users/maxoi/OneDrive/Desktop/results_crm_paper/lng_lowest")
 
 LR_FOLDERS = ["LR1", "LR3_5", "LR4", "LR5", "LR6", "LR7", "LR8", "LR9", "LR10"]
 
@@ -61,6 +66,9 @@ def get_base_scenario():
     """Get base scenario path"""
     return BASE_PATH / "LR1" / "scenario_high_high_high.xlsx"
 
+def get_lng_best_case_scenario():
+    """Get LNG best-case scenario path"""
+    return LNG_LOWEST_PATH / "scenario_min_min_min.xlsx"
 
 def mwh_to_bcm(mwh):
     """Convert MWh to BCM (billion cubic meters of natural gas equivalent)"""
@@ -123,7 +131,46 @@ def load_system_costs(file_path, sheet_name="extension_cost", years=range(2024, 
     df_done = df.groupby("stf")["Total_Cost"].sum()
     return df_done
 
+def identify_capacity_clusters(df, eps=0.7, min_samples=4):
+    """
+    Identify DBSCAN clusters in a given DataFrame (single tech).
+    Groups by year and clusters using Manufacturing + Remanufacturing.
+    Returns summary and full DataFrame with cluster_id.
+    """
+    cluster_summary = []
+    clustered_dfs = []
 
+    for year, df_group in df.groupby("year"):
+        if len(df_group) < min_samples:
+            cluster_summary.append({
+                "year": year,
+                "num_clusters": 0,
+                "num_points": len(df_group),
+                "note": "too few points"
+            })
+            continue
+
+        X = df_group[["Remanufacturing", "Manufacturing"]].values
+        X_scaled = StandardScaler().fit_transform(X)
+
+        db = DBSCAN(eps=eps, min_samples=min_samples)
+        labels = db.fit_predict(X_scaled)
+
+        df_group = df_group.copy()
+        df_group["cluster_id"] = labels
+        clustered_dfs.append(df_group)
+
+        n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
+        cluster_summary.append({
+            "year": year,
+            "num_clusters": n_clusters,
+            "num_points": len(df_group),
+            "noise_points": np.sum(labels == -1)
+        })
+
+    df_summary = pd.DataFrame(cluster_summary)
+    df_with_clusters = pd.concat(clustered_dfs, ignore_index=True) if clustered_dfs else pd.DataFrame()
+    return df_summary, df_with_clusters
 # -------------------------------
 # Plotting Functions
 # -------------------------------
@@ -303,14 +350,16 @@ def plot_scrap_comparison(base_file=None, nzia_scenarios_dict=None, output_dir="
         print(f"✔ Saved: {fname}")
 
 
-def plot_lng_analysis(base_file=None, nzia_scenarios_dict=None, output_dir="plots/lng_analysis"):
+def plot_lng_analysis(base_file=None, nzia_scenarios_dict=None, lng_file = None, output_dir="plots/lng_analysis"):
     """Comprehensive LNG analysis with multiple plot types"""
     if base_file is None:
         base_file = get_base_scenario()
     if nzia_scenarios_dict is None:
         nzia_scenarios_dict = build_scenario_dict()
+    if lng_file is None:
+        lng_file = get_lng_best_case_scenario()
 
-    years = range(2024, 2041)
+    years = range(2025, 2041)
     target_years = [2025, 2030, 2035, 2040]
     out_path = Path(output_dir)
     out_path.mkdir(parents=True, exist_ok=True)
@@ -324,12 +373,14 @@ def plot_lng_analysis(base_file=None, nzia_scenarios_dict=None, output_dir="plot
         plt.plot(series.index, series.values, color="grey", alpha=0.3, linewidth=1)
 
     base_series = load_lng(base_file, years)
+    best_case_series = load_lng(lng_file, years)
+    plt.plot(best_case_series.index, best_case_series.values, color="red",linewidth=2.5, label="Best Case scenario")
     plt.plot(base_series.index, base_series.values, color="lightsteelblue",
              linewidth=2.5, label="Base scenario")
 
     plt.xlabel("Year")
     plt.ylabel("LNG Demand [BCM]")
-    plt.title("LNG Demand – NZIA scenarios vs. Base")
+    plt.title("LNG Demand – NZIA scenarios")
     plt.xlim(min(years) - 1, max(years) + 1)
     plt.xticks([2025, 2030, 2035, 2040])
     plt.grid(True, linestyle="--", alpha=0.3)
@@ -366,8 +417,8 @@ def plot_lng_analysis(base_file=None, nzia_scenarios_dict=None, output_dir="plot
     #     x_vals = positions[i] + 0.08 * (np.random.rand() - 0.5)
     #     plt.scatter(x_vals, y_vals, color="grey", alpha=0.6, s=30, zorder=3)
 
-    plt.axhline(0, color="lightsteelblue", linewidth=2.5, linestyle="-", label="Base scenario")
-    plt.title("Cumulative LNG Demand – Percentage Deviation from Base", fontsize=14, weight="bold")
+    #plt.axhline(0, color="lightsteelblue", linewidth=2.5, linestyle="-", label="Base scenario")
+    plt.title("Cumulative LNG Demand – Compared to current Policies", fontsize=14, weight="bold")
     plt.xlabel("Year", fontsize=12)
     plt.ylabel("Deviation from Base [%]", fontsize=12)
     plt.xticks(positions, target_years, fontsize=11)
@@ -552,28 +603,42 @@ def plot_nzia_boxplots(
         plot_grouped_boxplot(df_cum, "Cumulative Capacity Additions", f"{tech_name}_cumulative_boxplot.png")
 
 
+
 def plot_cumulative_capacity_scatter(
     tech_list,
     nzia_scenarios_dict,
     target_years=[2025, 2030, 2035, 2040],
     output_dir="plots/cumulative_scatter",
-    save_csv=True
+    save_csv=True,
+    perform_clustering=True,
+    eps=0.7,
+    min_samples=4
 ):
     """
     Scatter plot of cumulative capacities:
     - X-axis: Remanufacturing
     - Y-axis: Manufacturing
     - Different colors for each target year
-    - Optionally export plotted data to CSV
+    - Optional tracer lines connecting the same scenario over time
+    - Optional DBSCAN clustering (used only for benchmarking, not plotted)
     """
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    year_colors = {2025: "#FF8C42", 2030: "#4CB5AE", 2035: "#FF6B6B", 2040: "#FFD166"}
+    # RGB color palette for years
+    year_colors = {
+        2025: (223 / 255, 221 / 255, 25 / 255),
+        2030: (239 / 255, 119 / 255, 72 / 255),
+        2035: (231 / 255, 35 / 255, 133 / 255),
+        2040: (91 / 255, 47 / 255, 104 / 255),
+    }
 
     for tech_name in tech_list:
         all_data = []
 
+        # -----------------------------
+        # Load and process NZIA files
+        # -----------------------------
         for (lr, scenario_name), file_path in nzia_scenarios_dict.items():
             if not file_path.exists():
                 continue
@@ -597,6 +662,7 @@ def plot_cumulative_capacity_scatter(
             df_tech["cum_eusecondary"] = df_tech["capacity_ext_eusecondary"].cumsum()
             df_tech["cum_stockout"] = df_tech["capacity_ext_stockout"].cumsum()
             df_tech["cum_euprimary"] = df_tech["capacity_ext_euprimary"].cumsum()
+            df_tech["cum_newly_added_capacity"] = df_tech["newly_added_capacity"].cumsum()
 
             for year in target_years:
                 row = df_tech[df_tech["stf"] == year]
@@ -607,7 +673,8 @@ def plot_cumulative_capacity_scatter(
                     "scenario": scenario_name,
                     "Remanufacturing": row["cum_eusecondary"].sum() / 1e3,
                     "Manufacturing": row["cum_euprimary"].sum() / 1e3,
-                    "Stockpile": row["cum_stockout"].sum() / 1e3
+                    "Stockpile": row["cum_stockout"].sum() / 1e3,
+                    "Totals (incl. Imports)": row["cum_newly_added_capacity"].sum() / 1e3
                 })
 
         if not all_data:
@@ -616,12 +683,26 @@ def plot_cumulative_capacity_scatter(
 
         df_all = pd.DataFrame(all_data)
 
-        # ===== Scatter plot =====
-        plt.figure(figsize=(8,6))
+        # -----------------------------
+        # Save CSV if requested
+        # -----------------------------
+        if save_csv:
+            csv_path = Path(output_dir) / f"cumulative_data_{tech_name}.csv"
+            df_all.to_csv(csv_path, index=False)
+            print(f"✔ Data exported for {tech_name}: {csv_path}")
+
+        # -----------------------------
+        # Simple scatter (points only)
+        # -----------------------------
+        plt.figure(figsize=(8, 6))
         for year in target_years:
             subset = df_all[df_all["year"] == year]
-            plt.scatter(subset["Remanufacturing"], subset["Manufacturing"],
-                        color=year_colors[year], label=str(year), alpha=0.7, s=50)
+            plt.scatter(
+                subset["Remanufacturing"], subset["Manufacturing"],
+                color=year_colors[year],
+                s=50,
+                label=str(year)
+            )
 
         plt.xlabel("Remanufacturing Capacity (GW)")
         plt.ylabel("Manufacturing Capacity (GW)")
@@ -629,17 +710,393 @@ def plot_cumulative_capacity_scatter(
         plt.grid(True, linestyle="--", alpha=0.3)
         plt.legend(title="Year", frameon=True, edgecolor='black')
         plt.tight_layout()
-
-        fig_path = Path(output_dir) / f"cumulative_scatter_{tech_name}.png"
+        fig_path = Path(output_dir) / f"cumulative_scatter_points_{tech_name}.png"
         plt.savefig(fig_path, dpi=300)
         plt.show()
-        print(f"✔ Scatter plot saved for {tech_name}: {fig_path}")
+        print(f"✔ Simple scatter plot saved for {tech_name}: {fig_path}")
 
-        # ===== Export plotted data to CSV =====
-        if save_csv:
-            csv_path = Path(output_dir) / f"cumulative_data_{tech_name}.csv"
-            df_all.to_csv(csv_path, index=False)
-            print(f"✔ Data exported for {tech_name}: {csv_path}")
+        # -----------------------------
+        # Scatter with tracers (lines connecting scenarios)
+        # -----------------------------
+        plt.figure(figsize=(8, 6))
+        for (lr, scenario_name), group_df in df_all.groupby(['learning_rate', 'scenario']):
+            group_df = group_df.sort_values('year')
+            plt.plot(
+                group_df['Remanufacturing'], group_df['Manufacturing'],
+                color='gray', alpha=0.3, linestyle='--', zorder=1
+            )
+            for year in target_years:
+                point = group_df[group_df['year'] == year]
+                if not point.empty:
+                    plt.scatter(
+                        point['Remanufacturing'], point['Manufacturing'],
+                        color=year_colors[year],
+                        s=50,
+                        label=str(year) if f"{year}" not in plt.gca().get_legend_handles_labels()[1] else None,
+                        zorder=2
+                    )
+
+        plt.xlabel("Remanufacturing Capacity (GW)")
+        plt.ylabel("Manufacturing Capacity (GW)")
+        plt.title(f"Cumulative Capacity with Tracers for {tech_name}")
+        plt.grid(True, linestyle="--", alpha=0.3)
+        plt.legend(title="Year", frameon=True, edgecolor='black')
+        plt.tight_layout()
+        fig_path = Path(output_dir) / f"cumulative_scatter_tracer_{tech_name}.png"
+        plt.savefig(fig_path, dpi=300)
+        plt.show()
+        print(f"✔ Scatter + tracer plot saved for {tech_name}: {fig_path}")
+
+        # -----------------------------
+        # Run clustering if requested (used for benchmarking only)
+        # -----------------------------
+        if perform_clustering:
+            df_summary, df_with_clusters = identify_capacity_clusters(
+                df_all, eps=eps, min_samples=min_samples
+            )
+            cluster_dir = output_dir / "clusters"
+            cluster_dir.mkdir(exist_ok=True)
+            df_summary.to_csv(cluster_dir / f"cluster_summary_{tech_name}.csv", index=False)
+            df_with_clusters.to_csv(cluster_dir / f"clustered_data_{tech_name}.csv", index=False)
+            print(f"✅ Clustering done for {tech_name}. Results saved in {cluster_dir}")
+
+            # Plot clustered benchmark & flows
+            plot_clustered_benchmark_from_df(df_with_clusters, output_dir="plots/clustered_benchmark")
+            #plot_all_cluster_flows(df_with_clusters)
+
+
+
+
+def plot_clustered_benchmark_from_df(df_with_clusters, output_dir):
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    components = ["Remanufacturing", "Stockpile", "Manufacturing"]
+    labels = ["Remanufacturing", "Stock", "Manufacturing"]
+    colors = ["#FDC5B5", "#F99B7D", "#F76C5E"]
+    hatches = ["..", "//", "xx"]
+
+    for tech in df_with_clusters["tech"].unique():
+        df_tech = df_with_clusters[df_with_clusters["tech"] == tech].copy()
+        years = sorted(df_tech["year"].unique())
+        x_base = np.arange(len(years))
+
+        # --- Determine global max cluster count ---
+        max_clusters = max(df_tech.groupby("year")["cluster_id"].nunique())
+
+        total_width = 0.8     # width of the full "year group"
+        gap = 0.02            # small visible gap between bars
+        width = (total_width - (max_clusters - 1) * gap) / max_clusters
+
+        # =====================================================
+        # RELATIVE PLOT
+        # =====================================================
+        fig_rel, ax_rel = plt.subplots(figsize=(11, 6))
+
+        for i, year in enumerate(years):
+            df_year = df_tech[df_tech["year"] == year]
+            clusters_this_year = sorted(df_year["cluster_id"].unique())
+            n_clusters = len(clusters_this_year)
+
+            # Compute leftmost offset so group is centered
+            group_width = n_clusters * width + (n_clusters - 1) * gap
+            start_offset = -group_width / 2 + width / 2
+
+            for j, cluster in enumerate(clusters_this_year):
+                df_cluster = df_year[df_year["cluster_id"] == cluster]
+                row = df_cluster[
+                    ["Remanufacturing", "Stockpile", "Manufacturing", "Totals (incl. Imports)"]
+                ].mean()
+
+                x_pos = x_base[i] + start_offset + j * (width + gap)
+                bottom = 0
+                total = row["Totals (incl. Imports)"] if row["Totals (incl. Imports)"] > 0 else 1
+
+                for comp, color, hatch in zip(components, colors, hatches):
+                    frac = row[comp] / total
+                    ax_rel.bar(
+                        x_pos,
+                        frac,
+                        width=width,
+                        bottom=bottom,
+                        facecolor=color,
+                        edgecolor="black",
+                        linewidth=0.8,
+                        hatch=hatch,
+                    )
+                    bottom += frac
+
+                ax_rel.text(x_pos, bottom + 0.02, f"C{int(cluster)}", ha="center", fontsize=8)
+
+        # Benchmark line
+        ax_rel.axhline(0.4, color="red", linestyle="--", alpha=0.7, linewidth=2)
+
+        ax_rel.set_xticks(x_base)
+        ax_rel.set_xticklabels(years)
+        ax_rel.set_ylim(0, 1)
+        ax_rel.yaxis.set_major_formatter(plt.FuncFormatter(lambda y, _: f"{int(y * 100)}%"))
+        ax_rel.set_title(f"Clustered Local Sourcing % - {tech}", pad=15)
+        ax_rel.set_xlabel("Year")
+        ax_rel.set_ylabel("% of Total Capacity Additions")
+        ax_rel.grid(axis="y", alpha=0.3)
+
+        legend_patches = [
+            mpatches.Patch(facecolor=fc, edgecolor="black", hatch=h, label=lab)
+            for fc, h, lab in zip(colors, hatches, labels)
+        ]
+        nzia_line = plt.Line2D([0], [0], color="red", linestyle="--", linewidth=2, label="NZIA Benchmark")
+        ax_rel.legend(handles=legend_patches + [nzia_line], frameon=True, loc="upper right")
+
+        fig_rel.tight_layout()
+        fig_rel.savefig(output_dir / f"{tech}_clustered_relative.png", dpi=300)
+        plt.close(fig_rel)
+
+        # =====================================================
+        # ABSOLUTE PLOT
+        # =====================================================
+        fig_abs, ax_abs = plt.subplots(figsize=(11, 6))
+
+        for i, year in enumerate(years):
+            df_year = df_tech[df_tech["year"] == year]
+            clusters_this_year = sorted(df_year["cluster_id"].unique())
+            n_clusters = len(clusters_this_year)
+
+            group_width = n_clusters * width + (n_clusters - 1) * gap
+            start_offset = -group_width / 2 + width / 2
+
+            for j, cluster in enumerate(clusters_this_year):
+                df_cluster = df_year[df_year["cluster_id"] == cluster]
+                row = df_cluster[
+                    ["Remanufacturing", "Stockpile", "Manufacturing", "Totals (incl. Imports)"]
+                ].mean()
+
+                x_pos = x_base[i] + start_offset + j * (width + gap)
+                bottom = 0
+                for comp, color, hatch in zip(components, colors, hatches):
+                    val = row[comp]
+                    ax_abs.bar(
+                        x_pos,
+                        val,
+                        width=width,
+                        bottom=bottom,
+                        facecolor=color,
+                        edgecolor="black",
+                        linewidth=0.8,
+                        hatch=hatch,
+                    )
+                    bottom += val
+
+                ax_abs.text(x_pos, bottom + 0.5, f"C{int(cluster)}", ha="center", fontsize=8)
+
+        ax_abs.set_xticks(x_base)
+        ax_abs.set_xticklabels(years)
+        ax_abs.set_ylabel("Capacity (GW)")
+        ax_abs.set_xlabel("Year")
+        ax_abs.set_title(f"Clustered Absolute Capacity - {tech}", pad=15)
+        ax_abs.grid(axis="y", alpha=0.3)
+
+        legend_patches_abs = [
+            mpatches.Patch(facecolor=fc, edgecolor="black", hatch=h, label=lab)
+            for fc, h, lab in zip(colors, hatches, labels)
+        ]
+        ax_abs.legend(handles=legend_patches_abs, frameon=True, loc="upper right")
+
+        fig_abs.tight_layout()
+        fig_abs.savefig(output_dir / f"{tech}_clustered_absolute.png", dpi=300)
+        plt.close(fig_abs)
+
+        print(f"✔ Clustered bar plots saved for {tech}")
+
+        # =====================================================
+        # SCATTER OVERLAY WITH CLUSTER LABELS
+        # =====================================================
+        fig_scatter, ax_scat = plt.subplots(figsize=(8, 6))
+        year_colors = {
+            2025: (223 / 255, 221 / 255, 25 / 255),
+            2030: (239 / 255, 119 / 255, 72 / 255),
+            2035: (231 / 255, 35 / 255, 133 / 255),
+            2040: (91 / 255, 47 / 255, 104 / 255),
+        }
+
+        for year, subset in df_tech.groupby("year"):
+            ax_scat.scatter(
+                subset["Remanufacturing"],
+                subset["Manufacturing"],
+                color=year_colors.get(year, "gray"),
+                alpha=0.4,
+                label=str(year),
+            )
+
+        centroids = (
+            df_tech.groupby(["year", "cluster_id"])[["Remanufacturing", "Manufacturing"]]
+            .mean()
+            .reset_index()
+        )
+
+        # Adaptive circle radius based on data scale
+        x_range = df_tech["Remanufacturing"].max() - df_tech["Remanufacturing"].min()
+        y_range = df_tech["Manufacturing"].max() - df_tech["Manufacturing"].min()
+        radius = 0.05 * max(x_range, y_range)  # 5% of max axis span
+
+        for _, row in centroids.iterrows():
+            circle = plt.Circle(
+                (row["Remanufacturing"], row["Manufacturing"]),
+                radius=radius,
+                edgecolor="black",
+                facecolor="none",
+                lw=1.5,
+                alpha=0.8,
+            )
+            ax_scat.add_patch(circle)
+            ax_scat.text(
+                row["Remanufacturing"],
+                row["Manufacturing"],
+                f"C{int(row['cluster_id'])}",
+                ha="center",
+                va="center",
+                fontsize=9,
+                fontweight="bold",
+                color="black",
+            )
+
+        ax_scat.set_xlabel("Remanufacturing Capacity (GW)")
+        ax_scat.set_ylabel("Manufacturing Capacity (GW)")
+        ax_scat.set_title(f"Cluster Overview on Scatter - {tech}")
+        ax_scat.grid(True, linestyle="--", alpha=0.3)
+        ax_scat.legend(title="Year", frameon=True)
+        fig_scatter.tight_layout()
+        fig_scatter.savefig(output_dir / f"{tech}_scatter_cluster_overlay.png", dpi=300)
+        plt.close(fig_scatter)
+
+        print(f"✔ Scatter with cluster overlays saved for {tech}")
+
+
+def plot_cluster_flow(df_with_clusters, tech, output_dir="plots/cluster_flows"):
+    """
+    Create a Sankey-style cluster flow diagram across years.
+    - Cluster nodes: white boxes with black outlines and names.
+    - Flows: colored based on first-year cluster assignment.
+    - Cluster names are dynamic per year based on Remanufacturing capacity.
+    - Colors remain consistent across all years from original (first-year) clusters.
+    """
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    df_tech = df_with_clusters[df_with_clusters["tech"] == tech].copy()
+    df_tech["combo"] = df_tech["learning_rate"].astype(str) + "_" + df_tech["scenario"].astype(str)
+    years = sorted(df_tech["year"].unique())
+
+    # --------------------------------------------------
+    # Fixed color mapping from first-year clusters
+    # --------------------------------------------------
+    first_year = years[0]
+    first_clusters = (
+        df_tech[df_tech["year"] == first_year]
+        .groupby("cluster_id")["Remanufacturing"]
+        .mean()
+        .sort_values(ascending=False)
+    )
+    cluster_order = list(first_clusters.index)
+    base_colors = ["#636EFA", "#EF553B", "#00CC96", "#AB63FA",
+                   "#FFA15A", "#19D3F3", "#FF6692", "#B6E880"]
+    cluster_colors = {cid: base_colors[i % len(base_colors)] for i, cid in enumerate(cluster_order)}
+
+    # --------------------------------------------------
+    # Assign color based on *first-year* cluster of each combo
+    # --------------------------------------------------
+    combo_to_first_cluster = (
+        df_tech[df_tech["year"] == first_year][["combo", "cluster_id"]]
+        .set_index("combo")["cluster_id"]
+        .to_dict()
+    )
+
+    df_tech["origin_cluster"] = df_tech["combo"].map(combo_to_first_cluster)
+    df_tech["origin_color"] = df_tech["origin_cluster"].map(cluster_colors)
+
+    # --------------------------------------------------
+    # Dynamic cluster names per year based on Remanufacturing
+    # --------------------------------------------------
+    year_cluster_names = {}
+    for year in years:
+        clusters_sorted = (
+            df_tech[df_tech["year"] == year]
+            .groupby("cluster_id")["Remanufacturing"]
+            .mean()
+            .sort_values(ascending=False)
+        )
+        year_cluster_names[year] = {cid: f"Cluster {i+1}" for i, cid in enumerate(clusters_sorted.index)}
+
+    # --------------------------------------------------
+    # Build flow data (color stays from origin)
+    # --------------------------------------------------
+    flows = []
+    for i in range(len(years) - 1):
+        year_from = years[i]
+        year_to = years[i + 1]
+        df_from = df_tech[df_tech["year"] == year_from][["combo", "cluster_id", "origin_color"]]
+        df_to = df_tech[df_tech["year"] == year_to][["combo", "cluster_id"]]
+
+        merged = df_from.merge(df_to, on="combo", suffixes=("_from", "_to"))
+        grouped = merged.groupby(["cluster_id_from", "cluster_id_to", "origin_color"]).size().reset_index(name="count")
+
+        for _, row in grouped.iterrows():
+            flows.append({
+                "source": f"{year_cluster_names[year_from][row['cluster_id_from']]}_{year_from}",
+                "target": f"{year_cluster_names[year_to][row['cluster_id_to']]}_{year_to}",
+                "value": row["count"],
+                "color": row["origin_color"]
+            })
+
+    # --------------------------------------------------
+    # Build nodes (white boxes)
+    # --------------------------------------------------
+    nodes = []
+    node_set = set()
+    for f in flows:
+        for n in [f["source"], f["target"]]:
+            if n not in node_set:
+                nodes.append(n)
+                node_set.add(n)
+    node_indices = {n: i for i, n in enumerate(nodes)}
+
+    # --------------------------------------------------
+    # Sankey Diagram
+    # --------------------------------------------------
+    fig = go.Figure(go.Sankey(
+        node=dict(
+            label=nodes,
+            color="white",  # white boxes
+            line=dict(color="black", width=1)  # black outlines
+        ),
+        link=dict(
+            source=[node_indices[f["source"]] for f in flows],
+            target=[node_indices[f["target"]] for f in flows],
+            value=[f["value"] for f in flows],
+            color=[f["color"] for f in flows]
+        )
+    ))
+
+    fig.update_layout(title_text=f"Cluster Flow for {tech}", font_size=10)
+    fig.write_html(output_dir / f"{tech}_cluster_flow.html")
+
+def plot_all_cluster_flows(df_with_clusters, output_dir="plots/cluster_flows"):
+    """
+    Plot Sankey diagrams for cluster transitions for all technologies in df_with_clusters.
+
+    Parameters
+    ----------
+    df_with_clusters : pd.DataFrame
+        Must contain columns: ['tech', 'year', 'learning_rate', 'scenario', 'cluster_id']
+    output_dir : str
+        Folder to save Sankey diagrams
+    """
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    for tech in df_with_clusters['tech'].unique():
+        print(f"📊 Generating cluster flow for {tech}...")
+        plot_cluster_flow(df_with_clusters, tech=tech, output_dir=output_dir)
+
 
 # -------------------------------
 # Main Execution
@@ -661,7 +1118,7 @@ def run_all_analyses():
     # Run analyses
     #plot_base_generation_mix(base_file)
     #plot_scrap_comparison(base_file, nzia_scenarios)
-    plot_lng_analysis(base_file, nzia_scenarios)
+    #plot_lng_analysis(base_file, nzia_scenarios)
     #plot_system_costs_boxplot(base_file, nzia_scenarios)
     #plot_nzia_boxplots(
     #    tech_list=tech_list,
@@ -670,12 +1127,14 @@ def run_all_analyses():
     #    output_dir="plots/nzia_plots",
     #)
 
-    #plot_cumulative_capacity_scatter(
-    #    tech_list=tech_list,
-    #    nzia_scenarios_dict=nzia_scenarios,
-    #    target_years=[2025, 2030, 2035, 2040],
-    #    output_dir="plots/cumulative_scatter"
-    #)
+    plot_cumulative_capacity_scatter(
+        tech_list=tech_list,
+        nzia_scenarios_dict=nzia_scenarios,
+        perform_clustering=True,  # enable clustering
+        eps=0.3,  # tune sensitivity
+        min_samples=3
+    )
+
 
     print("✅ All analyses completed!")
 
