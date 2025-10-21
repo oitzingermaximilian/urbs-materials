@@ -8,10 +8,19 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import DBSCAN
 import plotly.graph_objects as go
 import matplotlib.patches as mpatches
-
+from matplotlib.lines import Line2D
+from plotly.subplots import make_subplots
+import math
 # -------------------------------
 # Configuration
 # -------------------------------
+
+plt.rcParams["font.family"] = "Arial"
+plt.rcParams["font.size"] = 8  # around 6–8 pt target at print size
+plt.rcParams["pdf.fonttype"] = 42  # ensures fonts are embedded properly in vector outputs
+plt.rcParams["ps.fonttype"] = 42
+print(plt.rcParams["font.family"])
+
 BASE_PATH = Path("C:/Users/maxoi/OneDrive/Desktop/results_crm_paper/base")
 NZIA_PATH = Path("C:/Users/maxoi/OneDrive/Desktop/results_crm_paper/NZIA")
 LNG_LOWEST_PATH = Path("C:/Users/maxoi/OneDrive/Desktop/results_crm_paper/lng_lowest")
@@ -36,7 +45,7 @@ GROUPS = {
         "Lignite Plant", "Lignite Plant CCUS", "Oil Plant", "Other non-res"
     ],
     "Renewable generation": [
-        "Hydro (reservoir)", "Hydro (run-of-river)", "solarPV", "windoff", "windon"
+        "Hydro (reservoir)", "Hydro (run-of-river)", "solarPV", "windoff", "windon","Biomass Plant"
     ],
     "Thermal nuclear generation": ["Nuclear Plant"]
 }
@@ -45,6 +54,27 @@ GROUP_COLORS = {
     "Fossil fuels generation": "#F4C20D",
     "Renewable generation": "#009688",
     "Thermal nuclear generation": "#F57C00"
+}
+
+# Colors for renewable breakdown + grey for non-renewables
+RENEWABLE_COLORS = {
+    "Hydro (reservoir)": "#1f77b4",       # Blue
+    "Hydro (run-of-river)": "#6baed6",    # Light blue
+    "Solar PV": "#ffdd00",                # Yellow
+    "Wind onshore": "#2ca02c",            # Green
+    "Wind offshore": "#17becf",           # Cyan/teal
+    "Biomass": "#8c564b",                  # Brown
+"Non-renewables": "#B0B0B0"
+}
+
+
+PROCESS_MAP = {
+    "Hydro (reservoir)": "Hydro (reservoir)",
+    "Hydro (run-of-river)": "Hydro (run-of-river)",
+    "Solar PV": "solarPV",
+    "Wind onshore": "windon",
+    "Wind offshore": "windoff",
+    "Biomass": "Biomass Plant"
 }
 
 
@@ -131,6 +161,12 @@ def load_system_costs(file_path, sheet_name="extension_cost", years=range(2024, 
     df_done = df.groupby("stf")["Total_Cost"].sum()
     return df_done
 
+def load_installed_capacity(file_path):
+    """Load installed capacity from 'extension_total_caps' sheet."""
+    xls = pd.ExcelFile(file_path)
+    df = pd.read_excel(xls, sheet_name="extension_total_caps")
+    return df
+
 def identify_capacity_clusters(df, eps=0.7, min_samples=4):
     """
     Identify DBSCAN clusters in a given DataFrame (single tech).
@@ -171,6 +207,91 @@ def identify_capacity_clusters(df, eps=0.7, min_samples=4):
     df_summary = pd.DataFrame(cluster_summary)
     df_with_clusters = pd.concat(clustered_dfs, ignore_index=True) if clustered_dfs else pd.DataFrame()
     return df_summary, df_with_clusters
+
+def identify_yearly_capacity_clusters(df, years_of_interest=[2025, 2030, 2035, 2040],
+                                      eps=0.7, min_samples=2):
+    """
+    DBSCAN clustering on yearly values, returns summary + DataFrame with cluster_id.
+    """
+    df_yearly = df[df["year"].isin(years_of_interest)].copy()
+    if df_yearly.empty:
+        raise ValueError("No data for the specified years_of_interest.")
+
+    X = df_yearly[["Manufacturing", "Remanufacturing"]].values
+    X_scaled = StandardScaler().fit_transform(X)
+
+    db = DBSCAN(eps=eps, min_samples=min_samples)
+    labels = db.fit_predict(X_scaled)
+    df_yearly["cluster_id"] = labels
+
+    # Create summary
+    n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
+    n_noise = np.sum(labels == -1)
+    summary = pd.DataFrame({
+        "year": df_yearly["year"],
+        "cluster_id": labels,
+        "num_clusters": n_clusters,
+        "noise_points": n_noise,
+        "Manufacturing": df_yearly["Manufacturing"],
+        "Remanufacturing": df_yearly["Remanufacturing"]
+    })
+
+    return summary, df_yearly
+
+def aggregate_and_cluster_yearly(df, windows=None, eps=0.7, min_samples=2):
+    """
+    Aggregate yearly data into fixed windows, then run DBSCAN.
+
+    Args:
+        df (DataFrame): Must have columns ['year', 'Manufacturing', 'Remanufacturing']
+        windows (list of tuples): [(start_year, end_year), ...]
+        eps (float): DBSCAN eps
+        min_samples (int): DBSCAN min_samples
+
+    Returns:
+        summary_df: summary of clusters for each window
+        df_with_clusters: aggregated values with cluster_id
+    """
+    if windows is None:
+        windows = [(2024, 2025), (2026, 2030), (2031, 2035), (2036, 2040)]
+
+    records = []
+    for i, (start, end) in enumerate(windows, start=1):
+        df_window = df[(df["year"] >= start) & (df["year"] <= end)]
+        if df_window.empty:
+            continue
+        records.append({
+            "window_id": i,
+            "start_year": start,
+            "end_year": end,
+            "Manufacturing": df_window["Manufacturing"].sum(),
+            "Remanufacturing": df_window["Remanufacturing"].sum()
+        })
+
+    agg_df = pd.DataFrame(records)
+    X = agg_df[["Manufacturing", "Remanufacturing"]].values
+    X_scaled = StandardScaler().fit_transform(X)
+
+    db = DBSCAN(eps=eps, min_samples=min_samples)
+    labels = db.fit_predict(X_scaled)
+    agg_df["cluster_id"] = labels
+
+    # Summary
+    n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
+    n_noise = np.sum(labels == -1)
+    summary_df = pd.DataFrame({
+        "window_id": agg_df["window_id"],
+        "start_year": agg_df["start_year"],
+        "end_year": agg_df["end_year"],
+        "Manufacturing": agg_df["Manufacturing"],
+        "Remanufacturing": agg_df["Remanufacturing"],
+        "cluster_id": labels,
+        "num_clusters": n_clusters,
+        "noise_points": n_noise
+    })
+
+    return summary_df, agg_df
+
 # -------------------------------
 # Plotting Functions
 # -------------------------------
@@ -269,6 +390,145 @@ def plot_base_generation_mix(base_file=None, output_dir="plots"):
     plt.show()
     print(f"✔ Base scenario stacked bar chart saved → {output_path}")
 
+def plot_renewables_breakdown_100pct(base_file=None, output_dir="plots"):
+    """100% stacked horizontal bar chart showing renewable breakdown, grey out fossil/nuclear"""
+    if base_file is None:
+        base_file = get_base_scenario()
+
+    years = list(range(2025, 2041))
+    df = load_generation_data(base_file, years=years)
+
+    # --- Prepare data --- #
+    records = []
+    group_order = ["Hydro (reservoir)", "Hydro (run-of-river)", "Solar PV",
+                   "Wind onshore", "Wind offshore", "Biomass", "Non-renewables"]
+
+    for year in years:
+        year_df = df[df["Stf"] == year]
+
+        totals = {}
+        # Renewable components
+        totals["Hydro (reservoir)"] = year_df[year_df["Process"] == "Hydro (reservoir)"]["Value"].sum()
+        totals["Hydro (run-of-river)"] = year_df[year_df["Process"] == "Hydro (run-of-river)"]["Value"].sum()
+        totals["Solar PV"] = year_df[year_df["Process"] == "solarPV"]["Value"].sum()
+        totals["Wind onshore"] = year_df[year_df["Process"] == "windon"]["Value"].sum()
+        totals["Wind offshore"] = year_df[year_df["Process"] == "windoff"]["Value"].sum()
+        totals["Biomass"] = year_df[year_df["Process"] == "Biomass Plant"]["Value"].sum()
+
+        # Non-renewables
+        renewable_processes = ["Hydro (reservoir)", "Hydro (run-of-river)", "solarPV",
+                               "windon", "windoff", "Biomass Plant"]
+        totals["Non-renewables"] = year_df[~year_df["Process"].isin(renewable_processes)]["Value"].sum()
+
+        total_all = sum(totals.values())
+        shares = {g: totals[g] / total_all if total_all > 0 else 0 for g in group_order}
+
+        records.append({"year": year, **shares})
+
+    data = pd.DataFrame(records)
+
+    # --- Plot --- #
+    n = len(years)
+    fig, ax = plt.subplots(figsize=(10, max(10, 0.52 * n + 3.5)))
+    y_pos = np.arange(n)
+    left = np.zeros(n)
+    bar_height = 0.6
+
+    for g in group_order:
+        width = data[g].values * 100
+        ax.barh(
+            y_pos, width, left=left, height=bar_height,
+            color=RENEWABLE_COLORS[g], edgecolor="white", linewidth=1.2, zorder=5
+        )
+        left += width
+
+    # Formatting to match original 100% stacked bar
+    ax.set_yticks(y_pos, [str(y) for y in years])
+    ax.invert_yaxis()
+    ax.set_xlim(0, 100)
+    ax.xaxis.set_major_locator(mticker.MultipleLocator(10))
+    ax.xaxis.set_major_formatter(mticker.PercentFormatter(xmax=100))
+    ax.xaxis.set_ticks_position("top")
+
+    # Vertical white grid lines
+    ax.vlines(np.arange(0, 101, 10), -0.5, n - 0.5, colors="white", linewidth=1.5, zorder=7)
+    ax.set_facecolor("#E6E6E6")
+
+    ax.set_title(
+        "Renewable Generation Share Breakdown (%)",
+        loc="left",
+        fontsize=18,
+        fontweight="bold",
+        color="#1F4E79"
+    )
+
+    # Legend
+    handles = [plt.Rectangle((0, 0), 1, 1, color=RENEWABLE_COLORS[g]) for g in group_order]
+    ax.legend(
+        handles, group_order,
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.06),
+        ncol=len(group_order),
+        frameon=False,
+        fontsize=11
+    )
+
+    plt.tight_layout(rect=[0.02, 0.04, 0.98, 0.94])
+    output_path = Path(output_dir) / "renewables_breakdown_100pct.png"
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(output_path, dpi=300)
+    plt.show()
+    print(f"✔ Renewable 100% stacked bar chart saved → {output_path}")
+
+def plot_renewables_installed_capacity_vertical(base_file, output_dir="plots", region="EU27"):
+    """
+    Vertical stacked bar plot of renewable installed capacities (GW) 2024-2040.
+    """
+    # Load data
+    df = pd.read_excel(base_file, sheet_name="extension_total_caps")
+    df["stf"] = df["stf"].ffill()
+    df["sit"] = df["sit"].ffill()
+    if region:
+        df = df[df["sit"] == region]
+
+    years = list(range(2024, 2041))
+    group_order = list(PROCESS_MAP.keys())
+
+    # Prepare data
+    records = {g: [] for g in group_order}
+    for year in years:
+        year_df = df[df["stf"] == year]
+        for name, pro in PROCESS_MAP.items():
+            records[name].append(year_df[year_df["pro"] == pro]["cap_pro"].sum() / 1000)  # MW → GW
+
+    # Plot
+    fig, ax = plt.subplots(figsize=(14, 8))
+    bottom = [0]*len(years)
+
+    for g in group_order:
+        ax.bar(years, records[g], bottom=bottom, color=RENEWABLE_COLORS[g], label=g, edgecolor="white", width=0.7)
+        bottom = [b + v for b, v in zip(bottom, records[g])]
+
+    ax.set_xlabel("Year", fontsize=14)
+    ax.set_ylabel("Installed Capacity [GW]", fontsize=14)
+    ax.set_title("Renewable Installed Capacity by Technology (2024-2040)", fontsize=18, fontweight="bold", color="#1F4E79")
+    ax.set_facecolor("#E6E6E6")
+    ax.grid(axis="y", color="white", linewidth=1.5, zorder=7)
+
+    # Legend 4x2 below
+    handles, labels = ax.get_legend_handles_labels()
+    ax.legend(handles, labels, loc="upper center", bbox_to_anchor=(0.5, -0.15), ncol=2, frameon=False, fontsize=11)
+
+    plt.tight_layout(rect=[0.02, 0.05, 0.98, 0.95])
+
+    # Save plot
+    output_dir = Path(output_dir)
+    output_dir.mkdir(exist_ok=True)
+    output_path = output_dir / "renewables_installed_capacity_vertical.png"
+    plt.savefig(output_path, dpi=300)
+    plt.show()
+    print(f"✔ Vertical stacked bar chart saved → {output_path}")
+
 
 def plot_scrap_comparison(base_file=None, nzia_scenarios_dict=None, output_dir="plots/scrap_range"):
     """Plot scrap volume comparison between base and NZIA scenarios"""
@@ -350,8 +610,11 @@ def plot_scrap_comparison(base_file=None, nzia_scenarios_dict=None, output_dir="
         print(f"✔ Saved: {fname}")
 
 
-def plot_lng_analysis(base_file=None, nzia_scenarios_dict=None, lng_file = None, output_dir="plots/lng_analysis"):
-    """Comprehensive LNG analysis with multiple plot types"""
+
+def plot_lng_analysis(base_file=None, nzia_scenarios_dict=None, lng_file=None,
+                      output_dir="plots/lng_analysis"):
+    """Comprehensive LNG analysis with NZIA scenario range, LTC overlay, and boxplot"""
+
     if base_file is None:
         base_file = get_base_scenario()
     if nzia_scenarios_dict is None:
@@ -366,69 +629,108 @@ def plot_lng_analysis(base_file=None, nzia_scenarios_dict=None, lng_file = None,
 
     nzia_files = [f for f in nzia_scenarios_dict.values() if f.exists()]
 
-    # 1. Spaghetti plot
+    # ----------------------------------------------------------------------
+    # 1. RANGE PLOT — NZIA scenario range, LTC area, and main trajectories
+    # ----------------------------------------------------------------------
+
+    # Long-term contract data (BCM)
+    ltc_data = {
+        2025: 82, 2026: 85, 2027: 99, 2028: 92, 2029: 92,
+        2030: 88, 2031: 86, 2032: 84, 2035: 57, 2040: 48
+    }
+    ltc_series = pd.Series(ltc_data).sort_index()
+    ltc_series = ltc_series.reindex(years).interpolate()
+
     plt.figure(figsize=(8, 5))
+    ax = plt.gca()
+
+    # --- Aggregate NZIA scenario data for range plot ---
+    nzia_arrays = []
     for f in nzia_files:
         series = load_lng(f, years)
-        plt.plot(series.index, series.values, color="grey", alpha=0.3, linewidth=1)
+        nzia_arrays.append(series.values)
+    nzia_array = np.vstack(nzia_arrays)
+    min_vals = np.nanmin(nzia_array, axis=0)
+    max_vals = np.nanmax(nzia_array, axis=0)
 
+    # --- NZIA range band ---
+    ax.fill_between(
+        years, min_vals, max_vals,
+        color="#B0C4DE", alpha=0.4,
+        label="NZIA scenario range", zorder=1
+    )
+
+    # --- Long-term contracts (grey area + dashed line) ---
+    ax.fill_between(
+        ltc_series.index, 0, ltc_series.values,
+        color="#BEBEBE", alpha=0.25, zorder=2
+    )
+    ax.plot(
+        ltc_series.index, ltc_series.values,
+        color="#6E6E6E", linewidth=1.5, linestyle="--",
+        label="long-term contracts", zorder=3
+    )
+
+    # --- Base and Best-case trajectories ---
     base_series = load_lng(base_file, years)
     best_case_series = load_lng(lng_file, years)
-    plt.plot(best_case_series.index, best_case_series.values, color="red",linewidth=2.5, label="Best Case scenario")
-    plt.plot(base_series.index, base_series.values, color="lightsteelblue",
-             linewidth=2.5, label="Base scenario")
+    ax.plot(base_series.index, base_series.values,
+            color="#1F3A93", linewidth=2.2, label="current policies", zorder=4)
+    ax.plot(best_case_series.index, best_case_series.values,
+            color="#008080", linewidth=2.2, linestyle="--",
+            label="best-case scenario", zorder=5)
 
-    plt.xlabel("Year")
-    plt.ylabel("LNG Demand [BCM]")
-    plt.title("LNG Demand – NZIA scenarios")
-    plt.xlim(min(years) - 1, max(years) + 1)
-    plt.xticks([2025, 2030, 2035, 2040])
-    plt.grid(True, linestyle="--", alpha=0.3)
-    plt.legend()
-    plt.savefig(out_path / "lng_spaghetti.png", dpi=300)
+    # --- Formatting ---
+    ax.set_xlim(min(years) - 1, max(years) + 1)
+    ax.set_xticks([2025, 2030, 2035, 2040])
+    ax.set_xlabel("Year", fontsize=8)
+    ax.set_ylabel("LNG Demand and Supply [bcm]", fontsize=8)
+    ax.set_title("LNG demand trajectories vs. long-term contracts",
+                 fontsize=9, weight="bold")
+
+    ax.grid(axis="y", linestyle=":", color="0.8", linewidth=0.8)
+    ax.legend(frameon=True, fontsize=7, loc="upper right")
+
+    plt.tight_layout()
+    plt.savefig(out_path / "lng_demand_range_plot.pdf", dpi=800, bbox_inches="tight")
     plt.show()
-    print("✔ LNG spaghetti plot saved")
+    print("✔ LNG demand range plot saved")
 
-    # 2. Cumulative percentage deviation boxplot
+    # ----------------------------------------------------------------------
+    # 2. CUMULATIVE PERCENTAGE DEVIATION BOXPLOT
+    # ----------------------------------------------------------------------
     base_cumulative = load_lng(base_file, years).cumsum()
     nzia_cumulative = [load_lng(f, years).cumsum() for f in nzia_files]
 
     data = pd.DataFrame({i: s for i, s in enumerate(nzia_cumulative)}).T
     pct_dev = pd.DataFrame({
-        y: 100 * (data[y] - base_cumulative[y]) / base_cumulative[y] for y in target_years
+        y: 100 * (data[y] - base_cumulative[y]) / base_cumulative[y]
+        for y in target_years
     })
 
     plt.figure(figsize=(8, 5))
-
-    # Use 0,1,2,... for positions and then relabel
+    ax = plt.gca()
     positions = np.arange(len(target_years))
     box_data = [pct_dev[y].dropna() for y in target_years]
 
-    # Make narrower boxes
-    bp = plt.boxplot(box_data, positions=positions, widths=0.2, patch_artist=True,
-                     boxprops=dict(facecolor="lightsteelblue", alpha=0.6, linewidth=1.2),
-                     medianprops=dict(color="darkblue", linewidth=2),
-                     whiskerprops=dict(color="grey", linestyle="--", linewidth=1.2),
-                     capprops=dict(color="grey", linewidth=1.2))
+    bp = ax.boxplot(
+        box_data, positions=positions, widths=0.25, patch_artist=True,
+        boxprops=dict(facecolor="#A6CEE3", alpha=0.6, linewidth=1.2),
+        medianprops=dict(color="#1F78B4", linewidth=2),
+        whiskerprops=dict(color="grey", linestyle="--", linewidth=1.2),
+        capprops=dict(color="grey", linewidth=1.2)
+    )
 
-    # Optional scatter points for individual scenario deviations
-    # for i, year in enumerate(target_years):
-    #     y_vals = pct_dev[year].dropna().values
-    #     x_vals = positions[i] + 0.08 * (np.random.rand() - 0.5)
-    #     plt.scatter(x_vals, y_vals, color="grey", alpha=0.6, s=30, zorder=3)
+    ax.set_title("Cumulative LNG demand – Compared to current policies",
+                 fontsize=9, weight="bold")
+    ax.set_xlabel("Year", fontsize=8)
+    ax.set_ylabel("Deviation from base [%]", fontsize=8)
+    ax.set_xticks(positions)
+    ax.set_xticklabels(target_years, fontsize=8)
+    ax.grid(axis="y", linestyle=":", color="0.8", linewidth=0.8)
 
-    #plt.axhline(0, color="lightsteelblue", linewidth=2.5, linestyle="-", label="Base scenario")
-    plt.title("Cumulative LNG Demand – Compared to current Policies", fontsize=14, weight="bold")
-    plt.xlabel("Year", fontsize=12)
-    plt.ylabel("Deviation from Base [%]", fontsize=12)
-    plt.xticks(positions, target_years, fontsize=11)
-    plt.grid(axis="y", linestyle="--", alpha=0.4)
-    plt.legend(frameon=False, fontsize=11)
-
-    # Add margins to avoid touching edges
-    plt.margins(x=0.1)  # 10% horizontal margin
     plt.tight_layout()
-    plt.savefig(out_path / "lng_cumulative_pct_deviation.png", dpi=300)
+    plt.savefig(out_path / "lng_cumulative_pct_deviation.pdf", dpi=500, bbox_inches="tight")
     plt.show()
     print("✔ LNG cumulative deviation plot saved")
 
@@ -766,6 +1068,559 @@ def plot_cumulative_capacity_scatter(
 
 
 
+def plot_window_capacity_scatter(
+        tech_list,
+        nzia_scenarios_dict,
+        windows=[(2024, 2025), (2026, 2030), (2031, 2035), (2036, 2040)],
+        output_dir="plots/window_scatter",
+        save_csv=True,
+        perform_clustering=True,
+        eps=0.7,
+        min_samples=2,
+):
+    """
+    Scatter plot of capacities aggregated by windows (Remanufacturing vs Manufacturing)
+    for selected technologies, with optional DBSCAN clustering and integrated ternary grid output.
+
+    Added:
+      - after clustering, produce an interactive ternary grid (2x2 default) per tech using clustered dataframe.
+      - handles df_with_clusters that uses either 'year' or 'window_id'.
+    """
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    # RGB color palette for windows (kept)
+    window_colors = ["#DFDD19", "#EF7748", "#E72385", "#5B2F68"]
+
+    for tech_name in tech_list:
+        all_data = []
+
+        # Load and process NZIA files
+        for (lr, scenario_name), file_path in nzia_scenarios_dict.items():
+            if not Path(file_path).exists():
+                continue
+            try:
+                df = pd.read_excel(file_path, sheet_name="extension_only_caps")
+            except Exception as e:
+                print(f"⚠ Could not read {file_path}: {e}")
+                continue
+
+            df.columns = df.columns.str.strip()
+            df["tech"] = df["tech"].astype(str).str.strip()
+            df["stf"] = df["stf"].ffill()
+            if "location" in df.columns:
+                df["location"] = df["location"].ffill()
+
+            df_tech = df[df["tech"] == tech_name].copy()
+            if df_tech.empty:
+                continue
+
+            # Aggregate over windows
+            for i, (start_year, end_year) in enumerate(windows, start=1):
+                df_window = df_tech[(df_tech["stf"] >= start_year) & (df_tech["stf"] <= end_year)]
+                all_data.append({
+                    "tech": tech_name,
+                    "window_id": i,
+                    "window_label": f"{start_year}-{end_year}",
+                    "learning_rate": lr,
+                    "scenario": scenario_name,
+                    "Remanufacturing": df_window["capacity_ext_eusecondary"].sum() / 1e3,  # GW
+                    "Manufacturing": df_window["capacity_ext_euprimary"].sum() / 1e3,  # GW
+                    "Stockpile": df_window["capacity_ext_stockout"].sum() / 1e3,
+                    "Totals (incl. Imports)": df_window["newly_added_capacity"].sum() / 1e3
+                })
+
+        if not all_data:
+            print(f"No data for {tech_name}. Skipping.")
+            continue
+
+        df_all = pd.DataFrame(all_data)
+
+        # Save CSV if requested
+        if save_csv:
+            csv_path = Path(output_dir) / f"window_data_{tech_name}.csv"
+            df_all.to_csv(csv_path, index=False)
+            print(f"✔ Data exported for {tech_name}: {csv_path}")
+
+        # Simple scatter plot (points only)
+        plt.figure(figsize=(8, 6))
+        for i, (_, group) in enumerate(df_all.groupby("window_id")):
+            plt.scatter(
+                group["Remanufacturing"], group["Manufacturing"],
+                color=window_colors[i % len(window_colors)],
+                s=50,
+                label=group["window_label"].iloc[0]
+            )
+
+        plt.xlabel("Remanufacturing Capacity (GW)")
+        plt.ylabel("Manufacturing Capacity (GW)")
+        plt.title(f"Capacity by Window for {tech_name}")
+        plt.grid(True, linestyle="--", alpha=0.3)
+        plt.legend(title="Window", frameon=True, edgecolor='black')
+        plt.tight_layout()
+        fig_path = Path(output_dir) / f"window_scatter_points_{tech_name}.png"
+        plt.savefig(fig_path, dpi=300)
+        plt.close()
+        print(f"✔ Scatter plot saved for {tech_name}: {fig_path}")
+
+        # Optional clustering (DBSCAN)
+        if perform_clustering:
+            # Keep all columns needed for plotting stacked bars and ternary
+            df_for_clustering = df_all.copy()
+            # For DBSCAN the upstream helper expects 'year' column; rename
+            if "window_id" in df_for_clustering.columns:
+                df_for_clustering = df_for_clustering.rename(columns={"window_id": "year"})
+
+            # Call your clustering helper (assumed available in your environment)
+            df_summary, df_with_clusters = identify_yearly_capacity_clusters(
+                df_for_clustering,
+                years_of_interest=df_for_clustering["year"].unique(),
+                eps=eps,
+                min_samples=min_samples
+            )
+
+            cluster_dir = output_dir / "clusters_window"
+            cluster_dir.mkdir(exist_ok=True)
+            df_summary.to_csv(cluster_dir / f"cluster_summary_{tech_name}.csv", index=False)
+            df_with_clusters.to_csv(cluster_dir / f"clustered_data_{tech_name}.csv", index=False)
+            print(f"✅ Clustering done for {tech_name}. Results saved in {cluster_dir}")
+
+            # Call your existing clustered bar plotting if you still want it
+            plot_clustered_benchmark_from_window_df(df_with_clusters, output_dir=output_dir / "clustered_benchmark_window")
+
+    print("All done.")
+
+def plot_window_scatter_relative_single(
+        tech_list,
+        nzia_scenarios_dict,
+        windows=[(2024, 2025), (2026, 2030), (2031, 2035), (2036, 2040)],
+        output_dir="plots/window_scatter_relative",
+        save_csv=True,
+        figsize=(7, 6),
+        target_lines=(0.40, 0.45, 0.50, 0.55, 0.60),
+        project_with_stock=True,
+        projection_color="#ff7f0e",
+        barrier_color="#d62728",
+        show_top_projections=0,
+        scale_marker_by_totals=False,
+        min_stock_frac_to_show=0.01
+):
+    """
+    Single-window fractional scatter, with technology-based marker color,
+    thinner stockpile lines, and hollow markers to reduce overlay density.
+    """
+    # Tech color palette (add more as needed)
+    tech_colors = {
+        "solarPV": (223 / 255, 221 / 255, 25 / 255),  # yellow
+        "windon": (44 / 255, 80 / 255, 180 / 255),  # blue
+        "windoff": (143 / 255, 60 / 255, 175 / 255),  # purple
+    }
+    default_tech_color = (0.13, 0.13, 0.13)
+
+    outdir = Path(output_dir)
+    outdir.mkdir(parents=True, exist_ok=True)
+    saved_paths = []
+
+    for tech_name in tech_list:
+        all_data = []
+        tech_rgb = tech_colors.get(tech_name, default_tech_color)
+
+        # Aggregate inputs (reads extension_only_caps sheet)
+        for (lr, scenario_name), file_path in nzia_scenarios_dict.items():
+            p = Path(file_path)
+            if not p.exists():
+                continue
+            try:
+                df = pd.read_excel(p, sheet_name="extension_only_caps")
+            except Exception as e:
+                print(f"⚠ Could not read {p}: {e}")
+                continue
+
+            df.columns = df.columns.str.strip()
+            df["tech"] = df["tech"].astype(str).str.strip()
+            df["stf"] = df["stf"].ffill()
+            if "location" in df.columns:
+                df["location"] = df["location"].ffill()
+
+            df_tech = df[df["tech"] == tech_name].copy()
+            if df_tech.empty:
+                continue
+
+            for i, (start_year, end_year) in enumerate(windows, start=1):
+                df_window = df_tech[(df_tech["stf"] >= start_year) & (df_tech["stf"] <= end_year)]
+                all_data.append({
+                    "tech": tech_name,
+                    "window_id": i,
+                    "window_label": f"{start_year}-{end_year}",
+                    "window_end_year": end_year,
+                    "learning_rate": lr,
+                    "scenario": scenario_name,
+                    "Remanufacturing": df_window["capacity_ext_eusecondary"].sum() / 1e3,
+                    "Manufacturing": df_window["capacity_ext_euprimary"].sum() / 1e3,
+                    "Stockpile": df_window["capacity_ext_stockout"].sum() / 1e3,
+                    "Totals (incl. Imports)": df_window["newly_added_capacity"].sum() / 1e3
+                })
+
+        if not all_data:
+            print(f"No data for {tech_name}. Skipping.")
+            continue
+
+        df_all = pd.DataFrame(all_data)
+
+        if save_csv:
+            csv_path = outdir / f"window_data_{tech_name}.csv"
+            df_all.to_csv(csv_path, index=False)
+            print(f"✔ Data exported for {tech_name}: {csv_path}")
+
+        totals = df_all["Totals (incl. Imports)"].replace(0, np.nan)
+        df_all["Rem_frac"] = df_all["Remanufacturing"].div(totals).fillna(0)
+        df_all["Man_frac"] = df_all["Manufacturing"].div(totals).fillna(0)
+        df_all["Stock_frac"] = df_all["Stockpile"].div(totals).fillna(0)
+        df_all["LocalSourcing_frac"] = df_all[["Rem_frac", "Man_frac", "Stock_frac"]].sum(axis=1)
+
+        unique_windows = sorted(df_all["window_id"].unique())
+        for win in unique_windows:
+            sub = df_all[df_all["window_id"] == win].copy()
+            if sub.empty:
+                continue
+
+            try:
+                rem_max = float(sub["Rem_frac"].max(skipna=True))
+                man_max = float(sub["Man_frac"].max(skipna=True))
+                proj_rem_max = float((sub["Rem_frac"] + sub["Stock_frac"] / 2.0).max(skipna=True))
+                proj_man_max = float((sub["Man_frac"] + sub["Stock_frac"] / 2.0).max(skipna=True))
+                local_max = np.nanmax([rem_max, man_max, proj_rem_max, proj_man_max, 0.6])
+            except Exception:
+                local_max = 0.6
+            axis_max = min(1.0, max(local_max * 1.05, 0.6))
+            axis_min = 0.0
+            xs_line = np.linspace(axis_min, axis_max, 500)
+
+            fig, ax = plt.subplots(figsize=figsize)
+
+            # marker sizing: larger for trend visibility; can be scaled by totals if requested
+            if scale_marker_by_totals:
+                tot = sub["Totals (incl. Imports)"].fillna(0)
+                sizes = np.clip((tot / (tot.max() if tot.max() > 0 else 1)) * 120, 24, 180)
+            else:
+                sizes = np.full(len(sub), 80)
+
+            # deterministic jitter for axis-packed points
+            seed = abs(hash(f"{tech_name}_{win}")) % (2**32)
+            rng = np.random.default_rng(seed)
+            jitter_scale = 0.002
+            jitter_x = rng.normal(scale=jitter_scale, size=len(sub))
+            jitter_y = rng.normal(scale=jitter_scale, size=len(sub))
+
+            plot_x = sub["Rem_frac"].to_numpy(copy=True)
+            plot_y = sub["Man_frac"].to_numpy(copy=True)
+            small_mask_x = plot_x <= 1e-6
+            small_mask_y = plot_y <= 1e-6
+            plot_x[small_mask_x] += jitter_x[small_mask_x]
+            plot_y[small_mask_y] += jitter_y[small_mask_y]
+            plot_x = np.clip(plot_x, axis_min, axis_max)
+            plot_y = np.clip(plot_y, axis_min, axis_max)
+
+            # faint shadow tracers from axes to each plotted point
+            tracer_lw = 0.6
+            tracer_alpha = 0.28
+            tracer_color = "0.85"
+            for xi, yi in zip(plot_x, plot_y):
+                ax.plot([0, xi], [yi, yi], color=tracer_color, linewidth=tracer_lw, linestyle='-', alpha=tracer_alpha, zorder=0)
+                ax.plot([xi, xi], [0, yi], color=tracer_color, linewidth=tracer_lw, linestyle='-', alpha=tracer_alpha, zorder=0)
+
+            # draw barrier lines (red)
+            for p in target_lines:
+                ys = p - xs_line
+                mask = ys >= axis_min
+                linestyle = '-' if abs(p - 0.40) < 1e-9 else '--'
+                linewidth = 2.4 if abs(p - 0.40) < 1e-9 else 1.6
+                alpha = 0.98 if abs(p - 0.40) < 1e-9 else 0.6
+                ax.plot(xs_line[mask], ys[mask], color=barrier_color, linestyle=linestyle,
+                        linewidth=linewidth, alpha=alpha, zorder=1)
+
+            # Draw projections UNDER markers (so markers always visible)
+            proj_lw = 0.7
+            for idx, r in sub.iterrows():
+                sf = r["Stock_frac"]
+                if sf >= min_stock_frac_to_show and project_with_stock:
+                    x = r["Rem_frac"]
+                    y = r["Man_frac"]
+                    proj_x = min(max(x + sf / 2.0, axis_min), axis_max)
+                    proj_y = min(max(y + sf / 2.0, axis_min), axis_max)
+                    ax.plot([x, proj_x], [y, proj_y], color=projection_color, linewidth=proj_lw, alpha=0.9, zorder=2)
+                    ax.plot(proj_x, proj_y, marker='o', color=projection_color, markersize=6, markeredgecolor='white', zorder=2)
+
+            # Draw hollow (or semi-hollow) markers for all scenarios, tech color edge, faint fill
+            edgecolor = tech_rgb
+            facecolor = (tech_rgb[0], tech_rgb[1], tech_rgb[2], 0.15)  # very faint fill
+            ax.scatter(plot_x, plot_y, s=sizes, facecolors=[facecolor], edgecolors=[edgecolor],
+                       linewidths=1.4, zorder=4, marker='o')
+
+            # annotate top projections if requested
+            if show_top_projections and len(sub) > 0:
+                top = sub[sub["Stock_frac"] >= min_stock_frac_to_show].sort_values("Stock_frac", ascending=False).head(show_top_projections)
+                for _, trow in top.iterrows():
+                    px = min(max(trow["Rem_frac"] + trow["Stock_frac"]/2.0, axis_min), axis_max)
+                    py = min(max(trow["Man_frac"] + trow["Stock_frac"]/2.0, axis_min), axis_max)
+                    label = f"+{trow['Stock_frac']*100:.1f}%\n{trow['Stockpile']:.1f} GW"
+                    ax.text(px + 0.01*(axis_max-axis_min), py + 0.01*(axis_max-axis_min), label,
+                            fontsize=8, bbox=dict(facecolor='white', alpha=0.85, edgecolor='none'))
+
+            # aesthetics & equal axes
+            ax.set_xlim(axis_min, axis_max)
+            ax.set_ylim(axis_min, axis_max)
+            ax.set_aspect('equal', adjustable='box')
+            ax.set_xlabel("Remanufacturing (fraction of total)")
+            ax.set_ylabel("Manufacturing (fraction of total)")
+            window_label = sub["window_label"].iloc[0]
+            ax.set_title(f"{tech_name} — {window_label}")
+            ax.grid(True, linestyle='--', alpha=0.25)
+
+            # Compact legend: tech marker, projection, NZIA Benchmark
+            proxy_marker = Line2D([0], [0], marker='o', color='w',
+                                  markerfacecolor=facecolor, markeredgecolor=edgecolor,
+                                  markeredgewidth=1.4, markersize=8)
+            proxy_proj = Line2D([0], [0], color=projection_color, lw=1.2)
+            proxy_benchmark = Line2D([0], [0], color=barrier_color, lw=2.4)
+            ax.legend([proxy_marker, proxy_proj, proxy_benchmark],
+                      [f"{tech_name} scenario", "stockpile projection (equal split)", "NZIA Benchmark (40%)"],
+                      fontsize=8, frameon=True, loc='upper right')
+
+            # save the figure
+            safe_label = window_label.replace(' ', '_').replace('/', '-')
+            fname = outdir / f"{tech_name}_window_{safe_label}_relative.png"
+            fig.tight_layout(rect=[0, 0, 1, 0.96])
+            fig.savefig(fname, dpi=500)
+            plt.close(fig)
+            saved_paths.append(fname)
+            print(f"✔ Saved relative fractional plot: {fname}")
+
+    return saved_paths
+
+def plot_clustered_benchmark_from_window_df(df_with_clusters, output_dir):
+    """
+    Plot clustered benchmark for windowed capacities instead of years.
+    Adds grey bar for imports and colors windows in scatter overlay.
+
+    Changes:
+    - X axis and legends now use window labels (e.g., '2024-2025', '2026-2030', ...)
+      instead of 'Window 1', 'Window 2', etc.
+    """
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    components = ["Remanufacturing", "Stockpile", "Manufacturing"]
+    labels = ["Remanufacturing", "Stock", "Manufacturing"]
+    colors = ["#FDC5B5", "#F99B7D", "#F76C5E"]
+    hatches = ["..", "//", "xx"]
+
+    # Define window colors for scatter overlay
+    window_colors = ["#DFDD19", "#EF7748", "#E72385", "#5B2F68"]
+
+    for tech in df_with_clusters["tech"].unique():
+        df_tech = df_with_clusters[df_with_clusters["tech"] == tech].copy()
+        # The following two lines changed: use window_label for ticks/legends
+        windows = sorted(df_tech["year"].unique())
+        winid_to_label = {row["year"]: row["window_label"] for _, row in df_tech.drop_duplicates(subset=["year", "window_label"]).iterrows()}
+        window_labels = [winid_to_label[w] for w in windows]
+        x_base = np.arange(len(windows))
+
+        # --- Determine global max cluster count ---
+        max_clusters = max(df_tech.groupby("year")["cluster_id"].nunique())
+
+        total_width = 0.8
+        gap = 0.02
+        width = (total_width - (max_clusters - 1) * gap) / max_clusters
+
+        # =====================================================
+        # RELATIVE PLOT
+        # =====================================================
+        fig_rel, ax_rel = plt.subplots(figsize=(11, 6))
+
+        for i, win in enumerate(windows):
+            df_win = df_tech[df_tech["year"] == win]
+            clusters_this_win = sorted(df_win["cluster_id"].unique())
+            n_clusters = len(clusters_this_win)
+
+            group_width = n_clusters * width + (n_clusters - 1) * gap
+            start_offset = -group_width / 2 + width / 2
+
+            for j, cluster in enumerate(clusters_this_win):
+                df_cluster = df_win[df_win["cluster_id"] == cluster]
+                row = df_cluster[["Remanufacturing", "Stockpile", "Manufacturing", "Totals (incl. Imports)"]].mean()
+
+                x_pos = x_base[i] + start_offset + j * (width + gap)
+
+                # Grey background for Imports
+                ax_rel.bar(
+                    x_pos,
+                    1,
+                    width=width,
+                    bottom=0,
+                    facecolor="#D3D3D3",
+                    edgecolor="black",
+                    linewidth=0.8,
+                    zorder=0
+                )
+
+                bottom = 0
+                total = row["Totals (incl. Imports)"] if row["Totals (incl. Imports)"] > 0 else 1
+                for comp, color, hatch in zip(components, colors, hatches):
+                    frac = row[comp] / total
+                    ax_rel.bar(
+                        x_pos,
+                        frac,
+                        width=width,
+                        bottom=bottom,
+                        facecolor=color,
+                        edgecolor="black",
+                        linewidth=0.8,
+                        hatch=hatch,
+                        zorder=1
+                    )
+                    bottom += frac
+
+                ax_rel.text(x_pos, bottom + 0.02, f"C{int(cluster)}", ha="center", fontsize=8)
+
+        ax_rel.axhline(0.4, color="red", linestyle="--", alpha=0.7, linewidth=2)
+        ax_rel.set_xticks(x_base)
+        ax_rel.set_xticklabels(window_labels)
+        ax_rel.set_ylim(0, 1)
+        ax_rel.yaxis.set_major_formatter(plt.FuncFormatter(lambda y, _: f"{int(y * 100)}%"))
+        ax_rel.set_title(f"Clustered Local Sourcing % - {tech}", pad=15)
+        ax_rel.set_xlabel("Window")
+        ax_rel.set_ylabel("% of Total Capacity Additions")
+        ax_rel.grid(axis="y", alpha=0.3)
+
+        # Legend including Imports
+        legend_patches = [
+            mpatches.Patch(facecolor=fc, edgecolor="black", hatch=h, label=lab)
+            for fc, h, lab in zip(colors, hatches, labels)
+        ]
+        imports_patch = mpatches.Patch(facecolor="#D3D3D3", edgecolor="black", label="Imports")
+        nzia_line = plt.Line2D([0], [0], color="red", linestyle="--", linewidth=2, label="NZIA Benchmark")
+        ax_rel.legend(handles=legend_patches + [imports_patch, nzia_line], frameon=True, loc="upper right")
+
+        fig_rel.tight_layout()
+        fig_rel.savefig(output_dir / f"{tech}_clustered_relative_window.png", dpi=300)
+        plt.close(fig_rel)
+
+        # =====================================================
+        # ABSOLUTE PLOT
+        # =====================================================
+        fig_abs, ax_abs = plt.subplots(figsize=(11, 6))
+
+        for i, win in enumerate(windows):
+            df_win = df_tech[df_tech["year"] == win]
+            clusters_this_win = sorted(df_win["cluster_id"].unique())
+            n_clusters = len(clusters_this_win)
+
+            group_width = n_clusters * width + (n_clusters - 1) * gap
+            start_offset = -group_width / 2 + width / 2
+
+            for j, cluster in enumerate(clusters_this_win):
+                df_cluster = df_win[df_win["cluster_id"] == cluster]
+                row = df_cluster[["Remanufacturing", "Stockpile", "Manufacturing", "Totals (incl. Imports)"]].mean()
+
+                x_pos = x_base[i] + start_offset + j * (width + gap)
+
+                # Grey background for Imports (absolute)
+                ax_abs.bar(
+                    x_pos,
+                    row["Totals (incl. Imports)"],
+                    width=width,
+                    bottom=0,
+                    facecolor="#D3D3D3",
+                    edgecolor="black",
+                    linewidth=0.8,
+                    zorder=0
+                )
+
+                bottom = 0
+                for comp, color, hatch in zip(components, colors, hatches):
+                    val = row[comp]
+                    ax_abs.bar(
+                        x_pos,
+                        val,
+                        width=width,
+                        bottom=bottom,
+                        facecolor=color,
+                        edgecolor="black",
+                        linewidth=0.8,
+                        hatch=hatch,
+                        zorder=1
+                    )
+                    bottom += val
+
+                ax_abs.text(x_pos, bottom + 0.5, f"C{int(cluster)}", ha="center", fontsize=8)
+
+        ax_abs.set_xticks(x_base)
+        ax_abs.set_xticklabels(window_labels)
+        ax_abs.set_ylabel("Capacity (GW)")
+        ax_abs.set_xlabel("Window")
+        ax_abs.set_title(f"Clustered Absolute Capacity - {tech}", pad=15)
+        ax_abs.grid(axis="y", alpha=0.3)
+
+        ax_abs.legend(handles=legend_patches + [imports_patch], frameon=True, loc="upper right")
+
+        fig_abs.tight_layout()
+        fig_abs.savefig(output_dir / f"{tech}_clustered_absolute_window.png", dpi=300)
+        plt.close(fig_abs)
+
+        print(f"✔ Clustered bar plots saved for {tech}")
+
+        # =====================================================
+        # SCATTER OVERLAY WITH CLUSTER LABELS (windows as colors)
+        # =====================================================
+        fig_scat, ax_scat = plt.subplots(figsize=(8, 6))
+
+        for i, win in enumerate(windows):
+            subset = df_tech[df_tech["year"] == win]
+            ax_scat.scatter(
+                subset["Remanufacturing"],
+                subset["Manufacturing"],
+                color=window_colors[i],
+                alpha=0.6,
+                label=window_labels[i],
+                s=60
+            )
+
+        centroids = df_tech.groupby(["year", "cluster_id"])[["Remanufacturing", "Manufacturing"]].mean().reset_index()
+        x_range = df_tech["Remanufacturing"].max() - df_tech["Remanufacturing"].min()
+        y_range = df_tech["Manufacturing"].max() - df_tech["Manufacturing"].min()
+        radius = 0.05 * max(x_range, y_range)
+
+        for _, row in centroids.iterrows():
+            circle = plt.Circle(
+                (row["Remanufacturing"], row["Manufacturing"]),
+                radius=radius,
+                edgecolor="black",
+                facecolor="none",
+                lw=1.5,
+                alpha=0.8
+            )
+            ax_scat.add_patch(circle)
+            ax_scat.text(
+                row["Remanufacturing"],
+                row["Manufacturing"],
+                f"C{int(row['cluster_id'])}",
+                ha="center",
+                va="center",
+                fontsize=9,
+                fontweight="bold"
+            )
+
+        ax_scat.set_xlabel("Remanufacturing Capacity (GW)")
+        ax_scat.set_ylabel("Manufacturing Capacity (GW)")
+        ax_scat.set_title(f"Cluster Overview - {tech}")
+        ax_scat.grid(True, linestyle="--", alpha=0.3)
+        ax_scat.legend(title="Window", frameon=True)
+        fig_scat.tight_layout()
+        fig_scat.savefig(output_dir / f"{tech}_scatter_cluster_overlay_window.png", dpi=300)
+        plt.close(fig_scat)
+
+        print(f"✔ Scatter with cluster overlays saved for {tech}")
 
 def plot_clustered_benchmark_from_df(df_with_clusters, output_dir):
     output_dir = Path(output_dir)
@@ -798,7 +1653,6 @@ def plot_clustered_benchmark_from_df(df_with_clusters, output_dir):
             clusters_this_year = sorted(df_year["cluster_id"].unique())
             n_clusters = len(clusters_this_year)
 
-            # Compute leftmost offset so group is centered
             group_width = n_clusters * width + (n_clusters - 1) * gap
             start_offset = -group_width / 2 + width / 2
 
@@ -809,9 +1663,22 @@ def plot_clustered_benchmark_from_df(df_with_clusters, output_dir):
                 ].mean()
 
                 x_pos = x_base[i] + start_offset + j * (width + gap)
+
+                # Grey background bar for Imports (relative goes to 1.0)
+                ax_rel.bar(
+                    x_pos,
+                    1,                  # 100%
+                    width=width,
+                    bottom=0,
+                    facecolor="#D3D3D3",
+                    edgecolor="black",
+                    linewidth=0.8,
+                    zorder=0
+                )
+
+                # Colored stacks
                 bottom = 0
                 total = row["Totals (incl. Imports)"] if row["Totals (incl. Imports)"] > 0 else 1
-
                 for comp, color, hatch in zip(components, colors, hatches):
                     frac = row[comp] / total
                     ax_rel.bar(
@@ -823,14 +1690,13 @@ def plot_clustered_benchmark_from_df(df_with_clusters, output_dir):
                         edgecolor="black",
                         linewidth=0.8,
                         hatch=hatch,
+                        zorder=1
                     )
                     bottom += frac
 
                 ax_rel.text(x_pos, bottom + 0.02, f"C{int(cluster)}", ha="center", fontsize=8)
 
-        # Benchmark line
         ax_rel.axhline(0.4, color="red", linestyle="--", alpha=0.7, linewidth=2)
-
         ax_rel.set_xticks(x_base)
         ax_rel.set_xticklabels(years)
         ax_rel.set_ylim(0, 1)
@@ -871,6 +1737,20 @@ def plot_clustered_benchmark_from_df(df_with_clusters, output_dir):
                 ].mean()
 
                 x_pos = x_base[i] + start_offset + j * (width + gap)
+
+                # Grey background bar for Imports (absolute value)
+                ax_abs.bar(
+                    x_pos,
+                    row["Totals (incl. Imports)"],
+                    width=width,
+                    bottom=0,
+                    facecolor="#D3D3D3",
+                    edgecolor="black",
+                    linewidth=0.8,
+                    zorder=0
+                )
+
+                # Colored stacks
                 bottom = 0
                 for comp, color, hatch in zip(components, colors, hatches):
                     val = row[comp]
@@ -883,6 +1763,7 @@ def plot_clustered_benchmark_from_df(df_with_clusters, output_dir):
                         edgecolor="black",
                         linewidth=0.8,
                         hatch=hatch,
+                        zorder=1
                     )
                     bottom += val
 
@@ -1117,6 +1998,8 @@ def run_all_analyses():
 
     # Run analyses
     #plot_base_generation_mix(base_file)
+    #plot_renewables_breakdown_100pct(base_file)
+    #plot_renewables_installed_capacity_vertical(base_file)
     #plot_scrap_comparison(base_file, nzia_scenarios)
     #plot_lng_analysis(base_file, nzia_scenarios)
     #plot_system_costs_boxplot(base_file, nzia_scenarios)
@@ -1126,14 +2009,23 @@ def run_all_analyses():
     #    target_years=[2025, 2030, 2035, 2040],
     #    output_dir="plots/nzia_plots",
     #)
+    #plot_window_scatter_relative_single(tech_list=tech_list,
+    #    nzia_scenarios_dict=nzia_scenarios)
 
-    plot_cumulative_capacity_scatter(
+    plot_window_capacity_scatter(
         tech_list=tech_list,
         nzia_scenarios_dict=nzia_scenarios,
         perform_clustering=True,  # enable clustering
-        eps=0.3,  # tune sensitivity
+        eps=0.15,  # tune sensitivity
         min_samples=3
     )
+    #plot_cumulative_capacity_scatter(
+    #    tech_list=tech_list,
+    #    nzia_scenarios_dict=nzia_scenarios,
+    #    perform_clustering=True,  # enable clustering
+    #    eps=0.3,  # tune sensitivity
+    #    min_samples=3
+    #)
 
 
     print("✅ All analyses completed!")
