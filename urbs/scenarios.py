@@ -1,6 +1,4 @@
-
 def scenario_min_min_min(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -52,13 +50,33 @@ def scenario_min_min_min(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -111,7 +129,7 @@ def scenario_min_min_min(data, data_urbsextensionv1):
             "solarPV": 685.4,
             "windon": 1982.15,
             "windoff": 3462.33,
-            "Batteries": 5309.74
+            "Batteries": 5309.74,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -120,9 +138,9 @@ def scenario_min_min_min(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_min_min_avg(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -174,13 +192,33 @@ def scenario_min_min_avg(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -233,7 +271,7 @@ def scenario_min_min_avg(data, data_urbsextensionv1):
             "solarPV": 685.4,
             "windon": 1982.15,
             "windoff": 3462.33,
-            "Batteries": 13327.455
+            "Batteries": 13327.455,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -242,9 +280,9 @@ def scenario_min_min_avg(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_min_min_high(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -296,13 +334,33 @@ def scenario_min_min_high(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -355,7 +413,7 @@ def scenario_min_min_high(data, data_urbsextensionv1):
             "solarPV": 685.4,
             "windon": 1982.15,
             "windoff": 3462.33,
-            "Batteries": 42531.04
+            "Batteries": 42531.04,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -364,9 +422,9 @@ def scenario_min_min_high(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_min_avg_min(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -418,13 +476,33 @@ def scenario_min_avg_min(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -477,7 +555,7 @@ def scenario_min_avg_min(data, data_urbsextensionv1):
             "solarPV": 685.4,
             "windon": 4975.2,
             "windoff": 8690.45,
-            "Batteries": 5309.74
+            "Batteries": 5309.74,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -486,9 +564,9 @@ def scenario_min_avg_min(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_min_avg_avg(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -540,13 +618,33 @@ def scenario_min_avg_avg(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -599,7 +697,7 @@ def scenario_min_avg_avg(data, data_urbsextensionv1):
             "solarPV": 685.4,
             "windon": 4975.2,
             "windoff": 8690.45,
-            "Batteries": 13327.455
+            "Batteries": 13327.455,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -608,9 +706,9 @@ def scenario_min_avg_avg(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_min_avg_high(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -662,13 +760,33 @@ def scenario_min_avg_high(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -721,7 +839,7 @@ def scenario_min_avg_high(data, data_urbsextensionv1):
             "solarPV": 685.4,
             "windon": 4975.2,
             "windoff": 8690.45,
-            "Batteries": 42531.04
+            "Batteries": 42531.04,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -730,9 +848,9 @@ def scenario_min_avg_high(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_min_high_min(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -784,13 +902,33 @@ def scenario_min_high_min(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -843,7 +981,7 @@ def scenario_min_high_min(data, data_urbsextensionv1):
             "solarPV": 685.4,
             "windon": 15877,
             "windoff": 27733.28,
-            "Batteries": 5309.74
+            "Batteries": 5309.74,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -852,9 +990,9 @@ def scenario_min_high_min(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_min_high_avg(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -906,13 +1044,33 @@ def scenario_min_high_avg(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -965,7 +1123,7 @@ def scenario_min_high_avg(data, data_urbsextensionv1):
             "solarPV": 685.4,
             "windon": 15877,
             "windoff": 27733.28,
-            "Batteries": 13327.455
+            "Batteries": 13327.455,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -974,9 +1132,9 @@ def scenario_min_high_avg(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_min_high_high(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -1028,13 +1186,33 @@ def scenario_min_high_high(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -1087,7 +1265,7 @@ def scenario_min_high_high(data, data_urbsextensionv1):
             "solarPV": 685.4,
             "windon": 15877,
             "windoff": 27733.28,
-            "Batteries": 42531.04
+            "Batteries": 42531.04,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -1096,9 +1274,9 @@ def scenario_min_high_high(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_avg_min_min(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -1150,13 +1328,33 @@ def scenario_avg_min_min(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -1209,7 +1407,7 @@ def scenario_avg_min_min(data, data_urbsextensionv1):
             "solarPV": 1720.584,
             "windon": 1982.15,
             "windoff": 3462.33,
-            "Batteries": 5309.74
+            "Batteries": 5309.74,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -1218,9 +1416,9 @@ def scenario_avg_min_min(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_avg_min_avg(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -1272,13 +1470,33 @@ def scenario_avg_min_avg(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -1331,7 +1549,7 @@ def scenario_avg_min_avg(data, data_urbsextensionv1):
             "solarPV": 1720.584,
             "windon": 1982.15,
             "windoff": 3462.33,
-            "Batteries": 13327.455
+            "Batteries": 13327.455,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -1340,9 +1558,9 @@ def scenario_avg_min_avg(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_avg_min_high(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -1394,13 +1612,33 @@ def scenario_avg_min_high(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -1453,7 +1691,7 @@ def scenario_avg_min_high(data, data_urbsextensionv1):
             "solarPV": 1720.584,
             "windon": 1982.15,
             "windoff": 3462.33,
-            "Batteries": 42531.04
+            "Batteries": 42531.04,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -1462,9 +1700,9 @@ def scenario_avg_min_high(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_avg_avg_min(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -1516,13 +1754,33 @@ def scenario_avg_avg_min(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -1575,7 +1833,7 @@ def scenario_avg_avg_min(data, data_urbsextensionv1):
             "solarPV": 1720.584,
             "windon": 4975.2,
             "windoff": 8690.45,
-            "Batteries": 5309.74
+            "Batteries": 5309.74,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -1584,9 +1842,9 @@ def scenario_avg_avg_min(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_avg_avg_avg(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -1638,13 +1896,33 @@ def scenario_avg_avg_avg(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -1697,7 +1975,7 @@ def scenario_avg_avg_avg(data, data_urbsextensionv1):
             "solarPV": 1720.584,
             "windon": 4975.2,
             "windoff": 8690.45,
-            "Batteries": 13327.455
+            "Batteries": 13327.455,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -1706,9 +1984,9 @@ def scenario_avg_avg_avg(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_avg_avg_high(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -1760,13 +2038,33 @@ def scenario_avg_avg_high(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -1819,7 +2117,7 @@ def scenario_avg_avg_high(data, data_urbsextensionv1):
             "solarPV": 1720.584,
             "windon": 4975.2,
             "windoff": 8690.45,
-            "Batteries": 42531.04
+            "Batteries": 42531.04,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -1828,9 +2126,9 @@ def scenario_avg_avg_high(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_avg_high_min(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -1882,13 +2180,33 @@ def scenario_avg_high_min(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -1941,7 +2259,7 @@ def scenario_avg_high_min(data, data_urbsextensionv1):
             "solarPV": 1720.584,
             "windon": 15877,
             "windoff": 27733.28,
-            "Batteries": 5309.74
+            "Batteries": 5309.74,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -1950,9 +2268,9 @@ def scenario_avg_high_min(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_avg_high_avg(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -2004,13 +2322,33 @@ def scenario_avg_high_avg(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -2063,7 +2401,7 @@ def scenario_avg_high_avg(data, data_urbsextensionv1):
             "solarPV": 1720.584,
             "windon": 15877,
             "windoff": 27733.28,
-            "Batteries": 13327.455
+            "Batteries": 13327.455,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -2072,9 +2410,9 @@ def scenario_avg_high_avg(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_avg_high_high(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -2126,13 +2464,33 @@ def scenario_avg_high_high(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -2185,7 +2543,7 @@ def scenario_avg_high_high(data, data_urbsextensionv1):
             "solarPV": 1720.584,
             "windon": 15877,
             "windoff": 27733.28,
-            "Batteries": 42531.04
+            "Batteries": 42531.04,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -2194,9 +2552,9 @@ def scenario_avg_high_high(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_high_min_min(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -2248,13 +2606,33 @@ def scenario_high_min_min(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -2307,7 +2685,7 @@ def scenario_high_min_min(data, data_urbsextensionv1):
             "solarPV": 5490.56,
             "windon": 1982.15,
             "windoff": 3462.33,
-            "Batteries": 5309.74
+            "Batteries": 5309.74,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -2316,9 +2694,9 @@ def scenario_high_min_min(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_high_min_avg(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -2370,13 +2748,33 @@ def scenario_high_min_avg(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -2429,7 +2827,7 @@ def scenario_high_min_avg(data, data_urbsextensionv1):
             "solarPV": 5490.56,
             "windon": 1982.15,
             "windoff": 3462.33,
-            "Batteries": 13327.455
+            "Batteries": 13327.455,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -2438,9 +2836,9 @@ def scenario_high_min_avg(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_high_min_high(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -2492,13 +2890,33 @@ def scenario_high_min_high(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -2551,7 +2969,7 @@ def scenario_high_min_high(data, data_urbsextensionv1):
             "solarPV": 5490.56,
             "windon": 1982.15,
             "windoff": 3462.33,
-            "Batteries": 42531.04
+            "Batteries": 42531.04,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -2560,9 +2978,9 @@ def scenario_high_min_high(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_high_avg_min(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -2614,13 +3032,33 @@ def scenario_high_avg_min(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -2673,7 +3111,7 @@ def scenario_high_avg_min(data, data_urbsextensionv1):
             "solarPV": 5490.56,
             "windon": 4975.2,
             "windoff": 8690.45,
-            "Batteries": 5309.74
+            "Batteries": 5309.74,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -2682,9 +3120,9 @@ def scenario_high_avg_min(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_high_avg_avg(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -2736,13 +3174,33 @@ def scenario_high_avg_avg(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -2795,7 +3253,7 @@ def scenario_high_avg_avg(data, data_urbsextensionv1):
             "solarPV": 5490.56,
             "windon": 4975.2,
             "windoff": 8690.45,
-            "Batteries": 13327.455
+            "Batteries": 13327.455,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -2804,9 +3262,9 @@ def scenario_high_avg_avg(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_high_avg_high(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -2858,13 +3316,33 @@ def scenario_high_avg_high(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -2917,7 +3395,7 @@ def scenario_high_avg_high(data, data_urbsextensionv1):
             "solarPV": 5490.56,
             "windon": 4975.2,
             "windoff": 8690.45,
-            "Batteries": 42531.04
+            "Batteries": 42531.04,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -2926,9 +3404,9 @@ def scenario_high_avg_high(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_high_high_min(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -2980,13 +3458,33 @@ def scenario_high_high_min(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -3039,7 +3537,7 @@ def scenario_high_high_min(data, data_urbsextensionv1):
             "solarPV": 5490.56,
             "windon": 15877,
             "windoff": 27733.28,
-            "Batteries": 5309.74
+            "Batteries": 5309.74,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -3048,9 +3546,9 @@ def scenario_high_high_min(data, data_urbsextensionv1):
                     recyclingcost[key] = new_costs[tech]
 
     return data, data_urbsextensionv1
+
 
 def scenario_high_high_avg(data, data_urbsextensionv1):
-
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -3102,13 +3600,33 @@ def scenario_high_high_avg(data, data_urbsextensionv1):
     if "demand" in data:
         demand = data["demand"]
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -3161,7 +3679,7 @@ def scenario_high_high_avg(data, data_urbsextensionv1):
             "solarPV": 5490.56,
             "windon": 15877,
             "windoff": 27733.28,
-            "Batteries": 13327.455
+            "Batteries": 13327.455,
         }
         for stf in range(2024, 2051):
             for tech in technologies:
@@ -3171,8 +3689,8 @@ def scenario_high_high_avg(data, data_urbsextensionv1):
 
     return data, data_urbsextensionv1
 
-def scenario_high_high_high(data, data_urbsextensionv1):
 
+def scenario_high_high_high(data, data_urbsextensionv1):
     # ---------------- CO2 prices ----------------
     if "commodity" in data:
         co = data["commodity"]
@@ -3223,7 +3741,7 @@ def scenario_high_high_high(data, data_urbsextensionv1):
     # ---------------- Demand ----------------
     if "demand" in data:
         demand = data["demand"]
-        #yearly_profile = [
+        # yearly_profile = [
         #    207658333.3, 218941666.7, 230225000.0, 241500000.0,
         #    252775000.0, 264058333.3, 289000000.0, 299891666.7,
         #    310783333.3, 321675000.0, 332566666.7, 343458333.3,
@@ -3231,16 +3749,36 @@ def scenario_high_high_high(data, data_urbsextensionv1):
         #    397916666.7, 411833333.4, 425750000.0, 439666666.7,
         #    453583333.3, 467500000.0, 481416666.7, 495333333.3,
         #    509250000.0, 523166666.6, 537083333.3,
-        #] #This is the Profile with electrolyser Demand
+        # ] #This is the Profile with electrolyser Demand
 
         yearly_profile = [
-            207658333.3, 215588018.8, 223517704.2, 231447389.6,
-            239377075.1, 247306760.5, 255236445.9, 260097649.0,
-            264958852.1, 269820055.3, 274681258.3, 279542461.5,
-            284403664.6, 289264867.8, 294126070.8, 298987274.0,
-            294534045.3, 298734647.4, 302935249.6, 307135851.7,
-            311336453.8, 315537055.9, 319737658.1, 323938260.2,
-            328138862.3, 332339464.4, 338580792.8,
+            207658333.3,
+            215588018.8,
+            223517704.2,
+            231447389.6,
+            239377075.1,
+            247306760.5,
+            255236445.9,
+            260097649.0,
+            264958852.1,
+            269820055.3,
+            274681258.3,
+            279542461.5,
+            284403664.6,
+            289264867.8,
+            294126070.8,
+            298987274.0,
+            294534045.3,
+            298734647.4,
+            302935249.6,
+            307135851.7,
+            311336453.8,
+            315537055.9,
+            319737658.1,
+            323938260.2,
+            328138862.3,
+            332339464.4,
+            338580792.8,
         ]
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
@@ -3293,7 +3831,7 @@ def scenario_high_high_high(data, data_urbsextensionv1):
             "solarPV": 5490.56,
             "windon": 15877,
             "windoff": 27733.28,
-            "Batteries": 42531.04
+            "Batteries": 42531.04,
         }
         for stf in range(2024, 2051):
             for tech in technologies:

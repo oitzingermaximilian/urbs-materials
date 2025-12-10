@@ -395,7 +395,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         m.nsteps_sec,  # Steps
         initialize=lambda m, n: selected_relative_reductions.get(n, 0),
         mutable=False,
-        doc=f"Selected relative reductions for --lr {LEARNING_RATE}"
+        doc=f"Selected relative reductions for --lr {LEARNING_RATE}",
     )
 
     # Initialize P_sec_recycling with absolute recycling cost reductions
@@ -528,13 +528,15 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     )
 
     embedded_energy = {
-        'solarPV': 2452,  # MWh/MW (from 12-24 months EPBT)
-        'windon': 1277,# MWh/MW (from 5-8 months EPBT)
-        'windoff': 1277,
-        'Batteries': 1500  # MWh/MW
+        "solarPV": 2452,  # MWh/MW (from 12-24 months EPBT)
+        "windon": 1277,  # MWh/MW (from 5-8 months EPBT)
+        "windoff": 1277,
+        "Batteries": 1500,  # MWh/MW
     }
 
     # Pyomo Param to store embedded electricity needs
-    m.needs = pyomo.Param(m.tech, initialize=embedded_energy,doc="Embedded electricity needs in MWh per MW of capacity")
-
-
+    m.needs = pyomo.Param(
+        m.tech,
+        initialize=embedded_energy,
+        doc="Embedded electricity needs in MWh per MW of capacity",
+    )

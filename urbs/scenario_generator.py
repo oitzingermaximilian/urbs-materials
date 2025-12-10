@@ -7,7 +7,7 @@ price_levels = ["min", "avg", "high"]
 price_values = {
     "solarPV": {"min": 685.4, "avg": 1720.584, "high": 5490.56},
     "windon": {"min": 1982.15, "avg": 4975.2, "high": 15877},
-    "windoff": {"min": 3462.33, "avg": 8690.45, "high":27733.28 },
+    "windoff": {"min": 3462.33, "avg": 8690.45, "high": 27733.28},
     "Batteries": {
         "min": 5309.74,
         "avg": 13327.455,

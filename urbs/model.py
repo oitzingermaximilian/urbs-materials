@@ -627,9 +627,11 @@ def res_vertex_rule(m, tm, stf, sit, com, com_type):
         for tech in m.tech:
             if (tm, stf, sit, tech) in m.balance_ext:
                 power_surplus += m.balance_ext[tm, stf, sit, tech]
-                power_surplus -= m.demand_production[tm, stf, sit, tech]  # subtract production demand
+                power_surplus -= m.demand_production[
+                    tm, stf, sit, tech
+                ]  # subtract production demand
 
-                #print(power_surplus)
+                # print(power_surplus)
     # if com is a stock commodity, the commodity source term e_co_stock
     # can supply a possibly negative power_surplus
     # Add extra modelled LNG usage to power_surplus for "LNG"

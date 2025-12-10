@@ -33,7 +33,8 @@ def calc_invcost_factor(dep_prd, wacc, discount=None, year_built=None, stf_min=N
             return (
                 (1 + d) ** (1 - (year_built - stf_min))
                 * (i * (1 + i) ** dep_prd * ((1 + d) ** dep_prd - 1))
-             / (d * (1 + d) ** dep_prd * ((1 + i) ** dep_prd - 1)))
+                / (d * (1 + d) ** dep_prd * ((1 + i) ** dep_prd - 1))
+            )
 
 
 def calc_overpay_factor(dep_prd, wacc, discount, year_built, stf_min, stf_end):
@@ -58,23 +59,15 @@ def calc_overpay_factor(dep_prd, wacc, discount, year_built, stf_min, stf_end):
     else:
         if i == 0:
             return (
-                    (1 + d) ** (1 - (year_built - stf_min))
-                    * ((1 + d) ** op_time - 1)
-                    / (dep_prd * d * (1 + d) ** dep_prd)
+                (1 + d) ** (1 - (year_built - stf_min))
+                * ((1 + d) ** op_time - 1)
+                / (dep_prd * d * (1 + d) ** dep_prd)
             )
         else:
             return (
-                    (1 + d) ** (1 - (year_built - stf_min))
-                    * (
-                            i
-                            * (1 + i) ** dep_prd
-                            * ((1 + d) ** op_time - 1)
-                    )
-                    / (
-                            d
-                            * (1 + d) ** dep_prd
-                            * ((1 + i) ** dep_prd - 1)
-                    )
+                (1 + d) ** (1 - (year_built - stf_min))
+                * (i * (1 + i) ** dep_prd * ((1 + d) ** op_time - 1))
+                / (d * (1 + d) ** dep_prd * ((1 + i) ** dep_prd - 1))
             )
 
 

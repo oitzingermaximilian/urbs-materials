@@ -271,34 +271,35 @@ my_colors = {"EU27": (200, 230, 200)}
 for country, color in my_colors.items():
     urbs.COLORS[country] = color
 scenarios = [
-        ("scenario_min_min_min", urbs.scenario_min_min_min),
-        ("scenario_min_min_avg", urbs.scenario_min_min_avg),
-        ("scenario_min_min_high", urbs.scenario_min_min_high),
-        ("scenario_min_avg_min", urbs.scenario_min_avg_min),
-        ("scenario_min_avg_avg", urbs.scenario_min_avg_avg),
-        ("scenario_min_avg_high", urbs.scenario_min_avg_high),
-        ("scenario_min_high_min", urbs.scenario_min_high_min),
-        ("scenario_min_high_avg", urbs.scenario_min_high_avg),
-        ("scenario_min_high_high", urbs.scenario_min_high_high),
-        ("scenario_avg_min_min", urbs.scenario_avg_min_min),
-        ("scenario_avg_min_avg", urbs.scenario_avg_min_avg),
-        ("scenario_avg_min_high", urbs.scenario_avg_min_high),
-        ("scenario_avg_avg_min", urbs.scenario_avg_avg_min),
-        ("scenario_avg_avg_avg", urbs.scenario_avg_avg_avg),
-        ("scenario_avg_avg_high", urbs.scenario_avg_avg_high),
-        ("scenario_avg_high_min", urbs.scenario_avg_high_min),
-        ("scenario_avg_high_avg", urbs.scenario_avg_high_avg),
-        ("scenario_avg_high_high", urbs.scenario_avg_high_high),
-        ("scenario_high_min_min", urbs.scenario_high_min_min),
-        ("scenario_high_min_avg", urbs.scenario_high_min_avg),
-        ("scenario_high_min_high", urbs.scenario_high_min_high),
-        ("scenario_high_avg_min", urbs.scenario_high_avg_min),
-        ("scenario_high_avg_avg", urbs.scenario_high_avg_avg),
-        ("scenario_high_avg_high", urbs.scenario_high_avg_high),
-        ("scenario_high_high_min", urbs.scenario_high_high_min),
-        ("scenario_high_high_avg", urbs.scenario_high_high_avg),
-        ("scenario_high_high_high", urbs.scenario_high_high_high),
-    ]
+    ("scenario_min_min_min", urbs.scenario_min_min_min),
+    ("scenario_min_min_avg", urbs.scenario_min_min_avg),
+    ("scenario_min_min_high", urbs.scenario_min_min_high),
+    ("scenario_min_avg_min", urbs.scenario_min_avg_min),
+    ("scenario_min_avg_avg", urbs.scenario_min_avg_avg),
+    ("scenario_min_avg_high", urbs.scenario_min_avg_high),
+    ("scenario_min_high_min", urbs.scenario_min_high_min),
+    ("scenario_min_high_avg", urbs.scenario_min_high_avg),
+    ("scenario_min_high_high", urbs.scenario_min_high_high),
+    ("scenario_avg_min_min", urbs.scenario_avg_min_min),
+    ("scenario_avg_min_avg", urbs.scenario_avg_min_avg),
+    ("scenario_avg_min_high", urbs.scenario_avg_min_high),
+    ("scenario_avg_avg_min", urbs.scenario_avg_avg_min),
+    ("scenario_avg_avg_avg", urbs.scenario_avg_avg_avg),
+    ("scenario_avg_avg_high", urbs.scenario_avg_avg_high),
+    ("scenario_avg_high_min", urbs.scenario_avg_high_min),
+    ("scenario_avg_high_avg", urbs.scenario_avg_high_avg),
+    ("scenario_avg_high_high", urbs.scenario_avg_high_high),
+    ("scenario_high_min_min", urbs.scenario_high_min_min),
+    ("scenario_high_min_avg", urbs.scenario_high_min_avg),
+    ("scenario_high_min_high", urbs.scenario_high_min_high),
+    ("scenario_high_avg_min", urbs.scenario_high_avg_min),
+    ("scenario_high_avg_avg", urbs.scenario_high_avg_avg),
+    ("scenario_high_avg_high", urbs.scenario_high_avg_high),
+    ("scenario_high_high_min", urbs.scenario_high_high_min),
+    ("scenario_high_high_avg", urbs.scenario_high_high_avg),
+    ("scenario_high_high_high", urbs.scenario_high_high_high),
+]
+
 
 def run_perfect_foresight():
     """Original perfect foresight execution"""
@@ -496,11 +497,11 @@ def run_rolling_horizon(start_year=2024, end_year=2050, step=5):
         )
         output_file_path = os.path.join(result_dir, output_filename)
         write_carryovers_to_excel(all_carryovers, output_file_path)
-        #plot_auto.plot_nzia_benchmark(output_file_path)
-        #plot_auto.plot_scrap(output_file_path)
-        #plot_auto.plot_balance_created(output_file_path)
-        #plot_auto.lineplot_fuels(output_file_path)
-        #plot_auto.plot_facility_utilization(output_file_path)
+        # plot_auto.plot_nzia_benchmark(output_file_path)
+        # plot_auto.plot_scrap(output_file_path)
+        # plot_auto.plot_balance_created(output_file_path)
+        # plot_auto.lineplot_fuels(output_file_path)
+        # plot_auto.plot_facility_utilization(output_file_path)
 
 
 # Execute selected mode

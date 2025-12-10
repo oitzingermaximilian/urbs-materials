@@ -140,8 +140,10 @@ class cost_scrap_rule(AbstractConstraint):
 
         expr = (
             m.cost_scrap[stf, location, tech]
-            == (m.f_scrap_rec[stf, location, tech]
-            * m.capacity_scrap_rec[stf, location, tech])
+            == (
+                m.f_scrap_rec[stf, location, tech]
+                * m.capacity_scrap_rec[stf, location, tech]
+            )
             - m.pricereduction_sec_recycling[stf, location, tech]
         )
         # - m.pricereduction_sec_recycling[stf, location, tech] #todo reeactivate when pricereduction_sec_recycling is defined

@@ -119,8 +119,7 @@ def apply_variables(m):
         m.stf, m.location, m.tech, m.nsteps_sec, domain=pyomo.NonNegativeReals
     )
     m.auxiliary_product_BD_q_primary = pyomo.Var(
-        m.stf, m.location, m.tech, m.nsteps_sec,
-        within=pyomo.NonNegativeReals
+        m.stf, m.location, m.tech, m.nsteps_sec, within=pyomo.NonNegativeReals
     )
 
     """
@@ -156,4 +155,6 @@ def apply_variables(m):
         m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
     )
 
-    m.demand_production = pyomo.Var(m.timesteps_ext, m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals)
+    m.demand_production = pyomo.Var(
+        m.timesteps_ext, m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
+    )

@@ -3,8 +3,6 @@ import pyomo.core as pyomo
 from pyomo.environ import value
 
 
-
-
 class AbstractConstraint(ABC):
     @abstractmethod
     def apply_rule(self, m, *args):
@@ -249,6 +247,7 @@ class non_negativity_z_eq_sec(AbstractConstraint):
         )
         return expr
 
+
 class upper_bound_z_constraint_primary(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, nsteps_sec):
         lhs_value = m.auxiliary_product_BD_q_primary[stf, location, tech, nsteps_sec]
@@ -266,9 +265,10 @@ class upper_bound_z_q1_eq_primary(AbstractConstraint):
 class lower_bound_z_eq_primary(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, nsteps_sec):
         lhs_value = m.auxiliary_product_BD_q_primary[stf, location, tech, nsteps_sec]
-        rhs_value = m.capacity_ext_euprimary[stf, location, tech] - (
-            1 - m.BD_sec[stf, location, tech, nsteps_sec]
-        ) * m.gamma_sec
+        rhs_value = (
+            m.capacity_ext_euprimary[stf, location, tech]
+            - (1 - m.BD_sec[stf, location, tech, nsteps_sec]) * m.gamma_sec
+        )
         return lhs_value >= rhs_value
 
 
@@ -277,16 +277,20 @@ class non_negativity_z_eq_primary(AbstractConstraint):
         lhs_value = m.auxiliary_product_BD_q_primary[stf, location, tech, nsteps_sec]
         return lhs_value >= 0
 
+
 def recycling_reduction_rule(m, stf, location, tech):
     recycling_reduction_value = sum(
-        m.P_sec_recycling[location, tech, n] * m.auxiliary_product_BD_q[stf, location, tech, n]
+        m.P_sec_recycling[location, tech, n]
+        * m.auxiliary_product_BD_q[stf, location, tech, n]
         for n in m.nsteps_sec
     )
     if DEBUG:
-        print("="*60)
-        print(f"[RECYCLING EXPRESSION DEBUG] STF={stf}, Location={location}, Tech={tech}")
+        print("=" * 60)
+        print(
+            f"[RECYCLING EXPRESSION DEBUG] STF={stf}, Location={location}, Tech={tech}"
+        )
         print(f"  Recycling reduction value (LINEARIZED): {recycling_reduction_value}")
-        print("="*60)
+        print("=" * 60)
     return recycling_reduction_value
 
 
@@ -366,9 +370,17 @@ def apply_combined_lr_constraints(m):
             m,
             constraint_name,
             pyomo.Constraint(
-                m.stf, m.location, m.tech, m.nsteps_sec,
-                rule=lambda m, stf, loc, tech, n, constraint=constraint: constraint.apply_rule(m, stf, loc, tech, n)
-            )
+                m.stf,
+                m.location,
+                m.tech,
+                m.nsteps_sec,
+                rule=lambda m,
+                stf,
+                loc,
+                tech,
+                n,
+                constraint=constraint: constraint.apply_rule(m, stf, loc, tech, n),
+            ),
         )
 
     m.pricereduction_sec_recycling = pyomo.Expression(
@@ -376,5 +388,5 @@ def apply_combined_lr_constraints(m):
         m.location,
         m.tech,
         rule=recycling_reduction_rule,
-        doc="Recycling price reduction using linearized auxiliary variable"
+        doc="Recycling price reduction using linearized auxiliary variable",
     )

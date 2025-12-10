@@ -100,8 +100,8 @@ def apply_gas_block_pricing(m, data):
         # Apply discount factor per year
         dist = stf_dist(stf, m)
         gas_cost_factor = discount_factor(stf) * effective_distance(dist)
-        #print("#"*60)
-        #print(gas_cost_factor)
+        # print("#"*60)
+        # print(gas_cost_factor)
 
         return m.gas_cost[stf] == yearly_gas_cost * gas_cost_factor
 

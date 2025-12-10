@@ -5369,7 +5369,7 @@ def summarize_capacity_and_stock_all_LRs():
 
 def main():
     """
-    Main entry point for scenario_comparison.py.
+    Main entry point for scenario_comparison_rolling.py.
     Uncomment the desired plot functions to generate the corresponding plots.
     """
     # Example: Uncomment the plots you want to generate
