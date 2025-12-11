@@ -51,7 +51,7 @@ def read_input(input_files, year):
                     ["description"], axis=1
                 )
             else:
-                support_timeframe = year  ##TODO change back to support timeframe
+                support_timeframe = year
             global_prop = pd.concat(
                 [global_prop], keys=[support_timeframe], names=["support_timeframe"]
             )
@@ -622,8 +622,6 @@ def pyomo_model_prep(data, timesteps, window_start, window_end):
     m.global_prop_dict = m.global_prop.to_dict()
     m.commodity_dict = commodity.to_dict()
     m.process_dict = process.to_dict()
-    ##TODO solar sheet dict
-    # m.solar_dict = solar.to_dict()
 
     # dictionaries for additional features
     if m.mode["tra"]:
