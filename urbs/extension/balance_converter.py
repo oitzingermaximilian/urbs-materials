@@ -22,98 +22,10 @@ class ConvertTotalCapacityToBalance(AbstractConstraint):
         return m.balance_ext[timesteps_ext, stf, location, tech] == balance_value
 
 
-class ConvertCapacity1Rule(AbstractConstraint):
-    def apply_rule(self, m, timesteps_ext, stf, location, tech):
-        balance_value = (
-            m.capacity_ext_imported[stf, location, tech]  # Capacity in MW
-            * m.lf_solar[timesteps_ext, stf, location, tech]  # Load factor
-            * m.hours[timesteps_ext]  # Duration of the timestep in hours
-        )
-        # print(
-        #    f"Debug:time = {timesteps_ext}, STF = {stf}, Location = {location}, Tech = {tech}"
-        # )
-        # print(f"Total Balance (Imported Solar) = {balance_value}")
-        return m.balance_import_ext[timesteps_ext, stf, location, tech] == balance_value
-
-
-class ConvertCapacity2Rule(AbstractConstraint):
-    def apply_rule(self, m, timesteps_ext, stf, location, tech):
-        balance_value = (
-            m.capacity_ext_stockout[stf, location, tech]
-            * m.lf_solar[timesteps_ext, stf, location, tech]
-            * m.hours[timesteps_ext]
-        )
-        # print(
-        #    f"Debug:time = {timesteps_ext}, STF = {stf}, Location = {location}, Tech = {tech}"
-        # )
-        # print(f"Total Balance (Stockout Solar) = {balance_value}")
-        return (
-            m.balance_outofstock_ext[timesteps_ext, stf, location, tech]
-            == balance_value
-        )
-
-
-class ConvertCapacity3Rule(AbstractConstraint):
-    def apply_rule(self, m, timesteps_ext, stf, location, tech):
-        balance_value = (
-            m.capacity_ext_euprimary[stf, location, tech]
-            * m.lf_solar[timesteps_ext, stf, location, tech]
-            * m.hours[timesteps_ext]
-        )
-        # print(
-        #    f"Debug:time = {timesteps_ext}, STF = {stf}, Location = {location}, Tech = {tech}"
-        # )
-        # print(f"Total Balance (EU Primary Solar) = {balance_value}")
-        return (
-            m.balance_EU_primary_ext[timesteps_ext, stf, location, tech]
-            == balance_value
-        )
-
-
-class ConvertCapacity4Rule(AbstractConstraint):
-    def apply_rule(self, m, timesteps_ext, stf, location, tech):
-        balance_value = (
-            m.capacity_ext_eusecondary[stf, location, tech]
-            * m.lf_solar[timesteps_ext, stf, location, tech]
-            * m.hours[timesteps_ext]
-        )
-        # print(
-        #    f"Debug:time = {timesteps_ext}, STF = {stf}, Location = {location}, Tech = {tech}"
-        # )
-        # print(f"Total Balance (EU Secondary Solar) = {balance_value}")
-        return (
-            m.balance_EU_secondary_ext[timesteps_ext, stf, location, tech]
-            == balance_value
-        )
-
-
-class ComputeElectricityNeedsTotal(AbstractConstraint):
-    def apply_rule(self, m, t, stf, location, tech):
-        annual_demand = sum(
-            m.auxiliary_product_BD_q_primary[stf, location, tech, n]
-            * m.needs[tech]
-            * m.P_sec_relative[n]
-            for n in m.nsteps_sec
-        ) + sum(
-            m.auxiliary_product_BD_q[stf, location, tech, n]
-            * m.needs[tech]
-            * m.P_sec_relative[n]
-            for n in m.nsteps_sec
-        )
-
-        return (
-            m.demand_production[t, stf, location, tech] == annual_demand / 12
-        )  # or use num_timesteps
-
 
 def apply_balance_constraints(m):
     constraints = [
         ConvertTotalCapacityToBalance(),
-        ConvertCapacity1Rule(),
-        ConvertCapacity2Rule(),
-        ConvertCapacity3Rule(),
-        ConvertCapacity4Rule(),
-        ComputeElectricityNeedsTotal(),
     ]
 
     for i, constraint in enumerate(constraints):

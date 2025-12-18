@@ -544,7 +544,7 @@ def run_scenario(
         print("Model is feasible and solved to optimality.")
 
     # save problem solution (and input data) to HDF5 file
-    save(prob, os.path.join(result_dir, "{}.h5".format(sce)))
+    #save(prob, os.path.join(result_dir, "{}.h5".format(sce))) #TODO RE-ENABLE
 
     # write report to spreadsheet
     report(

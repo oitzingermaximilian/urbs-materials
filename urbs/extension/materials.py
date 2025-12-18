@@ -20,7 +20,7 @@ def debug_print(*args, **kwargs):
 class ProcessingCapacitiesBuildoutRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
         start_year = value(m.y0)
-        build_time_lag = value(m.build_time[tech, stage])
+        build_time_lag = value(m.build_time[location, tech, stage])
         cutoff_year = stf - build_time_lag
         processing_init = m.processing_cap_init[stf, location, tech,stage]
         if cutoff_year < start_year:
@@ -56,7 +56,7 @@ class CapacityProducedOutputCompositionRule(AbstractConstraint):
 class CapacityImportedCompositionRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
         return(
-            m.capacity_imorted[stf, location, tech, stage] ==
+            m.capacity_imported[stf, location, tech, stage] ==
             m.capacity_imported_flow[stf, location, tech, stage] +
             m.capacity_imported_storage[stf, location, tech, stage]
         )
@@ -64,7 +64,7 @@ class CapacityImportedCompositionRule(AbstractConstraint):
 class StockpileTotalRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
         return (
-            m.componenets_stockpilestf, location, tech, stage ==
+            m.components_stockpile[stf, location, tech, stage] ==
             m.stock_domestic[stf, location, tech, stage] +
             m.stock_imported[stf, location, tech, stage]
         )
@@ -118,50 +118,49 @@ class SupplyCompositionRule(AbstractConstraint):
                 (m.capacity_imported_flow[stf,location,tech,stage]+ m.capacity_imported_stockout[stf,location,tech,stage])
         )
 
-class SequentialProcessingRule(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech, stage):
-        if tech not in ['solarPV', 'Batteries']:
-            return pyomo.Constraint.Skip
-        if stage == 1:
-            return pyomo.Constraint.Skip
-        prev_stage = stage -1
-        lhs = m.capacity_produced_output[stf, location, tech, stage]
-        rhs = m.Supply[stf, location, tech, prev_stage]
-        return lhs <= rhs
 
-class ParallelAssemblyRule(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech, stage):
-        if tech not in ['windon','windoff']:
-            return pyomo.Constraint.Skip
-        final_stage = m.final_stage[tech]
-        if stage == final_stage:
-            return pyomo.Constraint.Skip
+class ComponentBalanceRule(AbstractConstraint):
+    def apply_rule(self, m, stf, location, input_tech, input_stage):
+        supply = m.Supply[stf, location, input_tech, input_stage]
 
-        lhs = m.capacity_produced_output[stf, location, tech, final_stage]
-        rhs = m.Supply[stf, location, tech, stage]
-        return lhs <= rhs
+        demand = sum(
+            m.capacity_produced_output[stf, location, consumer_tech, consumer_stage]
+            * m.bom_map[consumer_tech, consumer_stage, input_tech, input_stage]  # <--- UPDATED NAME
+
+            for consumer_tech in m.tech
+            for consumer_stage in m.stages
+            # Check against the new name:
+            if (consumer_tech, consumer_stage, input_tech, input_stage) in m.bom_map
+        )
+
+        return supply >= demand
 
 
 class InstallationSupplyLinkRule(AbstractConstraint):
     """
-    Implements Eq 7.1: Final Installation = Supply of the Final Stage
-    pi_new(y, l, k) = Q_supply(y, l, k, I_max)
+    Links the Manufacturing Model to the Energy Model.
+    Capacity Added (MW) == Supply of Final Stage (MW)
     """
-
     def apply_rule(self, m, stf, location, tech):
-        # 1. Retrieve the Final Stage Index for this technology
-        # We access the parameter you defined in Option A
-        # value() is important if you use the index for logic,
-        # but for direct index access, Pyomo handles params automatically.
-        # However, to be safe and clean:
-        final_stage = value(m.final_stage[tech])
+        # 1. Retrieve the Final Stage Name
+        # We wrap this in a try-block in case the parameter is missing or empty
+        try:
+            final_stage = value(m.final_stage[tech])
+        except (ValueError, KeyError):
+            print(f"⚠️ SKIPPING {tech}: No final_stage_idx defined!")
+            return pyomo.Constraint.Skip
 
-        # 2. The Constraint
-        # LHS: The capacity added to the energy system (Macro)
-        lhs = m.capacity_ext_new[stf, location, tech]
-
-        # RHS: The available supply of the finished good (Micro)
+        # 2. Define the sides of the equation
+        lhs = m.capacity_ext_new[stf, location, tech] # Or m.capacity_ext_new depending on your var name
         rhs = m.Supply[stf, location, tech, final_stage]
+
+        # --- DEBUG PRINT ---
+        # This will print once for every (stf, location, tech) combo during model build
+        print(f"LINKING: {tech} (Loc: {location})")
+        print(f"   -> Final Stage Identified: '{final_stage}'")
+        print(f"   -> Constraint: {lhs.name} == {rhs.name}")
+        print("-" * 30)
+        # -------------------
 
         return lhs == rhs
 
@@ -219,7 +218,7 @@ class ElecNeedsProductionRule(AbstractConstraint):
 
         # 1. Calculate Total Annual Energy Required (e.g., MWh)
         annual_energy_mwh = sum(
-            m.capacity_produced_output[stf, location, tech, stage] * m.energy_needs[tech, stage]
+            m.capacity_produced_output[stf, location, tech, stage] * m.energy_needs[location,tech, stage]
             for stage in m.stages
             # Safety check: ensure parameter exists for this combo
             if (tech, stage) in m.energy_needs
@@ -315,8 +314,8 @@ def apply_material_constraints(m):
         StockpileImportedRule(),
         MaximumStockpileImportsRule(),
         SupplyCompositionRule(),
-        SequentialProcessingRule(),
-        ParallelAssemblyRule(),
+        ComponentBalanceRule()
+
     ]
 
     for constraint_obj in stage_constraints:
@@ -354,7 +353,7 @@ def apply_material_constraints(m):
         name = constraint_obj.__class__.__name__
         # Assuming 'm.t' is your time-step set (e.g., months or hours)
         setattr(m, name, pyomo.Constraint(
-            m.t, m.stf, m.location, m.tech,
+            m.tm, m.stf, m.location, m.tech,
             rule=lambda m, t, y, l, k: constraint_obj.apply_rule(m, t, y, l, k)
         ))
 

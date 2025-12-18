@@ -165,6 +165,246 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     # index set for n (=steps of linearization)
     m.nsteps_sec = pyomo.Set(initialize=range(0, 7))
 
+    """
+    materials.py params
+    """
+
+    import pandas as pd
+    def load_and_apply_excel_data(m, excel_path):
+        print(f"Reading full dataset from {excel_path}...")
+        try:
+            xls_data = pd.read_excel(excel_path, sheet_name=None)
+        except FileNotFoundError:
+            print(f"ERROR: Could not find file at {excel_path}")
+            return
+
+        # HELPER: Clean strings (strip whitespace)
+        def clean_df_strings(df):
+            # Only clean object columns to avoid messing up numbers
+            obj_cols = df.select_dtypes(include=['object']).columns
+            for col in obj_cols:
+                df[col] = df[col].astype(str).str.strip()
+            return df
+
+        # ======================================================================
+        # 1. DEFINE SETS (STAGES & MATERIALS)
+        # ======================================================================
+
+        # --- Create m.stages ---
+        if 'Tech_Stage_Specs' in xls_data:
+            # We use a temporary variable here just for sets
+            df_temp_specs = clean_df_strings(xls_data['Tech_Stage_Specs'])
+            unique_stages = df_temp_specs['Stage'].unique().tolist()
+            m.stages = pyomo.Set(initialize=unique_stages, doc="Manufacturing stages")
+            print(f"  Defined Set m.stages: {unique_stages}")
+        else:
+            m.stages = pyomo.Set(initialize=[])
+
+        # --- Create m.materials ---
+        if 'Material_Intensity' in xls_data:
+            df_temp_mat = clean_df_strings(xls_data['Material_Intensity'])
+            unique_materials = df_temp_mat['Material'].unique().tolist()
+            m.materials = pyomo.Set(initialize=unique_materials, doc="Raw materials")
+            print(f"  Defined Set m.materials: {unique_materials}")
+        else:
+            m.materials = pyomo.Set(initialize=[])
+        m.stock_domestic_init = pyomo.Param(
+            m.location,
+            m.tech,
+            m.stages,
+            initialize=0,
+            default=0,
+            doc="Initial domestic stock of components (units)"
+        )
+
+        m.stock_imported_init = pyomo.Param(
+            m.location,
+            m.tech,
+            m.stages,
+            initialize=0,
+            default=0,
+            doc="Initial domestic stock of components (units)"
+        )
+
+
+        # ======================================================================
+        # 2. SHEET 1: TECH_STAGE_SPECS
+        # ======================================================================
+        if 'Tech_Stage_Specs' in xls_data:
+            print("  Processing Sheet: Tech_Stage_Specs...")
+
+            # FIX: Re-fetch and clean the dataframe explicitly in this scope
+            df_specs = clean_df_strings(xls_data['Tech_Stage_Specs'])
+
+            # Now we can safely set the index
+            df_specs.set_index(['Location', 'Technology', 'Stage'], inplace=True)
+
+            m.build_time = pyomo.Param(
+                m.location, m.tech, m.stages,
+                initialize=df_specs['build_time_lag'].to_dict(),
+                default=1
+            )
+            m.energy_needs = pyomo.Param(
+                m.location, m.tech, m.stages,
+                initialize=df_specs['energy_needs'].to_dict(),
+                default=0
+            )
+
+
+            init_cap_dict = df_specs['init_cap'].to_dict()
+
+            def init_cap_loader(model, y, l, k, s):
+                if y == pyomo.value(model.y0):
+                    return init_cap_dict.get((l, k, s), 0)
+                return 0
+
+            m.processing_cap_init = pyomo.Param(
+                m.stf, m.location, m.tech, m.stages,
+                initialize=init_cap_loader, default=0
+            )
+
+            final_stage_dict = {}
+            for (loc, tech, stage), row in df_specs.iterrows():
+                if row['is_final_stage'] == 1:
+                    final_stage_dict[tech] = stage
+
+            m.final_stage = pyomo.Param(m.tech, initialize=final_stage_dict, within=pyomo.Any)
+
+        # ======================================================================
+        # 3. SHEET 2: MATERIAL_INTENSITY
+        # ======================================================================
+        if 'Material_Intensity' in xls_data:
+            print("  Processing Sheet: Material_Intensity...")
+            df_mat = clean_df_strings(xls_data['Material_Intensity'])
+
+            intensity_dict = df_mat.set_index(['Technology', 'Stage', 'Material'])['intensity'].to_dict()
+
+            m.material_intensity = pyomo.Param(
+                m.tech, m.stages, m.materials,
+                initialize=intensity_dict, default=0
+            )
+
+            # Scrap Content & Efficiency
+            content_dict = {}
+            eff_dict = {}
+            for idx, row in df_mat.iterrows():
+                tech, mat = row['Technology'], row['Material']
+                content_dict[(tech, mat)] = content_dict.get((tech, mat), 0) + row['scrap_content']
+                eff_dict[(tech, mat)] = row['rec_efficiency']
+
+            m.material_content = pyomo.Param(m.tech, m.materials, initialize=content_dict, default=0)
+            m.recycling_efficiency = pyomo.Param(m.tech, m.materials, initialize=eff_dict, default=0)
+
+        # ======================================================================
+        # SHEET 3: MATERIAL_MARKET (STATIC - NO YEAR INDEX)
+        # ======================================================================
+        if 'Material_Market' in xls_data:
+            print("  Processing Sheet: Material_Market (Static)...")
+            df_market = clean_df_strings(xls_data['Material_Market'])
+
+            # 1. Clean up: Drop 'Year' if it exists, so we don't get confused
+            if 'Year' in df_market.columns:
+                df_market.drop(columns=['Year'], inplace=True)
+
+            # 2. Check for duplicates (critical now that Year is gone)
+            if df_market['Material'].duplicated().any():
+                print("  WARNING: Duplicate materials found in Material_Market! Keeping first occurrence.")
+                df_market.drop_duplicates(subset=['Material'], keep='first', inplace=True)
+
+            # 3. Create Static Dictionaries {Material: Value}
+            df_market.set_index('Material', inplace=True)
+
+            limit_dict = df_market['mining_limit'].to_dict()
+            mining_cost_dict = df_market['mining_cost'].to_dict()
+            import_cost_dict = df_market['import_cost'].to_dict()
+
+            # 4. Define Broadcasting Functions
+            # These functions take the (time, material) index asked by Pyomo
+            # but return the value from the static dictionary {material}.
+
+            def limit_init(model, t, mat):
+                return limit_dict.get(mat, 1e12)  # Default infinite limit
+
+            def mining_cost_init(model, t, mat):
+                return mining_cost_dict.get(mat, 0)
+
+            def import_cost_init(model, t, mat):
+                return import_cost_dict.get(mat, 0)
+
+            # 5. Initialize Parameters
+            m.availability_mining = pyomo.Param(
+                    m.stf, m.materials,
+                    initialize=limit_init,
+                    doc="Global mining limit (Static broadcast)"
+                )
+            m.cost_mining = pyomo.Param(
+                    m.stf, m.materials,
+                    initialize=mining_cost_init,
+                    doc="Cost of mining (Static broadcast)"
+                )
+            m.cost_import_material = pyomo.Param(
+                    m.stf, m.materials,
+                    initialize=import_cost_init,
+                    doc="Cost of material imports (Static broadcast)"
+                )
+
+        # ======================================================================
+        # SHEET 4: COST_DATA
+        # ======================================================================
+        if 'Cost_Data' in xls_data:
+            print("  Processing Sheet: Cost_Data...")
+            df_costs = clean_df_strings(xls_data['Cost_Data'])
+
+            # --- TYPE FIX: Ensure Year is Float ---
+            df_costs['Year'] = df_costs['Year'].astype(float)
+
+            # Filter for valid years
+            valid_years = set(m.stf)
+            df_costs = df_costs[df_costs['Year'].isin(valid_years)]
+
+            df_costs.set_index(['Year', 'Location', 'Technology', 'Stage'], inplace=True)
+
+            capex_dict = df_costs['capex_base'].to_dict()
+            opex_dict = df_costs['opex_var_base'].to_dict()
+            part_imp_dict = df_costs['import_cost_part'].to_dict()
+
+            data_urbsextensionv1["processing_stage_cost_dict"] = capex_dict
+
+            m.cost_capex = pyomo.Param(
+                m.stf, m.location, m.tech, m.stages,
+                initialize=capex_dict, default=0
+            )
+            m.cost_variable = pyomo.Param(
+                m.stf, m.location, m.tech, m.stages,
+                initialize=opex_dict, default=0
+            )
+            m.cost_import_part = pyomo.Param(
+                m.stf, m.location, m.tech, m.stages,
+                initialize=part_imp_dict, default=1e9
+            )
+
+        # ======================================================================
+        # SHEET 5: COMPONENT_MAP
+        # ======================================================================
+        if 'Component_Map' in xls_data:
+            print("  Processing Sheet: Component_Map...")
+            df_map = clean_df_strings(xls_data['Component_Map'])
+
+            # Map column names to index
+            map_dict = df_map.set_index(['Cons_Tech', 'Cons_Stage', 'Input_Tech', 'Input_Stage'])['Ratio'].to_dict()
+
+            # RENAME THIS PARAMETER:
+            m.bom_map = pyomo.Param(  # <--- Was m.component_map
+                m.tech, m.stages, m.tech, m.stages,
+                initialize=map_dict, default=0,
+                doc="Bill of Materials: Ratio of Input needed per unit of Consumer Output"
+            )
+
+        print("SUCCESS: Parameters loaded.")
+
+
+    # Usage Example:
+    load_and_apply_excel_data(m, "Input_urbsextensionv1.xlsx")
 
 
     # ========================================
@@ -442,7 +682,9 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         m.location,
         m.tech,
         m.stages,
-        initialize=initialize_param("Initial_secondary_cap", default_value=0),
+        initialize=0,  # <--- Set strictly to 0
+        default=0,
+        doc="Global accumulated production history (MW)"
     )
 
     ##########----------end EEM Addition-----------###############
@@ -542,85 +784,4 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     )
 
 
-    """
-    materials.py params
-    """
 
-    # Helper for Stage-Specific Params (NEW)
-    def initialize_param_stage(param_name, default_value=0):
-        # Requires your input data to have this structure, or use a flat default
-        # Returns {(loc, tech, stage): value}
-        # For now, simplistic implementation to allow model build
-        return {
-            (loc, t, s): default_value
-            for loc in m.location
-            for t in m.tech
-            for s in m.stages
-        }
-
-# 1. Build Time (Years)
-    m.build_time = pyomo.Param(
-        m.tech, m.stages,
-        within=pyomo.Integers,
-        default=1, # Replace with data lookup later
-        doc="Construction lead time"
-    )
-
-    # 3. Energy Needs
-    m.energy_needs = pyomo.Param(
-        m.tech, m.stages,
-        default=1.0,
-        doc="Energy (MWh) per unit output"
-    )
-
-    # 4. Final Stage Index (Critical for linking)
-    # Simple logic: Assign the highest index number as final stage for now
-    def final_stage_init(model, tech):
-        # You need a real map here later!
-        return 4 # Dummy: assumes 4 stages
-    m.final_stage = pyomo.Param(m.tech, initialize=final_stage_init)
-
-    # 5. Initial Capacity (Detailed)
-    m.processing_cap_init = pyomo.Param(
-        m.stf, m.location, m.tech, m.stages,
-        default=0,
-        doc="Initial factory capacity per stage"
-    )
-    # 6. Material Intensity
-    m.material_intensity = pyomo.Param(
-        m.tech, m.stages, m.materials,
-        default=0,
-        doc="Tonnes of material per MW output"
-    )
-
-    # 7. Mining Limits
-    m.availability_mining = pyomo.Param(
-        m.stf, m.materials,
-        default=1e9,
-        doc="Global mining limit"
-    )
-
-    # 8. Material Content in Scrap (for Recycling)
-    m.material_content = pyomo.Param(
-        m.tech, m.materials,
-        default=0.0
-    )
-
-    m.recycling_efficiency = pyomo.Param(
-        m.tech,
-        default=1.0
-    )
-
-    m.availability_mining = pyomo.Param(
-        m.stf, m.materials,
-        default=1e9
-    )
-
-    # Base Costs (before learning)
-    m.cost_capex = pyomo.Param(m.stf, m.location, m.tech, m.stages, default=1000)
-    m.cost_variable = pyomo.Param(m.stf, m.location, m.tech, m.stages, default=50)
-    m.cost_import_part = pyomo.Param(m.stf, m.location, m.tech, m.stages, default=1200)
-
-    # Material Costs
-    m.cost_mining = pyomo.Param(m.stf, m.materials, default=100)
-    m.cost_import_material = pyomo.Param(m.stf, m.materials, default=150)

@@ -207,10 +207,10 @@ def apply_combined_lr_constraints(m):
 
     print("Stage-Dependent Learning Rate constraints applied successfully.")
 
-    m.pricereduction_sec_recycling = pyomo.Expression(
-        m.stf,
-        m.location,
-        m.tech,
-        rule=recycling_reduction_rule,
-        doc="Recycling price reduction using linearized auxiliary variable",
-    )
+    #m.pricereduction_sec_recycling = pyomo.Expression(
+    #    m.stf,
+    #    m.location,
+    #    m.tech,
+    #    rule=recycling_reduction_rule,
+    #    doc="Recycling price reduction using linearized auxiliary variable",
+    #)

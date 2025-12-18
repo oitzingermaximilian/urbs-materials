@@ -634,6 +634,7 @@ def res_vertex_rule(m, tm, stf, sit, com, com_type):
                     tm, stf, sit, tech
                 ]  # subtract production demand
 
+
                 # print(power_surplus)
     # if com is a stock commodity, the commodity source term e_co_stock
     # can supply a possibly negative power_surplus
@@ -1163,9 +1164,9 @@ def cost_rule(m):
     # --- Base model costs ---
     total_base_costs = pyomo.summation(m.costs)  # existing costs
     total_ext_costs = pyomo.summation(m.costs_new)  # extension costs
-    gross_supply_chain_costs = (pyomo.summation(m.cost_capex_total) +
-                               pyomo.summation(m.cost_opex_total) +
-                               pyomo.summation(m.cost_trade_total)) #todo we need to apply the discount factor etc to that.
+    gross_supply_chain_costs = (pyomo.summation(m.cost_capex_total_extension) +
+                               pyomo.summation(m.cost_opex_total_extension) +
+                               pyomo.summation(m.cost_trade_total_extension)) #todo we need to apply the discount factor etc to that.
 
     # --- LNG block costs ---
     # m.lng_total_costs is a scalar representing total LNG cost over all years

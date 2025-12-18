@@ -231,6 +231,14 @@ def apply_variables(m):
     m.material_mined = pyomo.Var(m.stf, m.materials, domain=pyomo.NonNegativeReals)  # Or (stf, loc, mat)
     m.material_imported = pyomo.Var(m.stf, m.materials, domain=pyomo.NonNegativeReals)
     m.material_recycled = pyomo.Var(m.stf, m.materials, domain=pyomo.NonNegativeReals)  # Or (stf, loc, mat)
+    m.demand_production = pyomo.Var(
+        m.tm,
+        m.stf,
+        m.location,
+        m.tech,
+        within=pyomo.NonNegativeReals,
+        doc="Electricity demand for manufacturing per stage (MWh)"
+    )
 
     # --- 5. COSTS (Dimensions: stf) ---
     m.cost_capex_total_extension = pyomo.Var(m.stf, domain=pyomo.NonNegativeReals)
