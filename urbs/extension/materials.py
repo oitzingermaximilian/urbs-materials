@@ -154,7 +154,7 @@ class InstallationSupplyLinkRule(AbstractConstraint):
         # value() is important if you use the index for logic,
         # but for direct index access, Pyomo handles params automatically.
         # However, to be safe and clean:
-        final_stage = value(m.final_stage_idx[tech])
+        final_stage = value(m.final_stage[tech])
 
         # 2. The Constraint
         # LHS: The capacity added to the energy system (Macro)
@@ -193,7 +193,7 @@ class MaterialDemandBalanceRule(AbstractConstraint):
 class ScrapMaterialLinkageRule(AbstractConstraint):
     def apply_rule(self, m, stf, material):
         lhs = m.material_recycled[stf,material]
-        rhs = sum(m.capacity_scrap_rec[stf, location, tech] * m.material_content[tech, material] * m.recycling_efficiency[tech,material]
+        rhs = sum(m.capacity_scrap_rec[stf, location, tech] * m.material_content[tech, material] * m.recycling_efficiency[tech]
         for location in m.location
         for tech in m.tech
         if (tech, material) in m.material_content

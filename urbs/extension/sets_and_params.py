@@ -540,3 +540,87 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         initialize=embedded_energy,
         doc="Embedded electricity needs in MWh per MW of capacity",
     )
+
+
+    """
+    materials.py params
+    """
+
+    # Helper for Stage-Specific Params (NEW)
+    def initialize_param_stage(param_name, default_value=0):
+        # Requires your input data to have this structure, or use a flat default
+        # Returns {(loc, tech, stage): value}
+        # For now, simplistic implementation to allow model build
+        return {
+            (loc, t, s): default_value
+            for loc in m.location
+            for t in m.tech
+            for s in m.stages
+        }
+
+# 1. Build Time (Years)
+    m.build_time = pyomo.Param(
+        m.tech, m.stages,
+        within=pyomo.Integers,
+        default=1, # Replace with data lookup later
+        doc="Construction lead time"
+    )
+
+    # 3. Energy Needs
+    m.energy_needs = pyomo.Param(
+        m.tech, m.stages,
+        default=1.0,
+        doc="Energy (MWh) per unit output"
+    )
+
+    # 4. Final Stage Index (Critical for linking)
+    # Simple logic: Assign the highest index number as final stage for now
+    def final_stage_init(model, tech):
+        # You need a real map here later!
+        return 4 # Dummy: assumes 4 stages
+    m.final_stage = pyomo.Param(m.tech, initialize=final_stage_init)
+
+    # 5. Initial Capacity (Detailed)
+    m.processing_cap_init = pyomo.Param(
+        m.stf, m.location, m.tech, m.stages,
+        default=0,
+        doc="Initial factory capacity per stage"
+    )
+    # 6. Material Intensity
+    m.material_intensity = pyomo.Param(
+        m.tech, m.stages, m.materials,
+        default=0,
+        doc="Tonnes of material per MW output"
+    )
+
+    # 7. Mining Limits
+    m.availability_mining = pyomo.Param(
+        m.stf, m.materials,
+        default=1e9,
+        doc="Global mining limit"
+    )
+
+    # 8. Material Content in Scrap (for Recycling)
+    m.material_content = pyomo.Param(
+        m.tech, m.materials,
+        default=0.0
+    )
+
+    m.recycling_efficiency = pyomo.Param(
+        m.tech,
+        default=1.0
+    )
+
+    m.availability_mining = pyomo.Param(
+        m.stf, m.materials,
+        default=1e9
+    )
+
+    # Base Costs (before learning)
+    m.cost_capex = pyomo.Param(m.stf, m.location, m.tech, m.stages, default=1000)
+    m.cost_variable = pyomo.Param(m.stf, m.location, m.tech, m.stages, default=50)
+    m.cost_import_part = pyomo.Param(m.stf, m.location, m.tech, m.stages, default=1200)
+
+    # Material Costs
+    m.cost_mining = pyomo.Param(m.stf, m.materials, default=100)
+    m.cost_import_material = pyomo.Param(m.stf, m.materials, default=150)
