@@ -94,32 +94,66 @@ def apply_variables(m):
         doc="Auxiliary variable for linearizing BD_sec * capacity_ext_eusecondary",
     )
 
-    """
-    These Variables are used for the lr_manufacturing.py script constraints.
-    """
-    # m.pricereduction_pri = pyomo.Var(m.stf, domain=pyomo.NonNegativeReals)
-    # m.BD_pri = pyomo.Var(m.stf, m.nsteps_pri, domain=pyomo.Binary)
 
     """
     These Variables are used for the lr_remanufacturing.py script constraints.
     """
-    # New separate variables for investment and recycling cost reductions (absolute values)
-    m.pricereduction_sec_investment = pyomo.Var(
-        m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
+    """
+    Binary Decision Variable: Determines which 'Learning Step' (Efficiency Tier) 
+    a specific technology stage is currently operating in.
+    Dimensions: Time, Location, Tech, STAGE, Step
+    """
+    m.BD_sec = pyomo.Var(
+        m.stf,
+        m.location,
+        m.tech,
+        m.stages,  # <--- ADDED
+        m.nsteps_sec,
+        domain=pyomo.Binary,
+        doc="Binary variable: 1 if stage is in learning step n, 0 otherwise"
     )
-    m.PRICEREDUCTION_CAP_DEP_INV = pyomo.Var(
-        m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
-    )
-    # pricereduction_sec_recycling is now defined as an Expression in lr_remanufacturing.py
-    # to derive its value from BD_sec variables determined by investment constraint
 
-    m.BD_sec = pyomo.Var(m.stf, m.location, m.tech, m.nsteps_sec, domain=pyomo.Binary)
-
+    """
+    Auxiliary variable for Big-M linearization of bilinear terms.
+    This replaces the product: BD_sec * capacity_produced_output
+    Dimensions: Time, Location, Tech, STAGE, Step
+    """
     m.auxiliary_product_BD_q = pyomo.Var(
-        m.stf, m.location, m.tech, m.nsteps_sec, domain=pyomo.NonNegativeReals
+        m.stf,
+        m.location,
+        m.tech,
+        m.stages,  # <--- ADDED
+        m.nsteps_sec,
+        within=pyomo.NonNegativeReals,
+        doc="Auxiliary variable for linearizing BD_sec * capacity_produced_output",
     )
-    m.auxiliary_product_BD_q_primary = pyomo.Var(
-        m.stf, m.location, m.tech, m.nsteps_sec, within=pyomo.NonNegativeReals
+
+    """
+    Resulting Unit Price Reduction (EUR/MW).
+    This tracks the specific cost reduction value active in a given year.
+    Dimensions: Time, Location, Tech, STAGE
+    """
+    m.pricereduction_sec_investment = pyomo.Var(
+        m.stf,
+        m.location,
+        m.tech,
+        m.stages,  # <--- ADDED
+        domain=pyomo.NonNegativeReals,
+        doc="Current value of cost reduction (EUR/MW) based on active step"
+    )
+
+    """
+    Total Cost Savings (EUR).
+    This is the value subtracted from the total OPEX (Savings = Unit_Reduction * Production).
+    Dimensions: Time, Location, Tech, STAGE
+    """
+    m.PRICEREDUCTION_CAP_DEP_INV = pyomo.Var(
+        m.stf,
+        m.location,
+        m.tech,
+        m.stages,  # <--- ADDED
+        domain=pyomo.NonNegativeReals,
+        doc="Total operational cost savings (EUR) due to learning effects"
     )
 
     """
@@ -158,3 +192,47 @@ def apply_variables(m):
     m.demand_production = pyomo.Var(
         m.timesteps_ext, m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
     )
+
+    """
+    These Variables are used for the materials.py script constraints. And are the latest addition to the model.
+    """
+
+    m.capacity_total_factory = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    m.capacity_new_factory = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+
+    # --- 2. PRODUCTION & FLOWS (Dimensions: stf, location, tech, stage) ---
+    m.capacity_produced_output = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+
+    # Domestic Splits
+    m.capacity_produced_flow = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    m.capacity_produced_storage = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    m.capacity_produced_stockout = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+
+    # Import Splits
+    m.capacity_imported = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    m.capacity_imported_flow = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    m.capacity_imported_storage = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    m.capacity_imported_stockout = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+
+    # Supply Available for Next Stage (Coupling Variable)
+    m.Supply = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+
+    # --- 3. STOCKPILES (Dimensions: stf, location, tech, stage) ---
+    m.stock_domestic = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    m.stock_imported = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    # Aggregate for reporting
+    m.components_stockpile = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+
+    # --- 4. MATERIAL FLOWS (Dimensions: stf, [location], material) ---
+    # Demand Calculation
+    m.demand_material_total = pyomo.Var(m.stf, m.materials, domain=pyomo.NonNegativeReals)
+
+    # Supply Side
+    m.material_mined = pyomo.Var(m.stf, m.materials, domain=pyomo.NonNegativeReals)  # Or (stf, loc, mat)
+    m.material_imported = pyomo.Var(m.stf, m.materials, domain=pyomo.NonNegativeReals)
+    m.material_recycled = pyomo.Var(m.stf, m.materials, domain=pyomo.NonNegativeReals)  # Or (stf, loc, mat)
+
+    # --- 5. COSTS (Dimensions: stf) ---
+    m.cost_capex_total_extension = pyomo.Var(m.stf, domain=pyomo.NonNegativeReals)
+    m.cost_opex_total_extension = pyomo.Var(m.stf, domain=pyomo.NonNegativeReals)
+    m.cost_trade_total_extension = pyomo.Var(m.stf, domain=pyomo.NonNegativeReals)

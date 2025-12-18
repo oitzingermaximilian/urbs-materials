@@ -17,265 +17,126 @@ def debug_print(*args, **kwargs):
         print(*args, **kwargs)
 
 
+# ==============================================================================
+# GROUP 1: LOGIC CONSTRAINTS (Index: stf, location, tech, STAGE)
+# ==============================================================================
+
 class costsavings_constraint_sec_investment(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech):
-        # ✅ CORRECTED: Use auxiliary variable instead of bilinear product
-        # Original bilinear: P_sec_investment[n] * BD_sec[n] * capacity_ext_eusecondary
-        # Linearized: P_sec_investment[n] * auxiliary_product_BD_q[n]
+    def apply_rule(self, m, stf, location, tech, stage):
+        # Calculates Total Cost Savings based on active learning step
+        # Savings = Sum_n( Reduction_Value[n] * Aux_Production[n] )
 
         investment_reduction_value = sum(
-            m.P_sec_investment[location, tech, n]
-            * m.auxiliary_product_BD_q[stf, location, tech, n]
+            m.P_sec_investment[location, tech, stage, n]
+            * m.auxiliary_product_BD_q[stf, location, tech, stage, n]
             for n in m.nsteps_sec
         )
-        expr = (
-            m.PRICEREDUCTION_CAP_DEP_INV[stf, location, tech]
-            == investment_reduction_value
-        )
 
-        # Improved debug formatting - separate lines for better visibility
-        if DEBUG:
-            print("=" * 60)
-            print(
-                f"[INVESTMENT COSTSAVINGS DEBUG] STF={stf}, Location={location}, Tech={tech}"
-            )
-            print(f"  Investment reduction value: {investment_reduction_value}")
-            bd_values = [
-                m.BD_sec[stf, location, tech, n].value
-                if hasattr(m.BD_sec[stf, location, tech, n], "value")
-                else "unset"
-                for n in m.nsteps_sec
-            ]
-            print(f"  BD_sec values: {bd_values}")
-            p_values = [m.P_sec_investment[location, tech, n] for n in m.nsteps_sec]
-            print(f"  P_sec_investment values: {p_values}")
-            # Simplified active step contributions without nested quotes
-            contributions = []
-            for n in m.nsteps_sec:
-                bd_val = (
-                    m.BD_sec[stf, location, tech, n].value
-                    if hasattr(m.BD_sec[stf, location, tech, n], "value")
-                    else "unset"
-                )
-                contributions.append(
-                    (n, m.P_sec_investment[location, tech, n], f"BD_sec={bd_val}")
-                )
-            print(f"  Active step contributions: {contributions}")
-            print(f"  Expression: {expr}")
-            print("=" * 60)
-
-        return expr
+        return m.PRICEREDUCTION_CAP_DEP_INV[stf, location, tech, stage] == investment_reduction_value
 
 
 class pricereduction_stage_calc(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech):
-        investement_reduction_stage_value = sum(
-            m.P_sec_investment[location, tech, n] * m.BD_sec[stf, location, tech, n]
+    def apply_rule(self, m, stf, location, tech, stage):
+        # Calculates Unit Price Reduction (EUR/MW) based on active binary
+
+        unit_reduction_value = sum(
+            m.P_sec_investment[location, tech, stage, n] * m.BD_sec[stf, location, tech, stage, n]
             for n in m.nsteps_sec
         )
-        expr = (
-            m.pricereduction_sec_investment[stf, location, tech]
-            == investement_reduction_stage_value
-        )
-        return expr  # ✅ FIXED: Added missing return statement
+
+        return m.pricereduction_sec_investment[stf, location, tech, stage] == unit_reduction_value
 
 
 class BD_limitation_constraint_sec(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech):
-        bd_sum_value_sec = sum(m.BD_sec[stf, location, tech, n] for n in m.nsteps_sec)
-        expr_ok = bd_sum_value_sec == 1  # Force exactly one selection instead of <= 1
-
-        # Enhanced debugging
-        if DEBUG:
-            print("=" * 80)
-            print(f"[BD_limitation DETAILED] STF={stf}, loc={location}, tech={tech}")
-            print(f"  Number of steps (nsteps_sec): {len(list(m.nsteps_sec))}")
-            print(f"  Steps available: {list(m.nsteps_sec)}")
-            print(f"  Sum constraint: {bd_sum_value_sec} == 1")
-
-            # Check if this constraint might cause infeasibility
-            try:
-                # Check P_sec values to see if there are incentives
-                p_inv_values = [
-                    m.P_sec_investment[location, tech, n] for n in m.nsteps_sec
-                ]
-                p_rec_values = [
-                    m.P_sec_recycling[location, tech, n] for n in m.nsteps_sec
-                ]
-                print(f"  P_sec_investment values: {p_inv_values}")
-                print(f"  P_sec_recycling values: {p_rec_values}")
-
-                # Check capacity requirements
-                cap_values = [
-                    m.capacityperstep_sec[location, tech, n] for n in m.nsteps_sec
-                ]
-                print(f"  Capacity per step values: {cap_values}")
-
-            except Exception as e:
-                print(f"  Warning: Could not access parameter values: {e}")
-            print("=" * 80)
-
-        debug_print(
-            f"[BD_limitation] STF={stf}, loc={location}, tech={tech}  ➞ "
-            f"bd_sum_value_sec={bd_sum_value_sec} == 1? {expr_ok}"
-        )
-        return expr_ok
+    def apply_rule(self, m, stf, location, tech, stage):
+        # Force exactly one learning step to be active per stage
+        bd_sum = sum(m.BD_sec[stf, location, tech, stage, n] for n in m.nsteps_sec)
+        return bd_sum == 1
 
 
 class relation_pnew_to_pprior_constraint_sec(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech):
+    def apply_rule(self, m, stf, location, tech, stage):
+        # Enforce Monotonicity: Price Reduction(y) >= Price Reduction(y-1)
+        # "We cannot unlearn"
+
         if stf == 2024:
-            # REVERTED: Skip 2024 as originally intended
-            # The BD numerical tolerance issue should be solved differently
-            debug_print(f"[relation_pnew] STF={stf} (2024) ➞ SKIP (no prior year)")
             return pyomo.Constraint.Skip
 
-        # Separate if-else block for all other years (not 2024)
         if stf == value(m.y0):
-            lhs = m.pricereduction_sec_investment[stf, location, tech]
-            rhs = m.pricereduction_sec_init[location, tech]
-            expr = lhs >= rhs
-            debug_print(
-                f"[relation_pnew-init] STF={stf} == y0 ➞ {lhs} >= {rhs} ? {expr}"
-            )
+            # Compare to Initial State parameter (ensure param has stage index)
+            # Assuming m.pricereduction_sec_init is indexed by (loc, tech, stage)
+            lhs = m.pricereduction_sec_investment[stf, location, tech, stage]
+            # Fallback if init param doesn't have stage:
+            rhs = 0  # Placeholder if no init data for stages yet
+            return lhs >= rhs
         else:
-            lhs = m.pricereduction_sec_investment[stf, location, tech]
-            rhs = m.pricereduction_sec_investment[stf - 1, location, tech]
-            expr = lhs >= rhs
-            debug_print(
-                f"[relation_pnew-recursive] STF={stf} ➞ {lhs} >= {rhs} ? {expr}"
-            )
-
-        return expr
+            lhs = m.pricereduction_sec_investment[stf, location, tech, stage]
+            rhs = m.pricereduction_sec_investment[stf - 1, location, tech, stage]
+            return lhs >= rhs
 
 
 class q_perstep_constraint_sec(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech):
+    def apply_rule(self, m, stf, location, tech, stage):
         """
-        Ensures cumulative capacity (carryover + yearly extensions from y0 to y)
-        meets step requirements in year y.
+        THE DRIVER: Cumulative Production >= Threshold of active step.
         """
-        y0 = min(m.stf)  # First model year
+        y0 = min(m.stf)
 
-        # LHS = Carryover (only added once) + sum of extensions from y0 to stf
-
-        lhs = m.total_secondary_cap_inital[location, tech] + sum(
-            m.capacity_ext_eusecondary[year, location, tech]
+        # 1. Calculate Cumulative Production (History + Current Accumulation)
+        # Using capacity_produced_output as the driver
+        cumulative_prod = m.total_production_cap_inital[location, tech, stage] + sum(
+            m.capacity_produced_output[year, location, tech, stage]
             for year in m.stf
             if y0 <= year <= stf
         )
 
-        # RHS = Sum of required steps for current year
-        rhs = sum(
-            m.BD_sec[stf, location, tech, n] * m.capacityperstep_sec[location, tech, n]
+        # 2. Identify Threshold of active step
+        # Note: capacityperstep_production now has [loc, tech, stage, n]
+        active_threshold = sum(
+            m.BD_sec[stf, location, tech, stage, n] * m.capacityperstep_production[location, tech, stage, n]
             for n in m.nsteps_sec
         )
 
-        # Debug output
-        expr = lhs >= rhs
-        debug_print(
-            f"[q_perstep] STF={stf}, loc={location}, tech={tech}  ➞\n"
-            f"    LHS={lhs}\n"
-            f"    RHS={rhs}, expr: {expr}"
-        )
+        return cumulative_prod >= active_threshold
 
-        return expr
 
+# ==============================================================================
+# GROUP 2: LINEARIZATION CONSTRAINTS (Index: stf, location, tech, STAGE, n)
+# ==============================================================================
 
 class upper_bound_z_constraint_sec(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech, nsteps_sec):
-        """
-        Uses auxiliary variable instead of bilinear product BD_sec * capacity_ext_eusecondary
-        """
-        lhs_value = m.auxiliary_product_BD_q[stf, location, tech, nsteps_sec]
-        rhs_value = m.gamma_sec * m.BD_sec[stf, location, tech, nsteps_sec]
-
-        expr = lhs_value <= rhs_value
-        debug_print(
-            f"[upper_bound_z] STF={stf}, step={nsteps_sec}  ➞ "
-            f"LHS={lhs_value}, RHS={rhs_value}, expr: {expr}"
-        )
-        return expr
+    def apply_rule(self, m, stf, location, tech, stage, n):
+        # Aux <= BigM * Binary
+        # Using m.gamma_prod as BigM
+        lhs = m.auxiliary_product_BD_q[stf, location, tech, stage, n]
+        rhs = m.gamma_prod * m.BD_sec[stf, location, tech, stage, n]
+        return lhs <= rhs
 
 
 class upper_bound_z_q1_eq_sec(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech, nsteps_sec):
-        """
-        Uses auxiliary variable instead of bilinear product BD_sec * capacity_ext_eusecondary
-        """
-        lhs_value = m.auxiliary_product_BD_q[stf, location, tech, nsteps_sec]
-        rhs_value = m.capacity_ext_eusecondary[stf, location, tech]
-
-        expr = lhs_value <= rhs_value
-        debug_print(
-            f"[upper_bound_z_q1] STF={stf}, step={nsteps_sec}  ➞ "
-            f"LHS={lhs_value}, RHS={rhs_value}, expr: {expr}"
-        )
-        return expr
+    def apply_rule(self, m, stf, location, tech, stage, n):
+        # Aux <= Current Production
+        # We apply cost savings to CURRENT production
+        lhs = m.auxiliary_product_BD_q[stf, location, tech, stage, n]
+        rhs = m.capacity_produced_output[stf, location, tech, stage]
+        return lhs <= rhs
 
 
 class lower_bound_z_eq_sec(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech, nsteps_sec):
-        """
-        Uses auxiliary variable instead of bilinear product BD_sec * capacity_ext_eusecondary
-        """
-        lhs_value = m.auxiliary_product_BD_q[stf, location, tech, nsteps_sec]
-        rhs_value = (
-            m.capacity_ext_eusecondary[stf, location, tech]
-            - (1 - m.BD_sec[stf, location, tech, nsteps_sec]) * m.gamma_sec
+    def apply_rule(self, m, stf, location, tech, stage, n):
+        # Aux >= Current Production - BigM * (1 - Binary)
+        lhs = m.auxiliary_product_BD_q[stf, location, tech, stage, n]
+        rhs = (
+                m.capacity_produced_output[stf, location, tech, stage]
+                - (1 - m.BD_sec[stf, location, tech, stage, n]) * m.gamma_prod
         )
-
-        expr = lhs_value >= rhs_value
-        debug_print(
-            f"[lower_bound_z] STF={stf}, step={nsteps_sec}  ➞ "
-            f"LHS={lhs_value}, RHS={rhs_value}, expr: {expr}"
-        )
-        return expr
+        return lhs >= rhs
 
 
 class non_negativity_z_eq_sec(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech, nsteps_sec):
-        """
-        Uses auxiliary variable instead of bilinear product BD_sec * capacity_ext_eusecondary
-        """
-        lhs_value = m.auxiliary_product_BD_q[stf, location, tech, nsteps_sec]
+    def apply_rule(self, m, stf, location, tech, stage, n):
+        return m.auxiliary_product_BD_q[stf, location, tech, stage, n] >= 0
 
-        expr = lhs_value >= 0
-        debug_print(
-            f"[non_negativity] STF={stf}, step={nsteps_sec}  ➞ "
-            f"LHS={lhs_value}, expr: {expr}"
-        )
-        return expr
-
-
-class upper_bound_z_constraint_primary(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech, nsteps_sec):
-        lhs_value = m.auxiliary_product_BD_q_primary[stf, location, tech, nsteps_sec]
-        rhs_value = m.gamma_sec * m.BD_sec[stf, location, tech, nsteps_sec]
-        return lhs_value <= rhs_value
-
-
-class upper_bound_z_q1_eq_primary(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech, nsteps_sec):
-        lhs_value = m.auxiliary_product_BD_q_primary[stf, location, tech, nsteps_sec]
-        rhs_value = m.capacity_ext_euprimary[stf, location, tech]
-        return lhs_value <= rhs_value
-
-
-class lower_bound_z_eq_primary(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech, nsteps_sec):
-        lhs_value = m.auxiliary_product_BD_q_primary[stf, location, tech, nsteps_sec]
-        rhs_value = (
-            m.capacity_ext_euprimary[stf, location, tech]
-            - (1 - m.BD_sec[stf, location, tech, nsteps_sec]) * m.gamma_sec
-        )
-        return lhs_value >= rhs_value
-
-
-class non_negativity_z_eq_primary(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech, nsteps_sec):
-        lhs_value = m.auxiliary_product_BD_q_primary[stf, location, tech, nsteps_sec]
-        return lhs_value >= 0
 
 
 def recycling_reduction_rule(m, stf, location, tech):
@@ -294,94 +155,57 @@ def recycling_reduction_rule(m, stf, location, tech):
     return recycling_reduction_value
 
 
+# ==============================================================================
+# APPLICATION LOGIC
+# ==============================================================================
+
 def apply_combined_lr_constraints(m):
-    constraints_rm1 = [
+    # 1. Logic Constraints (Index: ... STAGE)
+    constraints_stage_logic = [
         costsavings_constraint_sec_investment(),
-        pricereduction_stage_calc(),  # ✅ Added back the fixed constraint
+        pricereduction_stage_calc(),
         BD_limitation_constraint_sec(),
         relation_pnew_to_pprior_constraint_sec(),
         q_perstep_constraint_sec(),
     ]
 
-    constraints_rm2 = [
+    # 2. Linearization Constraints (Index: ... STAGE, n)
+    constraints_stage_linearization = [
         upper_bound_z_constraint_sec(),
         upper_bound_z_q1_eq_sec(),
         lower_bound_z_eq_sec(),
         non_negativity_z_eq_sec(),
     ]
 
-    primary_constraints = [
-        upper_bound_z_constraint_primary(),
-        upper_bound_z_q1_eq_primary(),
-        lower_bound_z_eq_primary(),
-        non_negativity_z_eq_primary(),
-    ]
-
-    # ❌ REMOVED: auxiliary_variable_calculation() - this makes the model bilinear again!
-    # The Big-M constraints (constraints_rm2) already fully define the auxiliary variable
-
-    # Debug: Print the sets being used
+    print(f"DEBUG: Registering Learning Rate Constraints with Stages...")
     print(f"DEBUG: m.stf = {list(m.stf)}")
-    print(f"DEBUG: m.location = {list(m.location)}")
-    print(f"DEBUG: m.tech = {list(m.tech)}")
-    print(f"DEBUG: m.nsteps_sec = {list(m.nsteps_sec)}")
+    # print(f"DEBUG: m.stages = {list(m.stages)}") # Uncomment if you want to verify stages
 
-    for i, constraint in enumerate(constraints_rm1):
-        constraint_name = f"constraint_rm1_{i + 1}"
+    # Apply Logic Constraints
+    for i, constraint in enumerate(constraints_stage_logic):
+        constraint_name = f"constraint_lr_logic_{i + 1}"
         setattr(
             m,
             constraint_name,
             pyomo.Constraint(
-                m.stf,
-                m.location,
-                m.tech,
-                rule=lambda m,
-                stf,
-                loc,
-                tech,
-                constraint=constraint: constraint.apply_rule(m, stf, loc, tech),
+                m.stf, m.location, m.tech, m.stages,  # <--- Added Stage
+                rule=lambda m, stf, loc, tech, stage: constraint.apply_rule(m, stf, loc, tech, stage),
             ),
         )
 
-    for i, constraint in enumerate(constraints_rm2):
-        constraint_name = f"constraint_rm2_{i + 1}"
+    # Apply Linearization Constraints
+    for i, constraint in enumerate(constraints_stage_linearization):
+        constraint_name = f"constraint_lr_lin_{i + 1}"
         setattr(
             m,
             constraint_name,
             pyomo.Constraint(
-                m.stf,
-                m.location,
-                m.tech,
-                m.nsteps_sec,
-                rule=lambda m,
-                stf,
-                loc,
-                tech,
-                nsteps_sec,
-                constraint=constraint: constraint.apply_rule(
-                    m, stf, loc, tech, nsteps_sec
-                ),
+                m.stf, m.location, m.tech, m.stages, m.nsteps_sec,  # <--- Added Stage
+                rule=lambda m, stf, loc, tech, stage, n: constraint.apply_rule(m, stf, loc, tech, stage, n),
             ),
         )
 
-    for i, constraint in enumerate(primary_constraints):
-        constraint_name = f"constraint_primary_{i + 1}"
-        setattr(
-            m,
-            constraint_name,
-            pyomo.Constraint(
-                m.stf,
-                m.location,
-                m.tech,
-                m.nsteps_sec,
-                rule=lambda m,
-                stf,
-                loc,
-                tech,
-                n,
-                constraint=constraint: constraint.apply_rule(m, stf, loc, tech, n),
-            ),
-        )
+    print("Stage-Dependent Learning Rate constraints applied successfully.")
 
     m.pricereduction_sec_recycling = pyomo.Expression(
         m.stf,

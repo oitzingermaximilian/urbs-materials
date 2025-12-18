@@ -161,23 +161,11 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     ########################################
     # dynamic feedback loop EEM sets and params#     13. January 2025
     ########################################
-
-    # -------EU-Primary-------# ToDo enable if needed
-    # index set for n (=steps of linearization)
-    # m.nsteps_pri = pyomo.Set(initialize=range(0, 7))
-    # param def for price reduction
-    # m.P_pri = pyomo.Param(m.nsteps_pri, initialize={0: 0, 1: 172444.8, 2: 246826.8
-    #    , 3: 279008.4, 4: 292974, 5: 299046, 6: 301656.96})
-    # m.capacityperstep_pri = pyomo.Param(m.nsteps_pri, initialize={0: 0, 1: 100, 2: 1000, 3: 10000, 4: 100000, 5:1000000, 6:10000000})
-    # param for gamma
-    # m.gamma_pri = pyomo.Param(initialize=1e10)
-
     # -------EU-Secondary-------#
     # index set for n (=steps of linearization)
     m.nsteps_sec = pyomo.Set(initialize=range(0, 7))
 
-    # Scale factor to make the numbers larger for numerical stability
-    scaling_factor = 100000  # Scale up by 100,000
+
 
     # ========================================
     # LEARNING RATE REDUCTION PERCENTAGES (sorted by learning rate %)
@@ -298,20 +286,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     # ========================================
 
     # Get the cost data for absolute value calculations
-    remanufacturing_costs = data_urbsextensionv1["remanufacturingcost_dict"]
     recycling_costs = data_urbsextensionv1["recyclingcost_dict"]
-
-    # Create absolute value dictionaries for investment costs (EU_secondary_costs)
-    def create_absolute_investment_dict(reduction_percentages):
-        absolute_dict = {}
-        for n in reduction_percentages.keys():
-            absolute_dict[n] = {}
-            for (stf, location, tech), cost in remanufacturing_costs.items():
-                absolute_dict[n][(stf, location, tech)] = cost * (
-                    1 - reduction_percentages[n]
-                )
-        return absolute_dict
-
     # Create absolute value dictionaries for recycling costs (f_scrap_rec)
     def create_absolute_recycling_dict(reduction_percentages):
         absolute_dict = {}
@@ -323,18 +298,37 @@ def apply_sets_and_params(m, data_urbsextensionv1):
                 )
         return absolute_dict
 
+    # 1. Define the source dictionary OUTSIDE the function (or just reference it)
+    processing_stage_costs = data_urbsextensionv1["processing_stage_cost_dict"]
+
+    def create_absolute_stage_reduction_dict(reduction_percentages):
+        absolute_dict = {}
+
+        # Outer Loop: Steps (n)
+        for n in reduction_percentages.keys():
+            absolute_dict[n] = {}
+
+            # Inner Loop: Iterate over the dictionary items
+            # Just like recycling, but unpacking 4 items now: (stf, loc, tech, STAGE)
+            for (stf, location, tech, stage), cost in processing_stage_costs.items():
+                absolute_dict[n][(stf, location, tech, stage)] = cost * (
+                        1 - reduction_percentages[n]
+                )
+
+        return absolute_dict
+
     # Generate absolute value dictionaries for all learning rates
-    absolute_investment_reductions = {
-        "LR1": create_absolute_investment_dict(reduction_percentage_1),
-        "LR3_5": create_absolute_investment_dict(reduction_percentage_3_5),
-        "LR4": create_absolute_investment_dict(reduction_percentage_4),
-        "LR5": create_absolute_investment_dict(reduction_percentage_5),
-        "LR6": create_absolute_investment_dict(reduction_percentage_6),
-        "LR7": create_absolute_investment_dict(reduction_percentage_7),
-        "LR8": create_absolute_investment_dict(reduction_percentage_8),
-        "LR9": create_absolute_investment_dict(reduction_percentage_9),
-        "LR10": create_absolute_investment_dict(reduction_percentage_10),
-        "LR25": create_absolute_investment_dict(reduction_percentage_25),
+    absolute_stage_reductions = {
+        "LR1": create_absolute_stage_reduction_dict(reduction_percentage_1),
+        "LR3_5": create_absolute_stage_reduction_dict(reduction_percentage_3_5),
+        "LR4": create_absolute_stage_reduction_dict(reduction_percentage_4),
+        "LR5": create_absolute_stage_reduction_dict(reduction_percentage_5),
+        "LR6": create_absolute_stage_reduction_dict(reduction_percentage_6),
+        "LR7": create_absolute_stage_reduction_dict(reduction_percentage_7),
+        "LR8": create_absolute_stage_reduction_dict(reduction_percentage_8),
+        "LR9": create_absolute_stage_reduction_dict(reduction_percentage_9),
+        "LR10": create_absolute_stage_reduction_dict(reduction_percentage_10),
+        "LR25": create_absolute_stage_reduction_dict(reduction_percentage_25),
     }
 
     absolute_recycling_reductions = {
@@ -369,25 +363,27 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     )
 
     # Select the appropriate reductions based on environment variable
-    selected_investment_reductions = absolute_investment_reductions.get(
-        LEARNING_RATE, absolute_investment_reductions["LR5"]
+    selected_stage_reductions = absolute_stage_reductions.get(
+        LEARNING_RATE, absolute_stage_reductions["LR5"]
     )
     selected_recycling_reductions = absolute_recycling_reductions.get(
         LEARNING_RATE, absolute_recycling_reductions["LR5"]
     )
 
-    print(f"Selected investment reduction values for {LEARNING_RATE}")
+    print(f"Selected stage reduction values for {LEARNING_RATE}")
     print(f"Selected recycling reduction values for {LEARNING_RATE}")
 
-    # Initialize P_sec_investment with absolute investment cost reductions
+    # Initialize P_sec_investment with absolute stage cost reductions
     m.P_sec_investment = pyomo.Param(
-        m.location,  # Locations
-        m.tech,  # Technologies
-        m.nsteps_sec,  # Steps
-        initialize=lambda m, loc, tech, n: selected_investment_reductions[n].get(
-            (2024, loc, tech), 0
-        ),  # Use 2024 as base year
-        doc=f"Absolute investment cost reduction values for {LEARNING_RATE}",
+        m.location,
+        m.tech,
+        m.stages,  # <--- ADDED THIS
+        m.nsteps_sec,
+        # Updated lambda to accept stage and look up (2024, loc, tech, stage)
+        initialize=lambda m, loc, tech, stage, n: selected_stage_reductions[n].get(
+            (2024, loc, tech, stage), 0
+        ),
+        doc=f"Absolute OPEX reduction per STAGE for {LEARNING_RATE}",
     )
 
     # Define a Pyomo Param for the selected relative reductions
@@ -422,26 +418,30 @@ def apply_sets_and_params(m, data_urbsextensionv1):
 
     # Initialize the dictionary with uniform values for all (n, loc, tech)
     capacity_init_values = {
-        (loc, tech, n): uniform_step_values.get(n, 0)
+        (loc, tech, stage,n): uniform_step_values.get(n, 0)
         for loc in m.location
         for tech in m.tech
+        for stage in m.stages  # <--- ADD THIS LOOP
         for n in m.nsteps_sec
     }
 
+
     # Initialize the Pyomo Param
-    m.capacityperstep_sec = pyomo.Param(
-        m.location,  # First dimension
-        m.tech,  # Second dimension
-        m.nsteps_sec,  # Third dimension
+    m.capacityperstep_production = pyomo.Param(
+        m.location,
+        m.tech,
+        m.stages,  # <--- ADDED THIS
+        m.nsteps_sec,
         initialize=capacity_init_values,
     )
 
     # param for gamma
-    m.gamma_sec = pyomo.Param(initialize=1_100_000)
+    m.gamma_prod = pyomo.Param(initialize=1_100_000)
 
-    m.total_secondary_cap_inital = pyomo.Param(
+    m.total_production_cap_inital = pyomo.Param(
         m.location,
         m.tech,
+        m.stages,
         initialize=initialize_param("Initial_secondary_cap", default_value=0),
     )
 

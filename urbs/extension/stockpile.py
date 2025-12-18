@@ -41,7 +41,7 @@ class CapacityExtGrowthRule(AbstractConstraint):
             )
 
 
-class CapacityExtNewRule(AbstractConstraint):
+class CapacityExtNewRule(AbstractConstraint): #todo disabled due to new materials.py package
     def apply_rule(self, m, stf, location, tech):
         debug_print(f"Running constraint CapacityExtNewRule for stf={stf}")
 
@@ -53,7 +53,7 @@ class CapacityExtNewRule(AbstractConstraint):
         )
 
 
-class CapacityExtStockRule(AbstractConstraint):
+class CapacityExtStockRule(AbstractConstraint): #todo disabled due to new materials.py package
     def apply_rule(self, m, stf, location, tech):
         if stf == value(m.y0):
             debug_print(
@@ -73,7 +73,7 @@ class CapacityExtStockRule(AbstractConstraint):
             )
 
 
-class StockTurnoverRule(AbstractConstraint):  # NOTE disabled atm
+class StockTurnoverRule(AbstractConstraint):#todo disabled due to new materials.py package  # NOTE disabled atm
     def apply_rule(self, m, stf, location, tech):
         valid_years = [2025, 2030, 2035, 2040, 2045]
 
@@ -129,7 +129,7 @@ class CapacityExtNewLimitRule(AbstractConstraint):
             return cap_val <= ext_val
 
 
-class TimedelayEUPrimaryProductionRule(AbstractConstraint):
+class TimedelayEUPrimaryProductionRule(AbstractConstraint):#todo disabled due to new materials.py package
     def apply_rule(self, m, stf, location, tech):
         start_year = (
             2023  # reference start year TODO fix porperly for runing rolling horizon!
@@ -161,7 +161,7 @@ class TimedelayEUPrimaryProductionRule(AbstractConstraint):
             return lhs <= rhs
 
 
-class TimedelayEUSecondaryProductionRule(AbstractConstraint):
+class TimedelayEUSecondaryProductionRule(AbstractConstraint): #todo disabled due to new materials.py package
     def apply_rule(self, m, stf, location, tech):
         if stf == 2024:
             debug_print(
@@ -208,7 +208,7 @@ class TimedelayEUSecondaryProductionRule(AbstractConstraint):
             return lhs <= rhs
 
 
-class Constraint1EUSecondaryToTotalRule(AbstractConstraint):  # NOTE disabled atm
+class Constraint1EUSecondaryToTotalRule(AbstractConstraint): #todo disabled due to new materials.py package # NOTE disabled atm
     def apply_rule(self, m, stf, location, tech):
         l_value = m.l[location, tech]
         if value(m.y0) <= stf - l_value:
@@ -240,7 +240,7 @@ class Constraint1EUSecondaryToTotalRule(AbstractConstraint):  # NOTE disabled at
 #           return pyomo.Constraint.Skip
 
 
-class ConstraintEUPrimaryToTotalRule(AbstractConstraint):
+class ConstraintEUPrimaryToTotalRule(AbstractConstraint): #todo disabled due to new materials.py package
     def apply_rule(self, m, stf, location, tech):
         if stf == 2024:
             debug_print(
@@ -267,7 +267,7 @@ class ConstraintEUPrimaryToTotalRule(AbstractConstraint):
             return lhs >= rhs
 
 
-class ConstraintEUSecondaryToSecondaryRule(AbstractConstraint):
+class ConstraintEUSecondaryToSecondaryRule(AbstractConstraint):#todo disabled due to new materials.py package
     def apply_rule(self, m, stf, location, tech):
         if stf == 2024:
             debug_print(
@@ -294,7 +294,7 @@ class ConstraintEUSecondaryToSecondaryRule(AbstractConstraint):
             return lhs >= rhs
 
 
-class ConstraintMaxIntoStockRule(AbstractConstraint):
+class ConstraintMaxIntoStockRule(AbstractConstraint):#todo disabled due to new materials.py package but same logic in materials.py
     def apply_rule(self, m, stf, location, tech):
         # Calculate the left-hand side (LHS) and right-hand side (RHS)
         lhs = m.capacity_ext_stock_imported[stf, location, tech]
@@ -331,7 +331,7 @@ class ConstraintBatteryCapRule(AbstractConstraint):
         return lhs <= rhs
 
 
-class ConstraintCarryoverSecondary(AbstractConstraint):
+class ConstraintCarryoverSecondary(AbstractConstraint):#todo disabled due to new materials.py package
     def apply_rule(self, m, stf, location, tech):
         # Scale values to MW or GW to avoid very large numbers
         scaling_factor = 1000.0  # Convert to GW if values are in MW
@@ -346,7 +346,7 @@ class ConstraintCarryoverSecondary(AbstractConstraint):
         )
 
 
-class ConstraintCarryoverFacility(AbstractConstraint):
+class ConstraintCarryoverFacility(AbstractConstraint):#todo disabled due to new materials.py package
     def apply_rule(self, m, stf, location, tech):
         # Scale values to MW or GW to avoid very large numbers
         scaling_factor = 1000.0  # Convert to GW if values are in MW
@@ -361,7 +361,7 @@ class ConstraintCarryoverFacility(AbstractConstraint):
         )
 
 
-class ConstraintRemanufacturingFacilitySize(AbstractConstraint):
+class ConstraintRemanufacturingFacilitySize(AbstractConstraint):#todo disabled due to new materials.py package
     def apply_rule(self, m, stf, location, tech):
         # Scale values to improve numerical stability
         scaling_factor = 1000.0  # Convert to GW if values are in MW
@@ -375,7 +375,7 @@ class ConstraintRemanufacturingFacilitySize(AbstractConstraint):
         )
 
 
-class ConstraintLimitSecondaryCapacity(AbstractConstraint):
+class ConstraintLimitSecondaryCapacity(AbstractConstraint):#todo disabled due to new materials.py package
     def apply_rule(self, m, stf, location, tech):
         # Scale values to improve numerical stability
         scaling_factor = 1000.0  # Convert to GW if values are in MW
@@ -388,24 +388,24 @@ class ConstraintLimitSecondaryCapacity(AbstractConstraint):
 def apply_stockpiling_constraints(m):
     constraints = [
         CapacityExtGrowthRule(),
-        CapacityExtNewRule(),
-        CapacityExtStockRule(),
-        # StockTurnoverRule(),
+        #CapacityExtNewRule(), #ToDo Substituted with new extension for materials
+        # CapacityExtStockRule(),#todo disabled due to new materials.py package
+        # StockTurnoverRule(), #todo disabled due to new materials.py package
         # AntiDumpingMeasuresRule(),
         CapacityExtNewLimitRule(),
-        TimedelayEUPrimaryProductionRule(),
-        TimedelayEUSecondaryProductionRule(),
+        # TimedelayEUPrimaryProductionRule(),#todo disabled due to new materials.py package
+        # TimedelayEUSecondaryProductionRule(), #todo disabled due to new materials.py package
         # Constraint1EUSecondaryToTotalRule(), #ToDo fix this constraint
         # Constraint2EUSecondaryToTotalRule(),
-        ConstraintEUPrimaryToTotalRule(),
-        ConstraintEUSecondaryToSecondaryRule(),
-        ConstraintMaxIntoStockRule(),
+        # ConstraintEUPrimaryToTotalRule(), #todo disabled due to new materials.py package
+        # ConstraintEUSecondaryToSecondaryRule(), #todo disabled due to new materials.py package
+        # ConstraintMaxIntoStockRule(), #todo disabled due to new materials.py package
         ConstraintBatteryDemandRule(),
         ConstraintBatteryCapRule(),
-        ConstraintCarryoverSecondary(),
-        ConstraintCarryoverFacility(),
-        ConstraintRemanufacturingFacilitySize(),
-        ConstraintLimitSecondaryCapacity(),
+        # ConstraintCarryoverSecondary(), #todo disabled due to new materials.py package
+        # ConstraintCarryoverFacility(), #todo disabled due to new materials.py package
+        # ConstraintRemanufacturingFacilitySize(), #todo disabled due to new materials.py package
+        # ConstraintLimitSecondaryCapacity(), #todo disabled due to new materials.py package
     ]
 
     for i, constraint in enumerate(constraints):

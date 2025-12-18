@@ -13,6 +13,7 @@ from urbs.extension import (
     apply_scenario_constraints,
     apply_combined_lr_constraints,
     apply_gas_block_pricing,
+    apply_material_constraints
 )
 
 
@@ -405,7 +406,9 @@ def create_model(
 
     apply_balance_constraints(m)
 
-    apply_costs_constraints(m)
+    #apply_costs_constraints(m)
+
+    apply_material_constraints(m)
 
     ####################################################################################################################
     ####################################################################################################################
@@ -1160,13 +1163,16 @@ def cost_rule(m):
     # --- Base model costs ---
     total_base_costs = pyomo.summation(m.costs)  # existing costs
     total_ext_costs = pyomo.summation(m.costs_new)  # extension costs
+    gross_supply_chain_costs = pyomo.summation(m.cost_capex_total) + \
+                               pyomo.summation(m.cost_opex_total) + \
+                               pyomo.summation(m.cost_trade_total)
 
     # --- LNG block costs ---
     # m.lng_total_costs is a scalar representing total LNG cost over all years
     # total_lng_costs = m.lng_total_costs
 
     # --- Total objective ---
-    total_costs = total_base_costs + total_ext_costs  # + total_lng_costs
+    total_costs = total_base_costs  + gross_supply_chain_costs# + total_ext_costs
 
     # Optional debug print
     # print("Objective breakdown:")
