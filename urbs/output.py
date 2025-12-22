@@ -47,8 +47,6 @@ def get_constants(instance):
     #                                                                        #
     ##########################################################################
     ####gather BD df to see if it works 13. january 2025
-    decisionvalues_pri = get_entity(instance, "BD_pri")
-    # print(decisionvalues_pri)
     decisionvalues_sec = get_entity(instance, "BD_sec")
     # print(decisionvalues_sec)
     pricereduction_sec = get_entity(instance, "pricereduction_sec_investment")
@@ -56,59 +54,30 @@ def get_constants(instance):
     pricereduction_scrap = get_entity(instance, "pricereduction_sec_recycling")
     demand_production = get_entity(instance, "demand_production")
     P_sec_relative = get_entity(instance, "P_sec_relative")
-    capacityprimary = get_entity(instance, "capacity_ext_euprimary")
-    auxiliary_product_BD_q_primary = get_entity(
-        instance, "auxiliary_product_BD_q_primary"
-    )
-    # print(capacityprimary)
-    # Print the values of BD
-    # print("Decision variable values for BD:")
-    # for stf in m.stf:
-    #    for n in m.nsteps:
-    #        print(f"BD[{stf}, {n}] = {m.BD[stf, n].value}")
+    ##########################################################################
+    #                                                                        #
+    # IEW RELEVANT                                                           #
+    #                                                                        #
+    ##########################################################################
 
-    ####Gather all relevant urbs-ext df's
+    minerals_df = get_entity(instance, "demand_material_total")
+    process_capacities = get_entity(instance, "capacity_total_factory")
+    domestic_caps = get_entity(instance, "capacity_produced_output")
+    imported_caps = get_entity(instance, "capacity_imported")
+    supply = get_entity(instance, "Supply")
+
+
+
 
     process_cost = get_entity(instance, "process_costs")
     # print("process cost", process_cost)
-    ext_costs = get_entity(instance, "costs_new")
     gas_usage_block = get_entity(instance, "gas_usage_block")
     # print("ext_cost", ext_costs)
-    cext = get_entities(
-        instance,
-        [
-            "capacity_ext_imported",
-            "capacity_ext_stockout",
-            "capacity_ext_euprimary",
-            "capacity_ext_eusecondary",
-            "capacity_ext_stock",
-            "capacity_ext_stock_imported",
-        ],
-    )
-    # print("cext", cext)
 
-    secondary_cumulative_capacity_df = get_entities(
-        instance, ["capacity_secondary_cumulative"]
-    )
-    print("Cumulative sum by (location, tech) over time:")
-    print(secondary_cumulative_capacity_df)
 
-    facility_cumulative_capacity_df = get_entities(
-        instance, ["capacity_facility_cumulative"]
-    )
 
     bext = get_entity(instance, "balance_ext")
     # print("bext", bext)
-    yearly_cost_ext = get_entities(
-        instance,
-        [
-            "costs_ext_import",
-            "costs_ext_storage",
-            "costs_EU_primary",
-            "costs_EU_secondary",
-            "costs_O_and_M",
-        ],
-    )
     # print("yearly ext cost", yearly_cost_ext)
     capacity_ext_total = get_entity(instance, "capacity_ext")
     # print("capacity ext total", capacity_ext_total)
@@ -119,19 +88,8 @@ def get_constants(instance):
     )
 
     # print("e pro out df", e_pro_out_df)
-    scrapdf = get_entity(instance, "capacity_scrap_total")
-    decomdf = get_entity(instance, "capacity_dec")
-    facilitiesdf = get_entities(
-        instance,
-        [
-            "capacity_facility_eusecondary",
-            "capacity_ext_eusecondary",
-            "capacity_inactive_eusecondary",
-        ],
-    )
-
-    #####Process df's to be used in report sheets
-
+    scrapdf = get_entity(instance, "capacity_scrap_total") #scrapsheet
+    decomdf = get_entity(instance, "capacity_dec") #decom sheet
     ####us_co2
     e_pro_out_co2 = e_pro_out_df.loc[
         e_pro_out_df.index.get_level_values("com") == "CO2"
@@ -228,88 +186,6 @@ def get_constants(instance):
         combined_balance.groupby(["Stf", "Site", "Process"]).sum().reset_index()
     )
     combined_balance = combined_balance.drop(columns=["Timestep"])
-    # Display the final DataFrame
-    # print(combined_balance)
-
-    ####extension_cost
-    df_process = pd.DataFrame(process_cost)
-    df_process_reset = df_process.reset_index()
-    cost_types_to_sum = ["Invest", "Fixed", "Variable", "Fuel", "Environmental"]
-    df_process_summed = (
-        df_process_reset[df_process_reset["cost_type"].isin(cost_types_to_sum)]
-        .groupby(["stf", "pro"])["process_costs"]
-        .sum()
-        .reset_index()
-    )
-    df_process_summed.rename(columns={"process_costs": "Total_Cost"}, inplace=True)
-
-    df_ext_melted = yearly_cost_ext.reset_index().melt(
-        id_vars=["stf", "location", "tech"],
-        var_name="cost_type",
-        value_name="Total_Cost",
-    )
-
-    df_ext_melted["pro"] = df_ext_melted["tech"] + "_" + df_ext_melted["cost_type"]
-
-    cost_types_ext = [
-        "costs_ext_import",
-        "costs_ext_storage",
-        "costs_EU_primary",
-        "costs_EU_secondary",
-        "costs_O_and_M",
-    ]
-    df_ext_melted_filtered = df_ext_melted[
-        df_ext_melted["cost_type"].isin(cost_types_ext)
-    ]
-
-    cost_df_combined = pd.concat(
-        [df_process_summed, df_ext_melted_filtered[["stf", "pro", "Total_Cost"]]],
-        ignore_index=True,
-    )
-    cost_df_combined = round(
-        cost_df_combined.groupby(["stf", "pro"])["Total_Cost"].sum().reset_index(), 2
-    )
-
-    ####extension_capacity
-    # Extract total capacity from capacity_ext_total
-    total_capacity = capacity_ext_total.reset_index()[
-        ["stf", "location", "tech", "capacity_ext"]
-    ]
-    # Calculate newly added capacity from cext by summing relevant columns
-    cext["newly_added_capacity"] = cext[
-        [
-            "capacity_ext_imported",
-            "capacity_ext_stockout",
-            "capacity_ext_euprimary",
-            "capacity_ext_eusecondary",
-        ]
-    ].sum(axis=1)
-    new_capacity = cext.reset_index()[
-        ["stf", "location", "tech", "newly_added_capacity"]
-    ]
-    # Merge total capacity and newly added capacity on 'stf', 'location', and 'tech'
-    merged_capacity = pd.merge(
-        total_capacity, new_capacity, on=["stf", "location", "tech"], how="left"
-    )
-    merged_capacity["newly_added_capacity"] = merged_capacity[
-        "newly_added_capacity"
-    ].fillna(0)
-    # Rename columns to match cpro structure and set index
-    merged_capacity = merged_capacity.rename(
-        columns={
-            "stf": "stf",
-            "location": "sit",
-            "tech": "pro",
-            "capacity_ext": "cap_pro",
-            "newly_added_capacity": "cap_pro_new",
-        }
-    )
-    merged_capacity = merged_capacity.set_index(["stf", "sit", "pro"])
-    # Identify rows in merged_capacity not in cpro and concatenate them
-    new_rows = merged_capacity[~merged_capacity.index.isin(cpro.index)]
-    updated_cpro = pd.concat([cpro, new_rows]).sort_index()
-    # Display the final updated dataframe
-    # print(updated_cpro)
     ########################################################################################################################
 
     if not ctra.empty:
@@ -321,37 +197,29 @@ def get_constants(instance):
         csto.columns = ["C Total", "C New", "P Total", "P New"]
         csto.sort_index(inplace=True)
 
-    #### Process df's to be used in report sheets
-
-    ext_costs = ext_costs.rename("costs")
-    combined_costs_df = pd.concat([costs, ext_costs], ignore_index=False)
-
     return (
         costs,
         cpro,
         ctra,
         csto,
-        cext,
-        updated_cpro,
-        cost_df_combined,
         capacity_ext_total,
         grouped_co2,
         combined_balance,
-        decisionvalues_pri,
         decisionvalues_sec,
         scrapdf,
         decomdf,
         inst_processes_time,
         df_e_pro_in_grouped,
         pricereduction_sec,
-        secondary_cumulative_capacity_df,
-        facilitiesdf,
-        facility_cumulative_capacity_df,
         gas_usage_block,
         pricereduction_scrap,
         demand_production,
         P_sec_relative,
-        auxiliary_product_BD_q_primary,
+        minerals_df,
+        process_capacities,
+        domestic_caps,
+        imported_caps,
+        supply
     )
 
 

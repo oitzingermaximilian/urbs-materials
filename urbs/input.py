@@ -19,6 +19,7 @@ def read_input(input_files, year):
         - year: current year for non-intertemporal problems
 
     Returns:
+    Returns:
         a dict of up to 12 DataFrames
     """
 

@@ -19,5 +19,5 @@ __all__ = [
     "apply_combined_lr_constraints",
     "apply_scenario_constraints",
     "apply_lng_block_pricing",
-    "apply_material_constraints"
+    "apply_material_constraints",
 ]

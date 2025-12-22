@@ -13,7 +13,7 @@ from urbs.extension import (
     apply_scenario_constraints,
     apply_combined_lr_constraints,
     apply_gas_block_pricing,
-    apply_material_constraints
+    apply_material_constraints,
 )
 
 
@@ -396,7 +396,7 @@ def create_model(
 
     apply_gas_block_pricing(m, data_urbsextensionv1)
 
-    apply_scenario_constraints(m)
+    #apply_scenario_constraints(m)
 
     apply_stockpiling_constraints(m)
 
@@ -1166,7 +1166,8 @@ def cost_rule(m):
     total_ext_costs = pyomo.summation(m.costs_new)  # extension costs
     gross_supply_chain_costs = (pyomo.summation(m.cost_capex_total_extension) +
                                pyomo.summation(m.cost_opex_total_extension) +
-                               pyomo.summation(m.cost_trade_total_extension)) #todo we need to apply the discount factor etc to that.
+                               pyomo.summation(m.cost_trade_total_extension)+
+                                pyomo.summation(m.cost_stockpile_holding)) #todo we need to apply the discount factor etc to that.
 
     # --- LNG block costs ---
     # m.lng_total_costs is a scalar representing total LNG cost over all years

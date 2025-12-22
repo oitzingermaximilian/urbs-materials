@@ -17,24 +17,34 @@ def debug_print(*args, **kwargs):
     if DEBUG:
         print(*args, **kwargs)
 
+
 class ProcessingCapacitiesBuildoutRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
         start_year = value(m.y0)
         build_time_lag = value(m.build_time[location, tech, stage])
         cutoff_year = stf - build_time_lag
-        processing_init = m.processing_cap_init[stf, location, tech,stage]
+
+        # --- FIX 1: ALWAYS LOOK UP LEGACY CAPACITY AT START YEAR ---
+        # Old code (WRONG): m.processing_cap_init[stf, ...] -> returns 0 for 2025+
+        # New code (CORRECT): m.processing_cap_init[start_year, ...]
+        processing_init = m.processing_cap_init[start_year, location, tech, stage]
+
+        # --- FIX 2: RETIREMENT LOGIC (OPTIONAL BUT RECOMMENDED) ---
+        # If you want legacy factories to retire after lifetime 'l', add this:
+        # lifetime = m.lifetime[tech] # You need to ensure this param exists
+        # if stf - start_year >= lifetime:
+        #     processing_init = 0
+
         if cutoff_year < start_year:
             new_cap_sum = 0
         else:
             relevant_years = range(start_year, cutoff_year + 1)
-
-            # Use sum() on the generator
             new_cap_sum = sum(
                 m.capacity_new_factory[y, location, tech, stage]
                 for y in relevant_years
             )
 
-        debug_print(f"Year {stf}: Legacy={processing_init}, New_Active={new_cap_sum}")
+        # debug_print(f"Year {stf}: Legacy={processing_init}, New_Active={new_cap_sum}")
 
         return m.capacity_total_factory[stf, location, tech, stage] == processing_init + new_cap_sum
 
@@ -192,7 +202,7 @@ class MaterialDemandBalanceRule(AbstractConstraint):
 class ScrapMaterialLinkageRule(AbstractConstraint):
     def apply_rule(self, m, stf, material):
         lhs = m.material_recycled[stf,material]
-        rhs = sum(m.capacity_scrap_rec[stf, location, tech] * m.material_content[tech, material] * m.recycling_efficiency[tech]
+        rhs = sum(m.capacity_scrap_rec[stf, location, tech] * m.material_content[tech, material] * m.recycling_efficiency[tech, material]
         for location in m.location
         for tech in m.tech
         if (tech, material) in m.material_content
@@ -201,7 +211,7 @@ class ScrapMaterialLinkageRule(AbstractConstraint):
 
 class MiningLimit(AbstractConstraint):
     def apply_rule(self, m, stf, material):
-        lhs = m.material_mining[stf, material]
+        lhs = m.material_mined[stf, material]
         rhs = m.availability_mining[stf, material]
         return lhs <= rhs
 
@@ -266,7 +276,7 @@ class OpexCostRule(AbstractConstraint):
         # Summing over Materials (Global or Sum of Locations depending on your MiningLimit def)
         # Based on your MiningLimit rule, m.material_mining is indexed by [stf, material]
         mining_cost = sum(
-            m.material_mining[stf, material] * m.cost_mining[stf, material]
+            m.material_mined[stf, material] * m.cost_mining[stf, material]
             for material in m.materials
             if (stf, material) in m.cost_mining
         )
@@ -295,6 +305,26 @@ class TradeCostRule(AbstractConstraint):
         return m.cost_trade_total_extension[stf] == component_import_cost + material_import_cost
 
 
+class StockpileHoldingCostRule(AbstractConstraint):
+    def apply_rule(self, m, stf):
+        # --- DUMMY COST PARAMETER ---
+        # Set this high enough to be noticeable, but not infinite.
+        # e.g., 5-10% of your production cost.
+        # If your production cost is ~100, try 10.
+        HOLDING_COST_PER_UNIT = 1000000000
+
+        # Sum of all items currently sitting in stock
+        total_holding_cost = sum(
+            (m.stock_domestic[stf, location, tech, stage] +
+             m.stock_imported[stf, location, tech, stage])
+            * HOLDING_COST_PER_UNIT
+
+            for location in m.location
+            for tech in m.tech
+            for stage in m.stages
+        )
+
+        return m.cost_stockpile_holding[stf] == total_holding_cost
 def apply_material_constraints(m):
     """
     Registers all constraints with the Pyomo model, grouped by their index requirements.
@@ -314,7 +344,7 @@ def apply_material_constraints(m):
         StockpileImportedRule(),
         MaximumStockpileImportsRule(),
         SupplyCompositionRule(),
-        ComponentBalanceRule()
+        ComponentBalanceRule(),
 
     ]
 
@@ -383,6 +413,7 @@ def apply_material_constraints(m):
         CapexCostRule(),
         OpexCostRule(),
         TradeCostRule(),
+        StockpileHoldingCostRule()
     ]
 
     for constraint_obj in global_constraints:

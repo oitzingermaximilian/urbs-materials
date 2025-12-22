@@ -320,6 +320,7 @@ def run_perfect_foresight():
         )
 
 
+
 def run_myopic(window_length=5):
     #    for scenario_name, scenario in scenarios:
     total_years = 27

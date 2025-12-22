@@ -362,7 +362,23 @@ def run_scenario(
 
     def load_data_from_excel(file_path):
         """Loads data from Excel and processes all relevant sheets."""
-        # Read all sheets
+
+        # --- HELPERS ---
+        def clean_df_strings(df):
+            # Cleans values (e.g. " Solar " -> "Solar")
+            obj_cols = df.select_dtypes(include=['object']).columns
+            for col in obj_cols:
+                df[col] = df[col].astype(str).str.strip()
+            return df
+
+        def clean_headers(df):
+            # Cleans headers (e.g. "Stage " -> "Stage")
+            df.columns = [str(c).strip() for c in df.columns]
+            return df
+
+        xls = pd.ExcelFile(file_path)
+
+        # Standard Sheets
         base_data = pd.read_excel(file_path, sheet_name="Base")
         cost_sheet = pd.read_excel(file_path, sheet_name="cost_sheet")
         locations_data = pd.read_excel(file_path, sheet_name="locations")
@@ -370,42 +386,146 @@ def run_scenario(
         technologies_data = pd.read_excel(file_path, sheet_name="Technologies")
         dcr_data = pd.read_excel(file_path, sheet_name="dcr")
         stocklvl_data = pd.read_excel(file_path, sheet_name="stocklvl")
-        installable_capacity_data = pd.read_excel(
-            file_path, sheet_name="installable_capacity"
-        )
+        installable_capacity_data = pd.read_excel(file_path, sheet_name="installable_capacity")
         gas_block_data = pd.read_excel(file_path, sheet_name="gas_block")
-        # Process lng_blocks sheet
-        block_names, block_limits_dict, block_price_dict = process_gas_block_sheet(
-            gas_block_data
-        )
 
-        # Process Technologies sheet
+        # Process Gas Blocks
+        block_names, block_limits_dict, block_price_dict = process_gas_block_sheet(gas_block_data)
+
+        # Material Sheets
+        tech_stage_data = clean_headers(clean_df_strings(pd.read_excel(file_path, "Tech_Stage_Specs")))
+        mat_intensity_data = clean_headers(clean_df_strings(pd.read_excel(file_path, "Material_Intensity")))
+
+        # Conditional Sheets
+        if "Material_Market" in xls.sheet_names:
+            mat_market_data = clean_headers(clean_df_strings(pd.read_excel(xls, "Material_Market")))
+        else:
+            mat_market_data = pd.DataFrame()
+
+        # --- CHANGED: Separate Production Costs (Static) from Import Costs (Dynamic) ---
+        if "Cost_Data" in xls.sheet_names:
+            proc_cost_data = clean_headers(clean_df_strings(pd.read_excel(xls, "Cost_Data")))
+        else:
+            proc_cost_data = pd.DataFrame()
+
+        # NEW: Import Costs Time Series
+        # We look for the sheet name 'import_costs_stage'
+        if "import_costs_stage" in xls.sheet_names:
+            import_ts_data = clean_headers(clean_df_strings(pd.read_excel(xls, "import_costs_stage")))
+        else:
+            import_ts_data = pd.DataFrame()
+
+        if "Component_Map" in xls.sheet_names:
+            component_map_data = clean_headers(clean_df_strings(pd.read_excel(xls, "Component_Map")))
+        else:
+            component_map_data = pd.DataFrame()
+
+        # Process Standard Dictionaries
         technologies_dict = process_technology_sheet(technologies_data)
-        # Process the structured sheets
         stocklvl_dict = process_stocklvl_sheet(stocklvl_data)
         dcr_dict = process_dcr_sheet(dcr_data)
-        installable_capacity_dict = process_installable_capacity_sheet(
-            installable_capacity_data
-        )
+        installable_capacity_dict = process_installable_capacity_sheet(installable_capacity_data)
         loadfactors_dict = process_loadfactors_sheet(loadfactors_data)
-        # Extract base parameters from the Base sheet
+
         base_params = {
-            "y0": int(
-                base_data.loc[base_data["Param"] == "Start Year y0", "Value"].values[0]
-            ),
-            "y_end": int(
-                base_data.loc[base_data["Param"] == "End Year yn", "Value"].values[0]
-            ),
-            "hours": int(
-                base_data.loc[base_data["Param"] == "hours per year", "Value"].values[0]
-            ),
+            "y0": int(base_data.loc[base_data["Param"] == "Start Year y0", "Value"].values[0]),
+            "y_end": int(base_data.loc[base_data["Param"] == "End Year yn", "Value"].values[0]),
+            "hours": int(base_data.loc[base_data["Param"] == "hours per year", "Value"].values[0]),
         }
 
-        # Process the locations sheet: Extract non-empty values from the "Locations" column
-        locations_list = locations_data.iloc[:, 0].dropna().tolist()
-        # print(locations_list)
+        # --- 3. PROCESS MATERIAL DATA ---
 
-        # Process the cost sheet into import, manufacturing, and remanufacturing cost dicts
+        # A. Tech Specs (Stages)
+        static_tech_specs = {}
+        final_stage_map = {}
+
+        if not tech_stage_data.empty:
+            for _, row in tech_stage_data.iterrows():
+                val = str(row.get('is_final_stage', '0')).strip().lower()
+                if val in ['1', '1.0', 'true', 'yes', 'y']:
+                    final_stage_map[row['Technology']] = row['Stage']
+
+            tech_stage_data.set_index(['Location', 'Technology', 'Stage'], inplace=True)
+            static_tech_specs["init_cap"] = tech_stage_data['init_cap'].to_dict()
+            static_tech_specs["build_time"] = tech_stage_data['build_time_lag'].to_dict()
+            static_tech_specs["energy_needs"] = tech_stage_data['energy_needs'].to_dict()
+
+        # B. Material Intensity
+        mat_intensity_dict = {}
+        mat_content_dict = {}
+        mat_eff_dict = {}
+
+        if not mat_intensity_data.empty:
+            mat_intensity_dict = mat_intensity_data.set_index(['Technology', 'Stage', 'Material'])[
+                'intensity'].to_dict()
+            for _, row in mat_intensity_data.iterrows():
+                k = (row['Technology'], row['Material'])
+                mat_content_dict[k] = mat_content_dict.get(k, 0) + float(row.get('scrap_content', 0))
+                mat_eff_dict[k] = float(row.get('rec_efficiency', 0))
+
+        # C. Market
+        static_material_market = {}
+        if not mat_market_data.empty:
+            if mat_market_data['Material'].duplicated().any():
+                mat_market_data.drop_duplicates(subset=['Material'], keep='first', inplace=True)
+            mat_market_data.set_index('Material', inplace=True)
+            static_material_market = mat_market_data[['mining_limit', 'mining_cost', 'import_cost']].to_dict(
+                orient='index')
+
+        # D. Processing Costs (CAPEX/OPEX - Static)
+        proc_capex_dict = {}
+        proc_opex_dict = {}
+
+        # Note: We NO LONGER read import costs from here
+        if not proc_cost_data.empty:
+            proc_cost_data['Year'] = pd.to_numeric(proc_cost_data['Year'], errors='coerce').fillna(0).astype(int)
+            proc_cost_data.set_index(['Year', 'Location', 'Technology', 'Stage'], inplace=True)
+
+            proc_capex_dict = proc_cost_data['capex_base'].to_dict()
+            proc_opex_dict = proc_cost_data['opex_var_base'].to_dict()
+
+        # E. Import Costs (Time-Series - Dynamic)
+        proc_part_import_dict = {}
+
+        if not import_ts_data.empty:
+            # Rename 'Stf' to 'Year' if present
+            if 'Stf' in import_ts_data.columns:
+                import_ts_data.rename(columns={'Stf': 'Year'}, inplace=True)
+
+            # Melt from Wide to Long
+            # Rows: Year | Tech_Stage | Cost
+            df_melt = import_ts_data.melt(id_vars=['Year'], var_name='Tech_Stage', value_name='Cost')
+
+            # Split 'Tech_Stage' (e.g., 'solarPV_Ingot') into 'Technology' and 'Stage'
+            # IMPORTANT: This assumes headers are named 'Tech_Stage' (with underscore)
+            split_data = df_melt['Tech_Stage'].str.split('_', n=1, expand=True)
+
+            # Safety check for columns that didn't split (like "solarPVModule" or typos)
+            if split_data.shape[1] == 2:
+                df_melt['Technology'] = split_data[0]
+                df_melt['Stage'] = split_data[1]
+
+                # Default Location (Assuming EU27 as per your structure)
+                df_melt['Location'] = 'EU27'
+
+                # Drop rows where splitting failed (Stage is NaN)
+                # This protects against headers that don't match the format
+                df_melt.dropna(subset=['Technology', 'Stage'], inplace=True)
+
+                # Create the dictionary: (Year, Location, Tech, Stage) -> Cost
+                proc_part_import_dict = df_melt.set_index(['Year', 'Location', 'Technology', 'Stage'])['Cost'].to_dict()
+            else:
+                print("WARNING: Could not split Tech_Stage headers. Check underscores in Excel.")
+
+        # F. BOM
+        bom_map_dict = {}
+        if not component_map_data.empty:
+            bom_map_dict = component_map_data.set_index(['Cons_Tech', 'Cons_Stage', 'Input_Tech', 'Input_Stage'])[
+                'Ratio'].to_dict()
+
+        # Locations, Costs, etc.
+        locations_list = locations_data.iloc[:, 0].dropna().tolist()
+
         (
             importcost_dict,
             manufacturingcost_dict,
@@ -414,7 +534,6 @@ def run_scenario(
             o_and_m_dict,
         ) = process_cost_sheet(cost_sheet)
 
-        # Now we create the 'data_urbsextensionv1' dictionary to return all data
         data_urbsextensionv1 = {
             "base_params": base_params,
             "importcost_dict": importcost_dict,
@@ -424,16 +543,27 @@ def run_scenario(
             "o_and_m_dict": o_and_m_dict,
             "locations_list": locations_list,
             "loadfactors_dict": loadfactors_dict,
-            "technologies": technologies_dict,  # techs stored as dict
+            "technologies": technologies_dict,
             "dcr_dict": dcr_dict,
             "stocklvl_dict": stocklvl_dict,
             "installable_capacity_dict": installable_capacity_dict,
-            # LNG block info
             "block_limits": block_limits_dict,
             "block_price": block_price_dict,
             "block_names": block_names,
+
+            "static_tech_specs": static_tech_specs,
+            "final_stage_map": final_stage_map,
+            "static_material_market": static_material_market,
+            "material_intensity_dict": mat_intensity_dict,
+            "material_content_dict": mat_content_dict,
+            "recycling_efficiency_dict": mat_eff_dict,
+            "processing_stage_cost_dict": proc_capex_dict,
+            "processing_opex_dict": proc_opex_dict,
+            "part_import_cost_dict": proc_part_import_dict,  # <--- NEW DICTIONARY LINKED HERE
+            "bom_map_dict": bom_map_dict,
         }
 
+        print("Data loading complete.")
         return data_urbsextensionv1
 
     # Load the data from the Excel file

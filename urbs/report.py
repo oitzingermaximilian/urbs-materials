@@ -25,40 +25,33 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         cpro,
         ctra,
         csto,
-        cext,
-        updated_cpro,
-        cost_df_combined,
         capacity_ext_total,
         grouped_co2,
         combined_balance,
-        decisionvalues_pri,
         decisionvalues_sec,
         scrapdf,
         decomdf,
         inst_processes_time,
         df_e_pro_in_grouped,
         pricereduction_sec,
-        secondary_cumulative_capacity_df,
-        facilitiesdf,
-        facility_cumulative_capacity_df,
         gas_usage_block,
         pricereduction_scrap,
         demand_production,
         P_sec_relative,
-        auxiliary_product_BD_q_primary,
+        minerals_df,
+        process_capacities,
+        domestic_caps,
+        imported_caps,
+        supply
     ) = get_constants(instance)
 
     # create spreadsheet writer object
     with pd.ExcelWriter(filename) as writer:
         #################################################################################
         # dynamic feedback loop reports
-        decisionvalues_pri.to_excel(writer, sheet_name="us_BDpri_values")
         decisionvalues_sec.to_excel(writer, sheet_name="us_BDsec_values")
 
-        # urbs-ext reports
-        cext.to_excel(writer, sheet_name="extension_only_caps")
-        cost_df_combined.to_excel(writer, sheet_name="extension_cost")
-        updated_cpro.to_excel(writer, sheet_name="extension_total_caps")
+
         combined_balance.to_excel(writer, sheet_name="extension_balance", index=False)
         grouped_co2.to_excel(writer, sheet_name="us_co2", index=False)
         capacity_ext_total.to_excel(writer, sheet_name="extension_only_totalcapacity")
@@ -67,20 +60,16 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         inst_processes_time.to_excel(writer, sheet_name="inst_process")
         df_e_pro_in_grouped.to_excel(writer, sheet_name="e_pro_in")
         pricereduction_sec.to_excel(writer, sheet_name="pricereduction_sec")
-        secondary_cumulative_capacity_df.to_excel(
-            writer, sheet_name="Cumulative Secondary Caps"
-        )
-        facilitiesdf.to_excel(writer, sheet_name="Facilitiesvsinstalled")
-        facility_cumulative_capacity_df.to_excel(
-            writer, sheet_name="Facility_Cumulative_Capacity"
-        )
         gas_usage_block.to_excel(writer, sheet_name="gas demand per block")
         pricereduction_scrap.to_excel(writer, sheet_name="pricereduction_scrap")
         demand_production.to_excel(writer, sheet_name="production_elec_demand")
         P_sec_relative.to_excel(writer, sheet_name="P_sec_relative")
-        auxiliary_product_BD_q_primary.to_excel(
-            writer, sheet_name="auxiliary_BD_q_primary"
-        )
+        minerals_df.to_excel(writer, sheet_name="minerals")
+        process_capacities.to_excel(writer, sheet_name="processing_capacities")
+        domestic_caps.to_excel(writer, sheet_name="domestic_caps")
+        imported_caps.to_excel(writer, sheet_name="imported_caps")
+        supply.to_excel(writer, sheet_name="supply_mix")
+
 
         #################################################################################
 
