@@ -18,42 +18,54 @@ def debug_print(*args, **kwargs):
         print(*args, **kwargs)
 
 
-class ProcessingCapacitiesBuildoutRule(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech, stage):
-        start_year = value(m.y0)
-        build_time_lag = value(m.build_time[location, tech, stage])
-        cutoff_year = stf - build_time_lag
-
-        # --- FIX 1: ALWAYS LOOK UP LEGACY CAPACITY AT START YEAR ---
-        # Old code (WRONG): m.processing_cap_init[stf, ...] -> returns 0 for 2025+
-        # New code (CORRECT): m.processing_cap_init[start_year, ...]
-        processing_init = m.processing_cap_init[start_year, location, tech, stage]
-
-        # --- FIX 2: RETIREMENT LOGIC (OPTIONAL BUT RECOMMENDED) ---
-        # If you want legacy factories to retire after lifetime 'l', add this:
-        # lifetime = m.lifetime[tech] # You need to ensure this param exists
-        # if stf - start_year >= lifetime:
-        #     processing_init = 0
-
-        if cutoff_year < start_year:
-            new_cap_sum = 0
-        else:
-            relevant_years = range(start_year, cutoff_year + 1)
-            new_cap_sum = sum(
-                m.capacity_new_factory[y, location, tech, stage]
-                for y in relevant_years
-            )
-
-        # debug_print(f"Year {stf}: Legacy={processing_init}, New_Active={new_cap_sum}")
-
-        return m.capacity_total_factory[stf, location, tech, stage] == processing_init + new_cap_sum
-
 class ProcessingCapacitiesOutputLimitRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
         return(
             m.capacity_total_factory[stf, location, tech, stage]
             >= m.capacity_produced_output[stf, location, tech, stage]
         )
+
+##############---------Factory Linkage----------##########
+class ProcessingCapacitiesBuildoutRule(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage):
+        start_year = 2024
+
+        # Case 1: Start Year
+        # We start with the Legacy Capacity (from data) + Any immediate new builds
+        if stf == start_year:
+            return (
+                    m.capacity_total_factory[stf, location, tech, stage]
+                    == m.processing_cap_init[location, tech, stage]
+                    + m.capacity_new_factory[stf, location, tech, stage]
+            )
+
+        # Case 2: Subsequent Years
+        # We carry over the previous total and add the new build
+        else:
+            return (
+                    m.capacity_total_factory[stf, location, tech, stage]
+                    == m.capacity_total_factory[stf - 1, location, tech, stage]
+                    + m.capacity_new_factory[stf, location, tech, stage]
+            )
+
+class ProcessingCapacityGrowthLimitRule(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage):
+        start_year = value(m.y0)
+        years_elapsed = stf - start_year
+
+        # LHS: The amount we are trying to build this year
+        new_build = m.capacity_new_factory[stf, location, tech, stage]
+
+        # RHS: The limit of the construction sector at this point in time
+        # deltaQ = Base Construction Capability (GW/year)
+        # IR = Annual Improvement in Construction Capability (%)
+        deltaQ = 1000 #value(m.growth_limit_absolute[tech, stage])
+        IR = 0.06 #value(m.growth_limit_rate[tech, stage])
+
+        # Formula: Limit grows exponentially with time
+        limit = deltaQ * ((1 + IR) ** years_elapsed)
+
+        return new_build <= limit
 
 class CapacityProducedOutputCompositionRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
@@ -336,6 +348,7 @@ def apply_material_constraints(m):
     # ---------------------------------------------------------
     stage_constraints = [
         ProcessingCapacitiesBuildoutRule(),
+        ProcessingCapacityGrowthLimitRule(),
         ProcessingCapacitiesOutputLimitRule(),
         CapacityProducedOutputCompositionRule(),
         CapacityImportedCompositionRule(),

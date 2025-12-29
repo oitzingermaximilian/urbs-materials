@@ -408,13 +408,6 @@ def run_scenario(
         else:
             proc_cost_data = pd.DataFrame()
 
-        # NEW: Import Costs Time Series
-        # We look for the sheet name 'import_costs_stage'
-        if "import_costs_stage" in xls.sheet_names:
-            import_ts_data = clean_headers(clean_df_strings(pd.read_excel(xls, "import_costs_stage")))
-        else:
-            import_ts_data = pd.DataFrame()
-
         if "Component_Map" in xls.sheet_names:
             component_map_data = clean_headers(clean_df_strings(pd.read_excel(xls, "Component_Map")))
         else:
@@ -438,13 +431,26 @@ def run_scenario(
         # A. Tech Specs (Stages)
         static_tech_specs = {}
         final_stage_map = {}
+        valid_tech_stage_list = []  # <--- NEW: List to store valid (Tech, Stage) pairs
 
         if not tech_stage_data.empty:
+            # 1. First pass: Extract Metadata (Final Stage & Valid Combinations)
             for _, row in tech_stage_data.iterrows():
+                t = row['Technology']
+                s = row['Stage']
+
+                # Store valid combination for Pyomo Set
+                valid_tech_stage_list.append((t, s))
+
+                # Check for final stage flag
                 val = str(row.get('is_final_stage', '0')).strip().lower()
                 if val in ['1', '1.0', 'true', 'yes', 'y']:
-                    final_stage_map[row['Technology']] = row['Stage']
+                    final_stage_map[t] = s
 
+            # 2. Sort valid list to ensure consistent ordering
+            valid_tech_stage_list = sorted(list(set(valid_tech_stage_list)))
+
+            # 3. Create Dictionaries
             tech_stage_data.set_index(['Location', 'Technology', 'Stage'], inplace=True)
             static_tech_specs["init_cap"] = tech_stage_data['init_cap'].to_dict()
             static_tech_specs["build_time"] = tech_stage_data['build_time_lag'].to_dict()
@@ -478,44 +484,124 @@ def run_scenario(
 
         # Note: We NO LONGER read import costs from here
         if not proc_cost_data.empty:
-            proc_cost_data['Year'] = pd.to_numeric(proc_cost_data['Year'], errors='coerce').fillna(0).astype(int)
+            # 1. Drop the specific 'Year' column from the input (e.g., 2020)
+            # so we can treat these costs as valid for ALL years.
+            if 'Year' in proc_cost_data.columns:
+                proc_cost_data = proc_cost_data.drop(columns=['Year'])
+
+            # 2. Define the years you want to cover (e.g., 2020 to 2050)
+            # Adjust this range to match your model's 'm.stf' set
+            target_years = range(2024, 2051)
+
+            # 3. Duplicate the data for every year in that range
+            # This creates a list of dataframes (one per year) and merges them
+            expanded_dfs = [proc_cost_data.assign(Year=y) for y in target_years]
+            proc_cost_data = pd.concat(expanded_dfs)
+
+            # 4. Set the index (Year is now included and populated for all years)
             proc_cost_data.set_index(['Year', 'Location', 'Technology', 'Stage'], inplace=True)
 
             proc_capex_dict = proc_cost_data['capex_base'].to_dict()
             proc_opex_dict = proc_cost_data['opex_var_base'].to_dict()
 
-        # E. Import Costs (Time-Series - Dynamic)
+        # E ImportCost Dict
+        # --- E. IMPORT COSTS (INDEPENDENT & ROBUST) ---
         proc_part_import_dict = {}
+        sheet_name = "Import_Cost_Stage"
 
-        if not import_ts_data.empty:
-            # Rename 'Stf' to 'Year' if present
+        if sheet_name in xls.sheet_names:
+            print(f"--- PROCESSING {sheet_name} ---")
+
+            # 1. READ EXCEL & FIX YEARS
+            import_ts_data = pd.read_excel(xls, sheet_name)
             if 'Stf' in import_ts_data.columns:
+                import_ts_data['Stf'] = import_ts_data['Stf'].ffill().astype(int)
                 import_ts_data.rename(columns={'Stf': 'Year'}, inplace=True)
 
-            # Melt from Wide to Long
-            # Rows: Year | Tech_Stage | Cost
-            df_melt = import_ts_data.melt(id_vars=['Year'], var_name='Tech_Stage', value_name='Cost')
+            # 2. DEFINE TECH NAMES MANUALLY (To avoid 'undefined variable' errors)
+            # Add any other tech names your model uses here!
+            model_tech_list = ['windon', 'windoff', 'solarPV', 'Batteries', 'batteries']
 
-            # Split 'Tech_Stage' (e.g., 'solarPV_Ingot') into 'Technology' and 'Stage'
-            # IMPORTANT: This assumes headers are named 'Tech_Stage' (with underscore)
-            split_data = df_melt['Tech_Stage'].str.split('_', n=1, expand=True)
+            # Create Mapper: 'windon' -> 'windon', 'batteries' -> 'Batteries'
+            # We assume your model uses the Capitalized 'Batteries' if present in list
+            tech_mapper = {t.lower(): t for t in model_tech_list}
+            # Force 'batteries' to map to 'Batteries' (Title Case) if that's what model wants
+            if 'batteries' in tech_mapper: tech_mapper['batteries'] = 'Batteries'
 
-            # Safety check for columns that didn't split (like "solarPVModule" or typos)
-            if split_data.shape[1] == 2:
-                df_melt['Technology'] = split_data[0]
-                df_melt['Stage'] = split_data[1]
+            # 3. DEFINE HEADER CORRECTIONS
+            header_corrections = {
+                "Bateries_Cell": ("Batteries", "Cell"),
+                "Batteries_Pack": ("Batteries", "Assembly"),
+                "bateries_Pack": ("Batteries", "Assembly"),
+                "windon_Assembly": ("windon", "Assembly"),
+                "windoff_Assembly": ("windoff", "Assembly")
+            }
 
-                # Default Location (Assuming EU27 as per your structure)
-                df_melt['Location'] = 'EU27'
+            # 4. MELT & PARSE
+            if 'Year' in import_ts_data.columns:
+                import_ts_data.dropna(subset=['Year'], inplace=True)
+                df_melt = import_ts_data.melt(id_vars=['Year'], var_name='Header', value_name='Cost')
 
-                # Drop rows where splitting failed (Stage is NaN)
-                # This protects against headers that don't match the format
-                df_melt.dropna(subset=['Technology', 'Stage'], inplace=True)
+                processed_records = []
 
-                # Create the dictionary: (Year, Location, Tech, Stage) -> Cost
-                proc_part_import_dict = df_melt.set_index(['Year', 'Location', 'Technology', 'Stage'])['Cost'].to_dict()
-            else:
-                print("WARNING: Could not split Tech_Stage headers. Check underscores in Excel.")
+                for index, row in df_melt.iterrows():
+                    header = str(row['Header']).strip()
+
+                    # Clean Cost
+                    try:
+                        cost_str = str(row['Cost']).replace(',', '.')
+                        cost = float(cost_str)
+                    except:
+                        cost = 9999999.0
+
+                    if cost > 9000000: continue
+
+                    # Resolve Tech/Stage
+                    tech = None
+                    stage = None
+
+                    # A. Manual Correction
+                    if header in header_corrections:
+                        tech_raw, stage = header_corrections[header]
+                        tech = tech_mapper.get(tech_raw.lower(), tech_raw)
+
+                    # B. Standard Split
+                    elif '_' in header:
+                        parts = header.split('_', 1)
+                        excel_tech = parts[0]
+                        stage = parts[1]
+                        tech = tech_mapper.get(excel_tech.lower())
+
+                    # C. Save
+                    if tech:
+                        processed_records.append({
+                            'Year': int(row['Year']),
+                            'Location': 'EU27',
+                            'Technology': tech,
+                            'Stage': stage,
+                            'Cost': cost
+                        })
+
+                # 5. BUILD DICTIONARY
+                if processed_records:
+                    df_final = pd.DataFrame(processed_records)
+                    proc_part_import_dict = df_final.set_index(['Year', 'Location', 'Technology', 'Stage'])[
+                        'Cost'].to_dict()
+                    print(f"✅ Loaded {len(proc_part_import_dict)} import costs.")
+
+                    # VERIFY: Check if 2038 WindOn exists now
+                    test_key = (2038, 'EU27', 'windon', 'Assembly')
+                    if test_key in proc_part_import_dict:
+                        print(f"   VALIDATION: 2038 WindOn Price = {proc_part_import_dict[test_key]:,.0f}")
+                    else:
+                        print("   WARNING: 2038 WindOn key is still missing from the dict.")
+                else:
+                    print("🚨 ERROR: No valid records generated.")
+        else:
+            print(f"🚨 SHEET NOT FOUND: {sheet_name}")
+
+
+
 
         # F. BOM
         bom_map_dict = {}
@@ -559,8 +645,9 @@ def run_scenario(
             "recycling_efficiency_dict": mat_eff_dict,
             "processing_stage_cost_dict": proc_capex_dict,
             "processing_opex_dict": proc_opex_dict,
-            "part_import_cost_dict": proc_part_import_dict,  # <--- NEW DICTIONARY LINKED HERE
+            "part_import_cost_dict": proc_part_import_dict,  # Correctly populated now
             "bom_map_dict": bom_map_dict,
+            "valid_tech_stage_list": valid_tech_stage_list,
         }
 
         print("Data loading complete.")
@@ -605,6 +692,56 @@ def run_scenario(
         window_end=window_end,
         indexlist=indexlist,
     )
+
+    from pyomo.environ import value
+
+    print("\n--- 🕵️ IMPORT COST INSPECTION (What the solver sees) ---")
+
+    years_to_check = [2030, 2035, 2038, 2040]
+    loc = 'EU27'
+    stage = 'Assembly'  # The final product we are importing
+
+    print(f"{'Year':<6} | {'WindOn Cost':<15} | {'WindOff Cost':<15} | {'Ratio (Off/On)':<15}")
+    print("-" * 60)
+
+    for y in years_to_check:
+        # 1. Get Onshore Cost
+        try:
+            c_on = value(prob.cost_import_part[y, loc, 'windon', stage])
+            str_on = f"{c_on:,.0f}"
+        except KeyError:
+            str_on = "MISSING (Def=1?)"
+            c_on = 1  # Danger!
+
+        # 2. Get Offshore Cost
+        try:
+            # Note: Check if you import 'Assembly' or 'Foundation' for offshore
+            # Ideally we sum them if both are needed, but let's check Assembly first
+            c_off = value(prob.cost_import_part[y, loc, 'windoff', stage])
+            str_off = f"{c_off:,.0f}"
+        except KeyError:
+            str_off = "MISSING (Def=1?)"
+            c_off = 1
+
+        # 3. Calculate Ratio
+        if c_on > 0:
+            ratio = c_off / c_on
+            str_ratio = f"{ratio:.2f}"
+        else:
+            str_ratio = "N/A"
+
+        print(f"{y:<6} | {str_on:<15} | {str_off:<15} | {str_ratio:<15}")
+
+    print("-" * 60)
+    print("REMINDER: The 'Crossing Point' is 1.60.")
+    print("If Ratio < 1.60, Offshore is mathematically CHEAPER per MWh.")
+    print("If you see '1' anywhere, you have missing data.")
+
+
+
+
+
+
 
     # refresh time stamp string and create filename for logfile
     log_filename = os.path.join(result_dir, "{}.log").format(sce)

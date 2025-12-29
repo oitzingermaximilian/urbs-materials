@@ -181,6 +181,12 @@ def apply_sets_and_params(m, data_urbsextensionv1):
 
     m.materials = pyomo.Set(initialize=sorted(list(all_mats)), doc="Raw materials")
 
+    m.tech_stage_combinations = pyomo.Set(
+        dimen=2,
+        initialize=data_urbsextensionv1.get("valid_tech_stage_list", []),
+        doc="Valid Tech-Stage pairs"
+    )
+
     # ==============================================================================
     # 2. PROCESSING & TECH PARAMETERS
     # ==============================================================================
@@ -202,11 +208,13 @@ def apply_sets_and_params(m, data_urbsextensionv1):
 
     # Initial Capacity (Time-indexed, but only populated for start year by the Slicer)
     m.processing_cap_init = pyomo.Param(
-        m.stf, m.location, m.tech, m.stages,
-        initialize=data_urbsextensionv1.get("processing_cap_init_dict", {}),
+        m.location, m.tech, m.stages,
+        # FIX: Point to static_tech_specs -> init_cap
+        initialize=data_urbsextensionv1["static_tech_specs"].get("init_cap", {}),
         default=0,
         doc="Initial processing capacity (Active only at y0)"
     )
+
 
     m.final_stage = pyomo.Param(
         m.tech,
@@ -271,8 +279,8 @@ def apply_sets_and_params(m, data_urbsextensionv1):
 
     m.cost_capex = pyomo.Param(
         m.stf, m.location, m.tech, m.stages,
-        initialize=data_urbsextensionv1.get("processing_capex_dict", {}),
-        default=0,
+        initialize=data_urbsextensionv1.get("processing_stage_cost_dict", {}),
+        default=1e9,
         doc="CAPEX for processing plants"
     )
 
@@ -286,7 +294,8 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     m.cost_import_part = pyomo.Param(
         m.stf, m.location, m.tech, m.stages,
         initialize=data_urbsextensionv1.get("part_import_cost_dict", {}),
-        default=1,  # High default to discourage missing data usage
+        # default=1,  <-- DELETE OR COMMENT THIS OUT! It hides bugs!
+        default=99999999,  # Set to a penalty value so missing data implies "Impossible to build"
         doc="Cost to import intermediate parts"
     )
 
