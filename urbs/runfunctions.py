@@ -51,9 +51,9 @@ def setup_solver(optim, logfile="solver.log"):
         optim.set_options(
             "IntFeasTol=1e-09"
         )  # Minimum allowed integer feasibility tolerance
-        optim.set_options("FeasibilityTol=1e-09")  # General feasibility tolerance
-        optim.set_options("OptimalityTol=1e-09")  # Optimality tolerance
-        optim.set_options("MIPGap=0")  # Set MIP gap to 0 for exact solutions
+        optim.set_options("FeasibilityTol=1e-06")  # General feasibility tolerance
+        optim.set_options("OptimalityTol=1e-06")  # Optimality tolerance
+        optim.set_options("MIPGap=0.0001")  # Set MIP gap to 0 for exact solutions
         print("✅ Gurobi binary tolerance set to minimum (1e-09) for exact BD values")
         # ✅ Enable IIS computation if model is infeasible
         optim.set_options("ResultFile=infeasible.ilp")

@@ -63,7 +63,7 @@ class decommissioned_capacity_rule(AbstractConstraint):
             # lifetime disabled → always use exogenous + 15%
             expr = (
                 m.capacity_dec[stf, location, tech]
-                == _exogenous + 0.15 * m.capacity_ext_new[stf, location, tech]
+                == _exogenous + 0.15 *m.capacity_ext_new[stf, location, tech]
             )
             debug_print(
                 f"[decommissioned, no lifetime] STF={stf}, loc={location}, tech={tech} ➞ "
@@ -193,7 +193,7 @@ def apply_scrap_constraints(m):
     constraints = [
         decommissioned_capacity_rule(),
         capacity_scrap_dec_rule(),
-        capacity_scrap_rec_rule(),
+        #capacity_scrap_rec_rule(),
         capacity_scrap_total_rule(),
         cost_scrap_rule(),
         # Removed obsolete linearization constraints - now using direct absolute values
@@ -213,21 +213,21 @@ def apply_scrap_constraints(m):
         m.tech,
         rule=lambda m, stf, loc, tech: constraints[1].apply_rule(m, stf, loc, tech),
     )
-    m.capacity_scrap_rec_rule = pyomo.Constraint(
+    #m.capacity_scrap_rec_rule = pyomo.Constraint(
+    #    m.stf,
+    #    m.location,
+    #    m.tech,
+    #    rule=lambda m, stf, loc, tech: constraints[2].apply_rule(m, stf, loc, tech),
+    #)
+    m.capacity_scrap_total_rule = pyomo.Constraint(
         m.stf,
         m.location,
         m.tech,
         rule=lambda m, stf, loc, tech: constraints[2].apply_rule(m, stf, loc, tech),
     )
-    m.capacity_scrap_total_rule = pyomo.Constraint(
-        m.stf,
-        m.location,
-        m.tech,
-        rule=lambda m, stf, loc, tech: constraints[3].apply_rule(m, stf, loc, tech),
-    )
     m.cost_scrap_rule = pyomo.Constraint(
         m.stf,
         m.location,
         m.tech,
-        rule=lambda m, stf, loc, tech: constraints[4].apply_rule(m, stf, loc, tech),
+        rule=lambda m, stf, loc, tech: constraints[3].apply_rule(m, stf, loc, tech),
     )

@@ -396,7 +396,7 @@ def create_model(
 
     apply_gas_block_pricing(m, data_urbsextensionv1)
 
-    #apply_scenario_constraints(m)
+    apply_scenario_constraints(m)
 
     apply_stockpiling_constraints(m)
 
