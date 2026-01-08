@@ -286,9 +286,16 @@ def apply_sets_and_params(m, data_urbsextensionv1):
 
     m.cost_variable = pyomo.Param(
         m.stf, m.location, m.tech, m.stages,
-        initialize=data_urbsextensionv1.get("processing_opex_dict", {}),
+        initialize=data_urbsextensionv1.get("processing_opex_var_dict", {}),
         default=1e9,
         doc="Variable OPEX for processing"
+    )
+
+    m.cost_fixed = pyomo.Param(
+        m.stf, m.location, m.tech, m.stages,
+        initialize=data_urbsextensionv1.get("processing_opex_dict", {}),
+        default=1e9,
+        doc="Fixed OPEX for processing"
     )
 
     m.cost_import_part = pyomo.Param(

@@ -481,6 +481,7 @@ def run_scenario(
         # D. Processing Costs (CAPEX/OPEX - Static)
         proc_capex_dict = {}
         proc_opex_dict = {}
+        proc_opex_var_dict = {}
 
         # Note: We NO LONGER read import costs from here
         if not proc_cost_data.empty:
@@ -502,7 +503,8 @@ def run_scenario(
             proc_cost_data.set_index(['Year', 'Location', 'Technology', 'Stage'], inplace=True)
 
             proc_capex_dict = proc_cost_data['capex_base'].to_dict()
-            proc_opex_dict = proc_cost_data['opex_var_base'].to_dict()
+            proc_opex_dict = proc_cost_data['opex_fixed'].to_dict()
+            proc_opex_var_dict = proc_cost_data['opex_var_base'].to_dict()
 
         # E ImportCost Dict
         # --- E. IMPORT COSTS (INDEPENDENT & ROBUST) ---
@@ -645,6 +647,7 @@ def run_scenario(
             "recycling_efficiency_dict": mat_eff_dict,
             "processing_stage_cost_dict": proc_capex_dict,
             "processing_opex_dict": proc_opex_dict,
+            "processing_opex_var_dict": proc_opex_var_dict,
             "part_import_cost_dict": proc_part_import_dict,  # Correctly populated now
             "bom_map_dict": bom_map_dict,
             "valid_tech_stage_list": valid_tech_stage_list,

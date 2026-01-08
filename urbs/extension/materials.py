@@ -272,28 +272,58 @@ class CapexCostRule(AbstractConstraint):
 # OPEX
 class OpexCostRule(AbstractConstraint):
     def apply_rule(self, m, stf):
-        # 1. Manufacturing Variable Costs (Labor, Utilities, O&M)
-        # Summing over Location, Tech, Stage
-        manufacturing_cost = sum(
-            m.capacity_produced_output[stf, location, tech, stage] * m.cost_variable[stf, location, tech, stage]
-            + m.cost_scrap[stf, location, tech]
-            - m.PRICEREDUCTION_CAP_DEP_INV[stf, location, tech, stage]
+        # --- A. Manufacturing Costs ---
+
+        # 1. Fixed Costs (Applied to Installed Capacity)
+        # Unit: [MW_capacity] * [EUR/MW/yr]
+        manufacturing_fixed = sum(
+            m.capacity_total_factory[stf, location, tech, stage]
+            * m.cost_fixed[stf, location, tech, stage]
+
+            for location in m.location
+            for tech in m.tech
+            for stage in m.stages
+            if (stf, location, tech, stage) in m.cost_fixed
+        )
+
+        # 2. Variable Costs (Applied to Production Output)
+        # Unit: [MW_output] * [EUR/MW_output]
+        # Note: 'cost_variable' should include Labor + Materials (Consumables).
+        # Electricity is usually excluded here if modeled as physical demand elsewhere.
+        manufacturing_variable = sum(
+            m.capacity_produced_output[stf, location, tech, stage]
+            * m.cost_variable[stf, location, tech, stage]
+            #- m.PRICEREDUCTION_CAP_DEP_INV[stf, location, tech, stage]
+
             for location in m.location
             for tech in m.tech
             for stage in m.stages
             if (stf, location, tech, stage) in m.cost_variable
         )
+        # 3. Scrap & Recycling Adjustments (If applicable)
+        scrap_costs = sum(
+            m.cost_scrap[stf, location, tech]
 
-        # 2. Raw Material Mining Costs
-        # Summing over Materials (Global or Sum of Locations depending on your MiningLimit def)
-        # Based on your MiningLimit rule, m.material_mining is indexed by [stf, material]
+            for location in m.location
+            for tech in m.tech
+            for stage in m.stages
+            if (stf, location, tech) in m.cost_scrap
+        )
+
+        # --- B. Mining Costs (Virgin Material Extraction) ---
         mining_cost = sum(
             m.material_mined[stf, material] * m.cost_mining[stf, material]
             for material in m.materials
             if (stf, material) in m.cost_mining
         )
 
-        return m.cost_opex_total_extension[stf] == manufacturing_cost + mining_cost
+        # --- Total Equation ---
+        return m.cost_opex_total_extension[stf] == (
+                manufacturing_fixed +
+                manufacturing_variable +
+                scrap_costs +
+                mining_cost
+        )
 # Trade&Storage
 class TradeCostRule(AbstractConstraint):
     def apply_rule(self, m, stf):
