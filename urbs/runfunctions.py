@@ -456,6 +456,9 @@ def run_scenario(
             static_tech_specs["build_time"] = tech_stage_data['build_time_lag'].to_dict()
             static_tech_specs["energy_needs"] = tech_stage_data['energy_needs'].to_dict()
 
+
+
+
         # B. Material Intensity
         mat_intensity_dict = {}
         mat_content_dict = {}

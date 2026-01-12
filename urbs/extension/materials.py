@@ -211,15 +211,27 @@ class MaterialDemandBalanceRule(AbstractConstraint):
         return(
             m.demand_material_total[stf, material] == m.material_imported[stf,material] + m.material_mined[stf,material] + m.material_recycled[stf,material]
         )
+
+
 class ScrapMaterialLinkageRule(AbstractConstraint):
     def apply_rule(self, m, stf, material):
-        lhs = m.material_recycled[stf,material]
-        rhs = sum(m.capacity_scrap_rec[stf, location, tech] * m.material_content[tech, material] * m.recycling_efficiency[tech, material]
-        for location in m.location
-        for tech in m.tech
-        if (tech, material) in m.material_content
+        # LHS: Total Pure Material Recovered (e.g., Tons of Copper)
+        lhs = m.material_recycled[stf, material]
+
+        # RHS: Sum of (Scrap Mass Processed * Material Content % * Efficiency)
+        # Unit check: [Tons Scrap] * [Tons Mat / Tons Scrap] * [%] = [Tons Mat]
+        rhs = sum(
+            m.capacity_scrap_rec[stf, location, tech]
+            * m.scrap_content[tech, material]  # <--- Ensure this matches your data index!
+            * m.recycling_efficiency[tech, material]
+
+            for location in m.location
+            for tech in m.tech
+            if (tech, material) in m.scrap_content
         )
-        return lhs <= rhs
+
+        # Use Equality (==) to define the conversion strictly
+        return lhs == rhs
 
 class MiningLimit(AbstractConstraint):
     def apply_rule(self, m, stf, material):
@@ -239,11 +251,12 @@ class ElecNeedsProductionRule(AbstractConstraint):
         # We sum over all stages for this specific technology here.
 
         # 1. Calculate Total Annual Energy Required (e.g., MWh)
+        # CORRECTED LOOP
         annual_energy_mwh = sum(
-            m.capacity_produced_output[stf, location, tech, stage] * m.energy_needs[location,tech, stage]
+            m.capacity_produced_output[stf, location, tech, stage] * m.energy_needs[tech, stage]
+            # REMOVED location here
             for stage in m.stages
-            # Safety check: ensure parameter exists for this combo
-            if (tech, stage) in m.energy_needs
+            if (tech, stage) in m.energy_needs  # Matches the indices above
         )
 
         # 2. Link to the Demand Variable

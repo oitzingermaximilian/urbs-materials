@@ -202,7 +202,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     m.energy_needs = pyomo.Param(
         m.location, m.tech, m.stages,
         initialize=data_urbsextensionv1["static_tech_specs"].get("energy_needs", {}),
-        default=0,
+        default=100,
         doc="Energy required for processing"
     )
 
@@ -234,7 +234,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc="Material input required per unit of output"
     )
 
-    m.material_content = pyomo.Param(
+    m.scrap_content = pyomo.Param(
         m.tech, m.materials,
         initialize=data_urbsextensionv1.get("material_content_dict", {}),
         default=0,
