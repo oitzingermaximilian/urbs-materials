@@ -396,7 +396,7 @@ def create_model(
 
     apply_gas_block_pricing(m, data_urbsextensionv1)
 
-    # apply_scenario_constraints(m)
+    apply_scenario_constraints(m)
 
     apply_stockpiling_constraints(m)
 
@@ -1206,93 +1206,3 @@ def co2_rule(m):
     return co2_output_sum
 
 
-##########################################################################################
-#                                                                                        #
-#  urbs_solar Additional functions and rules used to implement into existing urbs model  #
-#                              25. September 2024                                        #
-#                                                                                        #
-##########################################################################################
-
-
-def net_zero_industrialactbenchmark_rule_a(m, stf, location, tech):
-    lhs = (
-        m.capacity_ext_euprimary[stf, location, tech]
-        + m.capacity_ext_eusecondary[stf, location, tech]
-        + m.capacity_ext_stockout[stf, location, tech]
-        - m.capacity_ext_stock_imported[stf, location, tech]
-    )
-
-    rhs = 0.4 * m.capacity_ext_new[stf, location, tech]
-
-    # Print both sides for debugging
-    print(
-        f"Debug: STF = {stf}, Location = {location}, Tech = {tech}, LHS = {lhs}, RHS = {rhs}"
-    )
-
-    return lhs >= rhs
-
-
-def net_zero_industrialactbenchmark_rule_b(m, stf, location, tech):
-    lhs = (
-        m.capacity_ext_euprimary[stf, location, tech]
-        + m.capacity_ext_eusecondary[stf, location, tech]
-    )
-
-    rhs = 0.4 * m.capacity_ext_new[stf, location, tech]
-
-    # Print both sides for debugging
-    print(
-        f"Debug: STF = {stf}, Location = {location}, Tech = {tech}, LHS = {lhs}, RHS = {rhs}"
-    )
-
-    return lhs >= rhs
-
-
-# Addition made on 29th November:
-def best_estimate_TYNDP2030_rule(m, stf, location, tech):
-    lhs = sum(m.capacity_ext_new[stf, location, tech] for stf in m.stf if stf <= 2030)
-
-    # Print the sum for debugging
-    print(
-        f"Debug: STF = {stf}, Location = {location}, Tech = {tech}, Total Solar Capacity for TYNDP2030 = {lhs}"
-    )
-
-    return lhs <= 558118
-
-
-def best_estimate_TYNDP2040_rule(m, stf, location, tech):
-    lhs = sum(m.capacity_ext_new[stf, location, tech] for stf in m.stf if stf <= 2040)
-
-    # Print the sum for debugging
-    print(
-        f"Debug: STF = {stf}, Location = {location}, Tech = {tech}, Total Solar Capacity for TYNDP2040 = {lhs}"
-    )
-
-    return lhs <= 1177233
-
-
-def best_estimate_TYNDP2050_rule(m, stf, location, tech):
-    lhs = sum(m.capacity_ext_new[stf, location, tech] for stf in m.stf if stf <= 2050)
-
-    # Print the sum for debugging
-    print(
-        f"Debug: STF = {stf}, Location = {location}, Tech = {tech}, Total Solar Capacity for TYNDP2050 = {lhs}"
-    )
-
-    return lhs <= 1753785
-
-
-def minimum_stock_level_rule(m, stf, location, tech):
-    lhs = m.min_stocklvl[stf, location, tech]
-    rhs = m.capacity_ext_stock[stf, location, tech]
-
-    # Debugging: Print the LHS and RHS values
-    print(
-        f"Debug: STF = {stf}, Location = {location}, Tech = {tech}, LHS = {lhs}, RHS = {rhs}"
-    )
-
-    return lhs <= rhs
-
-
-##################################
-# Nuclear minimum 80% activity
