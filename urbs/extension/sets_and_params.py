@@ -206,6 +206,11 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc="Energy required for processing"
     )
 
+    # Check if the parameter is empty or has data
+    print("--- Inspecting Energy Needs Parameter ---")
+    # This prints all values that represent "True" data (non-default)
+    m.energy_needs.display()
+
     # Initial Capacity (Time-indexed, but only populated for start year by the Slicer)
     m.processing_cap_init = pyomo.Param(
         m.location, m.tech, m.stages,
@@ -252,22 +257,28 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     # 4. MATERIAL MARKET (Broadcasted to Time by Slicer)
     # ==============================================================================
 
+    # 1. Availability / Limit
     m.availability_mining = pyomo.Param(
         m.stf, m.materials,
-        initialize=data_urbsextensionv1.get("mining_avail_dict", {}),
+        # MUST MATCH the key name you used in the return dictionary
+        initialize=data_urbsextensionv1.get("mat_mining_limit_dict", {}),
         default=1e12,
         doc="Global mining limit per year"
     )
 
+    # 2. Mining Cost
     m.cost_mining = pyomo.Param(
         m.stf, m.materials,
-        initialize=data_urbsextensionv1.get("mining_cost_dict", {}),
+        # MUST MATCH the key name you used in the return dictionary
+        initialize=data_urbsextensionv1.get("mat_mining_cost_dict", {}),
         default=0,
         doc="Cost of mining raw material"
     )
 
+    # 3. Import Cost
     m.cost_import_material = pyomo.Param(
         m.stf, m.materials,
+        # MUST MATCH the key name you used in the return dictionary
         initialize=data_urbsextensionv1.get("mat_import_cost_dict", {}),
         default=0,
         doc="Cost of importing raw material"

@@ -232,7 +232,7 @@ def apply_variables(m):
     m.material_imported = pyomo.Var(m.stf, m.materials, domain=pyomo.NonNegativeReals)
     m.material_recycled = pyomo.Var(m.stf, m.materials, domain=pyomo.NonNegativeReals)  # Or (stf, loc, mat)
     m.demand_production = pyomo.Var(
-        m.tm,
+        m.timesteps_ext,
         m.stf,
         m.location,
         m.tech,

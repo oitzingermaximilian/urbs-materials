@@ -395,12 +395,17 @@ def run_scenario(
         # Material Sheets
         tech_stage_data = clean_headers(clean_df_strings(pd.read_excel(file_path, "Tech_Stage_Specs")))
         mat_intensity_data = clean_headers(clean_df_strings(pd.read_excel(file_path, "Material_Intensity")))
+        # Material Markets
+
+        mat_mining_limit= clean_headers(clean_df_strings(pd.read_excel(file_path, "mining_limit")))
+        mat_mining_cost= clean_headers(clean_df_strings(pd.read_excel(file_path, "mining_cost")))
+        mat_import_cost_mining= clean_headers(clean_df_strings(pd.read_excel(file_path, "import_cost_mining")))
 
         # Conditional Sheets
-        if "Material_Market" in xls.sheet_names:
-            mat_market_data = clean_headers(clean_df_strings(pd.read_excel(xls, "Material_Market")))
-        else:
-            mat_market_data = pd.DataFrame()
+        #if "Material_Market" in xls.sheet_names:
+        #    mat_market_data = clean_headers(clean_df_strings(pd.read_excel(xls, "Material_Market")))
+        #else:
+        #    mat_market_data = pd.DataFrame()
 
         # --- CHANGED: Separate Production Costs (Static) from Import Costs (Dynamic) ---
         if "Cost_Data" in xls.sheet_names:
@@ -472,14 +477,58 @@ def run_scenario(
                 mat_content_dict[k] = mat_content_dict.get(k, 0) + float(row.get('scrap_content', 0))
                 mat_eff_dict[k] = float(row.get('rec_efficiency', 0))
 
-        # C. Market
-        static_material_market = {}
-        if not mat_market_data.empty:
-            if mat_market_data['Material'].duplicated().any():
-                mat_market_data.drop_duplicates(subset=['Material'], keep='first', inplace=True)
-            mat_market_data.set_index('Material', inplace=True)
-            static_material_market = mat_market_data[['mining_limit', 'mining_cost', 'import_cost']].to_dict(
-                orient='index')
+        # C. Material Market
+        # 1. SETUP DICTIONARIES
+        mat_mining_limit_dict = {}
+        mat_mining_cost_dict = {}
+        mat_import_cost_dict = {}
+
+        # 2. LIST OF TASKS
+        # ( DataFrame, Target Dictionary )
+        tasks = [
+            (mat_mining_limit, mat_mining_limit_dict),
+            (mat_mining_cost, mat_mining_cost_dict),
+            (mat_import_cost_mining, mat_import_cost_dict)
+        ]
+
+        # 3. RUN
+        for df_source, target_dict in tasks:
+            if df_source.empty: continue
+
+            # Copy and fix Year
+            df = df_source.copy()
+            if 'Stf' in df.columns:
+                df['Stf'] = df['Stf'].ffill().astype(int)
+                df.rename(columns={'Stf': 'Year'}, inplace=True)
+
+            # Melt (Columns -> Rows)
+            df_melt = df.melt(id_vars=['Year'], var_name='Material', value_name='Value')
+
+            # Clean Numbers
+            df_melt['Value'] = pd.to_numeric(
+                df_melt['Value'].astype(str).str.replace(',', '.', regex=False),
+                errors='coerce'
+            )
+            df_melt.dropna(subset=['Value'], inplace=True)
+
+            # Fill Dict
+            for _, row in df_melt.iterrows():
+                year = int(row['Year'])
+                mat = str(row['Material']).strip()
+                val = row['Value']
+
+                if val > 900000000: continue
+
+                # KEY: (Year, Material)
+                target_dict[(year, mat)] = val
+
+        print("✅ Done. Dictionaries populated with (Year, Material) keys.")
+
+        # VERIFICATION
+        if mat_mining_limit_dict:
+            # Print one example to confirm the structure
+            example_key = list(mat_mining_limit_dict.keys())[0]
+            print(f"   Sample Key: {example_key} -> Value: {mat_mining_limit_dict[example_key]}")
 
         # D. Processing Costs (CAPEX/OPEX - Static)
         proc_capex_dict = {}
@@ -644,7 +693,10 @@ def run_scenario(
 
             "static_tech_specs": static_tech_specs,
             "final_stage_map": final_stage_map,
-            "static_material_market": static_material_market,
+            "mat_mining_limit_dict": mat_mining_limit_dict,
+        "mat_mining_cost_dict": mat_mining_cost_dict,
+         "mat_import_cost_dict": mat_import_cost_dict,
+            #"static_material_market": static_material_market,
             "material_intensity_dict": mat_intensity_dict,
             "material_content_dict": mat_content_dict,
             "recycling_efficiency_dict": mat_eff_dict,

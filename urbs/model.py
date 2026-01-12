@@ -630,9 +630,7 @@ def res_vertex_rule(m, tm, stf, sit, com, com_type):
         for tech in m.tech:
             if (tm, stf, sit, tech) in m.balance_ext:
                 power_surplus += m.balance_ext[tm, stf, sit, tech]
-                power_surplus -= m.demand_production[
-                    tm, stf, sit, tech
-                ]  # subtract production demand
+                power_surplus -= m.demand_production[tm, stf, sit, tech]  # subtract production demand
 
 
                 # print(power_surplus)

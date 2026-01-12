@@ -222,7 +222,7 @@ class ScrapMaterialLinkageRule(AbstractConstraint):
         # Unit check: [Tons Scrap] * [Tons Mat / Tons Scrap] * [%] = [Tons Mat]
         rhs = sum(
             m.capacity_scrap_rec[stf, location, tech]
-            * m.scrap_content[tech, material]  # <--- Ensure this matches your data index!
+            * ( m.scrap_content[tech, material] / m.f_scrap[location, tech])  # <--- Ensure this matches your data index!
             * m.recycling_efficiency[tech, material]
 
             for location in m.location
@@ -246,27 +246,23 @@ class ElecNeedsProductionRule(AbstractConstraint):
     Demand(y, l, k) = Sum_over_stages( Production(y,l,k,i) * EnergyIntensity(k,i) )
     """
 
-    def apply_rule(self, m, t, stf, location, tech):
+    def apply_rule(self, m, tm, stf, location, tech):
         # NOTE: 'stage' is NOT in the arguments.
         # We sum over all stages for this specific technology here.
 
         # 1. Calculate Total Annual Energy Required (e.g., MWh)
-        # CORRECTED LOOP
         annual_energy_mwh = sum(
-            m.capacity_produced_output[stf, location, tech, stage] * m.energy_needs[tech, stage]
-            # REMOVED location here
+            m.capacity_produced_output[stf, location, tech, stage] * m.energy_needs[location, tech, stage]
+            # <--- Use 3 keys here
             for stage in m.stages
-            if (tech, stage) in m.energy_needs  # Matches the indices above
+            # Check for the 3-item tuple:
+            if (location, tech, stage) in m.energy_needs
         )
 
-        # 2. Link to the Demand Variable
-        # Assuming m.demand_production is indexed [stf, location, tech]
-
-        # If you specifically need Monthly Average Demand, keep the / 12
-        # return m.demand_production[stf, location, tech] == annual_energy_mwh / 12
-
-        # Standard Approach (Annual Total):
-        return m.demand_production[t, stf, location, tech] == annual_energy_mwh / 12
+        # 2. Build the constraint expression and print it
+        expr = m.demand_production[tm, stf, location, tech] == annual_energy_mwh / 12
+        print(f"ElecNeedsProductionRule constraint for (t={tm}, stf={stf}, loc={location}, tech={tech}): {expr}")
+        return expr
 
 # CAPEX
 class CapexCostRule(AbstractConstraint):
@@ -439,7 +435,7 @@ def apply_material_constraints(m):
         name = constraint_obj.__class__.__name__
         # Assuming 'm.t' is your time-step set (e.g., months or hours)
         setattr(m, name, pyomo.Constraint(
-            m.tm, m.stf, m.location, m.tech,
+            m.timesteps_ext, m.stf, m.location, m.tech,
             rule=lambda m, t, y, l, k: constraint_obj.apply_rule(m, t, y, l, k)
         ))
 
