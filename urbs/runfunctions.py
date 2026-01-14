@@ -400,6 +400,8 @@ def run_scenario(
         mat_mining_limit= clean_headers(clean_df_strings(pd.read_excel(file_path, "mining_limit")))
         mat_mining_cost= clean_headers(clean_df_strings(pd.read_excel(file_path, "mining_cost")))
         mat_import_cost_mining= clean_headers(clean_df_strings(pd.read_excel(file_path, "import_cost_mining")))
+        energy_transision_factor= clean_headers(clean_df_strings(pd.read_excel(file_path, "energy_transition_factor")))
+        conversion_factor_mat= clean_headers(clean_df_strings(pd.read_excel(file_path, "ore_metal_factor")))
 
         # Conditional Sheets
         #if "Material_Market" in xls.sheet_names:
@@ -482,13 +484,18 @@ def run_scenario(
         mat_mining_limit_dict = {}
         mat_mining_cost_dict = {}
         mat_import_cost_dict = {}
+        mat_conversion_dict = {}
+        mat_energy_transision_factor_dict = {}
+
 
         # 2. LIST OF TASKS
         # ( DataFrame, Target Dictionary )
         tasks = [
             (mat_mining_limit, mat_mining_limit_dict),
             (mat_mining_cost, mat_mining_cost_dict),
-            (mat_import_cost_mining, mat_import_cost_dict)
+            (mat_import_cost_mining, mat_import_cost_dict),
+            (conversion_factor_mat, mat_conversion_dict),
+            (energy_transision_factor, mat_energy_transision_factor_dict)
         ]
 
         # 3. RUN

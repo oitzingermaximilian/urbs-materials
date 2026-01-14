@@ -253,6 +253,26 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc="Efficiency of recycling process"
     )
 
+    # 1. Energy Sector Share Parameter (Dynamic over time) #todo initialize!
+    # Represents: The % of the mining limit accessible to the energy sector in Year Y.
+    m.mining_energy_transission_share = pyomo.Param(
+        m.stf, m.materials,  # <--- NOW INDEXED BY TIME
+        initialize=data_urbsextensionv1.get("mining_energy_share_dict", {}),
+        default=1.0,
+        doc="Share of mining limit allocated to energy sector (e.g., 2025: 0.4, 2050: 0.8)"
+    )
+
+    # 2. Conversion Factor (Stays Static) #todo initialize!
+    # Physics doesn't change over time, so this remains indexed by Material only.
+    m.mining_conversion_factor = pyomo.Param(
+        m.stf, m.materials,
+        initialize=data_urbsextensionv1.get("mining_conversion_dict", {}),
+        default=1.0,
+        doc="Ratio of Raw Input to Metal Content (e.g. 5.0 for Bauxite->Al)"
+    )
+
+
+
     # ==============================================================================
     # 4. MATERIAL MARKET (Broadcasted to Time by Slicer)
     # ==============================================================================
@@ -341,6 +361,31 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         m.location, m.tech, m.stages,
         initialize=0, default=0
     )
+    m.initial_total_reserves = pyomo.Param(
+        m.materials,
+        initialize=1e9, default=1e9
+    )
+    m.init_primary_material_availability = pyomo.Param(
+        m.materials,
+        initialize=1e9, default=1e9
+    )
+
+    # 2. Parameters for the growth logic (from your LaTeX)
+    # Absolute Increase (Q_hat in your eqn) - e.g., can add 100 tons/year minimum
+    m.primary_material_growth_absolute = pyomo.Param(m.materials, default=0)
+
+    # Relative Increase (IR in your eqn) - e.g., can grow by 5% (0.05) per year
+    m.primary_material_growth_relative = pyomo.Param(m.materials, default=0.05)
+
+    # --- PARAMETERS (From your LaTeX constants) ---
+    # Delta Q: The "Base" construction capacity (Equation 1)
+    m.recycling_growth_delta = pyomo.Param(m.tech, default=500)
+    # IR: Increase Rate (Equation 1)
+    m.recycling_growth_IR = pyomo.Param(m.tech, default=0.10)
+    # DR: Decrease Rate (Equation 2)
+    m.recycling_decrease_DR = pyomo.Param(m.tech, default=0.80)
+    # Init: Initial installed capacity (Equation 3)
+    m.recycling_init_capacity = pyomo.Param(m.location, m.tech, default=0)
 
 
     # ========================================
@@ -493,7 +538,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
 
         return absolute_dict
 
-    # Generate absolute value dictionaries for all learning rates
+    # Generate absolute value dictionaries for all learning rates #NOTE this is for CAPEX Cost
     absolute_stage_reductions = {
         "LR1": create_absolute_stage_reduction_dict(reduction_percentage_1),
         "LR3_5": create_absolute_stage_reduction_dict(reduction_percentage_3_5),
@@ -597,7 +642,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         (loc, tech, stage,n): uniform_step_values.get(n, 0)
         for loc in m.location
         for tech in m.tech
-        for stage in m.stages  # <--- ADD THIS LOOP
+        for stage in m.stages
         for n in m.nsteps_sec
     }
 

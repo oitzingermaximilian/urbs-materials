@@ -220,6 +220,20 @@ def apply_variables(m):
     # --- 3. STOCKPILES (Dimensions: stf, location, tech, stage) ---
     m.stock_domestic = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
     m.stock_imported = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    # The amount of material remaining in the ground at the end of period stf
+    m.remaining_reserves = pyomo.Var(m.stf, m.materials, domain=pyomo.NonNegativeReals)
+    # 1. The Variable representing the limit for that year (e.g., tons/year capacity)
+    m.primary_material_capacity_annual = pyomo.Var(m.stf, m.materials, domain=pyomo.NonNegativeReals)
+    # --- VARIABLES ---
+    # 1. The "New Build" (Little pi_facility in LaTeX)
+    m.capacity_new_scrap_rec = pyomo.Var(m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals)
+
+    # 2. The "Total Stock" (Big Pi_facility in LaTeX)
+    m.capacity_total_scrap_rec = pyomo.Var(m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals)
+
+    # 3. The "Inactive Capacity" (Optional, for Equation 4 reporting)
+    m.capacity_inactive_scrap_rec = pyomo.Var(m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals)
+
     # Aggregate for reporting
     m.components_stockpile = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
 
