@@ -42,7 +42,8 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         process_capacities,
         domestic_caps,
         imported_caps,
-        supply
+        supply,
+        stock
     ) = get_constants(instance)
 
     # create spreadsheet writer object
@@ -69,6 +70,7 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         domestic_caps.to_excel(writer, sheet_name="domestic_caps")
         imported_caps.to_excel(writer, sheet_name="imported_caps")
         supply.to_excel(writer, sheet_name="supply_mix")
+        stock.to_excel(writer, sheet_name="stock_levels")
 
 
         #################################################################################

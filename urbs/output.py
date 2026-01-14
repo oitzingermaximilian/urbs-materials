@@ -61,10 +61,11 @@ def get_constants(instance):
     ##########################################################################
 
     minerals_df = get_entity(instance, "demand_material_total")
-    process_capacities = get_entity(instance, "capacity_total_factory")
+    process_capacities = get_entity(instance, "capacity_processing_total")
     domestic_caps = get_entity(instance, "capacity_produced_output")
     imported_caps = get_entity(instance, "capacity_imported")
     supply = get_entity(instance, "Supply")
+    stock = get_entity(instance, "components_stockpile")
 
 
 
@@ -219,7 +220,8 @@ def get_constants(instance):
         process_capacities,
         domestic_caps,
         imported_caps,
-        supply
+        supply,
+        stock
     )
 
 

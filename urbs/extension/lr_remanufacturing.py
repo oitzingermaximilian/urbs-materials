@@ -139,22 +139,6 @@ class non_negativity_z_eq_sec(AbstractConstraint):
 
 
 
-def recycling_reduction_rule(m, stf, location, tech):
-    recycling_reduction_value = sum(
-        m.P_sec_recycling[location, tech, n]
-        * m.auxiliary_product_BD_q[stf, location, tech, n]
-        for n in m.nsteps_sec
-    )
-    if DEBUG:
-        print("=" * 60)
-        print(
-            f"[RECYCLING EXPRESSION DEBUG] STF={stf}, Location={location}, Tech={tech}"
-        )
-        print(f"  Recycling reduction value (LINEARIZED): {recycling_reduction_value}")
-        print("=" * 60)
-    return recycling_reduction_value
-
-
 # ==============================================================================
 # APPLICATION LOGIC
 # ==============================================================================

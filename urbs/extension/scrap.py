@@ -111,14 +111,6 @@ class capacity_scrap_total_rule(AbstractConstraint):
                 - m.capacity_scrap_rec[stf, location, tech]
             )
             debug_print(f"[scrap_total start] STF=2024 ➞ expr: {expr}")
-        elif stf == value(m.y0):
-            expr = (
-                m.capacity_scrap_total[stf, location, tech]
-                == m.scrap_total[location, tech]
-                + m.capacity_scrap_dec[stf, location, tech]
-                - m.capacity_scrap_rec[stf, location, tech]
-            )
-            debug_print(f"[scrap_total init] STF={stf} ➞ expr: {expr}")
         else:
             expr = (
                 m.capacity_scrap_total[stf, location, tech]

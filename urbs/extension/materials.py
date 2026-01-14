@@ -17,70 +17,78 @@ def debug_print(*args, **kwargs):
     if DEBUG:
         print(*args, **kwargs)
 
+#################################################################################
+# GROWTH CONSTRAINTS FOR PROCESSING AND SCRAP-PROCESSING
+#################################################################################
 
 class ProcessingCapacitiesOutputLimitRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
         return(
-            m.capacity_total_factory[stf, location, tech, stage]
+            m.capacity_processing_total[stf, location, tech, stage]
             >= m.capacity_produced_output[stf, location, tech, stage]
         )
 
-##############---------Factory Linkage----------##########
-class ProcessingCapacitiesBuildoutRule(AbstractConstraint):
+class ProcessingCapacitiesSizeRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
-
-        # LHS: Current Total
-        current_total = m.capacity_total_factory[stf, location, tech, stage]
-        # RHS Components
-        new_build = m.capacity_new_factory[stf, location, tech, stage]
-
-        if stf == value(m.y0):
-            # START YEAR: Total = Initial Data + New Build
-            return current_total == \
-                m.processing_cap_init[location, tech, stage] + new_build
-        else:
-            # SUBSEQUENT YEARS: Total = Previous Total + New Build
-            # (No subtraction here because they don't retire!)
-            prev_total = m.capacity_total_factory[stf-1, location, tech, stage]
-            return current_total == prev_total + new_build
-
+        lhs = m.capacity_processing_total[stf, location, tech, stage]
+        rhs = m.processing_cap_init[location, tech, stage] + sum(m.processing_cap_new[y, location, tech, stage] for y in m.stf if y <= stf)
+        return lhs == rhs
 
 class ProcessingCapacityGrowthLimitRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
-
-        # 1. Get Parameters (Seed Value & Growth Rate)
-        # Use defaults if you haven't defined these params yet
-        deltaQ = 1000  # Absolute "Kickstarter" limit (e.g., GW/year)
-        IR = 0.06  # Relative Growth Rate (e.g., 6%)
-
-        # If you have them as params, use:
-        # deltaQ = m.growth_limit_absolute[tech]
-        # IR = m.growth_limit_rate[tech]
-
-        if stf == value(m.y0):
-            # START YEAR CHECK
-            # We constrain the FIRST new build based on the initial legacy capacity
-            initial_legacy = m.processing_cap_init[location, tech, stage]
-
-            # The 'new build' is effectively (Total_current - Total_initial)
-            new_build = m.capacity_new_factory[stf, location, tech, stage]
-
-            limit = deltaQ + (IR * initial_legacy)
-            return new_build <= limit
-
+        if stf == 2024:
+            if tech in ["solarPV", "Batteries"]:
+                max_capacity = 2500  # 2.5 GW limit for renewable technologies
+            else:
+                max_capacity = 1500  # 1.5 GW limit for other technologies
+            return m.processing_cap_new[stf, location, tech, stage] <= max_capacity
         else:
-            # SUBSEQUENT YEARS (The y - y-1 Logic)
+            lhs =(
+                m.processing_cap_new[stf, location, tech, stage]
+                - m.processing_cap_new[stf-1, location, tech, stage]
+            )
+            rhs =(
+                m.processing_delta_grow[location, tech, stage]
+                + m.processing_avg_growth[location, tech, stage]
+                *m.processing_cap_new[stf-1, location, tech, stage]
+            )
+            return lhs <= rhs
 
-            # LHS: The Net Increase (which equals New Build since no retirement)
-            net_increase = m.capacity_total_factory[stf, location, tech, stage] - \
-                           m.capacity_total_factory[stf-1, location, tech, stage]
+#--------------------------------------------------------------------------------#
+class ScrapHandlingCapacitiesOutputLimitRule(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech):
+        return(
+            m.capacity_scrap_handling_total[stf, location, tech]
+            >= m.capacity_scrap_rec[stf, location, tech]
+        )
 
-            # RHS: The Allowed Limit based on YESTERDAY'S size
-            prev_total_size = m.capacity_total_factory[stf-1, location, tech, stage]
+class ScrapHandlingCapacitiesSizeRule(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech):
+        lhs = m.capacity_scrap_handling_total[stf, location, tech]
+        rhs = m.capacity_scrap_handling_init[location, tech] + sum(m.scraphandling_cap_new[y, location, tech] for y in m.stf if y <= stf)
+        return lhs == rhs
 
-            limit = deltaQ + (IR * prev_total_size)
+class ScrapHandlingCapacityGrowthLimitRule(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech):
+        if stf == 2024:
+            if tech in ["solarPV", "Batteries"]:
+                max_capacity = 15000  # 2.5 GW limit for renewable technologies
+            else:
+                max_capacity = 25000  # 1.5 GW limit for other technologies
+            return m.scraphandling_cap_new[stf, location, tech] <= max_capacity
+        else:
+            lhs =(
+                m.scraphandling_cap_new[stf, location, tech]
+                - m.scraphandling_cap_new[stf-1, location, tech]
+            )
+            rhs =(
+                m.scraphandling_delta_grow[location, tech]
+                + m.scraphandling_avg_growth[location, tech]
+                *m.scraphandling_cap_new[stf-1, location, tech]
+            )
+            return lhs <= rhs
 
-            return net_increase <= limit
+##################################################################################
 
 class CapacityProducedOutputCompositionRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
@@ -107,7 +115,7 @@ class StockpileTotalRule(AbstractConstraint):
         )
 class StockpileDomesticRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
-        if stf == value(m.y0):
+        if stf == 2024:
             return (
                     m.stock_domestic[stf, location, tech, stage] ==
                     m.stock_domestic_init[location, tech, stage] +
@@ -124,7 +132,7 @@ class StockpileDomesticRule(AbstractConstraint):
 
 class StockpileImportedRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
-        if stf == value(m.y0):
+        if stf == 2024:
             return (
                     m.stock_imported[stf, location, tech, stage] ==
                     m.stock_imported_init[location, tech, stage] +
@@ -193,10 +201,10 @@ class InstallationSupplyLinkRule(AbstractConstraint):
 
         # --- DEBUG PRINT ---
         # This will print once for every (stf, location, tech) combo during model build
-        print(f"LINKING: {tech} (Loc: {location})")
-        print(f"   -> Final Stage Identified: '{final_stage}'")
-        print(f"   -> Constraint: {lhs.name} == {rhs.name}")
-        print("-" * 30)
+        #print(f"LINKING: {tech} (Loc: {location})")
+        #print(f"   -> Final Stage Identified: '{final_stage}'")
+        #print(f"   -> Constraint: {lhs.name} == {rhs.name}")
+        #print("-" * 30)
         # -------------------
 
         return lhs == rhs
@@ -248,106 +256,18 @@ class ScrapMaterialLinkageRule(AbstractConstraint):
         # Use Equality (==) to define the conversion strictly
         return lhs == rhs
 
-
-class RecyclingConstructionGrowthRule(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech):
-        # 1. Skip Start Year
-        if stf == value(m.y0):
-            return pyomo.Constraint.Skip
-
-        # 2. Define Variables
-        new_build_now = m.capacity_new_scrap_rec[stf, location, tech]
-        new_build_prev = m.capacity_new_scrap_rec[stf - 1, location, tech]
-
-        # 3. Parameters
-        deltaQ = m.recycling_growth_delta[tech]
-        IR = m.recycling_growth_IR[tech]
-
-        # 4. Equation 1: Growth Limit
-        # "New <= Prev + DeltaQ + (IR * Prev)"
-        return new_build_now <= new_build_prev + deltaQ + (IR * new_build_prev)
-
-class RecyclingConstructionDecreaseRule(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech):
-        # 1. Skip Start Year
-        if stf == value(m.y0):
-            return pyomo.Constraint.Skip
-
-        # 2. Define Variables
-        new_build_now = m.capacity_new_scrap_rec[stf, location, tech]
-        new_build_prev = m.capacity_new_scrap_rec[stf - 1, location, tech]
-
-        # 3. Parameters
-        DR = m.recycling_decrease_DR[tech]
-
-        # 4. Equation 2: Decrease Limit
-        # "New >= DR * Prev"
-        return new_build_now >= DR * new_build_prev
-
-
-class RecyclingTotalStockRule(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech):
-
-        current_total = m.capacity_total_scrap_rec[stf, location, tech]
-        new_build = m.capacity_new_scrap_rec[stf, location, tech]
-
-        if stf == value(m.y0):
-            # START YEAR: Total = Init + New Build (as per your Eq 3 sum range)
-            return current_total == \
-                m.recycling_init_capacity[location, tech] + new_build
-        else:
-            # SUBSEQUENT YEARS: Total = Previous Total + New Build
-            prev_total = m.capacity_total_scrap_rec[stf-1, location, tech]
-            return current_total == prev_total + new_build
-
-
-class RecyclingUsageLimitRule(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech):
-        # The physical limit:
-        # Actual Processing (pi^eu-sec) <= Total Stock (Pi^facility)
-
-        # LHS: Actual usage (This is the variable used in your Linkage Rule)
-        actual_usage = m.capacity_scrap_rec[stf, location, tech]
-
-        # RHS: Available Capacity
-        total_capacity = m.capacity_total_scrap_rec[stf, location, tech]
-
-        return actual_usage <= total_capacity
-
-class RecyclingInactiveReportingRule(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech):
-        # Inactive = Total - Actual
-        return m.capacity_inactive_scrap_rec[stf, location, tech] == \
-               m.capacity_total_scrap_rec[stf, location, tech] - \
-               m.capacity_scrap_rec[stf, location, tech]
-
 class MiningLimit(AbstractConstraint):
     def apply_rule(self, m, stf, material):
         # LHS: Actual Metal Mined
         lhs = m.material_mined[stf, material]
-
-        # RHS COMPONENTS:
-        # 1. The Dynamic Capacity (Variable)
-        # We use the variable we defined above, which is growing over time!
-        current_capacity = m.primary_material_capacity_annual[stf, material]
-
-        # 2. Conversion Factor
-        conv_factor = m.mining_conversion_factor[stf, material]
-
-        # 3. Share
-        share = m.mining_energy_transission_share[stf, material]
-
-        # CALCULATION:
-        # Mining must be less than the (Dynamic Capacity / Conversion) * Share
-        rhs = (current_capacity / conv_factor) * share
-
+        rhs = m.primary_material_availability[stf, material]
         return lhs <= rhs
 
 class LimitResourceExistanceRule(AbstractConstraint):
     def apply_rule(self, m, stf, material):
         # Get the previous time step
 
-        if stf == value(m.y0):
+        if stf == 2024:
             # Initial condition: First year reserves = Total Initial - Mined this year
             return m.remaining_reserves[stf, material] == \
                 m.initial_total_reserves[material] - m.material_mined[stf, material]
@@ -355,16 +275,6 @@ class LimitResourceExistanceRule(AbstractConstraint):
             # Recursive step: Current = Previous - Mined this year
             return m.remaining_reserves[stf, material] == \
                 m.remaining_reserves[stf-1, material] - m.material_mined[stf, material]
-
-class IncreaseRatePrimaryMaterialRule():
-    def apply_rule(self, m, stf, material):
-        if stf == value(m.y0):
-            return m.primary_material_capacity_annual[stf, material] == m.init_primary_material_availability[material]
-        else:
-            delta_prim = m.primary_material_capacity_annual[stf, material] - m.primary_material_capacity_annual[stf-1, material]
-            growth = m.primary_material_growth_absolute[material] + (m.primary_material_growth_relative[material] * m.primary_material_capacity_annual[stf-1, material])
-            return delta_prim <= growth
-
 
 class ElecNeedsProductionRule(AbstractConstraint):
     """
@@ -378,8 +288,8 @@ class ElecNeedsProductionRule(AbstractConstraint):
 
         # 1. Calculate Total Annual Energy Required (e.g., MWh)
         annual_energy_mwh = sum(
-            m.energy_needs[location, tech, stage] * m.auxiliary_product_BD_q[stf, location, tech, stage, n] * m.P_sec_relative[n]
-            for n in m.nsteps_sec
+            m.energy_needs[location, tech, stage] * m.capacity_produced_output[stf, location, tech, stage] #* m.auxiliary_product_BD_q[stf, location, tech, stage, n] * m.P_sec_relative[n]
+            #for n in m.nsteps_sec
             # <--- Use 3 keys here
             for stage in m.stages
             # Check for the 3-item tuple:
@@ -388,7 +298,7 @@ class ElecNeedsProductionRule(AbstractConstraint):
 
         # 2. Build the constraint expression and print it
         expr = m.demand_production[tm, stf, location, tech] == annual_energy_mwh / 12
-        print(f"ElecNeedsProductionRule constraint for (t={tm}, stf={stf}, loc={location}, tech={tech}): {expr}")
+        #print(f"ElecNeedsProductionRule constraint for (t={tm}, stf={stf}, loc={location}, tech={tech}): {expr}")
         return expr
 
 # CAPEX
@@ -396,7 +306,7 @@ class CapexCostRule(AbstractConstraint):
     def apply_rule(self, m, stf):
         # Calculate gross cost and subtract the total calculated savings
         annual_investment = sum(
-            (m.capacity_new_factory[stf, loc, tech, stage] * m.cost_capex[stf, loc, tech, stage])
+            (m.processing_cap_new[stf, loc, tech, stage] * m.cost_capex[stf, loc, tech, stage])
             - m.PRICEREDUCTION_CAP_DEP_INV[stf, loc, tech, stage]
             for loc in m.location
             for tech in m.tech
@@ -413,7 +323,7 @@ class OpexCostRule(AbstractConstraint):
         # 1. Fixed Costs (Applied to Installed Capacity)
         # Unit: [MW_capacity] * [EUR/MW/yr]
         manufacturing_fixed = sum(
-            m.capacity_total_factory[stf, location, tech, stage]
+            m.capacity_processing_total[stf, location, tech, stage]
             * m.cost_fixed[stf, location, tech, stage]
 
             for location in m.location
@@ -429,7 +339,6 @@ class OpexCostRule(AbstractConstraint):
         manufacturing_variable = sum(
             m.capacity_produced_output[stf, location, tech, stage]
             * m.cost_variable[stf, location, tech, stage]
-            #- m.PRICEREDUCTION_CAP_DEP_INV[stf, location, tech, stage]
 
             for location in m.location
             for tech in m.tech
@@ -489,7 +398,7 @@ class StockpileHoldingCostRule(AbstractConstraint):
         # Set this high enough to be noticeable, but not infinite.
         # e.g., 5-10% of your production cost.
         # If your production cost is ~100, try 10.
-        HOLDING_COST_PER_UNIT = 1000000000
+        HOLDING_COST_PER_UNIT = 10
 
         # Sum of all items currently sitting in stock
         total_holding_cost = sum(
@@ -507,13 +416,24 @@ def apply_material_constraints(m):
     """
     Registers all constraints with the Pyomo model, grouped by their index requirements.
     """
+    scrap_growth_constraints = [
+        ScrapHandlingCapacitiesSizeRule(),
+        ScrapHandlingCapacityGrowthLimitRule(),
+        ScrapHandlingCapacitiesOutputLimitRule(),
+    ]
 
+    for constraint_obj in scrap_growth_constraints:
+        name = constraint_obj.__class__.__name__
+        setattr(m, name, pyomo.Constraint(
+            m.stf, m.location, m.tech,
+            rule=lambda m, y, l, k: constraint_obj.apply_rule(m, y, l, k)
+        ))
     # ---------------------------------------------------------
     # GROUP 1: Full Detail Constraints
     # Indices: (stf, location, tech, stage)
     # ---------------------------------------------------------
     stage_constraints = [
-        ProcessingCapacitiesBuildoutRule(),
+        ProcessingCapacitiesSizeRule(),
         ProcessingCapacityGrowthLimitRule(),
         ProcessingCapacitiesOutputLimitRule(),
         CapacityProducedOutputCompositionRule(),
@@ -540,11 +460,6 @@ def apply_material_constraints(m):
     # ---------------------------------------------------------
     tech_constraints = [
         InstallationSupplyLinkRule(),
-        RecyclingConstructionDecreaseRule(),
-        RecyclingConstructionGrowthRule(),
-        RecyclingTotalStockRule(),
-        RecyclingUsageLimitRule(),
-        RecyclingInactiveReportingRule(),
     ]
 
     for constraint_obj in tech_constraints:
@@ -581,7 +496,6 @@ def apply_material_constraints(m):
         ScrapMaterialLinkageRule(),
         MiningLimit(),
         LimitResourceExistanceRule(),
-        IncreaseRatePrimaryMaterialRule()
     ]
 
     for constraint_obj in material_constraints:

@@ -220,6 +220,36 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc="Initial processing capacity (Active only at y0)"
     )
 
+    m.processing_delta_grow = pyomo.Param(
+        m.location, m.tech, m.stages,
+        initialize = 3000,
+        default = 3000,
+    )
+    m.processing_avg_growth = pyomo.Param(
+        m.location, m.tech, m.stages,
+        initialize = 0.05,
+        default = 0.05,
+    )
+
+    m.capacity_scrap_handling_init = pyomo.Param(
+        m.location, m.tech,
+        # FIX: Point to static_tech_specs -> init_cap
+        initialize=0,
+        default=0,
+        doc="Initial processing capacity (Active only at y0)"
+    )
+
+    m.scraphandling_delta_grow = pyomo.Param(
+        m.location, m.tech,
+        initialize = 20000,
+        default = 20000,
+    )
+    m.scraphandling_avg_growth = pyomo.Param(
+        m.location, m.tech,
+        initialize = 0.15,
+        default = 0.15,
+    )
+
 
     m.final_stage = pyomo.Param(
         m.tech,
@@ -278,11 +308,11 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     # ==============================================================================
 
     # 1. Availability / Limit
-    m.availability_mining = pyomo.Param(
+    m.primary_material_availability = pyomo.Param(
         m.stf, m.materials,
         # MUST MATCH the key name you used in the return dictionary
         initialize=data_urbsextensionv1.get("mat_mining_limit_dict", {}),
-        default=1e12,
+        default=1e7,
         doc="Global mining limit per year"
     )
 
@@ -311,21 +341,21 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     m.cost_capex = pyomo.Param(
         m.stf, m.location, m.tech, m.stages,
         initialize=data_urbsextensionv1.get("processing_stage_cost_dict", {}),
-        default=1e9,
+        default=1e7,
         doc="CAPEX for processing plants"
     )
 
     m.cost_variable = pyomo.Param(
         m.stf, m.location, m.tech, m.stages,
         initialize=data_urbsextensionv1.get("processing_opex_var_dict", {}),
-        default=1e9,
+        default=1e7,
         doc="Variable OPEX for processing"
     )
 
     m.cost_fixed = pyomo.Param(
         m.stf, m.location, m.tech, m.stages,
         initialize=data_urbsextensionv1.get("processing_opex_dict", {}),
-        default=1e9,
+        default=1e7,
         doc="Fixed OPEX for processing"
     )
 
@@ -333,7 +363,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         m.stf, m.location, m.tech, m.stages,
         initialize=data_urbsextensionv1.get("part_import_cost_dict", {}),
         # default=1,  <-- DELETE OR COMMENT THIS OUT! It hides bugs!
-        default=99999999,  # Set to a penalty value so missing data implies "Impossible to build"
+        default=1e7,  # Set to a penalty value so missing data implies "Impossible to build"
         doc="Cost to import intermediate parts"
     )
 
@@ -365,27 +395,6 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         m.materials,
         initialize=1e9, default=1e9
     )
-    m.init_primary_material_availability = pyomo.Param(
-        m.materials,
-        initialize=1e9, default=1e9
-    )
-
-    # 2. Parameters for the growth logic (from your LaTeX)
-    # Absolute Increase (Q_hat in your eqn) - e.g., can add 100 tons/year minimum
-    m.primary_material_growth_absolute = pyomo.Param(m.materials, default=0)
-
-    # Relative Increase (IR in your eqn) - e.g., can grow by 5% (0.05) per year
-    m.primary_material_growth_relative = pyomo.Param(m.materials, default=0.05)
-
-    # --- PARAMETERS (From your LaTeX constants) ---
-    # Delta Q: The "Base" construction capacity (Equation 1)
-    m.recycling_growth_delta = pyomo.Param(m.tech, default=500)
-    # IR: Increase Rate (Equation 1)
-    m.recycling_growth_IR = pyomo.Param(m.tech, default=0.10)
-    # DR: Decrease Rate (Equation 2)
-    m.recycling_decrease_DR = pyomo.Param(m.tech, default=0.80)
-    # Init: Initial installed capacity (Equation 3)
-    m.recycling_init_capacity = pyomo.Param(m.location, m.tech, default=0)
 
 
     # ========================================
@@ -657,7 +666,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     )
 
     # param for gamma
-    m.gamma_prod = pyomo.Param(initialize=1_100_000)
+    m.gamma_prod = pyomo.Param(initialize=3_000_000)
 
     m.total_production_cap_inital = pyomo.Param(
         m.location,
