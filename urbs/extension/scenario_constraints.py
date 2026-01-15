@@ -18,13 +18,14 @@ class nzia_strict_rule(AbstractConstraint):
         Forces the model to build specific bottleneck capacities (e.g., Cells) in the EU.
         """
         # Domestic Production = Flow + Stockout Withdrawal
-        domestic_contribution = sum ((
+        domestic_contribution = (
                 m.capacity_produced_flow[stf, location, tech, stage] +
-                m.capacity_produced_stockout[stf, location, tech, stage]
-        ) for stage in m.stages)
+                m.capacity_produced_stockout[stf, location, tech, stage] +
+                m.capacity_imported_stockout[stf, location, tech, stage]
+        )
 
         # RHS: 40% of Total Supply for THIS stage
-        rhs = 0.4 * sum(m.Supply[stf, location, tech, stage] for stage in m.stages)
+        rhs = 0.4 * m.Supply[stf, location, tech, stage]
 
         return domestic_contribution >= rhs
 
@@ -32,26 +33,28 @@ class nzia_strict_rule(AbstractConstraint):
 # ==============================================================================
 # 2. NZIA FLEX (Aggregated) - Allows "Assembly Washing"
 # ==============================================================================
-class nzia_flex_rule(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech):
+class nzia_soft_target_rule(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage):
         """
-        FLEX: Ensures 40% domestic production summed across ALL stages of a tech.
-        Allows importing difficult upstream components if downstream assembly volume is high.
+        SOFT TARGET: Aim for 40% domestic production for EVERY stage.
+        If impossible (due to growth limits), record the 'shortfall'.
         """
-        # Sum Domestic Production (All Stages)
-        domestic_contribution = sum(
-            m.capacity_produced_flow[stf, location, tech, s] +
-            m.capacity_produced_stockout[stf, location, tech, s]
-            for s in m.stages
+
+        # 1. Domestic Contribution (Flow + Stock)
+        domestic_contribution = (
+                m.capacity_produced_flow[stf, location, tech, stage] +
+                m.capacity_produced_stockout[stf, location, tech, stage] +
+                m.capacity_imported_stockout[stf, location, tech, stage]
         )
 
-        # Sum Total Supply (All Stages)
-        total_supply = sum(
-            m.Supply[stf, location, tech, s]
-            for s in m.stages
-        )
+        # 2. The Target (40% of Supply)
+        target = 0.40 * m.Supply[stf, location, tech, stage]
 
-        return domestic_contribution >= 0.4 * total_supply
+        # 3. The Equation with SLACK
+        # Domestic + Shortfall >= Target
+        # If Domestic is low, 'Shortfall' becomes positive to bridge the gap.
+
+        return domestic_contribution + m.nzia_shortfall[stf, location, tech, stage] >= target
 
 
 # ==============================================================================
@@ -131,32 +134,33 @@ def apply_scenario_constraints(m):
         m.stf, m.location, m.tech, m.stages,
         rule=lambda m, y, l, t, s: strict_logic.apply_rule(m, y, l, t, s)
     )
-    #m.nzia_strict_constraint.deactivate()
+    m.nzia_strict_constraint.deactivate()
 
-    ## --- 2. NZIA FLEX (Aggregated per Tech) ---
-    #flex_logic = nzia_flex_rule()
-    #m.nzia_flex_constraint = pyomo.Constraint(
-    #    m.stf, m.location, m.tech,
-    #    rule=lambda m, y, l, t: flex_logic.apply_rule(m, y, l, t)
+    ### --- 2. NZIA FLEX (Aggregated per Tech) ---
+    #flex_logic = nzia_soft_target_rule()
+    #m.nzia_soft_target_constraint = pyomo.Constraint(
+    #    m.stf, m.location, m.tech, m.stages,
+    #    rule=lambda m, y, l, t,s : flex_logic.apply_rule(m, y, l, t, s)
     #)
-    ## Deactivate Flex by default (cannot have both Strict and Flex active for the same goal usually)
-    #m.nzia_flex_constraint.deactivate()
 #
-    ## --- 3. CRMA MINING (Global Filtered) ---
+    ## Deactivate Flex by default (cannot have both Strict and Flex active for the same goal usually)
+    ##m.nzia_flex_constraint.deactivate()
+##
+    ### --- 3. CRMA MINING (Global Filtered) ---
     #extraction_rule = eu_extraction_constraint()
     #m.eu_extraction_constraint = pyomo.Constraint(
     #    m.stf,
     #    rule=lambda m, y: extraction_rule.apply_rule(m, y),
     #)
     ##m.eu_extraction_constraint.deactivate()
-#
-    ## --- 4. CRMA RECYCLING (Global Filtered) ---
+##
+    ### --- 4. CRMA RECYCLING (Global Filtered) ---
     #recycling_rule = eu_recycling_constraint()
     #m.eu_recycling_constraint = pyomo.Constraint(
     #    m.stf,
     #    rule=lambda m, y: recycling_rule.apply_rule(m, y),
     #)
-   ##m.eu_extraction_constraint.deactivate()
+    ##m.eu_extraction_constraint.deactivate()
 
     print("\n✅ Scenario Constraints Registered:")
     print("   1. NZIA Strict (40% per stage):   ACTIVE")

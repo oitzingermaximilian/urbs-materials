@@ -362,12 +362,18 @@ class OpexCostRule(AbstractConstraint):
             if (stf, material) in m.cost_mining
         )
 
+        penalty_cost = sum(m.nzia_shortfall[stf, location, tech, stage] * 500_000_000
+                          for location in m.location
+                           for tech in m.tech
+                           for stage in m.stages)
+
         # --- Total Equation ---
         return m.cost_opex_total_extension[stf] == (
                 manufacturing_fixed +
                 manufacturing_variable +
                 scrap_costs +
                 mining_cost
+                +penalty_cost
         )
 # Trade&Storage
 class TradeCostRule(AbstractConstraint):

@@ -254,3 +254,7 @@ def apply_variables(m):
     m.cost_opex_total_extension = pyomo.Var(m.stf, domain=pyomo.NonNegativeReals)
     m.cost_trade_total_extension = pyomo.Var(m.stf, domain=pyomo.NonNegativeReals)
     m.cost_stockpile_holding = pyomo.Var(m.stf, domain=pyomo.NonNegativeReals)
+    m.nzia_shortfall = pyomo.Var(
+        m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals
+    )
+

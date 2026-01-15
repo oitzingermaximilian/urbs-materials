@@ -387,9 +387,15 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         initialize=0, default=0
     )
 
+    stock_data = {
+        ('EU27', 'solarPV', 'Module'): 56000  # 56 GW -> 56,000 MW
+    }
+
+    # 2. Update your Parameter definition
     m.stock_imported_init = pyomo.Param(
         m.location, m.tech, m.stages,
-        initialize=0, default=0
+        initialize=stock_data,  # <--- Pass the dictionary here
+        default=0  # All other combos (e.g. Wind, Batteries) stay 0
     )
     m.initial_total_reserves = pyomo.Param(
         m.materials,
