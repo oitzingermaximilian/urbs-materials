@@ -43,7 +43,8 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         domestic_caps,
         imported_caps,
         supply,
-        stock
+        stock,
+        decisionvalue_scrap
     ) = get_constants(instance)
 
     # create spreadsheet writer object
@@ -51,6 +52,7 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         #################################################################################
         # dynamic feedback loop reports
         decisionvalues_sec.to_excel(writer, sheet_name="us_BDsec_values")
+        decisionvalue_scrap.to_excel(writer, sheet_name="us_BDscrap_values")
 
 
         combined_balance.to_excel(writer, sheet_name="extension_balance", index=False)

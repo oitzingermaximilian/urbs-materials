@@ -96,7 +96,7 @@ def apply_variables(m):
 
 
     """
-    These Variables are used for the lr_remanufacturing.py script constraints.
+    These Variables are used for the economiesofscale_base.py script constraints.
     """
     """
     Binary Decision Variable: Determines which 'Learning Step' (Efficiency Tier) 
@@ -257,4 +257,24 @@ def apply_variables(m):
     m.nzia_shortfall = pyomo.Var(
         m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals
     )
+
+    #########################
+    # Scrap Economies of Scale Variables
+    #########################
+    m.ap_BDV_scrap = pyomo.Var(
+        m.stf, m.location, m.tech, m.nsteps_sec, within=pyomo.NonNegativeReals
+    )
+    m.pricereduction_scrap = pyomo.Var(
+        m.stf, m.location, m.tech, within=pyomo.NonNegativeReals
+    )
+
+    m.BDV_scrap = pyomo.Var(
+        m.stf, m.location, m.tech, m.nsteps_sec, domain=pyomo.Binary
+    )
+
+    m.pricereduction_stage = pyomo.Var(
+        m.stf, m.location, m.tech, within=pyomo.NonNegativeReals
+    )
+
+
 

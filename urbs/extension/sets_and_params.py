@@ -641,6 +641,40 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc=f"Absolute recycling cost reduction values for {LEARNING_RATE}",
     )
 
+    tons_step_values = {
+        0: 0,
+        1: 1000,
+        2: 10000,
+        3: 100000,
+        4: 1000000,
+        5: 10000000,
+        6: 100000000,
+    }
+
+    tons_init_values = {
+        (loc, tech,n): tons_step_values.get(n, 0)
+        for loc in m.location
+        for tech in m.tech
+        for n in m.nsteps_sec
+    }
+
+    m.tons_perstep_recycling = pyomo.Param(
+        m.location,
+        m.tech,
+        m.nsteps_sec,
+        initialize=tons_init_values,
+    )
+
+    m.total_recycling_cap_initial = pyomo.Param(
+        m.location,
+        m.tech,
+        initialize=0,  # <--- Set strictly to 0
+        default=0,
+        doc="Global accumulated recycling history (tons)"
+    )
+
+    m.gamma_scrap = pyomo.Param(initialize=1e9)
+
     # Define the step values (same for all technologies)
     uniform_step_values = {
         0: 0,

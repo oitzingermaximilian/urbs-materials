@@ -12,6 +12,7 @@ from urbs.extension import (
     apply_sets_and_params,
     apply_scenario_constraints,
     apply_combined_lr_constraints,
+    apply_scrap_scaling_constraints,
     apply_gas_block_pricing,
     apply_material_constraints,
 )
@@ -401,6 +402,8 @@ def create_model(
     apply_stockpiling_constraints(m)
 
     apply_combined_lr_constraints(m)
+
+    apply_scrap_scaling_constraints(m)
 
     apply_scrap_constraints(m)
 

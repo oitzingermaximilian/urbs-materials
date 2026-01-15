@@ -758,56 +758,6 @@ def run_scenario(
         indexlist=indexlist,
     )
 
-    from pyomo.environ import value
-
-    print("\n--- 🕵️ IMPORT COST INSPECTION (What the solver sees) ---")
-
-    years_to_check = [2030, 2035, 2038, 2040]
-    loc = 'EU27'
-    stage = 'Assembly'  # The final product we are importing
-
-    print(f"{'Year':<6} | {'WindOn Cost':<15} | {'WindOff Cost':<15} | {'Ratio (Off/On)':<15}")
-    print("-" * 60)
-
-    for y in years_to_check:
-        # 1. Get Onshore Cost
-        try:
-            c_on = value(prob.cost_import_part[y, loc, 'windon', stage])
-            str_on = f"{c_on:,.0f}"
-        except KeyError:
-            str_on = "MISSING (Def=1?)"
-            c_on = 1  # Danger!
-
-        # 2. Get Offshore Cost
-        try:
-            # Note: Check if you import 'Assembly' or 'Foundation' for offshore
-            # Ideally we sum them if both are needed, but let's check Assembly first
-            c_off = value(prob.cost_import_part[y, loc, 'windoff', stage])
-            str_off = f"{c_off:,.0f}"
-        except KeyError:
-            str_off = "MISSING (Def=1?)"
-            c_off = 1
-
-        # 3. Calculate Ratio
-        if c_on > 0:
-            ratio = c_off / c_on
-            str_ratio = f"{ratio:.2f}"
-        else:
-            str_ratio = "N/A"
-
-        print(f"{y:<6} | {str_on:<15} | {str_off:<15} | {str_ratio:<15}")
-
-    print("-" * 60)
-    print("REMINDER: The 'Crossing Point' is 1.60.")
-    print("If Ratio < 1.60, Offshore is mathematically CHEAPER per MWh.")
-    print("If you see '1' anywhere, you have missing data.")
-
-
-
-
-
-
-
     # refresh time stamp string and create filename for logfile
     log_filename = os.path.join(result_dir, "{}.log").format(sce)
 

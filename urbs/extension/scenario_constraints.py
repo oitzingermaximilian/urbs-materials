@@ -155,11 +155,11 @@ def apply_scenario_constraints(m):
     ##m.eu_extraction_constraint.deactivate()
 ##
     ### --- 4. CRMA RECYCLING (Global Filtered) ---
-    #recycling_rule = eu_recycling_constraint()
-    #m.eu_recycling_constraint = pyomo.Constraint(
-    #    m.stf,
-    #    rule=lambda m, y: recycling_rule.apply_rule(m, y),
-    #)
+    recycling_rule = eu_recycling_constraint()
+    m.eu_recycling_constraint = pyomo.Constraint(
+        m.stf,
+        rule=lambda m, y: recycling_rule.apply_rule(m, y),
+    )
     ##m.eu_extraction_constraint.deactivate()
 
     print("\n✅ Scenario Constraints Registered:")

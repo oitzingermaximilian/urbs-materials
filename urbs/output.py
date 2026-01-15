@@ -48,6 +48,7 @@ def get_constants(instance):
     ##########################################################################
     ####gather BD df to see if it works 13. january 2025
     decisionvalues_sec = get_entity(instance, "BD_sec")
+    decisionvalue_scrap = get_entity(instance, "BDV_scrap")
     # print(decisionvalues_sec)
     pricereduction_sec = get_entity(instance, "pricereduction_sec_investment")
     # print(pricereduction_sec)
@@ -207,6 +208,7 @@ def get_constants(instance):
         grouped_co2,
         combined_balance,
         decisionvalues_sec,
+        decisionvalue_scrap,
         scrapdf,
         decomdf,
         inst_processes_time,
