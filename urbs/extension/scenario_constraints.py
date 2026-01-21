@@ -146,25 +146,25 @@ def apply_scenario_constraints(m):
         m.stf, m.location, m.tech, m.stages,
         rule=lambda m, y, l, t, s: strict_logic.apply_rule(m, y, l, t, s)
     )
-    #m.nzia_strict_constraint.deactivate()
+    m.nzia_strict_constraint.deactivate()
 
    #### --- 2. NZIA FLEX (Aggregated per Tech) ---
-   #flex_logic = nzia_soft_target_rule()
-   #m.nzia_soft_target_constraint = pyomo.Constraint(
-   #    m.stf, m.location, m.tech,
-   #    rule=lambda m, y, l, t: flex_logic.apply_rule(m, y, l, t)
-   #)
+    flex_logic = nzia_soft_target_rule()
+    m.nzia_soft_target_constraint = pyomo.Constraint(
+        m.stf, m.location, m.tech,
+        rule=lambda m, y, l, t: flex_logic.apply_rule(m, y, l, t)
+    )
 #
    ### Deactivate Flex by default (cannot have both Strict and Flex active for the same goal usually)
    ###m.nzia_flex_constraint.deactivate()
 ##
    #### --- 3. CRMA MINING (Global Filtered) ---
-    extraction_rule = eu_extraction_constraint()
-    m.eu_extraction_constraint = pyomo.Constraint(
-        m.stf,
-        rule=lambda m, y: extraction_rule.apply_rule(m, y),
-    )
-    m.eu_extraction_constraint.deactivate()
+    #extraction_rule = eu_extraction_constraint()
+    #m.eu_extraction_constraint = pyomo.Constraint(
+    #    m.stf,
+    #    rule=lambda m, y: extraction_rule.apply_rule(m, y),
+    #)
+    #m.eu_extraction_constraint.deactivate()
 ##
    #### --- 4. CRMA RECYCLING (Global Filtered) ---
     recycling_rule = eu_recycling_constraint()
@@ -176,6 +176,6 @@ def apply_scenario_constraints(m):
 
     print("\n✅ Scenario Constraints Registered:")
     print("   1. NZIA Strict (40% per stage):   ACTIVE")
-    print("   2. NZIA Flex (40% per tech):      INACTIVE (Toggle manually if needed)")
-    print("   3. CRMA Mining (10% minable):     ACTIVE")
-    print("   4. CRMA Recycling (15% recycl.):  ACTIVE")
+    #print("   2. NZIA Flex (40% per tech):      INACTIVE (Toggle manually if needed)")
+    #print("   3. CRMA Mining (10% minable):     ACTIVE")
+    #print("   4. CRMA Recycling (15% recycl.):  ACTIVE")

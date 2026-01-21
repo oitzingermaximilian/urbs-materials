@@ -760,20 +760,23 @@ def run_scenario(
         indexlist=indexlist,
     )
 
-    print("--- BINARY COUNT DEBUG ---")
-    print(f"1. Base Manufacturing Binaries: {len(prob.BD_onetech)}")
-    if hasattr(prob, 'BD_scrap_onetech'):
-        print(f"2. Scrap Binaries: {len(prob.BD_scrap_onetech)}")
-    print(f"3. Elements in m.stages: {len(prob.stages)}")
-    print(f"4. Elements in m.tech_one_tech: {len(prob.tech_one_tech)}")
+    #print("--- BINARY COUNT DEBUG ---")
+    #print(f"1. Base Manufacturing Binaries: {len(prob.BD_onetech)}")
+    #if hasattr(prob, 'BD_scrap_onetech'):
+   #     print(f"2. Scrap Binaries: {len(prob.BD_scrap_onetech)}")
+    #print(f"3. Elements in m.stages: {len(prob.stages)}")
+    #print(f"4. Elements in m.tech_one_tech: {len(prob.tech_one_tech)}")
 
     # refresh time stamp string and create filename for logfile
     log_filename = os.path.join(result_dir, "{}.log").format(sce)
 
     # solve model and read results
-    optim = SolverFactory("gurobi")  # cplex, glpk, gurobi, ...
-    # optim.options['NumericFocus'] = 3
-    # optim.options['ScaleFlag'] = 1
+    optim = SolverFactory("gurobi")  #
+    # Force Gurobi to handle the 1e9 vs 1e-5 difference
+    optim.options['NumericFocus'] = 3  # Maximum precision mode
+    optim.options['ScaleFlag'] = 2  # Aggressive scaling
+    optim.options['ObjScale'] = -1  # Auto-scale the objective
+
     optim = setup_solver(optim, logfile=log_filename)
     result = optim.solve(prob, tee=True)
     # assert str(result.solver.termination_condition) == "optimal"

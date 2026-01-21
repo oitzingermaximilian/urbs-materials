@@ -61,7 +61,13 @@ def get_constants(instance):
     #                                                                        #
     ##########################################################################
 
-    minerals_df = get_entity(instance, "demand_material_total")
+    # OPTION 1: If get_entities supports lists
+    minerals_df = get_entities(instance, [
+        "demand_material_total",
+        "material_imported",
+        "material_mined",
+        "material_recycled"
+    ])
     process_capacities = get_entity(instance, "capacity_processing_total")
     domestic_caps = get_entity(instance, "capacity_produced_output")
     imported_caps = get_entity(instance, "capacity_imported")
