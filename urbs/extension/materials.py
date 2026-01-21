@@ -256,25 +256,49 @@ class ScrapMaterialLinkageRule(AbstractConstraint):
         # Use Equality (==) to define the conversion strictly
         return lhs == rhs
 
+
 class MiningLimit(AbstractConstraint):
     def apply_rule(self, m, stf, material):
-        # LHS: Actual Metal Mined
+        # LHS: Actual Metal Mined (Useful/Refined Metal)
         lhs = m.material_mined[stf, material]
-        rhs = m.primary_material_availability[stf, material]
+
+        # RHS: Global Capacity * Share * Efficiency
+        # Meaning: "Global Ore Capacity" -> "Our Portion" -> "Useful Metal we can get"
+        rhs = (
+                m.primary_material_availability[stf, material]
+                * m.mining_energy_transission_share[stf, material]
+                * m.mining_conversion_factor[stf, material]  # <--- Applied here
+        )
+
         return lhs <= rhs
+
 
 class LimitResourceExistanceRule(AbstractConstraint):
     def apply_rule(self, m, stf, material):
-        # Get the previous time step
+        """
+        Calculates remaining reserves based on the Total Allowable Budget (Initial * Share)
+        minus everything we have mined so far.
+        """
 
-        if stf == 2024:
-            # Initial condition: First year reserves = Total Initial - Mined this year
-            return m.remaining_reserves[stf, material] == \
-                m.initial_total_reserves[material] - m.material_mined[stf, material]
-        else:
-            # Recursive step: Current = Previous - Mined this year
-            return m.remaining_reserves[stf, material] == \
-                m.remaining_reserves[stf-1, material] - m.material_mined[stf, material]
+        # 1. Calculate the Total Recoverable Budget (In Useful Metal terms)
+        # This represents the total amount of metal we are allowed to access over all time.
+        # We apply the share and conversion factor to the INITIAL stock.
+        total_allowable_metal_stock = (
+                m.initial_total_reserves[material]
+                * m.mining_energy_transission_share[stf, material]
+                * m.mining_conversion_factor[stf, material]  # <--- Ore-to-Metal Efficiency
+        )
+
+        # 2. Calculate Cumulative Consumption up to the current year
+        cumulative_mined = sum(
+            m.material_mined[year, material]
+            for year in m.stf
+            if year <= stf
+        )
+
+        # 3. Define Remaining Reserves
+        # Remaining = Total_Budget - Used_So_Far
+        return m.remaining_reserves[stf, material] == total_allowable_metal_stock - cumulative_mined
 
 class ElecNeedsProductionRule(AbstractConstraint):
     """
@@ -304,17 +328,27 @@ class ElecNeedsProductionRule(AbstractConstraint):
 # CAPEX
 class CapexCostRule(AbstractConstraint):
     def apply_rule(self, m, stf):
-        # Calculate gross cost and subtract the total calculated savings
-        annual_investment = sum(
-            (m.processing_cap_new[stf, loc, tech, stage] * m.cost_capex[stf, loc, tech, stage])
-            - m.PRICEREDUCTION_CAP_DEP_INV[stf, loc, tech, stage]
+        # 1. Base Cost (All Techs)
+        gross_investment = sum(
+            m.processing_cap_new[stf, loc, tech, stage] * m.cost_capex[stf, loc, tech, stage]
             for loc in m.location
             for tech in m.tech
             for stage in m.stages
             if (stf, loc, tech, stage) in m.cost_capex
         )
 
-        return m.cost_capex_total_extension[stf] == annual_investment
+        # 2. Savings (Generic One-Tech)
+        savings = 0
+        # In CapexCostRule...
+        if hasattr(m, 'stages_one_tech'):
+            savings = sum(
+                m.PRICEREDUCTION_ONETECH_TOTAL[stf, loc, tech, stage]
+                for loc in m.location
+                for tech in m.tech_one_tech
+                for stage in m.stages_one_tech  # <--- Use the new subset!
+            )
+
+        return m.cost_capex_total_extension[stf] == gross_investment - savings
 # OPEX
 class OpexCostRule(AbstractConstraint):
     def apply_rule(self, m, stf):

@@ -15,6 +15,8 @@ from urbs.extension import (
     apply_scrap_scaling_constraints,
     apply_gas_block_pricing,
     apply_material_constraints,
+    setup_onetech_learning,
+    setup_scrap_onetech_learning
 )
 
 
@@ -401,9 +403,19 @@ def create_model(
 
     apply_stockpiling_constraints(m)
 
-    apply_combined_lr_constraints(m)
+    relevant_stages = ['Polysilicon', 'Wafer', 'Cell', 'Module']
 
-    apply_scrap_scaling_constraints(m)
+    setup_onetech_learning(
+        m,
+        target_tech_name='solarPV',
+        target_stages=relevant_stages  # <--- Pass the list here
+    )
+
+    setup_scrap_onetech_learning(m, target_tech_name='solarPV')
+
+    #apply_combined_lr_constraints(m) #this is for multiple techs
+
+    #apply_scrap_scaling_constraints(m) #this is for multiple techs
 
     apply_scrap_constraints(m)
 

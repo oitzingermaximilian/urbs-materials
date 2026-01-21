@@ -1,164 +1,119 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
-import matplotlib.colors as mcolors
-import os
 
-# Define file path — adjust for your system
-desktop_path = r"C:/Users/maxoi/GitHub/urbs-extension/plots"
-file_name = "LCOE_grouped_bar.png"
-file_path = os.path.join(desktop_path, file_name)
-plt.rcParams["font.family"] = "Arial"
-plt.rcParams["pdf.fonttype"] = 42
-plt.rcParams["ps.fonttype"] = 42
+def calculate_solar_pv_costs_explicit_energy():
+    # --- 1. USER CONFIGURABLE INPUTS ---
 
-# Optional: default font size for these plots
-plt.rcParams["font.size"] = 8
+    # [INPUT] Electricity Price in €/MWh
+    # To hit your target of $0.06/W (approx $60k/MW total energy cost),
+    # with ~400 MWh total demand and 1.10 Exchange rate, we need ~136 €/MWh.
+    electricity_price_eur_mwh = 74.06
+
+    # Exchange Rate (EUR to USD)
+    exchange_rate = 1
+
+    # Material Prices (USD/kg)
+    prices_usd = {
+        'Glass': 0.59,
+        'Polymers': 6.00,
+        'Ag': 2500,
+        'Si': 2.48,
+        'Al': 3135/1000,
+        'Cu': 12905/1000
+    }
+
+    # Manufacturing Data
+    # energy_mwh: Energy demand per MW of production
+    # other_opex_usd: Non-energy operational costs (Labor, overhead) in USD
+    manufacturing_specs = {
+        'Polysilicon': {'energy_mwh': 160, 'other_opex_usd': 4669},
+        'Wafer': {'energy_mwh': 130, 'other_opex_usd': 7912},
+        'Cell': {'energy_mwh': 80, 'other_opex_usd': 23184},
+        'Module': {'energy_mwh': 30, 'other_opex_usd': 14720}
+    }
+
+    # Material Intensity (kg per MW) - UPDATED WITH USER WEIGHTS
+    intensities = {
+        'Polysilicon': {
+            'Si': 3047.16  # Precision Update (was 3803)
+        },
+        'Wafer': {
+            # Still mostly energy/consumables, no main BOM change
+        },
+        'Cell': {
+            'Ag': 20.78,  # Silver Paste
+            'Al': 207.76  # New: Aluminium for Cell rear contact (0.3% weight)
+        },
+        'Module': {
+            'Al': 11080.60,  # Frame (16% weight)
+            'Glass': 46400,  # Glass (67% weight)
+            'Polymers': 7617.91,  # Encapsulant/Backsheet (11% weight)
+            'Cu': 554.03  # Ribbon Copper Content (0.8% weight)
+        }
+    }
+
+    # Market Reference Prices (USD per MW)
+    market_prices_usd = {
+        'Cell': 82800,
+        'Module': 170200
+    }
+
+    # --- 2. CALCULATION LOGIC ---
+
+    def calculate_stage_cost(stage_name):
+        specs = manufacturing_specs[stage_name]
+
+        # A. Energy Cost Calculation (Price x Quantity)
+        # Formula: (MWh * €/MWh) * Exchange Rate
+        energy_cost_usd = (specs['energy_mwh'] * electricity_price_eur_mwh) * exchange_rate
+
+        # B. Other OPEX
+        opex_cost_usd = specs['other_opex_usd']
+
+        # C. Material Cost
+        mat_cost_usd = 0
+        stage_materials = intensities.get(stage_name, {})
+        for mat, qty in stage_materials.items():
+            mat_cost_usd += qty * prices_usd[mat]
+
+        return mat_cost_usd, energy_cost_usd, opex_cost_usd
+
+    # --- 3. BUILD RESULTS ---
+
+    # Calculate costs for all EU stages
+    total_mat = 0
+    total_energy = 0
+    total_opex = 0
+
+    print(f"{'Stage':<12} | {'Energy (MWh)':<12} | {'Elec Cost ($)':<15} | {'Mat Cost ($)':<15} | {'Total ($)':<15}")
+    print("-" * 75)
+
+    for stage in manufacturing_specs:
+        m, e, o = calculate_stage_cost(stage)
+        total_mat += m
+        total_energy += e
+        total_opex += o
+
+        energy_demand = manufacturing_specs[stage]['energy_mwh']
+        total_stage = m + e + o
+        print(f"{stage:<12} | {energy_demand:<12} | {e:<15,.0f} | {m:<15,.0f} | {total_stage:<15,.0f}")
+
+    grand_total_usd = total_mat + total_energy + total_opex
+
+    print("-" * 75)
+    print(
+        f"{'TOTAL':<12} | {sum(d['energy_mwh'] for d in manufacturing_specs.values()):<12} | {total_energy:<15,.0f} | {total_mat:<15,.0f} | {grand_total_usd:<15,.0f}")
+
+    # --- 4. FINAL SCENARIO SUMMARY ---
+    cost_imported = market_prices_usd['Module']
+    cost_hybrid = market_prices_usd['Cell'] + sum(calculate_stage_cost('Module'))
+
+    print("\n--- FINAL SCENARIOS ($/W) ---")
+    print(f"Electricity Input: €{electricity_price_eur_mwh}/MWh")
+    print(f"Electricity Cost Share: ${total_energy / 1_000_000:.3f}/W (Target: $0.060)")
+    print(f"1. Fully Imported:      ${cost_imported / 1e6:.3f}/W")
+    print(f"2. Hybrid (EU Module):  ${cost_hybrid / 1e6:.3f}/W")
+    print(f"3. Fully EU Produced:   ${grand_total_usd / 1e6:.3f}/W")
 
 
-# -----------------------------
-# Function to calculate LCOE
-# -----------------------------
-def calculate_lcoe(
-    capex, om_cost, capacity, capacity_factor, lifetime, discount_rate=0.07
-):
-    """
-    Calculate LCOE with discounting for a given tech option.
-    """
-    capital_cost = capex * capacity
-    discounted_om = 0
-    discounted_energy = 0
-
-    for year in range(1, lifetime + 1):
-        discounted_om += om_cost * capacity / ((1 + discount_rate) ** year)
-        discounted_energy += (
-            capacity * capacity_factor * 8760 / ((1 + discount_rate) ** year)
-        )
-
-    total_cost = capital_cost + discounted_om
-    lcoe = total_cost / discounted_energy
-    return lcoe
-
-
-# -----------------------------
-# Define technologies & supply options
-# -----------------------------
-capex_option_names = [
-    "Import",
-    "Manufacturing",
-    "Rem. - Low",
-    "Rem. - Avg",
-    "Rem.- High",
-]
-
-technologies = {
-    "Solar PV": {
-        "capacity": 1,
-        "capacity_factor": 0.125,
-        "om_cost": 4400,
-        "lifetime": 25,
-        "capex_options": [250240, 303600, 310423.02, 390052.48, 680050.35],
-    },
-    "Onshore Wind": {
-        "capacity": 1,
-        "capacity_factor": 0.3,
-        "om_cost": 17386.63,
-        "lifetime": 20,
-        "capex_options": [1052044.84, 1673707.7, 1377124.68, 1730304.07, 3016719.09],
-    },
-    "Offshore Wind": {
-        "capacity": 1,
-        "capacity_factor": 0.481,
-        "om_cost": 44000,
-        "lifetime": 20,
-        "capex_options": [1775265.64, 2337972.5216, 2405501.38, 3022419.75, 5269473.43],
-    },
-}
-
-discount_rate = 0.03
-results = []
-
-# -----------------------------
-# Calculate LCOEs
-# -----------------------------
-for tech, params in technologies.items():
-    for name, capex in zip(capex_option_names, params["capex_options"]):
-        lcoe = calculate_lcoe(
-            capex=capex,
-            om_cost=params["om_cost"],
-            capacity=params["capacity"],
-            capacity_factor=params["capacity_factor"],
-            lifetime=params["lifetime"],  # use tech-specific lifetime
-            discount_rate=discount_rate,
-        )
-        results.append(
-            {
-                "Technology": tech,
-                "Supply Option": name,
-                "CAPEX": capex,
-                "Lifetime (years)": params["lifetime"],
-                "LCOE (€/MWh)": lcoe,
-            }
-        )
-
-df_results = pd.DataFrame(results)
-print(df_results)
-
-# -----------------------------
-# Plot LCOE per technology & supply option
-# -----------------------------
-# --- RGB(A) colors you can easily modify ---
-colors_255 = {
-    "Solar PV": (244, 225, 0),  # yellow
-    "Onshore Wind": (5, 165, 210),  # light blue
-    "Offshore Wind": (58, 115, 125),  # dark blue
-}
-
-tech_colors = {
-    "Solar PV": "#E69F00",  # Orange
-    "Onshore Wind": "#66C2A5",  # Teal
-    "Offshore Wind": "#00876C",  # Dark Green
-}
-# Convert 0-255 RGB to 0–1 using to_rgb
-colors = {k: mcolors.to_rgb(tuple(np.array(v) / 255)) for k, v in colors_255.items()}
-
-# Set position for grouped bar chart
-supply_options = capex_option_names
-x = np.arange(len(supply_options))  # positions for groups
-width = 0.25  # bar width
-
-plt.figure(figsize=(12, 7))
-
-for i, tech in enumerate(df_results["Technology"].unique()):
-    tech_data = df_results[df_results["Technology"] == tech]
-    plt.bar(
-        x + i * width,
-        tech_data["LCOE (€/MWh)"],
-        width=width,
-        color=tech_colors[tech],  # RGB handled by matplotlib
-        edgecolor="black",
-        linewidth=1.2,
-        label=tech,
-    )
-
-# Larger tick labels
-plt.xticks(x + width, supply_options, rotation=45, ha="right", fontsize=20)
-plt.yticks(fontsize=16)
-# Add dotted horizontal grid lines
-plt.grid(axis="y", linestyle=":", color="gray", alpha=0.7)
-plt.ylabel("LCOE (€/MWh)", fontsize=20)
-plt.legend(
-    fontsize=20,
-    frameon=True,
-    edgecolor="black",
-    facecolor="white",
-    framealpha=1,
-    shadow=False,
-    loc="best",
-    borderpad=1,
-)
-plt.tight_layout()
-plt.savefig(file_path, dpi=1000)  # dpi=300 for publication quality
-plt.show()
-
-print(f"Plot saved to {file_path}")
+# Run
+calculate_solar_pv_costs_explicit_energy()

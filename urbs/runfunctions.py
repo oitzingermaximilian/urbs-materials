@@ -713,6 +713,8 @@ def run_scenario(
             "part_import_cost_dict": proc_part_import_dict,  # Correctly populated now
             "bom_map_dict": bom_map_dict,
             "valid_tech_stage_list": valid_tech_stage_list,
+            "mining_energy_share_dict": mat_energy_transision_factor_dict,
+            "conversion_factor_mat": mat_conversion_dict,
         }
 
         print("Data loading complete.")
@@ -757,6 +759,13 @@ def run_scenario(
         window_end=window_end,
         indexlist=indexlist,
     )
+
+    print("--- BINARY COUNT DEBUG ---")
+    print(f"1. Base Manufacturing Binaries: {len(prob.BD_onetech)}")
+    if hasattr(prob, 'BD_scrap_onetech'):
+        print(f"2. Scrap Binaries: {len(prob.BD_scrap_onetech)}")
+    print(f"3. Elements in m.stages: {len(prob.stages)}")
+    print(f"4. Elements in m.tech_one_tech: {len(prob.tech_one_tech)}")
 
     # refresh time stamp string and create filename for logfile
     log_filename = os.path.join(result_dir, "{}.log").format(sce)

@@ -283,7 +283,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc="Efficiency of recycling process"
     )
 
-    # 1. Energy Sector Share Parameter (Dynamic over time) #todo initialize!
+    # 1. Energy Sector Share Parameter (Dynamic over time)
     # Represents: The % of the mining limit accessible to the energy sector in Year Y.
     m.mining_energy_transission_share = pyomo.Param(
         m.stf, m.materials,  # <--- NOW INDEXED BY TIME
@@ -296,7 +296,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     # Physics doesn't change over time, so this remains indexed by Material only.
     m.mining_conversion_factor = pyomo.Param(
         m.stf, m.materials,
-        initialize=data_urbsextensionv1.get("mining_conversion_dict", {}),
+        initialize=data_urbsextensionv1.get("conversion_factor_mat", {}),
         default=1.0,
         doc="Ratio of Raw Input to Metal Content (e.g. 5.0 for Bauxite->Al)"
     )
@@ -395,8 +395,10 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     m.stock_imported_init = pyomo.Param(
         m.location, m.tech, m.stages,
         initialize=stock_data,  # <--- Pass the dictionary here
-        default=0  # All other combos (e.g. Wind, Batteries) stay 0
-    )
+        default=0 ) # All other combos (e.g. Wind, Batteries) stay 0
+
+
+    #Todo fix this
     m.initial_total_reserves = pyomo.Param(
         m.materials,
         initialize=1e9, default=1e9
@@ -812,6 +814,13 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         initialize=embedded_energy,
         doc="Embedded electricity needs in MWh per MW of capacity",
     )
+
+    ####################################################################
+    # solar only economies of
+    ####################################################################
+
+    # Create the subset 'gatekeeper'
+    m.one_tech_only = pyomo.Set(initialize=['solarPV'], within=m.tech)
 
 
 

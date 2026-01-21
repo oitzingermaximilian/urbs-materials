@@ -16,9 +16,9 @@ def debug_print(*args, **kwargs):
         print(*args, **kwargs)
 
 
-# ==============================================================================
-# GROUP 1: LOGIC CONSTRAINTS (Index: stf, location, tech)
-# ==============================================================================
+# ==============================================================================#
+# GROUP 1: LOGIC CONSTRAINTS (Index: stf, location, tech)                       #
+# ==============================================================================#
 
 class ScrapCostSavingsCalculationRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):

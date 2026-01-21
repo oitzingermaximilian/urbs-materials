@@ -29,6 +29,7 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         grouped_co2,
         combined_balance,
         decisionvalues_sec,
+        decisionvalue_scrap,
         scrapdf,
         decomdf,
         inst_processes_time,
@@ -44,7 +45,8 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         imported_caps,
         supply,
         stock,
-        decisionvalue_scrap
+        bd_one_tech_scrap,
+        bd_one_tech_base
     ) = get_constants(instance)
 
     # create spreadsheet writer object
@@ -73,6 +75,8 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         imported_caps.to_excel(writer, sheet_name="imported_caps")
         supply.to_excel(writer, sheet_name="supply_mix")
         stock.to_excel(writer, sheet_name="stock_levels")
+        bd_one_tech_scrap.to_excel(writer, sheet_name="bd_one_tech_scrap")
+        bd_one_tech_base.to_excel(writer, sheet_name="bd_one_tech_base")
 
 
         #################################################################################

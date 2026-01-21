@@ -277,4 +277,3 @@ def apply_variables(m):
     )
 
 
-

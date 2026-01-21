@@ -124,23 +124,19 @@ class capacity_scrap_total_rule(AbstractConstraint):
 
 class cost_scrap_rule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
-        # ✅ PROPERLY LINEARIZED: Use base cost minus linearized reduction
-        # Original would be: (f_scrap_rec - price_reduction_per_unit) * capacity_scrap_rec
-        # But price_reduction_per_unit involves bilinear terms
-        # So we use: f_scrap_rec * capacity_scrap_rec - pricereduction_sec_recycling
-        # where pricereduction_sec_recycling = sum(P_sec_recycling[n] * auxiliary_product_BD_q[n])
+        # 1. Base Cost (Recycling Fee * Capacity)
+        base_cost = m.f_scrap_rec[stf, location, tech] * m.capacity_scrap_rec[stf, location, tech]
 
-        expr = (
-            m.cost_scrap[stf, location, tech]
-            == (
-                m.f_scrap_rec[stf, location, tech]
-                * m.capacity_scrap_rec[stf, location, tech]
-            )
-            - m.pricereduction_scrap[stf, location, tech]
-        )
+        # 2. Subtract Savings (Only if Tech is in the Scrap Learning Subset)
+        savings = 0
 
-        debug_print(f"[cost_scrap] STF={stf} ➞ expr: {expr}")
-        return expr
+        # Check if the subset exists AND if the current 'tech' is inside it
+        if hasattr(m, 'tech_scrap_onetech') and tech in m.tech_scrap_onetech:
+            # We can safely access the variable because we know 'tech' is valid
+            savings = m.PRICEREDUCTION_SCRAP_ONETECH_TOTAL[stf, location, tech]
+
+        # 3. Final Equation
+        return m.cost_scrap[stf, location, tech] == base_cost - savings
 
 
 class scrap_total_decrease_rule(AbstractConstraint):

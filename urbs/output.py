@@ -67,6 +67,8 @@ def get_constants(instance):
     imported_caps = get_entity(instance, "capacity_imported")
     supply = get_entity(instance, "Supply")
     stock = get_entity(instance, "components_stockpile")
+    bd_one_tech_base = get_entity(instance, "BD_onetech")
+    bd_one_tech_scrap = get_entity(instance, "BD_scrap_onetech")
 
 
 
@@ -223,7 +225,9 @@ def get_constants(instance):
         domestic_caps,
         imported_caps,
         supply,
-        stock
+        stock,
+        bd_one_tech_scrap,
+        bd_one_tech_base
     )
 
 
