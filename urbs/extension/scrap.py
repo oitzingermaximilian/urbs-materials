@@ -161,20 +161,25 @@ class scrap_total_decrease_rule(AbstractConstraint):
 class scrap_recycling_increase_rule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
         if stf == value(m.y0):
-            debug_print(f"[scrap_increase] STF={stf} (start) ➞ SKIP")
             return pyomo.Constraint.Skip
+
+        # Define a "Kickstart" allowance (e.g., 50 MW or 100 MW)
+        # This allows the industry to go from 0 to 50 MW in one year.
+        # After that, the % growth takes over.
+        min_annual_add = 100  # Adjust unit to match your model (e.g. MW or tons)
+
         lhs = (
-            m.capacity_scrap_rec[stf, location, tech]
-            - m.capacity_scrap_rec[stf - 1, location, tech]
+                m.capacity_scrap_rec[stf, location, tech]
+                - m.capacity_scrap_rec[stf - 1, location, tech]
         )
+
+        # RHS = Growth Limit + Kickstarter
         rhs = (
-            m.f_increase[location, tech] * m.capacity_scrap_rec[stf - 1, location, tech]
+                m.f_increase[location, tech] * m.capacity_scrap_rec[stf - 1, location, tech]
+                + min_annual_add
         )
-        expr = lhs <= rhs
-        debug_print(
-            f"[scrap_increase] STF={stf} ➞ LHS: {lhs}, RHS: {rhs}, expr: {expr}"
-        )
-        return expr
+
+        return lhs <= rhs
 
 
 def apply_scrap_constraints(m):

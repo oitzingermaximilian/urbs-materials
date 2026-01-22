@@ -300,30 +300,37 @@ class LimitResourceExistanceRule(AbstractConstraint):
         # Remaining = Total_Budget - Used_So_Far
         return m.remaining_reserves[stf, material] == total_allowable_metal_stock - cumulative_mined
 
+
+# --- PART A: Calculate Annual Total (Complex, run ONCE per year) ---
+class FactoryEnergyAnnualRule(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech):
+
+        # Filter: Only apply to techs that have production demand
+        # (You might need a check here to skip non-manufacturing techs)
+
+        total_mwh = 0
+
+        for stage in m.stages:
+            if (location, tech, stage) not in m.energy_needs:
+                continue
+
+            intensity = m.energy_needs[location, tech, stage]
+
+            prod = m.capacity_produced_output[stf, location, tech, stage]
+            total_mwh += intensity * prod
+
+        return m.FACTORY_ENERGY_ANNUAL[stf, location, tech] == total_mwh
+
+
+# --- PART B: Distribute to Grid (Simple, run MANY times) ---
 class ElecNeedsProductionRule(AbstractConstraint):
-    """
-    Implements Eq 16: Calculates Annual Electricity Demand for a Technology
-    Demand(y, l, k) = Sum_over_stages( Production(y,l,k,i) * EnergyIntensity(k,i) )
-    """
-
     def apply_rule(self, m, tm, stf, location, tech):
-        # NOTE: 'stage' is NOT in the arguments.
-        # We sum over all stages for this specific technology here.
+        # Just link the variables. Very fast for solver.
+        # Ensure '12' is correct!
+        # If 'tm' is MONTHS: Divide by 12.
+        # If 'tm' is HOURS: Divide by 8760 (to get constant MW power).
 
-        # 1. Calculate Total Annual Energy Required (e.g., MWh)
-        annual_energy_mwh = sum(
-            m.energy_needs[location, tech, stage] * m.capacity_produced_output[stf, location, tech, stage] #* m.auxiliary_product_BD_q[stf, location, tech, stage, n] * m.P_sec_relative[n]
-            #for n in m.nsteps_sec
-            # <--- Use 3 keys here
-            for stage in m.stages
-            # Check for the 3-item tuple:
-            if (location, tech, stage) in m.energy_needs
-        )
-
-        # 2. Build the constraint expression and print it
-        expr = m.demand_production[tm, stf, location, tech] == annual_energy_mwh / 12
-        #print(f"ElecNeedsProductionRule constraint for (t={tm}, stf={stf}, loc={location}, tech={tech}): {expr}")
-        return expr
+        return m.demand_production[tm, stf, location, tech] == m.FACTORY_ENERGY_ANNUAL[stf, location, tech] / 12
 
 # CAPEX
 class CapexCostRule(AbstractConstraint):
@@ -345,7 +352,7 @@ class CapexCostRule(AbstractConstraint):
                 m.PRICEREDUCTION_ONETECH_TOTAL[stf, loc, tech, stage]
                 for loc in m.location
                 for tech in m.tech_one_tech
-                for stage in m.stages_one_tech  # <--- Use the new subset!
+                for stage in m.stages_one_tech
             )
 
         return m.cost_capex_total_extension[stf] == gross_investment - savings
@@ -396,18 +403,12 @@ class OpexCostRule(AbstractConstraint):
             if (stf, material) in m.cost_mining
         )
 
-        penalty_cost = sum(m.nzia_shortfall[stf, location, tech, stage] * 500_000_000
-                          for location in m.location
-                           for tech in m.tech
-                           for stage in m.stages)
-
         # --- Total Equation ---
         return m.cost_opex_total_extension[stf] == (
                 manufacturing_fixed +
                 manufacturing_variable +
                 scrap_costs +
                 mining_cost
-                +penalty_cost
         )
 # Trade&Storage
 class TradeCostRule(AbstractConstraint):
@@ -438,7 +439,7 @@ class StockpileHoldingCostRule(AbstractConstraint):
         # Set this high enough to be noticeable, but not infinite.
         # e.g., 5-10% of your production cost.
         # If your production cost is ~100, try 10.
-        HOLDING_COST_PER_UNIT = 10
+        HOLDING_COST_PER_UNIT = 1000
 
         # Sum of all items currently sitting in stock
         total_holding_cost = sum(
@@ -460,6 +461,7 @@ def apply_material_constraints(m):
         ScrapHandlingCapacitiesSizeRule(),
         ScrapHandlingCapacityGrowthLimitRule(),
         ScrapHandlingCapacitiesOutputLimitRule(),
+        FactoryEnergyAnnualRule(),
     ]
 
     for constraint_obj in scrap_growth_constraints:

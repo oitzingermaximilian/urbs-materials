@@ -68,7 +68,7 @@ def get_constants(instance):
         "material_mined",
         "material_recycled"
     ])
-    process_capacities = get_entity(instance, "capacity_processing_total")
+    process_capacities = get_entities(instance, ["capacity_processing_total","processing_cap_new"])
     domestic_caps = get_entity(instance, "capacity_produced_output")
     imported_caps = get_entity(instance, "capacity_imported")
     supply = get_entity(instance, "Supply")

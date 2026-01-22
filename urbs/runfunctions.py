@@ -766,22 +766,44 @@ def run_scenario(
    #     print(f"2. Scrap Binaries: {len(prob.BD_scrap_onetech)}")
     #print(f"3. Elements in m.stages: {len(prob.stages)}")
     #print(f"4. Elements in m.tech_one_tech: {len(prob.tech_one_tech)}")
-
     # refresh time stamp string and create filename for logfile
     log_filename = os.path.join(result_dir, "{}.log").format(sce)
-
     # solve model and read results
     optim = SolverFactory("gurobi")  #
-    # Force Gurobi to handle the 1e9 vs 1e-5 difference
-    optim.options['NumericFocus'] = 3  # Maximum precision mode
-    optim.options['ScaleFlag'] = 2  # Aggressive scaling
-    optim.options['ObjScale'] = -1  # Auto-scale the objective
-
     optim = setup_solver(optim, logfile=log_filename)
     result = optim.solve(prob, tee=True)
-    # assert str(result.solver.termination_condition) == "optimal"
 
-    # solver debug
+    from pyomo.environ import Objective
+
+    def find_real_objective(prob):
+        print("\n🔎 SEARCHING FOR OBJECTIVE FUNCTION...")
+        found = False
+
+        # Correct iteration over Pyomo components
+        for component in prob.component_objects(Objective, active=True):
+            name = component.name
+            expr_str = str(component.expr)
+
+            print(f"✅ Found Active Objective: '{name}'")
+            # Print the first 150 chars to verify it looks like a cost equation
+            print(f"   Equation Preview: {expr_str[:150]}...")
+
+            # Check for your savings variable
+            if "cost_capex_total_extension" in expr_str:
+                print("   🎉 SUCCESS: 'cost_capex_total_extension' IS in this objective!")
+            elif "PRICEREDUCTION" in expr_str:
+                print("   🎉 SUCCESS: 'PRICEREDUCTION' variable IS in this objective!")
+            else:
+                print("   ❌ WARNING: Neither 'cost_capex_total_extension' nor 'PRICEREDUCTION' found here.")
+                print("      The solver is minimizing this function, so your savings are IGNORED.")
+
+            found = True
+
+        if not found:
+            print("🚨 CRITICAL: No active Objective Function found! The solver has no goal.")
+
+    # Run this immediately after optim.solve()
+    find_real_objective(prob)
 
     # Check solver termination condition
     if str(result.solver.termination_condition) != "optimal":

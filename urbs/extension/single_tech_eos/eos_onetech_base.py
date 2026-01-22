@@ -106,12 +106,15 @@ class OneTech_Relation_Pnew_Pprior(AbstractConstraint):
         if stf == 2024:
             return pyomo.Constraint.Skip
 
-        if stf == min(m.stf):  # Logic for first year if not 2024
-            return pyomo.Constraint.Skip
+        if stf == value(m.y0):  # Logic for first year if not 2024
+            lhs = m.pricereduction_onetech_unit[stf, location, tech, stage]
+            rhs = 0
+            return lhs >= rhs
+        else:
 
-        lhs = m.pricereduction_onetech_unit[stf, location, tech, stage]
-        rhs = m.pricereduction_onetech_unit[stf - 1, location, tech, stage]
-        return lhs >= rhs
+            lhs = m.pricereduction_onetech_unit[stf, location, tech, stage]
+            rhs = m.pricereduction_onetech_unit[stf - 1, location, tech, stage]
+            return lhs >= rhs
 
 
 class OneTech_Q_PerStep(AbstractConstraint):
@@ -119,7 +122,7 @@ class OneTech_Q_PerStep(AbstractConstraint):
         # Cumulative Production >= Threshold of active step
         y0 = min(m.stf)
         cumulative_prod = m.total_production_cap_inital[location, tech, stage] + sum(
-            m.capacity_produced_output[year, location, tech, stage]
+            m.processing_cap_new[year, location, tech, stage]
             for year in m.stf if y0 <= year <= stf
         )
 
@@ -143,13 +146,13 @@ class OneTech_UpperBound_Z_Q1(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage, n):
         # Aux <= Current Production
         return m.aux_onetech_prod[stf, location, tech, stage, n] <= \
-            m.capacity_produced_output[stf, location, tech, stage]
+            m.processing_cap_new[stf, location, tech, stage]
 
 
 class OneTech_LowerBound_Z(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage, n):
         # Aux >= Current Production - BigM * (1 - Binary)
-        rhs = (m.capacity_produced_output[stf, location, tech, stage]
+        rhs = (m.processing_cap_new[stf, location, tech, stage]
                - (1 - m.BD_onetech[stf, location, tech, stage, n]) * m.gamma_prod)
         return m.aux_onetech_prod[stf, location, tech, stage, n] >= rhs
 
