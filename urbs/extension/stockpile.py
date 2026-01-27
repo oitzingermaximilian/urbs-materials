@@ -101,6 +101,7 @@ class StockTurnoverRule(AbstractConstraint):#todo disabled due to new materials.
             return pyomo.Constraint.Skip
 
 
+
 class AntiDumpingMeasuresRule(AbstractConstraint):  # NOTE disabled atm
     def apply_rule(self, m, stf, location, tech):
         rhs = m.anti_dumping_index[location, tech] * (

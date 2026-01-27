@@ -31,7 +31,7 @@ LEARNING_RATES = {
     "LR1": "1% Learning Rate",
     "LR3_5": "3.5% Learning Rate",
     "LR4": "4% Learning Rate",
-    "LR5": "5% Learning Rate",
+    "LR4": "5% Learning Rate",
     "LR6": "6% Learning Rate",
     "LR7": "7% Learning Rate",
     "LR8": "8% Learning Rate",
@@ -1574,7 +1574,7 @@ def plot_lng_lines_by_learning_rate():
 
         output_path = output_dir / f"lng_lines_by_lr_group_{group_idx + 1}.png"
         plt.savefig(output_path, dpi=300, bbox_inches="tight")
-        print(f"Saved LNG lines by LR group {group_idx + 1}: {output_path}")
+        print(f"Saved LNG lines by LR6 group {group_idx + 1}: {output_path}")
     #  plt.show()
 
 
@@ -1680,7 +1680,7 @@ def plot_lng_lines_by_price_scenario():
 
 def lng_lineplot_horizons(lr_code="LR25", price_scenario="extremely_low"):
     """
-    Plot LNG demand over time for a specific LR and price scenario combination
+    Plot LNG demand over time for a specific LR6 and price scenario combination
     across all rolling horizons. Shows 4 lines (one for each rolling horizon).
 
     Args:
@@ -1707,7 +1707,7 @@ def lng_lineplot_horizons(lr_code="LR25", price_scenario="extremely_low"):
     for lr_code, lr_name in LEARNING_RATES.items():
         for price_scenario in all_price_scenarios:
             plt.figure(figsize=(14, 8))
-            print(f"LR: {lr_code}, Price scenario: {price_scenario}")
+            print(f"LR6: {lr_code}, Price scenario: {price_scenario}")
             for horizon_idx, rolling_horizon in enumerate(rolling_horizons):
                 df = load_rolling_horizon_data(
                     lr_code, rolling_horizon, price_scenario, "e_pro_in"
@@ -2515,7 +2515,7 @@ def lng_lineplot_range():
     pf_scenarios = SCENARIO_COMBOS_LNG_PF
 
     for lr_code, lr_name in LEARNING_RATES.items():
-        print(f"Processing LR: {lr_code}")
+        print(f"Processing LR6: {lr_code}")
 
         # ===== PLOT 1: LNG_NZ SCENARIOS =====
         plt.figure(figsize=(14, 8))
@@ -2717,8 +2717,8 @@ def lng_lineplot_range_comp_basecase():
       3. PF with NZIA
       4. PF without NZIA
     Data directory structure:
-      result/results_with_nzia/<LR>/<rolling_2024_to_2050>/scenario_<price_scenario>.xlsx
-      result/results_without_nzia/<LR>/<rolling_2024_to_2050>/scenario_<price_scenario>.xlsx
+      result/results_with_nzia/<LR6>/<rolling_2024_to_2050>/scenario_<price_scenario>.xlsx
+      result/results_without_nzia/<LR6>/<rolling_2024_to_2050>/scenario_<price_scenario>.xlsx
     """
     output_dir = Path("scenario_comparison")
     output_dir.mkdir(exist_ok=True)
@@ -2762,7 +2762,7 @@ def lng_lineplot_range_comp_basecase():
     ]
 
     def load_group_data(base_variant, lr_code, scenarios):
-        """Load LNG yearly BCM values for all scenarios in a group for a given LR.
+        """Load LNG yearly BCM values for all scenarios in a group for a given LR6.
         Returns dict: year -> list of bcm values across scenarios"""
         data_by_year = {y: [] for y in years_full}
         for scenario in scenarios:
@@ -2797,7 +2797,7 @@ def lng_lineplot_range_comp_basecase():
 
     print("Creating 2024-2050 NZIA comparison LNG range plots...")
     for lr_code, lr_name in LEARNING_RATES.items():
-        print(f"Processing LR {lr_code} ...")
+        print(f"Processing LR6 {lr_code} ...")
         plt.figure(figsize=(14, 8))
         for group in group_definitions:
             print(f"  Group: {group['label']}")
@@ -2899,8 +2899,8 @@ def lng_lineplot_range_comp_basecase_3x3():
       3. PF with NZIA
       4. PF without NZIA
     Data directory structure:
-      result/results_with_nzia/<LR>/<rolling_2024_to_2050>/scenario_<price_scenario>.xlsx
-      result/results_without_nzia/<LR>/<rolling_2024_to_2050>/scenario_<price_scenario>.xlsx
+      result/results_with_nzia/<LR6>/<rolling_2024_to_2050>/scenario_<price_scenario>.xlsx
+      result/results_without_nzia/<LR6>/<rolling_2024_to_2050>/scenario_<price_scenario>.xlsx
     """
     output_dir = Path("scenario_comparison")
     output_dir.mkdir(exist_ok=True)
@@ -2944,7 +2944,7 @@ def lng_lineplot_range_comp_basecase_3x3():
     ]
 
     def load_group_data(base_variant, lr_code, scenarios):
-        """Load LNG yearly BCM values for all scenarios in a group for a given LR.
+        """Load LNG yearly BCM values for all scenarios in a group for a given LR6.
         Returns dict: year -> list of bcm values across scenarios"""
         data_by_year = {y: [] for y in years_full}
         for scenario in scenarios:
@@ -2989,7 +2989,7 @@ def lng_lineplot_range_comp_basecase_3x3():
             break
 
         ax = axes[idx]
-        print(f"Processing LR {lr_code} in subplot {idx + 1}...")
+        print(f"Processing LR6 {lr_code} in subplot {idx + 1}...")
 
         for group in group_definitions:
             print(f"  Group: {group['label']}")
@@ -3150,7 +3150,7 @@ def co2_lineplot_range_comp_basecase():
     ]
 
     def load_co2_group_data(base_variant, lr_code, scenarios):
-        """Load CO2 yearly emissions for all scenarios in a group for a given LR.
+        """Load CO2 yearly emissions for all scenarios in a group for a given LR6.
         Returns dict: year -> list of CO2 values (in Mt) across scenarios"""
         data_by_year = {y: [] for y in years_full}
         for scenario in scenarios:
@@ -3198,7 +3198,7 @@ def co2_lineplot_range_comp_basecase():
             break
 
         ax = axes[lr_idx]
-        print(f"Processing LR {lr_code} (subplot {lr_idx + 1}/9)...")
+        print(f"Processing LR6 {lr_code} (subplot {lr_idx + 1}/9)...")
 
         subplot_has_data = False
 
@@ -3532,7 +3532,7 @@ def plot_capacity_additions_by_technology_and_lr_nzia_split():
     - NZ without NZIA
     - PF with NZIA
     - PF without NZIA
-    Each subplot: x-axis = learning rates, 3 grouped boxplots per LR = Manufacturing, Remanufacturing, Stockpile
+    Each subplot: x-axis = learning rates, 3 grouped boxplots per LR6 = Manufacturing, Remanufacturing, Stockpile
     """
     output_dir = Path("scenario_comparison")
     output_dir.mkdir(exist_ok=True)
@@ -4977,7 +4977,7 @@ def plot_combined_domestic_percentage_heatmap():
 
 def plot_capacity_and_stock_separately():
     """
-    For each scenario (LR, NZIA, scenario):
+    For each scenario (LR6, NZIA, scenario):
     - Plots stacked bar for total installed capacities (excluding Batteries, positive y)
     - Plots a separate stacked bar for stock levels of solarPV, windon, windoff (positive y)
     - Data from extension_total_caps and extension_only_caps, up to 2040

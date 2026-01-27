@@ -263,6 +263,8 @@ def apply_variables(m):
         domain=pyomo.NonNegativeReals
     )
 
+    m.balance_yearly_new_capacity = pyomo.Var(m.stf, m.location, m.tech, within=pyomo.NonNegativeReals)
+
     #########################
     # Scrap Economies of Scale Variables
     #########################

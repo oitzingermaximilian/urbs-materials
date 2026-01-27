@@ -265,3 +265,43 @@ def inst_pro_tuples(m):
                 inst_pro.append((sit, pro, stf_later))
 
     return inst_pro
+
+
+def calculate_factors_for_solar(m):
+    """
+    This function replicates the urbs 'process.apply' logic.
+    It returns two dictionaries that Pyomo uses to initialize Parameters.
+    """
+    stf_list = sorted(m.stf)
+    stf_min = stf_list[0]
+
+    # Calculate stf_end exactly like urbs
+    try:
+        last_weight = m.global_prop.xs("Weight", level=1).iloc[0]["value"]
+    except:
+        last_weight = 1
+    stf_end = stf_list[-1] + last_weight - 1
+
+    try:
+        discount = m.global_prop.xs("Discount rate", level=1).iloc[0]["value"]
+    except:
+        discount = 0.05
+
+    inv_dict = {}
+    over_dict = {}
+
+    for stf in m.stf:
+        for loc in m.location:
+            for tech in m.tech:
+                for stage in m.stages:
+                    # REPLACE THESE with your actual data lookups if they vary
+                    wacc = 0.071
+                    depr = 20
+
+                    inv_dict[stf, loc, tech, stage] = invcost_factor(
+                        depr, wacc, discount, stf, stf_min
+                    )
+                    over_dict[stf, loc, tech, stage] = overpay_factor(
+                        depr, wacc, discount, stf, stf_min, stf_end
+                    )
+    return inv_dict, over_dict

@@ -32,7 +32,7 @@ BASE_PATH = Path("C:/Users/maxoi/OneDrive/Desktop/results_crm_paper/base")
 NZIA_PATH = Path("C:/Users/maxoi/OneDrive/Desktop/results_crm_paper/NZIA")
 LNG_LOWEST_PATH = Path("C:/Users/maxoi/OneDrive/Desktop/results_crm_paper/lng_lowest")
 
-LR_FOLDERS = ["LR1", "LR3_5", "LR4", "LR5", "LR6", "LR7", "LR8", "LR9", "LR10"]
+LR_FOLDERS = ["LR1", "LR3_5", "LR4", "LR4", "LR6", "LR7", "LR8", "LR9", "LR10"]
 
 SCENARIO_NAMES = [
     "scenario_min_min_min",

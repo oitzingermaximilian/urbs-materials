@@ -113,6 +113,9 @@ class StockpileTotalRule(AbstractConstraint):
             m.stock_domestic[stf, location, tech, stage] +
             m.stock_imported[stf, location, tech, stage]
         )
+
+# Based on the 16% -> 24% growth over 10 years
+obsolescence_factor = 0.041 # 4.1% per year https://www.ise.fraunhofer.de/en/publications/studies/photovoltaics-report.html page 9 of Photovoltaics report
 class StockpileDomesticRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
         if stf == 2024:
@@ -125,7 +128,8 @@ class StockpileDomesticRule(AbstractConstraint):
         else:
             return (
                     m.stock_domestic[stf, location, tech, stage] ==
-                    m.stock_domestic[stf-1,location, tech, stage] +
+                    m.stock_domestic[stf-1,location, tech, stage] *
+                    (1 - obsolescence_factor) +
                     m.capacity_produced_storage[stf, location, tech, stage] -
                     m.capacity_produced_stockout[stf, location, tech, stage]
             )
@@ -142,7 +146,8 @@ class StockpileImportedRule(AbstractConstraint):
         else:
             return (
                     m.stock_imported[stf, location, tech, stage] ==
-                    m.stock_imported[stf-1,location, tech, stage] +
+                    m.stock_imported[stf-1,location, tech, stage] *
+                    (1 - obsolescence_factor) +
                     m.capacity_imported_storage[stf, location, tech, stage] -
                     m.capacity_imported_stockout[stf, location, tech, stage]
             )
@@ -150,8 +155,74 @@ class StockpileImportedRule(AbstractConstraint):
 class MaximumStockpileImportsRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
         lhs = m.capacity_imported_storage[stf,location, tech, stage]
-        rhs = 0.5 * m.capacity_imported[stf, location, tech, stage]
+        rhs = 0.25 * m.capacity_imported[stf, location, tech, stage]
         return lhs <= rhs
+
+class MaximumStockpileDomesticRule(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage):
+        lhs = m.capacity_produced_storage[stf,location, tech, stage]
+        rhs = 0.25 * m.capacity_produced_output[stf, location, tech, stage]
+        return lhs <= rhs
+
+
+class TurnvoverStockImportsNewRule(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage):
+        valid_years = [2025, 2030, 2035, 2040, 2045]
+
+        if stf not in valid_years:
+            return pyomo.Constraint.Skip
+
+        # --- Hardcoded Step Size ---
+        step_size = 5
+
+        # Calculate LHS (Outflows)
+        lhs = sum(
+            m.capacity_imported_stockout[j, location, tech, stage]
+            for j in range(stf, stf + step_size)  # Range 2025 -> 2030
+            if (j, location, tech, stage) in m.capacity_imported_stockout
+        )
+
+        # Calculate RHS (Average Stock * FT)
+        rhs = (
+                1
+                * (1 / step_size)  # Averaging factor (1/5)
+                * sum(
+            m.stock_imported[j, location, tech, stage]
+            for j in range(stf, stf + step_size)
+            if (j, location, tech, stage) in m.stock_imported
+        )
+        )
+        return lhs >= rhs
+
+
+class TurnvoverStockDomesticNewRule(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage):
+        valid_years = [2025, 2030, 2035, 2040, 2045]
+
+        if stf not in valid_years:
+            return pyomo.Constraint.Skip
+
+        # --- Hardcoded Step Size ---
+        step_size = 2
+
+        # Calculate LHS (Outflows)
+        lhs = sum(
+            m.capacity_produced_stockout[j, location, tech, stage]
+            for j in range(stf, stf + step_size)
+            if (j, location, tech, stage) in m.capacity_produced_stockout
+        )
+
+        # Calculate RHS (Average Stock * FT)
+        rhs = (
+                1
+                * (1 / step_size)
+                * sum(
+            m.stock_domestic[j, location, tech, stage]
+            for j in range(stf, stf + step_size)
+            if (j, location, tech, stage) in m.stock_domestic
+        )
+        )
+        return lhs >= rhs
 
 
 
@@ -198,7 +269,6 @@ class InstallationSupplyLinkRule(AbstractConstraint):
         # 2. Define the sides of the equation
         lhs = m.capacity_ext_new[stf, location, tech] # Or m.capacity_ext_new depending on your var name
         rhs = m.Supply[stf, location, tech, final_stage]
-
         # --- DEBUG PRINT ---
         # This will print once for every (stf, location, tech) combo during model build
         #print(f"LINKING: {tech} (Loc: {location})")
@@ -208,6 +278,15 @@ class InstallationSupplyLinkRule(AbstractConstraint):
         # -------------------
 
         return lhs == rhs
+
+class NewlyAddedBalanceLCOE(AbstractConstraint):
+    def apply_rule(self, m, stf,location,tech):
+        return m.balance_yearly_new_capacity[stf,location,tech] == sum(
+                m.capacity_ext_new[stf, location, tech] * m.lf_solar[t, stf, location, tech]
+               * m.hours[t]
+                for t in m.timesteps_ext
+            )
+
 
 
 # Materials
@@ -267,7 +346,7 @@ class MiningLimit(AbstractConstraint):
         rhs = (
                 m.primary_material_availability[stf, material]
                 * m.mining_energy_transission_share[stf, material]
-                * m.mining_conversion_factor[stf, material]  # <--- Applied here
+                / m.mining_conversion_factor[stf, material]  # <--- Applied here
         )
 
         return lhs <= rhs
@@ -332,127 +411,104 @@ class ElecNeedsProductionRule(AbstractConstraint):
 
         return m.demand_production[tm, stf, location, tech] == m.FACTORY_ENERGY_ANNUAL[stf, location, tech] / 12
 
-# CAPEX
+# CLONED URBS COST CALCULATION
 class CapexCostRule(AbstractConstraint):
     def apply_rule(self, m, stf):
-        # 1. Base Cost (All Techs)
-        gross_investment = sum(
-            m.processing_cap_new[stf, loc, tech, stage] * m.cost_capex[stf, loc, tech, stage]
-            for loc in m.location
-            for tech in m.tech
-            for stage in m.stages
-            if (stf, loc, tech, stage) in m.cost_capex
+        # --- urbs Intertemporal Factors ---
+        j = 0.03  # Social Discount Rate
+        i = 0.071  # WACC (Interest Rate)
+        n = 20    # Depreciation Period
+        stf_min = min(m.stf)
+        stf_end = max(m.stf) # In yearly model, end is just the final year
+
+        # f_inv: Annuity + Discounting for the decision year
+        f_inv = ((1 + j)**(1 - (stf - stf_min)) * (i * (1 + i)**n * ((1 + j)**n - 1)) /
+                 (j * (1 + j)**n * ((1 + i)**n - 1)))
+
+        # f_over: Rest value subtraction (if factory outlives the model)
+        op_time = (stf + n) - stf_end - 1
+        f_over = 0
+        if op_time > 0:
+            f_over = ((1 + j)**(1 - (stf - stf_min)) * (i * (1 + i)**n * ((1 + j)**op_time - 1)) /
+                      (j * (1 + j)**n * ((1 + i)**n - 1)))
+
+        # --- CALCULATION ---
+        # 1. Gross Investment (Uses NEW capacity)
+        gross = sum(
+            m.processing_cap_new[stf, loc, tech, stage]
+            * m.cost_capex[stf, loc, tech, stage]
+            * (f_inv - f_over)
+            for loc in m.location for tech in m.tech for stage in m.stages
+            if (stf, loc, tech, stage) in m.processing_cap_new
         )
 
-        # 2. Savings (Generic One-Tech)
+        # 2. Learning Rate Savings
         savings = 0
-        # In CapexCostRule...
-        if hasattr(m, 'stages_one_tech'):
+        if hasattr(m, 'PRICEREDUCTION_ONETECH_TOTAL'):
             savings = sum(
                 m.PRICEREDUCTION_ONETECH_TOTAL[stf, loc, tech, stage]
-                for loc in m.location
-                for tech in m.tech_one_tech
-                for stage in m.stages_one_tech
+                * (f_inv - f_over)
+                for loc in m.location for tech in m.tech_one_tech for stage in m.stages_one_tech
+                if (stf, loc, tech, stage) in m.PRICEREDUCTION_ONETECH_TOTAL
             )
 
-        return m.cost_capex_total_extension[stf] == gross_investment - savings
-# OPEX
+        return m.cost_capex_total_extension[stf] == gross - savings
+
+
 class OpexCostRule(AbstractConstraint):
     def apply_rule(self, m, stf):
-        # --- A. Manufacturing Costs ---
+        j = 0.03
+        stf_min = min(m.stf)
 
-        # 1. Fixed Costs (Applied to Installed Capacity)
-        # Unit: [MW_capacity] * [EUR/MW/yr]
-        manufacturing_fixed = sum(
-            m.capacity_processing_total[stf, location, tech, stage]
-            * m.cost_fixed[stf, location, tech, stage]
+        # In a yearly simulation, f_cost is just the discount factor for that year
+        f_cost = (1 + j) ** (1 - (stf - stf_min))
 
-            for location in m.location
-            for tech in m.tech
-            for stage in m.stages
-            if (stf, location, tech, stage) in m.cost_fixed
+        # Sum of all operational components for the extension
+        # Fixed (Capacity) + Variable (Output) + Scrap + Mining
+        total_opex = (
+                sum(m.capacity_processing_total[stf, loc, tech, stage] * m.cost_fixed[stf, loc, tech, stage]
+                    for loc in m.location for tech in m.tech for stage in m.stages) +
+                sum(m.capacity_produced_output[stf, loc, tech, stage] * m.cost_variable[stf, loc, tech, stage]
+                    for loc in m.location for tech in m.tech for stage in m.stages) +
+                sum(m.cost_electricity[stf] * m.FACTORY_ENERGY_ANNUAL[stf, location, tech]
+                    for location in m.location for tech in m.tech) +
+                sum(m.cost_scrap[stf, loc, tech] for loc in m.location for tech in m.tech) +
+                sum(m.material_mined[stf, mat] * m.cost_mining[stf, mat] *1.05 for mat in m.materials)
         )
 
-        # 2. Variable Costs (Applied to Production Output)
-        # Unit: [MW_output] * [EUR/MW_output]
-        # Note: 'cost_variable' should include Labor + Materials (Consumables).
-        # Electricity is usually excluded here if modeled as physical demand elsewhere.
-        manufacturing_variable = sum(
-            m.capacity_produced_output[stf, location, tech, stage]
-            * m.cost_variable[stf, location, tech, stage]
+        return m.cost_opex_total_extension[stf] == total_opex * f_cost
 
-            for location in m.location
-            for tech in m.tech
-            for stage in m.stages
-            if (stf, location, tech, stage) in m.cost_variable
-        )
-        # 3. Scrap & Recycling Adjustments (If applicable)
-        scrap_costs = sum(
-            m.cost_scrap[stf, location, tech]
 
-            for location in m.location
-            for tech in m.tech
-            for stage in m.stages
-            if (stf, location, tech) in m.cost_scrap
-        )
-
-        # --- B. Mining Costs (Virgin Material Extraction) ---
-        mining_cost = sum(
-            m.material_mined[stf, material] * m.cost_mining[stf, material]
-            for material in m.materials
-            if (stf, material) in m.cost_mining
-        )
-
-        # --- Total Equation ---
-        return m.cost_opex_total_extension[stf] == (
-                manufacturing_fixed +
-                manufacturing_variable +
-                scrap_costs +
-                mining_cost
-        )
-# Trade&Storage
 class TradeCostRule(AbstractConstraint):
     def apply_rule(self, m, stf):
-        # 1. Component Imports (e.g., Solar Cells, Wafers)
-        component_import_cost = sum(
-            m.capacity_imported[stf, location, tech, stage] * m.cost_import_part[stf, location, tech, stage]
-            for location in m.location
-            for tech in m.tech
-            for stage in m.stages
-            if (stf, location, tech, stage) in m.cost_import_part
+        j = 0.03
+        stf_min = min(m.stf)
+        f_cost = (1 + j)**(1 - (stf - stf_min))
+
+        total_trade = (
+            sum(m.capacity_imported[stf, loc, tech, stage] * m.cost_import_part[stf, loc, tech, stage]
+                for loc in m.location for tech in m.tech for stage in m.stages) +
+            sum(m.material_imported[stf, mat] * m.cost_import_material[stf, mat] for mat in m.materials)
         )
 
-        # 2. Raw Material Imports (e.g., Lithium, Silicon)
-        # Assuming m.material_imported is indexed [stf, material] per your Balance Rule
-        material_import_cost = sum(
-            m.material_imported[stf, material] * m.cost_import_material[stf, material]
-            for material in m.materials
-            if (stf, material) in m.cost_import_material
-        )
-
-        return m.cost_trade_total_extension[stf] == component_import_cost + material_import_cost
-
-
+        return m.cost_trade_total_extension[stf] == total_trade * f_cost
+# Trade&Storage
 class StockpileHoldingCostRule(AbstractConstraint):
     def apply_rule(self, m, stf):
-        # --- DUMMY COST PARAMETER ---
-        # Set this high enough to be noticeable, but not infinite.
-        # e.g., 5-10% of your production cost.
-        # If your production cost is ~100, try 10.
-        HOLDING_COST_PER_UNIT = 1000
+        j = 0.03
+        stf_min = min(m.stf)
+        f_cost = (1 + j) ** (1 - (stf - stf_min))
 
-        # Sum of all items currently sitting in stock
-        total_holding_cost = sum(
-            (m.stock_domestic[stf, location, tech, stage] +
-             m.stock_imported[stf, location, tech, stage])
-            * HOLDING_COST_PER_UNIT
+        # Holding cost per unit (MW or kg) per year
+        HOLDING_COST = 27500
 
-            for location in m.location
-            for tech in m.tech
-            for stage in m.stages
+        total_stock = sum(
+            (m.stock_domestic[stf, loc, tech, stage] + m.stock_imported[stf, loc, tech, stage])
+            for loc in m.location for tech in m.tech for stage in m.stages
         )
 
-        return m.cost_stockpile_holding[stf] == total_holding_cost
+        return m.cost_stockpile_holding[stf] == total_stock * HOLDING_COST * f_cost
+
 def apply_material_constraints(m):
     """
     Registers all constraints with the Pyomo model, grouped by their index requirements.
@@ -462,6 +518,7 @@ def apply_material_constraints(m):
         ScrapHandlingCapacityGrowthLimitRule(),
         ScrapHandlingCapacitiesOutputLimitRule(),
         FactoryEnergyAnnualRule(),
+        NewlyAddedBalanceLCOE()
     ]
 
     for constraint_obj in scrap_growth_constraints:
@@ -484,6 +541,8 @@ def apply_material_constraints(m):
         StockpileDomesticRule(),
         StockpileImportedRule(),
         MaximumStockpileImportsRule(),
+        TurnvoverStockDomesticNewRule(),
+        TurnvoverStockImportsNewRule(),
         SupplyCompositionRule(),
         ComponentBalanceRule(),
 

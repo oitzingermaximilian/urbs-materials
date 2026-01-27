@@ -46,7 +46,9 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         supply,
         stock,
         bd_one_tech_scrap,
-        bd_one_tech_base
+        bd_one_tech_base,
+        costs_extension,
+        new_balance
     ) = get_constants(instance)
 
     # create spreadsheet writer object
@@ -77,6 +79,8 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         stock.to_excel(writer, sheet_name="stock_levels")
         bd_one_tech_scrap.to_excel(writer, sheet_name="bd_one_tech_scrap")
         bd_one_tech_base.to_excel(writer, sheet_name="bd_one_tech_base")
+        costs_extension.to_excel(writer,sheet_name="costs_extension")
+        new_balance.to_excel(writer,sheet_name="new_balance")
 
 
         #################################################################################

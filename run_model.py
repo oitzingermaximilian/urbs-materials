@@ -228,9 +228,9 @@ parser.add_argument(
 )
 parser.add_argument(
     "--lr",
-    choices=["LR1", "LR3_5", "LR4", "LR5", "LR6", "LR7", "LR8", "LR9", "LR10", "LR25"],
-    default="LR5",
-    help="Learning rate scenario (default: LR5)",
+    choices=["LR1", "LR3_5", "LR4", "LR4", "LR6", "LR7", "LR8", "LR9", "LR10", "LR25"],
+    default="LR4",
+    help="Learning rate scenario (default: LR4)",
 )
 args = parser.parse_args()
 
@@ -271,33 +271,9 @@ my_colors = {"EU27": (200, 230, 200)}
 for country, color in my_colors.items():
     urbs.COLORS[country] = color
 scenarios = [
-    ("scenario_min_min_min", urbs.scenario_min_min_min),
-    #("scenario_min_min_avg", urbs.scenario_min_min_avg),
-    #("scenario_min_min_high", urbs.scenario_min_min_high),
-    #("scenario_min_avg_min", urbs.scenario_min_avg_min),
-    #("scenario_min_avg_avg", urbs.scenario_min_avg_avg),
-    #("scenario_min_avg_high", urbs.scenario_min_avg_high),
-    #("scenario_min_high_min", urbs.scenario_min_high_min),
-    #("scenario_min_high_avg", urbs.scenario_min_high_avg),
-    #("scenario_min_high_high", urbs.scenario_min_high_high),
-    #("scenario_avg_min_min", urbs.scenario_avg_min_min),
-    #("scenario_avg_min_avg", urbs.scenario_avg_min_avg),
-    #("scenario_avg_min_high", urbs.scenario_avg_min_high),
-    #("scenario_avg_avg_min", urbs.scenario_avg_avg_min),
-    #("scenario_avg_avg_avg", urbs.scenario_avg_avg_avg),
-    #("scenario_avg_avg_high", urbs.scenario_avg_avg_high),
-    #("scenario_avg_high_min", urbs.scenario_avg_high_min),
-    #("scenario_avg_high_avg", urbs.scenario_avg_high_avg),
-    #("scenario_avg_high_high", urbs.scenario_avg_high_high),
-    #("scenario_high_min_min", urbs.scenario_high_min_min),
-    #("scenario_high_min_avg", urbs.scenario_high_min_avg),
-    #("scenario_high_min_high", urbs.scenario_high_min_high),
-    #("scenario_high_avg_min", urbs.scenario_high_avg_min),
-    #("scenario_high_avg_avg", urbs.scenario_high_avg_avg),
-    #("scenario_high_avg_high", urbs.scenario_high_avg_high),
-    #("scenario_high_high_min", urbs.scenario_high_high_min),
-    #("scenario_high_high_avg", urbs.scenario_high_high_avg),
-    #("scenario_high_high_high", urbs.scenario_high_high_high),
+    ("scenario_solar_recycling_low", urbs.scenario_solar_recycling_low),
+    ("scenario_solar_recycling_medium", urbs.scenario_solar_recycling_medium),
+    ("scenario_solar_recycling_high", urbs.scenario_solar_recycling_high),
 ]
 
 

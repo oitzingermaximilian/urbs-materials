@@ -9,10 +9,14 @@ class AbstractConstraint(ABC):
 
 
 # ==============================================================================
-# 1. NZIA STRICT (Per Stage) - No Loopholes
+# 1. NZIA STRICT (Per Stage) - Starts 2030
 # ==============================================================================
 class nzia_strict_rule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
+        # --- TIME CHECK: Skip years before 2030 ---
+        if stf < 2030:
+            return pyomo.Constraint.Skip
+
         if tech not in ['SolarPV', 'solarPV']:
             return pyomo.Constraint.Skip
 
@@ -25,10 +29,14 @@ class nzia_strict_rule(AbstractConstraint):
 
 
 # ==============================================================================
-# 2. NZIA FLEX (Aggregated) - Value Chain Averaging
+# 2. NZIA FLEX (Aggregated) - Starts 2030
 # ==============================================================================
 class nzia_flex_rule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
+        # --- TIME CHECK: Skip years before 2030 ---
+        if stf < 2030:
+            return pyomo.Constraint.Skip
+
         if tech not in ['SolarPV', 'solarPV']:
             return pyomo.Constraint.Skip
 
@@ -45,10 +53,14 @@ class nzia_flex_rule(AbstractConstraint):
 
 
 # ==============================================================================
-# 3. CRMA MINING (10% of Minable Demand)
+# 3. CRMA MINING (10% of Minable Demand) - Starts 2030
 # ==============================================================================
 class eu_extraction_constraint(AbstractConstraint):
     def apply_rule(self, m, stf):
+        # --- TIME CHECK: Skip years before 2030 ---
+        if stf < 2030:
+            return pyomo.Constraint.Skip
+
         total_mined = sum(m.material_mined[stf, mat] for mat in m.materials)
 
         relevant_demand = sum(
@@ -60,16 +72,21 @@ class eu_extraction_constraint(AbstractConstraint):
 
 
 # ==============================================================================
-# 4. CRMA RECYCLING (15% of Recyclable Demand)
+# 4. CRMA RECYCLING (15% of Recyclable Demand) - Starts 2030
 # ==============================================================================
 class eu_recycling_constraint(AbstractConstraint):
     def apply_rule(self, m, stf):
+        # --- TIME CHECK: Skip years before 2030 ---
+        if stf < 2030:
+            return pyomo.Constraint.Skip
+
         total_recycled = sum(m.material_recycled[stf, mat] for mat in m.materials)
 
         relevant_demand = 0
         for mat in m.materials:
             is_recyclable = False
             for t in m.tech:
+                # Check if tuple exists in recycling dict
                 if (t, mat) in m.recycling_efficiency:
                     if pyomo.value(m.recycling_efficiency[t, mat]) > 0:
                         is_recyclable = True
@@ -82,27 +99,17 @@ class eu_recycling_constraint(AbstractConstraint):
 
 
 # ==============================================================================
-# APPLICATION LOGIC (WITH FULL CONTROL)
+# APPLICATION LOGIC (No Changes Needed Here, Logic is inside Rules)
 # ==============================================================================
 
 def apply_scenario_constraints(m, nzia_mode='strict', crma_active=True):
     """
     Registers scenario constraints with full toggle control.
-
-    ARGUMENTS:
-      m: The model instance.
-
-      nzia_mode (str):
-          - 'strict': Forces 40% domestic production for EVERY stage.
-          - 'flex':   Forces 40% domestic production on AVERAGE.
-          - 'none':   Disables NZIA targets.
-
-      crma_active (bool):
-          - True:  Enforces 10% Mining and 15% Recycling targets.
-          - False: Disables CRMA targets completely.
+    Constraints will essentially be "dormant" (Skipped) until 2030.
     """
     print(f"\n--- Initializing Scenario Constraints ---")
     print(f"   Settings: NZIA='{nzia_mode.upper()}', CRMA={crma_active}")
+    print("   Note: Targets only active for Years >= 2030.")
 
     # 1. CREATE ALL CONSTRAINTS (Always created, then toggled)
     # ---------------------------------------------------------
@@ -140,14 +147,14 @@ def apply_scenario_constraints(m, nzia_mode='strict', crma_active=True):
     if nzia_mode == 'strict':
         m.nzia_strict_constraint.activate()
         m.nzia_flex_constraint.deactivate()
-        print("✅ NZIA STRICT: Active")
+        print("✅ NZIA STRICT: Active (>=2030)")
         print("❌ NZIA FLEX:   Inactive")
 
     elif nzia_mode == 'flex':
         m.nzia_strict_constraint.deactivate()
         m.nzia_flex_constraint.activate()
         print("❌ NZIA STRICT: Inactive")
-        print("✅ NZIA FLEX:   Active")
+        print("✅ NZIA FLEX:   Active (>=2030)")
 
     else:  # 'none' or unknown
         m.nzia_strict_constraint.deactivate()
@@ -157,9 +164,9 @@ def apply_scenario_constraints(m, nzia_mode='strict', crma_active=True):
     # 3. TOGGLE CRMA
     # ---------------------------------------------------------
     if crma_active:
-        #m.eu_extraction_constraint.activate()
+        m.eu_extraction_constraint.activate()
         m.eu_recycling_constraint.activate()
-        print("✅ CRMA:        Active (Mining & Recycling)")
+        print("✅ CRMA:        Active (>=2030)")
     else:
         m.eu_extraction_constraint.deactivate()
         m.eu_recycling_constraint.deactivate()

@@ -8,7 +8,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     ###############################################
 
     # Learning rate selection via environment variable
-    LEARNING_RATE = os.environ.get("URBS_LR", "LR5")  # Default to LR5
+    LEARNING_RATE = os.environ.get("URBS_LR", "LR4")  # Default to LR4
     print(f"Using Learning Rate: {LEARNING_RATE}")
 
     # Excel read in
@@ -58,6 +58,8 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     m.l = pyomo.Param(
         m.location, m.tech, initialize=initialize_param("l", default_value=0)
     )
+
+    m.i = pyomo.Param(initialize=0.071, doc="Global WACC / Interest Rate")
 
     m.Installed_Capacity_Q_s = pyomo.Param(
         m.location,
@@ -334,6 +336,13 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc="Cost of importing raw material"
     )
 
+    m.cost_electricity = pyomo.Param(
+        m.stf,
+        initialize=74.06,
+        default=74.06,
+        doc="Cost of electricity per MWh"
+    )
+
     # ==============================================================================
     # 5. PROCESSING COSTS (Time-Indexed)
     # ==============================================================================
@@ -560,7 +569,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         "LR1": create_absolute_stage_reduction_dict(reduction_percentage_1),
         "LR3_5": create_absolute_stage_reduction_dict(reduction_percentage_3_5),
         "LR4": create_absolute_stage_reduction_dict(reduction_percentage_4),
-        "LR5": create_absolute_stage_reduction_dict(reduction_percentage_5),
+        "LR4": create_absolute_stage_reduction_dict(reduction_percentage_5),
         "LR6": create_absolute_stage_reduction_dict(reduction_percentage_6),
         "LR7": create_absolute_stage_reduction_dict(reduction_percentage_7),
         "LR8": create_absolute_stage_reduction_dict(reduction_percentage_8),
@@ -573,7 +582,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         "LR1": create_absolute_recycling_dict(reduction_percentage_1),
         "LR3_5": create_absolute_recycling_dict(reduction_percentage_3_5),
         "LR4": create_absolute_recycling_dict(reduction_percentage_4),
-        "LR5": create_absolute_recycling_dict(reduction_percentage_5),
+        "LR4": create_absolute_recycling_dict(reduction_percentage_5),
         "LR6": create_absolute_recycling_dict(reduction_percentage_6),
         "LR7": create_absolute_recycling_dict(reduction_percentage_7),
         "LR8": create_absolute_recycling_dict(reduction_percentage_8),
@@ -587,7 +596,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         "LR1": reduction_percentage_1,
         "LR3_5": reduction_percentage_3_5,
         "LR4": reduction_percentage_4,
-        "LR5": reduction_percentage_5,
+        "LR4": reduction_percentage_5,
         "LR6": reduction_percentage_6,
         "LR7": reduction_percentage_7,
         "LR8": reduction_percentage_8,
@@ -597,15 +606,15 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     }
 
     selected_relative_reductions = all_relative_reductions.get(
-        LEARNING_RATE, all_relative_reductions["LR5"]
+        LEARNING_RATE, all_relative_reductions["LR4"]
     )
 
     # Select the appropriate reductions based on environment variable
     selected_stage_reductions = absolute_stage_reductions.get(
-        LEARNING_RATE, absolute_stage_reductions["LR5"]
+        LEARNING_RATE, absolute_stage_reductions["LR4"]
     )
     selected_recycling_reductions = absolute_recycling_reductions.get(
-        LEARNING_RATE, absolute_recycling_reductions["LR5"]
+        LEARNING_RATE, absolute_recycling_reductions["LR4"]
     )
 
     print(f"Selected stage reduction values for {LEARNING_RATE}")
