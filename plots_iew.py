@@ -67,8 +67,10 @@ print("\n📊 Data Load Summary:")
 for scenario, cases in all_results.items():
     print(f"  • {scenario}: {list(cases.keys())} loaded")
 
+
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+import matplotlib.lines as mlines
 from matplotlib.ticker import StrMethodFormatter
 from pathlib import Path
 import os
@@ -78,8 +80,10 @@ plt.rcParams["font.family"] = "Arial"
 plt.rcParams["pdf.fonttype"] = 42
 plt.rcParams["ps.fonttype"] = 42
 
-# Define the specific color for Solar PV (Adjust if you have a specific palette)
-SOLAR_COLOR = "#E69F00"
+# Colors
+SOLAR_COLOR = "#E69F00"  # Your Model
+BENCHMARK_COLOR = "#333333"  # TYNDP Reference (Dark Grey)
+
 
 # ================= DATA LOADING =================
 def get_total_capacity_ext(base_dir, file_name="scenario_solar_recycling_high.xlsx"):
@@ -98,29 +102,25 @@ def get_total_capacity_ext(base_dir, file_name="scenario_solar_recycling_high.xl
         print(f"❌ Error reading file: {e}")
         return None
 
-    # Forward Fill columns
+    # Forward Fill & Filter
     cols_to_fix = ['stf', 'location', 'tech']
     existing_cols = [c for c in cols_to_fix if c in df.columns]
     df[existing_cols] = df[existing_cols].ffill()
 
-    # Filter for 'solarPV'
     mask = df['tech'].astype(str).str.contains("solarPV", case=False, na=False)
-    df_filtered = df[mask].copy()
-
-    # Group by Year ('stf')
-    capacity_series = df_filtered.groupby('stf')['capacity_ext'].sum()
+    # Group by Year ('stf') -> Sum Capacity -> Convert to GW immediately here for safety
+    capacity_series = df[mask].groupby('stf')['capacity_ext'].sum()
 
     return capacity_series
 
 
 # ================= PLOTTING FUNCTION =================
-def plot_cumulative_capacity_styled(data_series, output_dir="plots"):
+def plot_cumulative_capacity_with_benchmarks(data_series, output_dir="plots"):
     """
-    Vertical bar plot of Total Solar Installed Capacity (GW) 2024-2040.
-    Exact style match: Frame visible, White grid overlays bars.
+    Vertical bar plot with TYNDP Benchmarks overlaid.
     """
 
-    # 1. Prepare Data (MW -> GW)
+    # 1. Prepare Model Data (MW -> GW)
     data_gw = data_series / 1000
     years = list(range(2024, 2041))
     plot_data = data_gw.reindex(years).fillna(0)
@@ -128,17 +128,62 @@ def plot_cumulative_capacity_styled(data_series, output_dir="plots"):
     # 2. Setup Figure
     fig, ax = plt.subplots(figsize=(14, 8))
 
-    # 3. Plotting
-    # Z-ORDER 2: Bars sit below the grid (which is 7)
+    # 3. Plotting Bars (Your Model)
+    # Z-ORDER 2: Bars sit below the grid
     ax.bar(
         plot_data.index,
         plot_data.values,
         color=SOLAR_COLOR,
-        label="Solar PV",
-        edgecolor="white",  # Matches reference style for bar edges
+        label="Simulated Capacity",  # Updated label
+        edgecolor="white",
         width=0.7,
         zorder=2
     )
+
+    # ================= BENCHMARKING =================
+    # Define Values (GW)
+    tyndp_2030_val = 660
+    tyndp_2040_low = 781.124
+    tyndp_2040_high = 1448.395
+
+    # A. Plot 2030: Single Point (Diamond)
+    # zorder=10 ensures it sits ON TOP of the grid
+    ax.scatter(
+        2030, tyndp_2030_val,
+        color=BENCHMARK_COLOR,
+        s=150,  # Size
+        marker='D',  # Diamond shape
+        edgecolor='white',
+        linewidth=1.5,
+        zorder=10,
+        label="TYNDP 2030 (National Trends)"
+    )
+
+    # B. Plot 2040: Range (Vertical Interval)
+    # We plot a line from Low to High, and markers at the ends
+    ax.plot(
+        [2040, 2040], [tyndp_2040_low, tyndp_2040_high],
+        color=BENCHMARK_COLOR,
+        linewidth=2,
+        zorder=10,
+        linestyle='-'
+    )
+
+    # Add caps (markers) to the range
+    ax.scatter(
+        [2040, 2040], [tyndp_2040_low, tyndp_2040_high],
+        color=BENCHMARK_COLOR,
+        s=100,
+        marker='_',  # Horizontal line marker for clear limits
+        linewidth=3,
+        zorder=10
+    )
+
+    # Annotate the 2040 Range
+    mid_point_2040 = (tyndp_2040_low + tyndp_2040_high) / 2
+    # Optional: You can text label it if you want, but Legend is usually cleaner
+
+    # ================================================
 
     # 4. Axis Formatting
     ax.set_xticks([2024, 2030, 2035, 2040])
@@ -149,43 +194,40 @@ def plot_cumulative_capacity_styled(data_series, output_dir="plots"):
     ax.tick_params(axis="y", labelsize=22)
     ax.yaxis.set_major_formatter(StrMethodFormatter("{x:,.0f}"))
 
-    # 5. Visual Styling (Background & Grid)
+    # 5. Visual Styling
     ax.set_facecolor("#F3F3F3")
-
-    # Z-ORDER 7: Grid sits ON TOP of bars
     ax.grid(axis="y", color="white", linewidth=2, zorder=7)
 
-    # NOTE: We removed the lines that hid the spines (ax.spines[...].set_visible(False))
-    # This restores the default black frame around the plot.
+    # 6. Custom Legend
+    # Create manual handles to ensure the style is exactly what we want
 
-    # 6. Legend
-    handles = [
-        mpatches.Patch(
-            facecolor=SOLAR_COLOR,
-            edgecolor="#666666",
-            linewidth=0.6,
-            label="Solar PV"
-        )
-    ]
-
-    legend = ax.legend(
-        handles=handles,
-        loc="upper center",
-        bbox_to_anchor=(0.5, -0.16),
-        ncol=1,
-        frameon=False,
-        fontsize=22,
-        handlelength=1.5,
-        handletextpad=0.6,
-        columnspacing=1.2,
+    # Handle 1: The Model Bar
+    h_bar = mpatches.Patch(
+        facecolor=SOLAR_COLOR, edgecolor="#666666", linewidth=0.6, label="Solar PV"
     )
 
-    # Make legend boxes more visible
-    for lh in legend.legendHandles:
-        try:
-            lh.set_linewidth(0.6)
-        except Exception:
-            pass
+    # Handle 2: The 2030 Point
+    h_2030 = mlines.Line2D(
+        [], [], color=BENCHMARK_COLOR, marker='D', linestyle='None',
+        markersize=10, markeredgecolor='white', label="TYNDP (NT+)"
+    )
+
+    # Handle 3: The 2040 Range
+    h_2040 = mlines.Line2D(
+        [], [], color=BENCHMARK_COLOR, marker='_', linestyle='-', linewidth=2,
+        markersize=10, markeredgewidth=3, label="TYNDP (Low-High)"
+    )
+
+    legend = ax.legend(
+        handles=[h_bar, h_2030, h_2040],
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.16),
+        ncol=3,
+        frameon=False,
+        fontsize=18,  # Slightly smaller to fit 3 items
+        handlelength=1.5,
+        columnspacing=1.5,
+    )
 
     # 7. Layout & Save
     plt.tight_layout(rect=[0.02, 0.06, 0.98, 0.94])
@@ -193,10 +235,10 @@ def plot_cumulative_capacity_styled(data_series, output_dir="plots"):
 
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    output_path = output_dir / "Fig_Cumulative_Solar_Capacity.png"
-    plt.savefig(output_path, dpi=900, bbox_inches="tight")
+    output_path = output_dir / "Fig_Cumulative_Solar_Capacity_Benchmarked.png"
+    plt.savefig(output_path, dpi=300, bbox_inches="tight")
     plt.show()
-    print(f"✔ Styled Cumulative Capacity chart saved → {output_path}")
+    print(f"✔ Benchmarked Chart saved → {output_path}")
 
 
 # ================= MAIN EXECUTION =================
@@ -206,7 +248,7 @@ RESULT_DIRECTORY = "result"
 data_capacity = get_total_capacity_ext(RESULT_DIRECTORY)
 
 if data_capacity is not None:
-    plot_cumulative_capacity_styled(data_capacity)
+    plot_cumulative_capacity_with_benchmarks(data_capacity)
 else:
     print("⚠️ Skipping plot due to missing data.")
 import pandas as pd
@@ -215,26 +257,27 @@ import matplotlib.patches as mpatches
 import numpy as np
 import os
 
-# ================= FORMATTING =================
-plt.rcParams["font.family"] = "Arial"
-plt.rcParams["font.size"] = 16
-plt.rcParams["pdf.fonttype"] = 42
-plt.rcParams["ps.fonttype"] = 42
-plt.rcParams["axes.grid"] = True
-plt.rcParams["grid.alpha"] = 0.3
-plt.rcParams["axes.axisbelow"] = True
-
 # ================= CONFIGURATION =================
 RESULT_DIRECTORY = "result"
 YEARS_TO_PLOT = [2025, 2030, 2035, 2040]
 BASELINE_YEAR = 2024
 STAGES = ['Polysilicon', 'Wafer', 'Cell', 'Module']
+SCENARIOS = ['Base_case', 'low', 'medium', 'high']
 
-STAGE_COLORS = {
-    'Polysilicon': '#F4E100',
-    'Wafer': '#3A737D',
-    'Cell': '#05A5D2',
-    'Module': '#D79327'
+# Color Mapping
+SCENARIO_COLORS = {
+    'Base_case': '#333333',  # Dark Grey
+    'low': '#1f77b4',  # Blue
+    'medium': '#ff7f0e',  # Orange
+    'high': '#d62728'  # Red
+}
+
+# Labels for Legend
+SCENARIO_LABELS = {
+    'Base_case': 'Base Case',
+    'low': 'Low Scenario',
+    'medium': 'Medium Scenario',
+    'high': 'High Scenario'
 }
 
 
@@ -247,15 +290,13 @@ def load_clean_data(base_dir, folder, filename):
 
     try:
         df = pd.read_excel(path, sheet_name="processing_capacities")
-        # Fix merged cells
         cols = ['stf', 'location', 'tech']
         df[[c for c in cols if c in df.columns]] = df[[c for c in cols if c in df.columns]].ffill()
 
-        # Filter
         df = df[df['stages'].isin(STAGES)].copy()
         df = df[df['stf'].isin(set(YEARS_TO_PLOT) | {BASELINE_YEAR})].copy()
 
-        # Aggregation (GW)
+        # Group and sum -> Convert to GW
         agg = df.groupby(['stf', 'stages'])['capacity_processing_total'].sum().unstack()
         agg = agg.reindex(columns=STAGES).fillna(0) / 1000
         return agg
@@ -265,105 +306,132 @@ def load_clean_data(base_dir, folder, filename):
 
 
 # ================= PLOTTING ENGINE =================
-def create_2x2_plot(group_name, scenario_data, output_name):
+def create_sorted_staircase_plot(group_name, scenario_data, output_name):
     """
-    Generates a 2x2 plot (2025, 2030, 2035, 2040) with a bottom legend.
+    2x2 Plot with Sorted Staircase Logic.
+    1. Sorts scenarios by value (Smallest -> Largest).
+    2. Plots incremental deltas (floating bars).
     """
-    fig, axs = plt.subplots(2, 2, figsize=(16, 10))
+    fig, axs = plt.subplots(2, 2, figsize=(16, 11))
     axs = axs.flatten()
 
-    x_labels = ["Base Case", "Low", "Medium", "High"]
-
-    # Get Baseline (2024)
-    base_df = scenario_data['Base_case']
-    baseline_vals = base_df.loc[BASELINE_YEAR] if BASELINE_YEAR in base_df.index else pd.Series(0, index=STAGES)
-
-    # --- LOOP YEARS ---
     for i, year in enumerate(YEARS_TO_PLOT):
         ax = axs[i]
 
-        # Collect data for [Base, Low, Med, High] for this specific year
-        datasets = []
-        keys = ['Base_case', 'low', 'medium', 'high']
+        # Style
+        ax.grid(axis='y', color='white', linestyle='-', linewidth=1.5, alpha=0.5, zorder=0)
+        ax.set_axisbelow(True)
+        ax.set_facecolor('#F0F0F0')
 
-        for k in keys:
-            df = scenario_data[k] if k in scenario_data else scenario_data['Base_case']
-            if df is not None and year in df.index:
-                datasets.append(df.loc[year])
-            else:
-                datasets.append(pd.Series(0, index=STAGES))
+        n_stages = len(STAGES)
+        n_scens = len(SCENARIOS)
 
-        # --- BAR LOGIC ---
-        n_groups = len(datasets)
-        n_bars = len(STAGES)
-        total_width = 0.85
-        bar_width = total_width / n_bars
-        indices = np.arange(n_groups)
+        # Bar Layout
+        bar_width = 0.18
+        gap = 0.02
+        indices = np.arange(n_stages)
 
+        # --- LOOP STAGES ---
         for j, stage in enumerate(STAGES):
-            color = STAGE_COLORS.get(stage, 'gray')
-            x_pos = indices + (j - n_bars / 2 + 0.5) * bar_width
+            center_x = indices[j]
 
-            totals = [ds[stage] for ds in datasets]
-            base_val = baseline_vals[stage]
-            solids = [min(t, base_val) for t in totals]
+            # 1. GATHER VALUES & SORT
+            # List of tuples: (Scenario_Name, Value)
+            values = []
+            for key in SCENARIOS:
+                df = scenario_data[key]
+                val = df.loc[year, stage] if (df is not None and year in df.index) else 0
+                values.append((key, val))
 
-            # Layer 1: Hatched (Total)
-            ax.bar(x_pos, totals, width=bar_width,
-                   facecolor='white', edgecolor=color, hatch='////',
-                   linewidth=0.6, label='_nolegend_')
+            # Sort by Value (Smallest to Largest)
+            # If values are equal, sort by predefined scenario order to keep colors stable
+            values.sort(key=lambda x: (x[1], SCENARIOS.index(x[0])))
 
-            # Layer 2: Solid (Baseline)
-            ax.bar(x_pos, solids, width=bar_width,
-                   color=color, edgecolor='black', linewidth=0.5,
-                   label='_nolegend_')  # Legend is handled manually below
+            # 2. PLOT STEPS
+            prev_height = 0
+
+            for k, (scen_key, current_val) in enumerate(values):
+                # Calculate X Position
+                x_pos = center_x + (k - (n_scens - 1) / 2) * (bar_width + gap)
+                color = SCENARIO_COLORS[scen_key]
+
+                if k == 0:
+                    # FIRST BAR (Smallest) -> Full Height, Solid/Hatched
+                    # If it's Base Case, make it solid. Others hatched.
+                    hatch = '' if scen_key == 'Base_case' else '////'
+
+                    ax.bar(x_pos, current_val, width=bar_width,
+                           facecolor='white' if hatch else color,
+                           edgecolor=color if hatch else 'black',
+                           hatch=hatch, linewidth=0.8, zorder=3)
+
+                    if not hatch:  # Solid bar needs edge color fix
+                        ax.bar(x_pos, current_val, width=bar_width,
+                               color=color, edgecolor='black', linewidth=0.5, zorder=3)
+
+                    # Label: Absolute Value
+                    if current_val > 0.1:
+                        ax.text(x_pos, current_val + 0.5, f"{current_val:.1f}",
+                                ha='center', va='bottom', fontsize=8, color='black', fontweight='bold')
+
+                    prev_height = current_val
+
+                else:
+                    # SUBSEQUENT BARS -> Floating Deltas
+                    delta = current_val - prev_height
+
+                    # Prevent negative delta glitch if floating point errors occur (should be sorted >= 0)
+                    delta = max(0, delta)
+
+                    if delta > 0.05:
+                        # Draw Floating Bar
+                        ax.bar(x_pos, delta, bottom=prev_height, width=bar_width,
+                               facecolor='white', edgecolor=color, hatch='////', linewidth=0.8, zorder=3)
+
+                        # Label: +Delta
+                        ax.text(x_pos, prev_height + delta + 0.5, f"+{delta:.1f}",
+                                ha='center', va='bottom', fontsize=8, color=color, fontweight='bold')
+                    else:
+                        # Delta is ~0 -> Draw Line
+                        ax.plot([x_pos - bar_width / 2, x_pos + bar_width / 2],
+                                [prev_height, prev_height],
+                                color=color, linewidth=2, zorder=4)
+
+                    prev_height = current_val
 
         # Formatting
-        ax.set_title(f"{year}")
+        ax.set_title(f"{year}", fontweight='bold', fontsize=14)
         ax.set_xticks(indices)
-        ax.set_xticklabels(x_labels)
-        ax.set_ylabel("Processing Capacity (GW)")
+        ax.set_xticklabels(STAGES, fontweight='bold', fontsize=11)
 
-        all_max = max([d.max() for d in datasets]) if datasets else 1
-        ax.set_ylim(0, all_max * 1.15)
+        if i % 2 == 0:
+            ax.set_ylabel("Processing Capacity (GW)", fontsize=12)
 
-        # --- LEGEND CONSTRUCTION ---
-        handles = []
+        # Y-Limit
+        all_vals = []
+        for df in scenario_data.values():
+            if df is not None and year in df.index:
+                all_vals.extend(df.loc[year].values)
+        top_val = max(all_vals) if all_vals else 10
+        ax.set_ylim(0, top_val * 1.25)
 
-        # 1. Colors (Now with black borders)
-        for s in STAGES:
-            handles.append(mpatches.Patch(
-                facecolor=STAGE_COLORS[s],
-                edgecolor='black',  # Adds the black frame
-                linewidth=0.6,  # Sets the frame thickness
-                label=s
-            ))
+    # --- LEGEND ---
+    handles = []
+    for key in SCENARIOS:
+        label = SCENARIO_LABELS[key]
+        c = SCENARIO_COLORS[key]
+        # Show solid patch for color ID, hatching implies structure in plot
+        handles.append(mpatches.Patch(facecolor=c, edgecolor='black', label=label))
 
-        # 2. Hatch (Already had a border, just ensuring it matches)
-        handles.append(mpatches.Patch(
-            facecolor='white',
-            edgecolor='black',
-            hatch='////',
-            linewidth=0.6,
-            label='New Capacity'
-        ))
+    fig.legend(handles=handles, loc='lower center', bbox_to_anchor=(0.5, 0.02),
+               ncol=4, frameon=True, fontsize=13)
 
-        # Place legend beneath the entire figure
-        fig.legend(handles=handles,
-                   loc='lower center',
-                   bbox_to_anchor=(0.5, 0.02),
-                   ncol=5,
-                   frameon=True,
-                   fontsize=16)  # Check your fontsize here
+    plt.suptitle(f"Sorted Incremental Capacity: {group_name}\n(Sorted Left-to-Right by Total Magnitude)",
+                 fontsize=16, weight='bold', y=0.97)
 
-    # Title & Layout
-    plt.suptitle(f"Processing Capacities: {group_name}", fontsize=16, weight='bold', y=0.98)
-
-    # Adjust bottom margin to make space for the legend
     plt.tight_layout()
-    plt.subplots_adjust(bottom=0.1)
+    plt.subplots_adjust(bottom=0.12, top=0.92)
 
-    # Save
     out_file = f"{output_name}.pdf"
     plt.savefig(out_file, bbox_inches='tight')
     print(f"✅ Saved: {out_file}")
@@ -376,7 +444,6 @@ print("📂 Loading Data...")
 df_base = load_clean_data(RESULT_DIRECTORY, "Base_case", "scenario_solar_recycling_high.xlsx")
 
 if df_base is not None:
-    # NZIA Strict Data
     data_strict = {
         'Base_case': df_base,
         'low': load_clean_data(RESULT_DIRECTORY, "LR4_nziastrict", "scenario_solar_recycling_low.xlsx"),
@@ -384,7 +451,6 @@ if df_base is not None:
         'high': load_clean_data(RESULT_DIRECTORY, "LR4_nziastrict", "scenario_solar_recycling_high.xlsx")
     }
 
-    # NZIA Flex Data
     data_flex = {
         'Base_case': df_base,
         'low': load_clean_data(RESULT_DIRECTORY, "LR4_nziaflex", "scenario_solar_recycling_low.xlsx"),
@@ -393,12 +459,12 @@ if df_base is not None:
     }
 
     print("📊 Generating Strict PDF...")
-    create_2x2_plot("NZIA Strict Scenarios", data_strict, "Plot_2x2_NZIA_Strict")
+    create_sorted_staircase_plot("NZIA Strict", data_strict, "Plot_Staircase_Strict")
 
     print("📊 Generating Flex PDF...")
-    create_2x2_plot("NZIA Flex Scenarios", data_flex, "Plot_2x2_NZIA_Flex")
+    create_sorted_staircase_plot("NZIA Flex", data_flex, "Plot_Staircase_Flex")
 else:
-    print("❌ Base Case data missing. Cannot plot.")
+    print("❌ Base Case data missing.")
 
 import pandas as pd
 import matplotlib.pyplot as plt
