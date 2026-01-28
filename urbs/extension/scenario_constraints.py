@@ -61,15 +61,11 @@ class nzia_flex_rule(AbstractConstraint):
 class eu_extraction_constraint(AbstractConstraint):
     def apply_rule(self, m, stf, mat):
         # --- MATERIAL CHECK: Only apply to Strategic Raw Materials ---
-        #if mat not in CRMA_TARGET_MATERIALS:
-        #    return pyomo.Constraint.Skip
+        if mat not in CRMA_TARGET_MATERIALS:
+            return pyomo.Constraint.Skip
 
         # --- TIME CHECK: Skip years before 2030 ---
         if stf < 2030:
-            return pyomo.Constraint.Skip
-
-        # --- FEASIBILITY CHECK: Only apply if material exists in ground ---
-        if pyomo.value(m.primary_material_availability[stf, mat]) <= 1e-6:
             return pyomo.Constraint.Skip
 
         # Constraint: Specific material mining >= 10% of specific material demand
@@ -83,22 +79,11 @@ class eu_extraction_constraint(AbstractConstraint):
 class eu_recycling_constraint(AbstractConstraint):
     def apply_rule(self, m, stf, mat):
         # --- MATERIAL CHECK: Only apply to Strategic Raw Materials ---
-        #if mat not in CRMA_TARGET_MATERIALS:
-        #    return pyomo.Constraint.Skip
+        if mat not in CRMA_TARGET_MATERIALS:
+            return pyomo.Constraint.Skip
 
         # --- TIME CHECK: Skip years before 2030 ---
         if stf < 2030:
-            return pyomo.Constraint.Skip
-
-        # --- FEASIBILITY CHECK: Only apply if material is technically recyclable ---
-        is_recyclable = False
-        for t in m.tech:
-            if (t, mat) in m.recycling_efficiency:
-                if pyomo.value(m.recycling_efficiency[t, mat]) > 0:
-                    is_recyclable = True
-                    break
-
-        if not is_recyclable:
             return pyomo.Constraint.Skip
 
         # Constraint: Specific material recycling >= 15% of specific material demand
