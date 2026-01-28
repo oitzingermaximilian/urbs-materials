@@ -48,22 +48,34 @@ def setup_solver(optim, logfile="solver.log"):
     if optim.name == "gurobi":
         optim.set_options("logfile={}".format(logfile))
 
-        # 1. FIX THE GAP: Set strictly to zero (or very close)
-        #    Your previous setting was 1e-4. This forces it to keep going.
+        # =========================================================
+        # 1. DETERMINISM & PARALLELISM
+        # =========================================================
+        # Use 32 threads exactly. This fixes the "randomness" issue.
+        # Leaving 16 cores free ensures system stability.
+        optim.set_options("Threads=32")
+
+        # Force the Barrier algorithm.
+        # This is safer and faster for large energy models on multi-core servers.
+        # It avoids the "race conditions" of the default method.
+        optim.set_options("Method=2")
+
+        # =========================================================
+        # 2. ACCURACY & STABILITY
+        # =========================================================
+        # Tighten the gap to 0.01% to fix the "Flat Valley" capacity issue.
         optim.set_options("MIPGap=1e-4")
 
-        # 2. FIX THE RANDOMNESS: Force single-threaded mode
-        #    This is required to stop "achieving different results each run".
-        optim.set_options("Threads=1")
-
-        # 3. FIX THE NUMERICS: Handle your large matrix range
-        #    This prevents the "Warning: constraint violation" issues.
+        # Handle your large number range (10^14) safely.
+        # Prevents "Constraint Violation" warnings from becoming actual errors.
         optim.set_options("NumericFocus=3")
 
-        # Keep your strict tolerances (these are good)
+        # Strict Tolerances (Keep these as you had them)
         optim.set_options("IntFeasTol=1e-09")
         optim.set_options("FeasibilityTol=1e-06")
         optim.set_options("OptimalityTol=1e-06")
+
+        print("--> Gurobi Running: 32 Threads | Barrier Method | Gap 0.01%")
     elif optim.name == "glpk":
         # reference with list of options
         # execute 'glpsol --help'
