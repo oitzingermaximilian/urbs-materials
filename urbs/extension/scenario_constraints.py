@@ -1,6 +1,12 @@
 from abc import ABC, abstractmethod
 import pyomo.environ as pyomo
 
+# ==============================================================================
+# CONFIGURATION
+# ==============================================================================
+# Materials subject to CRMA Strategic Raw Material targets (10% Mining / 15% Recycling)
+CRMA_TARGET_MATERIALS = ['Al', 'Si', 'Cu']
+
 
 class AbstractConstraint(ABC):
     @abstractmethod
@@ -13,10 +19,8 @@ class AbstractConstraint(ABC):
 # ==============================================================================
 class nzia_strict_rule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
-        # --- TIME CHECK: Skip years before 2030 ---
         if stf < 2030:
             return pyomo.Constraint.Skip
-
         if tech not in ['SolarPV', 'solarPV']:
             return pyomo.Constraint.Skip
 
@@ -33,10 +37,8 @@ class nzia_strict_rule(AbstractConstraint):
 # ==============================================================================
 class nzia_flex_rule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
-        # --- TIME CHECK: Skip years before 2030 ---
         if stf < 2030:
             return pyomo.Constraint.Skip
-
         if tech not in ['SolarPV', 'solarPV']:
             return pyomo.Constraint.Skip
 
@@ -53,93 +55,92 @@ class nzia_flex_rule(AbstractConstraint):
 
 
 # ==============================================================================
-# 3. CRMA MINING (10% of Minable Demand) - Starts 2030
+# 3. CRMA MINING (10% of Demand PER MATERIAL) - Starts 2030
+#    Target Materials Only: Al, Si, Cu
 # ==============================================================================
 class eu_extraction_constraint(AbstractConstraint):
-    def apply_rule(self, m, stf):
+    def apply_rule(self, m, stf, mat):
+        # --- MATERIAL CHECK: Only apply to Strategic Raw Materials ---
+        #if mat not in CRMA_TARGET_MATERIALS:
+        #    return pyomo.Constraint.Skip
+
         # --- TIME CHECK: Skip years before 2030 ---
         if stf < 2030:
             return pyomo.Constraint.Skip
 
-        total_mined = sum(m.material_mined[stf, mat] for mat in m.materials)
+        # --- FEASIBILITY CHECK: Only apply if material exists in ground ---
+        if pyomo.value(m.primary_material_availability[stf, mat]) <= 1e-6:
+            return pyomo.Constraint.Skip
 
-        relevant_demand = sum(
-            m.demand_material_total[stf, mat]
-            for mat in m.materials
-            if pyomo.value(m.primary_material_availability[stf, mat]) > 1e-6
-        )
-        return total_mined >= 0.10 * relevant_demand
+        # Constraint: Specific material mining >= 10% of specific material demand
+        return m.material_mined[stf, mat] >= 0.10 * m.demand_material_total[stf, mat]
 
 
 # ==============================================================================
-# 4. CRMA RECYCLING (15% of Recyclable Demand) - Starts 2030
+# 4. CRMA RECYCLING (15% of Demand PER MATERIAL) - Starts 2030
+#    Target Materials Only: Al, Si, Cu
 # ==============================================================================
 class eu_recycling_constraint(AbstractConstraint):
-    def apply_rule(self, m, stf):
+    def apply_rule(self, m, stf, mat):
+        # --- MATERIAL CHECK: Only apply to Strategic Raw Materials ---
+        #if mat not in CRMA_TARGET_MATERIALS:
+        #    return pyomo.Constraint.Skip
+
         # --- TIME CHECK: Skip years before 2030 ---
         if stf < 2030:
             return pyomo.Constraint.Skip
 
-        total_recycled = sum(m.material_recycled[stf, mat] for mat in m.materials)
+        # --- FEASIBILITY CHECK: Only apply if material is technically recyclable ---
+        is_recyclable = False
+        for t in m.tech:
+            if (t, mat) in m.recycling_efficiency:
+                if pyomo.value(m.recycling_efficiency[t, mat]) > 0:
+                    is_recyclable = True
+                    break
 
-        relevant_demand = 0
-        for mat in m.materials:
-            is_recyclable = False
-            for t in m.tech:
-                # Check if tuple exists in recycling dict
-                if (t, mat) in m.recycling_efficiency:
-                    if pyomo.value(m.recycling_efficiency[t, mat]) > 0:
-                        is_recyclable = True
-                        break
+        if not is_recyclable:
+            return pyomo.Constraint.Skip
 
-            if is_recyclable:
-                relevant_demand += m.demand_material_total[stf, mat]
-
-        return total_recycled >= 0.15 * relevant_demand
+        # Constraint: Specific material recycling >= 15% of specific material demand
+        return m.material_recycled[stf, mat] >= 0.15 * m.demand_material_total[stf, mat]
 
 
 # ==============================================================================
-# APPLICATION LOGIC (No Changes Needed Here, Logic is inside Rules)
+# APPLICATION LOGIC
 # ==============================================================================
-
 def apply_scenario_constraints(m, nzia_mode='strict', crma_active=True):
-    """
-    Registers scenario constraints with full toggle control.
-    Constraints will essentially be "dormant" (Skipped) until 2030.
-    """
     print(f"\n--- Initializing Scenario Constraints ---")
     print(f"   Settings: NZIA='{nzia_mode.upper()}', CRMA={crma_active}")
-    print("   Note: Targets only active for Years >= 2030.")
+    print(f"   CRMA Target Materials: {CRMA_TARGET_MATERIALS}")
 
-    # 1. CREATE ALL CONSTRAINTS (Always created, then toggled)
+    # 1. CREATE ALL CONSTRAINTS
     # ---------------------------------------------------------
-
-    # NZIA Strict
     strict_logic = nzia_strict_rule()
     m.nzia_strict_constraint = pyomo.Constraint(
         m.stf, m.location, m.tech, m.stages,
         rule=lambda m, y, l, t, s: strict_logic.apply_rule(m, y, l, t, s)
     )
 
-    # NZIA Flex
     flex_logic = nzia_flex_rule()
     m.nzia_flex_constraint = pyomo.Constraint(
         m.stf, m.location, m.tech,
         rule=lambda m, y, l, t: flex_logic.apply_rule(m, y, l, t)
     )
 
-    # CRMA Mining
+    # CRMA Mining (Indexed by MATERIALS)
     extraction_logic = eu_extraction_constraint()
     m.eu_extraction_constraint = pyomo.Constraint(
         m.stf,
-        rule=lambda m, y: extraction_logic.apply_rule(m, y)
+        m.materials,
+        rule=lambda m, y, mat: extraction_logic.apply_rule(m, y, mat)
     )
 
-    # CRMA Recycling
+    # CRMA Recycling (Indexed by MATERIALS)
     recycling_logic = eu_recycling_constraint()
     m.eu_recycling_constraint = pyomo.Constraint(
         m.stf,
-        rule=lambda m, y: recycling_logic.apply_rule(m, y)
+        m.materials,
+        rule=lambda m, y, mat: recycling_logic.apply_rule(m, y, mat)
     )
 
     # 2. TOGGLE NZIA
@@ -148,15 +149,11 @@ def apply_scenario_constraints(m, nzia_mode='strict', crma_active=True):
         m.nzia_strict_constraint.activate()
         m.nzia_flex_constraint.deactivate()
         print("✅ NZIA STRICT: Active (>=2030)")
-        print("❌ NZIA FLEX:   Inactive")
-
     elif nzia_mode == 'flex':
         m.nzia_strict_constraint.deactivate()
         m.nzia_flex_constraint.activate()
-        print("❌ NZIA STRICT: Inactive")
         print("✅ NZIA FLEX:   Active (>=2030)")
-
-    else:  # 'none' or unknown
+    else:
         m.nzia_strict_constraint.deactivate()
         m.nzia_flex_constraint.deactivate()
         print("❌ NZIA:        All targets disabled")
@@ -166,7 +163,7 @@ def apply_scenario_constraints(m, nzia_mode='strict', crma_active=True):
     if crma_active:
         m.eu_extraction_constraint.activate()
         m.eu_recycling_constraint.activate()
-        print("✅ CRMA:        Active (>=2030)")
+        print(f"✅ CRMA:        Active (>=2030) for {CRMA_TARGET_MATERIALS}")
     else:
         m.eu_extraction_constraint.deactivate()
         m.eu_recycling_constraint.deactivate()

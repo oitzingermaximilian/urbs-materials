@@ -473,7 +473,7 @@ class OpexCostRule(AbstractConstraint):
                 sum(m.cost_electricity[stf] * m.FACTORY_ENERGY_ANNUAL[stf, location, tech]
                     for location in m.location for tech in m.tech) +
                 sum(m.cost_scrap[stf, loc, tech] for loc in m.location for tech in m.tech) +
-                sum(m.material_mined[stf, mat] * m.cost_mining[stf, mat] *1.05 for mat in m.materials)
+                sum(m.material_mined[stf, mat] * m.cost_mining[stf, mat]  for mat in m.materials)
         )
 
         return m.cost_opex_total_extension[stf] == total_opex * f_cost
