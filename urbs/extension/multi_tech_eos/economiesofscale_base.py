@@ -23,7 +23,7 @@ def debug_print(*args, **kwargs):
 
 class costsavings_constraint_sec_investment(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
-        # Calculates Total Cost Savings based on active learning step
+        # CON: Stage Cost Savings | Calculates total cost savings based on active learning step
         # Savings = Sum_n( Reduction_Value[n] * Aux_Production[n] )
 
         investment_reduction_value = sum(
@@ -37,6 +37,7 @@ class costsavings_constraint_sec_investment(AbstractConstraint):
 
 class pricereduction_stage_calc(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
+        # CON: Unit Price Reduction | Calculates current unit price reduction based on active binary
         # Calculates Unit Price Reduction (EUR/MW) based on active binary
 
         unit_reduction_value = sum(
@@ -49,13 +50,14 @@ class pricereduction_stage_calc(AbstractConstraint):
 
 class BD_limitation_constraint_sec(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
-        # Force exactly one learning step to be active per stage
+        # CON: Learning Step Selection | Forces exactly one learning step to be active per stage
         bd_sum = sum(m.BD_sec[stf, location, tech, stage, n] for n in m.nsteps_sec)
         return bd_sum == 1
 
 
 class relation_pnew_to_pprior_constraint_sec(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
+        # CON: Price Monotonicity | Ensures price reductions cannot decrease (no unlearning)
         # Enforce Monotonicity: Price Reduction(y) >= Price Reduction(y-1)
         # "We cannot unlearn"
 
@@ -80,6 +82,7 @@ class q_perstep_constraint_sec(AbstractConstraint):
         """
         THE DRIVER: Cumulative Production >= Threshold of active step.
         """
+        # CON: Cumulative Production Threshold | Links cumulative production to the active learning step
         y0 = min(m.stf)
 
         # 1. Calculate Cumulative Production (History + Current Accumulation)
@@ -106,6 +109,7 @@ class q_perstep_constraint_sec(AbstractConstraint):
 
 class upper_bound_z_constraint_sec(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage, n):
+        # CON: Linearization Upper Bound Z | Big-M constraint for linearization (Aux <= M * Binary)
         # Aux <= BigM * Binary
         # Using m.gamma_prod as BigM
         lhs = m.auxiliary_product_BD_q[stf, location, tech, stage, n]
@@ -115,6 +119,7 @@ class upper_bound_z_constraint_sec(AbstractConstraint):
 
 class upper_bound_z_q1_eq_sec(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage, n):
+        # CON: Linearization Upper Bound Q | Ensures Aux variable does not exceed actual production
         # Aux <= Current Production
         # We apply cost savings to CURRENT production
         lhs = m.auxiliary_product_BD_q[stf, location, tech, stage, n]
@@ -124,6 +129,7 @@ class upper_bound_z_q1_eq_sec(AbstractConstraint):
 
 class lower_bound_z_eq_sec(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage, n):
+        # CON: Linearization Lower Bound | Ensures Aux variable tracks production when binary is active
         # Aux >= Current Production - BigM * (1 - Binary)
         lhs = m.auxiliary_product_BD_q[stf, location, tech, stage, n]
         rhs = (
@@ -135,6 +141,7 @@ class lower_bound_z_eq_sec(AbstractConstraint):
 
 class non_negativity_z_eq_sec(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage, n):
+        # CON: Linearization Non-Negativity | Ensures auxiliary variable is non-negative
         return m.auxiliary_product_BD_q[stf, location, tech, stage, n] >= 0
 
 
@@ -190,11 +197,3 @@ def apply_combined_lr_constraints(m):
         )
 
     print("Stage-Dependent Learning Rate constraints applied successfully.")
-
-    #m.pricereduction_sec_recycling = pyomo.Expression(
-    #    m.stf,
-    #    m.location,
-    #    m.tech,
-    #    rule=recycling_reduction_rule,
-    #    doc="Recycling price reduction using linearized auxiliary variable",
-    #)

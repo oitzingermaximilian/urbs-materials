@@ -26,6 +26,7 @@ class ScrapCostSavingsCalculationRule(AbstractConstraint):
         Calculates Total Cost Savings for Recycling based on active scaling step.
         Savings = Sum_n( Reduction_Value[n] * Aux_Recycling_Output[n] )
         """
+        # CON: Scrap Cost Savings | Calculates total cost savings for recycling based on active scaling step
         scrap_reduction_value = sum(
             m.P_sec_recycling[location, tech, n]
             * m.ap_BDV_scrap[stf, location, tech, n]
@@ -40,6 +41,7 @@ class ScrapUnitReductionCalculationRule(AbstractConstraint):
         """
         Calculates Unit Price Reduction (EUR/MW_recycling) based on active binary.
         """
+        # CON: Scrap Unit Price Reduction | Calculates current unit price reduction for recycling
         unit_reduction_value = sum(
             m.P_sec_recycling[location, tech, n] * m.BDV_scrap[stf, location, tech, n]
             for n in m.nsteps_sec
@@ -53,6 +55,7 @@ class ScrapStepSelectionConstraint(AbstractConstraint):
         """
         Force exactly one recycling scale step to be active per year/loc/tech.
         """
+        # CON: Scrap Step Selection | Forces exactly one recycling scale step to be active
         bd_sum = sum(m.BDV_scrap[stf, location, tech, n] for n in m.nsteps_sec)
         return bd_sum == 1
 
@@ -63,6 +66,7 @@ class ScrapMonotonicityConstraint(AbstractConstraint):
         Enforce Monotonicity: We cannot 'unlearn' or lose economies of scale.
         Recycling efficiency (Price Reduction) today >= yesterday.
         """
+        # CON: Scrap Price Monotonicity | Ensures recycling price reductions cannot decrease over time
         if stf == 2024:
             return pyomo.Constraint.Skip
 
@@ -85,6 +89,7 @@ class ScrapCumulativeThresholdConstraint(AbstractConstraint):
         """
         THE DRIVER: Cumulative Recycling Capacity >= Threshold of active step.
         """
+        # CON: Scrap Cumulative Threshold | Links cumulative recycling capacity to the active learning step
         y0 = min(m.stf)
 
         # 1. Calculate Cumulative Recycling Capacity (Initial + New Installations)
@@ -113,6 +118,7 @@ class ScrapLinearizationBigMConstraint(AbstractConstraint):
         Auxiliary Variable Upper Bound (BigM Logic)
         Aux <= BigM * Binary
         """
+        # CON: Scrap Linearization Upper Bound Z | Big-M constraint for scrap linearization
         lhs = m.ap_BDV_scrap[stf, location, tech, n]
         rhs = m.gamma_scrap * m.BDV_scrap[stf, location, tech, n]
         return lhs <= rhs
@@ -124,6 +130,7 @@ class ScrapLinearizationOutputConstraint(AbstractConstraint):
         Auxiliary Variable <= Current Recycling Output
         Ensures we apply cost savings only to actual capacity deployed.
         """
+        # CON: Scrap Linearization Upper Bound Q | Ensures scrap aux variable does not exceed actual output
         lhs = m.ap_BDV_scrap[stf, location, tech, n]
         rhs = m.capacity_scrap_rec[stf, location, tech]
         return lhs <= rhs
@@ -135,6 +142,7 @@ class ScrapLinearizationLowerBoundConstraint(AbstractConstraint):
         Auxiliary Variable Lower Bound (BigM Logic)
         Aux >= Current Output - BigM * (1 - Binary)
         """
+        # CON: Scrap Linearization Lower Bound | Ensures scrap aux variable tracks output when binary is active
         lhs = m.ap_BDV_scrap[stf, location, tech, n]
         rhs = (
                 m.capacity_scrap_rec[stf, location, tech]
@@ -145,6 +153,7 @@ class ScrapLinearizationLowerBoundConstraint(AbstractConstraint):
 
 class ScrapLinearizationNonNegativityConstraint(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, n):
+        # CON: Scrap Linearization Non-Negativity | Ensures scrap aux variable is non-negative
         return m.ap_BDV_scrap[stf, location, tech, n] >= 0
 
 
