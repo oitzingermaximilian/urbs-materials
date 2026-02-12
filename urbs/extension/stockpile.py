@@ -19,6 +19,7 @@ def debug_print(*args, **kwargs):
 
 class CapacityExtGrowthRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
+        # CON: Capacity Growth Balance | Tracks installed capacity evolution (New - Decommissioned)
         if stf == value(m.y0):
             debug_print(
                 f"Running constraint CapacityExtGrowthRule for stf={stf} (start year)"
@@ -41,276 +42,21 @@ class CapacityExtGrowthRule(AbstractConstraint):
             )
 
 
-class CapacityExtNewRule(AbstractConstraint): #todo disabled due to new materials.py package
-    def apply_rule(self, m, stf, location, tech):
-        debug_print(f"Running constraint CapacityExtNewRule for stf={stf}")
-
-        return m.capacity_ext_new[stf, location, tech] == (
-            m.capacity_ext_imported[stf, location, tech]
-            + m.capacity_ext_stockout[stf, location, tech]
-            + m.capacity_ext_euprimary[stf, location, tech]
-            + m.capacity_ext_eusecondary[stf, location, tech]
-        )
-
-
-class CapacityExtStockRule(AbstractConstraint): #todo disabled due to new materials.py package
-    def apply_rule(self, m, stf, location, tech):
-        if stf == value(m.y0):
-            debug_print(
-                f"Running constraint CapacityExtStockRule for stf={stf} (start year)"
-            )
-            return m.capacity_ext_stock[stf, location, tech] == (
-                m.Existing_Stock_Q_stock[location, tech]
-                + m.capacity_ext_stock_imported[stf, location, tech]
-                - m.capacity_ext_stockout[stf, location, tech]
-            )
-        else:
-            # debug_print(f"Running constraint CapacityExtStockRule for stf={stf}")
-            return m.capacity_ext_stock[stf, location, tech] == (
-                m.capacity_ext_stock[stf - 1, location, tech]
-                + m.capacity_ext_stock_imported[stf, location, tech]
-                - m.capacity_ext_stockout[stf, location, tech]
-            )
-
-
-class StockTurnoverRule(AbstractConstraint):#todo disabled due to new materials.py package  # NOTE disabled atm
-    def apply_rule(self, m, stf, location, tech):
-        valid_years = [2025, 2030, 2035, 2040, 2045]
-
-        if stf in valid_years:
-            lhs = sum(
-                m.capacity_ext_stockout[j, location, tech]
-                for j in range(stf, stf + m.n)
-                if j in m.capacity_ext_stockout
-            )
-            debug_print(f"LHS for {tech} at {location} in year {stf}: {lhs}")
-
-            rhs = (
-                m.FT
-                * (1 / m.n)
-                * sum(
-                    m.capacity_ext_stock[j, location, tech]
-                    for j in range(stf, stf + m.n)
-                    if j in m.capacity_ext_stock
-                )
-            )
-            debug_print(f"RHS for {tech} at {location} in year {stf}: {rhs}")
-
-            return lhs >= rhs
-        else:
-            return pyomo.Constraint.Skip
-
-
-
-class AntiDumpingMeasuresRule(AbstractConstraint):  # NOTE disabled atm
-    def apply_rule(self, m, stf, location, tech):
-        rhs = m.anti_dumping_index[location, tech] * (
-            m.capacity_ext_imported[stf, location, tech]
-            + m.capacity_ext_stock_imported[stf, location, tech]
-        )
-
-        debug_print(
-            f"Anti-Dumping Measure for {tech} at {location} in year {stf}: "
-            f"{m.anti_dumping_measures[stf, location, tech]} = {rhs}"
-        )
-
-        return m.anti_dumping_measures[stf, location, tech] == rhs
-
-
 class CapacityExtNewLimitRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
+        # CON: New Capacity Limit | Restricts annual new capacity to defined installable limits
         cap_val = m.capacity_ext_new[stf, location, tech]
         if stf == 2024:
-            ext_val = m.Q_ext_new[stf, location, tech]  # * 0.7 # * 10#3
+            ext_val = m.Q_ext_new[stf, location, tech]
             return cap_val <= ext_val
         else:
-            ext_val = m.Q_ext_new[
-                stf, location, tech
-            ]  # * 0.7 # + m.capacity_dec[stf-1,location,tech]  # * 10#3
+            ext_val = m.Q_ext_new[stf, location, tech]
             return cap_val <= ext_val
-
-
-class TimedelayEUPrimaryProductionRule(AbstractConstraint):#todo disabled due to new materials.py package
-    def apply_rule(self, m, stf, location, tech):
-        start_year = (
-            2023  # reference start year TODO fix porperly for runing rolling horizon!
-        )
-        if stf == start_year:
-            # Start year: compare with existing prior capacity
-            lhs = (
-                m.capacity_ext_euprimary[stf, location, tech]
-                - m.cap_prim_prior[location, tech]
-            )
-            rhs = m.deltaQ_EUprimary[location, tech]
-            debug_print(f"Start year constraint: STF={stf}, LHS={lhs}, RHS={rhs}")
-            return lhs <= rhs
-
-        else:
-            # Growth-limited constraint for subsequent years
-            years_since_start = stf - start_year
-            lhs = (
-                m.capacity_ext_euprimary[stf, location, tech]
-                # + m.capacity_ext_eusecondary[stf, location, tech]
-            )
-            rhs = (
-                m.deltaQ_EUprimary[location, tech]
-                * (1 + m.IR_EU_primary[location, tech]) ** years_since_start
-            )
-            debug_print(
-                f"Growth-limited constraint: STF={stf}, Location={location}, Tech={tech}, LHS={lhs}, RHS={rhs}"
-            )
-            return lhs <= rhs
-
-
-class TimedelayEUSecondaryProductionRule(AbstractConstraint): #todo disabled due to new materials.py package
-    def apply_rule(self, m, stf, location, tech):
-        if stf == 2024:
-            debug_print(
-                f"Applying capacity limit for TimedelayEUSecondaryProductionRule for stf={stf} (first year)"
-            )
-            # Set a reasonable limit for 2024 instead of skipping
-            # For example: 5 GW (5000 MW) for renewables and 2 GW for others
-            if tech in ["solarPV", "Batteries"]:
-                max_capacity = 2500  # 2.5 GW limit for renewable technologies
-            else:
-                max_capacity = 1500  # 1.5 GW limit for other technologies
-
-            return m.capacity_facility_eusecondary[stf, location, tech] <= max_capacity
-
-        elif stf == value(m.y0) and stf != 2024:
-            debug_print(
-                f"Running constraint TimedelayEUSecondaryProductionRule for stf={stf} (start year)"
-            )
-            lhs = (
-                m.capacity_facility_eusecondary[stf, location, tech]
-                - m.cap_sec_prior[location, tech]
-            )
-            rhs = (
-                m.deltaQ_EUsecondary[location, tech]
-                + m.IR_EU_secondary[location, tech] * m.cap_sec_prior[location, tech]
-            )
-            return lhs <= rhs
-
-        else:
-            lhs = (
-                m.capacity_facility_eusecondary[stf, location, tech]
-                - m.capacity_facility_eusecondary[stf - 1, location, tech]
-            )
-            rhs = (
-                m.deltaQ_EUsecondary[location, tech]
-                + m.IR_EU_secondary[location, tech]
-                * m.capacity_facility_eusecondary[stf - 1, location, tech]
-            )
-
-            debug_print(
-                f"Debug: STF = {stf}, Location = {location}, Tech = {tech}, LHS = {lhs}, RHS = {rhs}"
-            )
-
-            return lhs <= rhs
-
-
-class Constraint1EUSecondaryToTotalRule(AbstractConstraint): #todo disabled due to new materials.py package # NOTE disabled atm
-    def apply_rule(self, m, stf, location, tech):
-        l_value = m.l[location, tech]
-        if value(m.y0) <= stf - l_value:
-            lhs = m.capacity_ext_eusecondary[stf, location, tech]
-            rhs = m.capacity_ext_new[stf - l_value, location, tech]
-
-            debug_print(
-                f"Debug: STF = {stf}, Location = {location}, Tech = {tech}, LHS = {lhs}, RHS = {rhs}"
-            )
-
-            return lhs <= rhs
-        else:
-            return pyomo.Constraint.Skip
-
-
-# class Constraint2EUSecondaryToTotalRule(AbstractConstraint):
-#    def apply_rule(self, m, stf, location, tech):
-#        l_value = m.l[location, tech]
-#        if value(m.y0) >= stf - l_value:
-#            lhs = m.capacity_ext_eusecondary[stf, location, tech]
-#            rhs = m.DCR_solar[stf, location, tech] * m.capacity_ext[stf, location, tech]
-#
-#            debug_print(
-#                f"Debug: STF = {stf}, Location = {location}, Tech = {tech}, LHS = {lhs}, RHS = {rhs}"
-#            )
-#
-#            return lhs <= rhs
-#        else:
-#           return pyomo.Constraint.Skip
-
-
-class ConstraintEUPrimaryToTotalRule(AbstractConstraint): #todo disabled due to new materials.py package
-    def apply_rule(self, m, stf, location, tech):
-        if stf == 2024:
-            debug_print(
-                f"Skipping ConstraintEUPrimaryToTotalRule constraint for stf={stf} (global start year)"
-            )
-            return pyomo.Constraint.Skip
-
-        if stf == value(m.y0):
-            lhs = m.capacity_ext_euprimary[stf, location, tech]
-            rhs = m.DR_primary[location, tech] * m.cap_prim_prior[location, tech]
-            return lhs >= rhs
-
-        else:
-            lhs = m.capacity_ext_euprimary[stf, location, tech]
-            rhs = (
-                m.DR_primary[location, tech]
-                * m.capacity_ext_euprimary[stf - 1, location, tech]
-            )
-
-            debug_print(
-                f"Debug: STF = {stf}, Location = {location}, Tech = {tech}, LHS = {lhs}, RHS = {rhs}"
-            )
-
-            return lhs >= rhs
-
-
-class ConstraintEUSecondaryToSecondaryRule(AbstractConstraint):#todo disabled due to new materials.py package
-    def apply_rule(self, m, stf, location, tech):
-        if stf == 2024:
-            debug_print(
-                f"Skipping ConstraintEUSecondaryToSecondaryRule constraint for stf={stf} (global start year)"
-            )
-            return pyomo.Constraint.Skip
-
-        if stf == value(m.y0):
-            lhs = m.capacity_facility_eusecondary[stf, location, tech]
-            rhs = m.DR_secondary[location, tech] * m.cap_sec_prior[location, tech]
-
-            return lhs >= rhs
-        else:
-            lhs = m.capacity_facility_eusecondary[stf, location, tech]
-            rhs = (
-                m.DR_secondary[location, tech]
-                * m.capacity_facility_eusecondary[stf - 1, location, tech]
-            )
-
-            debug_print(
-                f"Debug: STF = {stf}, Location = {location}, Tech = {tech}, LHS = {lhs}, RHS = {rhs}"
-            )
-
-            return lhs >= rhs
-
-
-class ConstraintMaxIntoStockRule(AbstractConstraint):#todo disabled due to new materials.py package but same logic in materials.py
-    def apply_rule(self, m, stf, location, tech):
-        # Calculate the left-hand side (LHS) and right-hand side (RHS)
-        lhs = m.capacity_ext_stock_imported[stf, location, tech]
-        rhs = 0.5 * m.capacity_ext_imported[stf, location, tech]
-
-        # Debugging: Print the LHS and RHS values
-        debug_print(
-            f"Debug: STF = {stf}, Location = {location}, Tech = {tech}, LHS = {lhs}, RHS = {rhs}"
-        )
-
-        return lhs <= rhs
 
 
 class ConstraintBatteryDemandRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
+        # CON: BESS Demand Calculation | Calculates required BESS capacity based on other tech installations
         lhs = m.demand_bess[stf, location]
         rhs = sum(
             m.factor_bess[location, t] * m.capacity_ext_new[stf, location, t]
@@ -323,6 +69,7 @@ class ConstraintBatteryDemandRule(AbstractConstraint):
 
 class ConstraintBatteryCapRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
+        # CON: BESS Capacity Requirement | Ensures BESS installations meet the calculated demand
         lhs = m.demand_bess[stf, location]
         rhs = m.capacity_ext_new[stf, location, "Batteries"]
 
@@ -332,92 +79,29 @@ class ConstraintBatteryCapRule(AbstractConstraint):
         return lhs <= rhs
 
 
-class ConstraintCarryoverSecondary(AbstractConstraint):#todo disabled due to new materials.py package
-    def apply_rule(self, m, stf, location, tech):
-        # Scale values to MW or GW to avoid very large numbers
-        scaling_factor = 1000.0  # Convert to GW if values are in MW
-        return m.capacity_secondary_cumulative[
-            stf, location, tech
-        ] / scaling_factor == m.total_secondary_cap_inital[
-            location, tech
-        ] / scaling_factor + sum(
-            m.capacity_ext_eusecondary[t, location, tech] / scaling_factor
-            for t in m.stf
-            if t <= stf
-        )
-
-
-class ConstraintCarryoverFacility(AbstractConstraint):#todo disabled due to new materials.py package
-    def apply_rule(self, m, stf, location, tech):
-        # Scale values to MW or GW to avoid very large numbers
-        scaling_factor = 1000.0  # Convert to GW if values are in MW
-        return m.capacity_facility_cumulative[
-            stf, location, tech
-        ] / scaling_factor == m.total_facility_cap_initial[
-            location, tech
-        ] / scaling_factor + sum(
-            m.capacity_facility_eusecondary[t, location, tech] / scaling_factor
-            for t in m.stf
-            if t <= stf
-        )
-
-
-class ConstraintRemanufacturingFacilitySize(AbstractConstraint):#todo disabled due to new materials.py package
-    def apply_rule(self, m, stf, location, tech):
-        # Scale values to improve numerical stability
-        scaling_factor = 1000.0  # Convert to GW if values are in MW
-        return (
-            m.capacity_inactive_eusecondary[stf, location, tech] / scaling_factor
-            == (
-                m.capacity_facility_cumulative[stf, location, tech]
-                - m.capacity_ext_eusecondary[stf, location, tech]
-            )
-            / scaling_factor
-        )
-
-
-class ConstraintLimitSecondaryCapacity(AbstractConstraint):#todo disabled due to new materials.py package
-    def apply_rule(self, m, stf, location, tech):
-        # Scale values to improve numerical stability
-        scaling_factor = 1000.0  # Convert to GW if values are in MW
-        return (
-            m.capacity_ext_eusecondary[stf, location, tech] / scaling_factor
-            <= m.capacity_facility_cumulative[stf, location, tech] / scaling_factor
-        )
-
-
 def apply_stockpiling_constraints(m):
+    """
+    Applies the cleaned list of stockpile and capacity constraints.
+    """
     constraints = [
         CapacityExtGrowthRule(),
-        #CapacityExtNewRule(), #ToDo Substituted with new extension for materials
-        # CapacityExtStockRule(),#todo disabled due to new materials.py package
-        # StockTurnoverRule(), #todo disabled due to new materials.py package
-        # AntiDumpingMeasuresRule(),
         CapacityExtNewLimitRule(),
-        # TimedelayEUPrimaryProductionRule(),#todo disabled due to new materials.py package
-        # TimedelayEUSecondaryProductionRule(), #todo disabled due to new materials.py package
-        # Constraint1EUSecondaryToTotalRule(), #ToDo fix this constraint
-        # Constraint2EUSecondaryToTotalRule(),
-        # ConstraintEUPrimaryToTotalRule(), #todo disabled due to new materials.py package
-        # ConstraintEUSecondaryToSecondaryRule(), #todo disabled due to new materials.py package
-        # ConstraintMaxIntoStockRule(), #todo disabled due to new materials.py package
         ConstraintBatteryDemandRule(),
         ConstraintBatteryCapRule(),
-        # ConstraintCarryoverSecondary(), #todo disabled due to new materials.py package
-        # ConstraintCarryoverFacility(), #todo disabled due to new materials.py package
-        # ConstraintRemanufacturingFacilitySize(), #todo disabled due to new materials.py package
-        # ConstraintLimitSecondaryCapacity(), #todo disabled due to new materials.py package
     ]
 
-    for i, constraint in enumerate(constraints):
-        constraint_name = f"constraint_{i + 1}"
+    for constraint_obj in constraints:
+        # Use class name for clearer constraint naming in Pyomo
+        name = constraint_obj.__class__.__name__
         setattr(
             m,
-            constraint_name,
+            name,
             pyomo.Constraint(
                 m.stf,
                 m.location,
                 m.tech,
-                rule=lambda m, stf, loc, tech: constraint.apply_rule(m, stf, loc, tech),
+                rule=lambda m, stf, loc, tech: constraint_obj.apply_rule(m, stf, loc, tech),
             ),
         )
+
+    print("Stockpiling constraints applied successfully.")
