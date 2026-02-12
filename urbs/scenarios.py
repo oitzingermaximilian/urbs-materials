@@ -110,6 +110,13 @@ def _apply_standard_background_data(data):
     # ---------------- Demand ----------------
     if "demand" in data:
         demand = data["demand"]
+
+        # ---------------------------------------------------------
+        # FIX: Force the entire dataframe to allow decimals (Floats)
+        # This prevents the warning because the container is now ready for 207658333.3
+        demand = demand.astype(float)
+        # ---------------------------------------------------------
+
         yearly_profile = [
             207658333.3, 215588018.8, 223517704.2, 231447389.6, 239377075.1,
             247306760.5, 255236445.9, 260097649.0, 264958852.1, 269820055.3,
@@ -121,6 +128,9 @@ def _apply_standard_background_data(data):
         years = range(2024, 2051)
         for year, per_timestep in zip(years, yearly_profile):
             demand.loc[(float(year), slice(1, 12)), ("EU27", "Elec")] = per_timestep
+
+        # IMPORTANT: Ensure the main dictionary is updated with the new float-version
+        data["demand"] = demand
 
     # ---------------- SUPIM ----------------
     if "supim" in data:

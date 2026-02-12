@@ -181,7 +181,7 @@ def create_model(
     )
     m.com_stock = pyomo.Set(
         within=m.com,
-        initialize=commodity_subset(m.com_tuples, "Stock"),
+        initialize=sorted(list(commodity_subset(m.com_tuples, "Stock"))),
         doc="Commodities that can be purchased at some site(s)",
     )
     if m.mode["int"]:
@@ -207,17 +207,17 @@ def create_model(
     # commodity type subsets
     m.com_supim = pyomo.Set(
         within=m.com,
-        initialize=commodity_subset(m.com_tuples, "SupIm"),
+        initialize=sorted(list(commodity_subset(m.com_tuples, "SupIm"))),
         doc="Commodities that have intermittent (timeseries) input",
     )
     m.com_demand = pyomo.Set(
         within=m.com,
-        initialize=commodity_subset(m.com_tuples, "Demand"),
+        initialize=sorted(list(commodity_subset(m.com_tuples, "Demand"))),
         doc="Commodities that have a demand (implies timeseries)",
     )
     m.com_env = pyomo.Set(
         within=m.com,
-        initialize=commodity_subset(m.com_tuples, "Env"),
+        initialize=sorted(list(commodity_subset(m.com_tuples, "Env"))),
         doc="Commodities that (might) have a maximum creation limit",
     )
 

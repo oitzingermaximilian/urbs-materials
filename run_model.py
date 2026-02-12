@@ -5,6 +5,10 @@ import urbs
 from datetime import date
 import pandas as pd
 from collections import defaultdict
+import warnings  # <--- 1. Import warnings here
+
+# <--- 2. Paste this block right here, before other imports like pandas or pyomo
+warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")
 
 # from urbs_auto_plotting import plot_from_excel
 import plot_auto

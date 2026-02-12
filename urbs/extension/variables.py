@@ -82,20 +82,6 @@ def apply_variables(m):
     )
 
     """
-    Auxiliary variable for Big-M linearization of bilinear terms
-    This replaces the product: BD_sec * capacity_ext_eusecondary
-    """
-    m.auxiliary_product_BD_q = pyomo.Var(
-        m.stf,
-        m.location,
-        m.tech,
-        m.nsteps_sec,
-        within=pyomo.NonNegativeReals,
-        doc="Auxiliary variable for linearizing BD_sec * capacity_ext_eusecondary",
-    )
-
-
-    """
     These Variables are used for the economiesofscale_base.py script constraints.
     """
     """
@@ -187,10 +173,6 @@ def apply_variables(m):
     )
     m.costs_O_and_M = pyomo.Var(
         m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
-    )
-
-    m.demand_production = pyomo.Var(
-        m.timesteps_ext, m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
     )
 
     """

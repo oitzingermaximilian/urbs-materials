@@ -35,7 +35,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         all_techs.update(data_urbsextensionv1["technologies"][loc].keys())
 
     # Define the technology set
-    m.tech = pyomo.Set(initialize=all_techs)
+    m.tech = pyomo.Set(initialize=sorted(list(all_techs)))
 
     #
     # Helper function to initialize parameters with default values

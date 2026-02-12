@@ -47,35 +47,40 @@ def setup_solver(optim, logfile="solver.log"):
     """ """
     if optim.name == "gurobi":
         optim.set_options("logfile={}".format(logfile))
-
         # =========================================================
         # 1. DETERMINISM & PARALLELISM
         # =========================================================
-        # Use 32 threads exactly. This fixes the "randomness" issue.
-        # Leaving 16 cores free ensures system stability.
-        optim.set_options("Threads=32")
+        # FIX THE ALGORITHM: Dual Simplex (1)
+        # For small/medium models (like your current 10k rows), Simplex is
+        # usually faster than Barrier and very stable.
+        # By forcing '1', we stop the "race" between algorithms.
+        optim.set_options("Method=1")
+        optim.set_options("Heuristics=0")
+        optim.set_options("Presolve=1")
 
-        # Force the Barrier algorithm.
-        # This is safer and faster for large energy models on multi-core servers.
-        # It avoids the "race conditions" of the default method.
-        optim.set_options("Method=2")
+        # Use 8 threads for stability and efficiency on small/medium models.
+        optim.set_options("Threads=8")
 
         # =========================================================
-        # 2. ACCURACY & STABILITY
+        # 2. ACCURACY (The "Flat Valley" Fix)
         # =========================================================
-        # Tighten the gap to 0.01% to fix the "Flat Valley" capacity issue.
-        optim.set_options("MIPGap=1e-4")
+        # Keep the gap extremely tight to ensure high accuracy and prevent
+        # early stopping at suboptimal solutions.
+        optim.set_options("MIPGap=1e-9")
 
-        # Handle your large number range (10^14) safely.
-        # Prevents "Constraint Violation" warnings from becoming actual errors.
+        # =========================================================
+        # 3. STABILITY (The "Warning" Fix)
+        # =========================================================
+        # This fixes the "Constraint Violation" warning and handles large number ranges safely.
+        # It tells Gurobi: "Be slightly slower, but be much more careful with rounding."
         optim.set_options("NumericFocus=3")
 
-        # Strict Tolerances (Keep these as you had them)
+        # Standard tolerances
         optim.set_options("IntFeasTol=1e-09")
         optim.set_options("FeasibilityTol=1e-06")
         optim.set_options("OptimalityTol=1e-06")
 
-        print("--> Gurobi Running: 32 Threads | Barrier Method | Gap 0.01%")
+        print("--> Gurobi Config: Deterministic (Dual Simplex) | 8 Threads | MIPGap 1e-9 | Stable")
     elif optim.name == "glpk":
         # reference with list of options
         # execute 'glpsol --help'

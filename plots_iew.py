@@ -507,9 +507,9 @@ UNIT_MAP = {
     'Si': ('Silicon', 'kt', 1000)
 }
 
-STRICT_COLOR = '#d62728'  # Red
+STRICT_COLOR = '#EB5B44'  # Red
 FLEX_COLOR = '#1f77b4'  # Blue
-
+DEMAND_LINE_COLOR = '#EB5B44'
 
 # ================= DATA LOADING =================
 def load_mineral_data_pair(base_dir, folder, filename):
@@ -543,6 +543,13 @@ def load_mineral_data_pair(base_dir, folder, filename):
                 results[metric] = agg
             else:
                 return None
+
+        # --- NEW CALCULATION ---
+        # Calculate Domestic Supply = Total - Imports
+        if 'total' in results and 'imports' in results:
+            # We clip at 0 to ensure no negative supply due to data noise
+            results['domestic'] = (results['total'] - results['imports']).clip(lower=0)
+
         return results
 
     except Exception as e:
@@ -554,11 +561,16 @@ def load_mineral_data_pair(base_dir, folder, filename):
 def create_big_grid_plot(group_name, data_dict, output_name, main_color):
     """
     Creates a 6x3 Grid.
-    - Rows = Materials (Full Names)
-    - Cols = Scenarios (Reversed: High -> Medium -> Low)
-    - Shared Y-Axis Scale per Row
+    - Stack Order:
+      1. Bottom: Imports (Grey)
+      2. Top: Domestic Supply (Gold) -> This 'pushes' down on imports visually.
+      3. Line: Total Demand
     """
     fig, axs = plt.subplots(6, 3, figsize=(12, 18))
+
+    # --- COLORS ---
+    DOMESTIC_COLOR = '#70C4C0'  # Gold RGB(112,196,192
+    IMPORT_COLOR = '#EF85B0'  # Light Grey RGB(239,133,176
 
     # --- UPDATED COLUMN ORDER (High to Low) ---
     plot_order = ['high', 'medium', 'low']
@@ -573,7 +585,7 @@ def create_big_grid_plot(group_name, data_dict, output_name, main_color):
         # Unpack info
         full_name, unit_label, divisor = UNIT_MAP[mat]
 
-        # 1. FIND MAX Y-VALUE FOR THIS ROW (Across all scenarios to keep scale uniform)
+        # 1. FIND MAX Y-VALUE FOR THIS ROW
         row_max_y = 0
         for sens in SCENARIOS_KEYS:
             if sens in data_dict and data_dict[sens] is not None:
@@ -595,9 +607,19 @@ def create_big_grid_plot(group_name, data_dict, output_name, main_color):
                 y_total = df_total[mat] / divisor
                 y_imports = df_imports[mat] / divisor
 
-                # Plot Line & Area
-                ax.plot(y_total.index, y_total, color=main_color, lw=2)
-                ax.fill_between(y_imports.index, 0, y_imports, color=main_color, alpha=0.3, linewidth=0)
+                # --- PLOTTING LOGIC ---
+
+                # 1. Imports (Bottom Layer) - From 0 to y_imports
+                ax.fill_between(y_imports.index, 0, y_imports,
+                                color=IMPORT_COLOR, alpha=0.6, linewidth=0)
+
+                # 2. Domestic Supply (Top Layer) - From y_imports to y_total
+                # This fills the gap between imports and the total line
+                ax.fill_between(y_total.index, y_imports, y_total,
+                                color=DOMESTIC_COLOR, alpha=0.8, linewidth=0)
+
+                # 3. Total Demand Line (Boundary)
+                ax.plot(y_total.index, y_total, color=main_color, lw=2.5)
 
                 # Setup Axes
                 ax.set_ylim(0, y_limit)
@@ -619,9 +641,9 @@ def create_big_grid_plot(group_name, data_dict, output_name, main_color):
 
     # --- LEGEND ---
     handles = [
-        plt.Line2D([], [], color=main_color, lw=2, label='Annual Demand'),
-        mpatches.Patch(color=main_color, alpha=0.3, label='Material Imports'),
-        mpatches.Patch(facecolor='white', edgecolor='lightgray', hatch='///', label='Domestic Supply')
+        plt.Line2D([], [], color=main_color, lw=2.5, label='Annual Demand'),
+        mpatches.Patch(facecolor=DOMESTIC_COLOR, alpha=0.8, label='Domestic Supply'),
+        mpatches.Patch(facecolor=IMPORT_COLOR, alpha=0.6, label='Material Imports')
     ]
 
     fig.legend(handles=handles, loc='lower center', ncol=3, frameon=False, fontsize=14, bbox_to_anchor=(0.5, 0.02))
@@ -657,3 +679,195 @@ if any(v is not None for v in strict_data.values()):
 if any(v is not None for v in flex_data.values()):
     print("📊 Generating Grid for Flex...")
     create_big_grid_plot("NZIA Flex", flex_data, "Grid_18_Flex_FullNames", FLEX_COLOR)
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+import numpy as np
+import os
+
+# ================= FORMATTING =================
+plt.rcParams["font.family"] = "Arial"
+plt.rcParams["pdf.fonttype"] = 42
+plt.rcParams["ps.fonttype"] = 42
+
+# ================= CONFIGURATION =================
+RESULT_DIRECTORY = "result"
+YEARS_TO_PLOT = [2030, 2035, 2040]
+BASELINE_YEAR = 2024
+STAGES = ['Polysilicon', 'Wafer', 'Cell', 'Module']
+
+# FIXED DISPLAY ORDER
+SCENARIO_ORDER = ['Base_case', 'high', 'medium', 'low']
+
+SCENARIO_COLORS = {
+    'Base_case': '#F4E100',  # Yellow/Gold
+    'low': '#3A737D',  # Teal Blue
+    'medium': '#05A5D2',  # Bright Blue
+    'high': '#D79327'  # Orange/Bronze
+}
+
+SCENARIO_LABELS = {
+    'Base_case': 'Base Case',
+    'low': 'Low Scrap Price',
+    'medium': 'Medium Scrap Price',
+    'high': 'High Scrap Price'
+}
+
+
+# ================= DATA LOADING =================
+def load_clean_data(base_dir, folder, filename):
+    path = os.path.join(base_dir, folder, filename)
+    if not os.path.exists(path):
+        print(f"⚠️ Missing: {path}")
+        return None
+
+    try:
+        df = pd.read_excel(path, sheet_name="processing_capacities")
+        cols = ['stf', 'location', 'tech']
+        # Fix missing values
+        df[[c for c in cols if c in df.columns]] = df[[c for c in cols if c in df.columns]].ffill()
+
+        # Filter
+        df = df[df['stages'].isin(STAGES)].copy()
+        df = df[df['stf'].isin(set(YEARS_TO_PLOT) | {BASELINE_YEAR})].copy()
+
+        # Group and sum -> Convert to GW
+        agg = df.groupby(['stf', 'stages'])['capacity_processing_total'].sum().unstack()
+        agg = agg.reindex(columns=STAGES).fillna(0) / 1000  # Convert MW to GW
+        return agg
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        return None
+
+
+# ================= NEW PLOTTING ENGINE (TOTALS) =================
+def create_vertical_total_plot(group_name, scenario_data, output_name):
+    """
+    3x1 Grid (Vertical Stack).
+    X-Axis: Stages.
+    Y-Values: Total Capacity (Side-by-side bars, Solid colors).
+    """
+
+    # Setup Figure: 3 Rows (Years), 1 Column
+    fig, axs = plt.subplots(3, 1, figsize=(10, 16))
+    axs = axs.flatten()
+
+    # 1. CALCULATE GLOBAL MAX Y for consistent scaling
+    global_max = 0
+    for df in scenario_data.values():
+        if df is not None:
+            relevant_data = df[df.index.isin(YEARS_TO_PLOT)]
+            if not relevant_data.empty:
+                current_max = relevant_data.max().max()
+                if current_max > global_max:
+                    global_max = current_max
+
+    y_limit = global_max * 1.25  # Add headroom for labels
+
+    # --- LOOP YEARS ---
+    for i, year in enumerate(YEARS_TO_PLOT):
+        ax = axs[i]
+
+        # Grid settings
+        ax.grid(axis='y', color='white', linestyle='-', linewidth=1.5, alpha=0.5, zorder=0)
+        ax.set_axisbelow(True)
+        ax.set_facecolor('#F0F0F0')
+
+        n_stages = len(STAGES)
+        n_scens = len(SCENARIO_ORDER)
+
+        bar_width = 0.18
+        gap = 0.04
+        indices = np.arange(n_stages)
+
+        # --- LOOP STAGES ---
+        for j, stage in enumerate(STAGES):
+            center_x = indices[j]
+
+            # Plot Bars for each Scenario Side-by-Side
+            for k, scen_key in enumerate(SCENARIO_ORDER):
+                # Calculate X Position to center the group
+                x_pos = center_x + (k - (n_scens - 1) / 2) * (bar_width + gap)
+
+                # Get Data
+                df = scenario_data[scen_key]
+                val = df.loc[year, stage] if (df is not None and year in df.index) else 0
+                color = SCENARIO_COLORS[scen_key]
+
+                # Draw Bar (Solid, No Hatching)
+                ax.bar(x_pos, val, width=bar_width,
+                       color=color, edgecolor='black', linewidth=0.5, zorder=3)
+
+                # Optional: Add text label on top of very small bars or specific highlights
+                # Here we just rely on the Y-axis for cleanliness, as requested.
+
+        # Formatting
+        ax.set_title(f"{year}", fontweight='bold', fontsize=16)
+        ax.set_xticks(indices)
+
+        # Only show X-axis labels on the BOTTOM plot (index 2)
+        if i == 2:
+            ax.set_xticklabels(STAGES, fontweight='bold', fontsize=16)
+        else:
+            ax.set_xticklabels([])  # Hide labels for top and middle plots
+
+        ax.set_ylim(0, y_limit)
+        ax.tick_params(axis='y', labelsize=14)
+        ax.set_ylabel("Processing Capacity (GW/yr)", fontweight='bold', fontsize=14)
+
+    # --- LEGEND ---
+    # Create simple solid patches
+    handles = []
+    for key in SCENARIO_ORDER:
+        c = SCENARIO_COLORS[key]
+        l = SCENARIO_LABELS[key]
+        # Solid patch
+        handles.append(mpatches.Patch(facecolor=c, edgecolor='black', label=l))
+
+    # Place Legend at bottom
+    fig.legend(handles=handles, loc='lower center', bbox_to_anchor=(0.5, 0.02),
+               ncol=4, frameon=True, fontsize=14)
+
+    # Title
+    # plt.suptitle(f"Total Processing Capacity: {group_name}", fontsize=18, weight='bold', y=0.98)
+
+    plt.tight_layout()
+    plt.subplots_adjust(bottom=0.08, top=0.95, hspace=0.15)
+
+    out_file = f"{output_name}.pdf"
+    plt.savefig(out_file, bbox_inches='tight')
+    print(f"✅ Saved: {out_file}")
+    plt.show()
+
+
+# ================= MAIN EXECUTION =================
+
+print("📂 Loading Data...")
+df_base = load_clean_data(RESULT_DIRECTORY, "Base_case", "scenario_solar_recycling_high.xlsx")
+
+if df_base is not None:
+    # Strict Scenarios
+    data_strict = {
+        'Base_case': df_base,
+        'low': load_clean_data(RESULT_DIRECTORY, "LR4_nziastrict", "scenario_solar_recycling_low.xlsx"),
+        'medium': load_clean_data(RESULT_DIRECTORY, "LR4_nziastrict", "scenario_solar_recycling_medium.xlsx"),
+        'high': load_clean_data(RESULT_DIRECTORY, "LR4_nziastrict", "scenario_solar_recycling_high.xlsx")
+    }
+
+    # Flex Scenarios
+    data_flex = {
+        'Base_case': df_base,
+        'low': load_clean_data(RESULT_DIRECTORY, "LR4_nziaflex", "scenario_solar_recycling_low.xlsx"),
+        'medium': load_clean_data(RESULT_DIRECTORY, "LR4_nziaflex", "scenario_solar_recycling_medium.xlsx"),
+        'high': load_clean_data(RESULT_DIRECTORY, "LR4_nziaflex", "scenario_solar_recycling_high.xlsx")
+    }
+
+    print("📊 Generating Total Capacity Plot (Strict)...")
+    create_vertical_total_plot("NZIA Strict", data_strict, "Plot_Vertical_Total_Strict")
+
+    print("📊 Generating Total Capacity Plot (Flex)...")
+    create_vertical_total_plot("NZIA Flex", data_flex, "Plot_Vertical_Total_Flex")
+
+else:
+    print("❌ Base Case data missing.")
