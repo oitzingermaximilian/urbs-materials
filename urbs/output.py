@@ -1,0 +1,471 @@
+import pandas as pd
+from .input import get_input
+from .pyomoio import get_entity, get_entities
+from .util import is_string
+
+
+def get_constants(instance):
+    """Return summary DataFrames for important variables
+
+    Usage:
+        costs, cpro, ctra, csto = get_constants(instance)
+
+    Args:
+        instance: an urbs model instance
+
+    Returns:
+        (costs, cpro, ctra, csto) tuple
+
+    Example:
+        >>> import pyomo.environ
+        >>> from pyomo.opt.base import SolverFactory
+        >>> data = read_excel('mimo-example.xlsx')
+        >>> prob = create_model(data, range(1,25))
+        >>> optim = SolverFactory('glpk')
+        >>> result = optim.solve(prob)
+        >>> cap_pro = get_constants(prob)[1]['Total']
+        >>> cap_pro.xs('Wind park', level='Process').apply(int)
+        Site
+        Mid      13000
+        North    23258
+        South        0
+        Name: Total, dtype: int64
+    """
+
+    costs = get_entity(instance, "costs")
+    cpro = get_entities(instance, ["cap_pro", "cap_pro_new"])
+    # print("cpro", cpro)
+    ctra = get_entities(instance, ["cap_tra", "cap_tra_new"])
+    csto = get_entities(
+        instance, ["cap_sto_c", "cap_sto_c_new", "cap_sto_p", "cap_sto_p_new"]
+    )
+    inst_processes_time = get_entities(instance, ["inst_pro_tuples"])
+
+    ##########################################################################
+    #                                                                        #
+    # Handling of extra report df for better Display of Results and Plotting #
+    #                                                                        #
+    ##########################################################################
+    ####gather BD df to see if it works 13. january 2025
+    decisionvalues_sec = get_entity(instance, "BD_sec")
+    decisionvalue_scrap = get_entity(instance, "BDV_scrap")
+    # print(decisionvalues_sec)
+    pricereduction_sec = get_entity(instance, "pricereduction_sec_investment")
+    # print(pricereduction_sec)
+    pricereduction_scrap = get_entity(instance, "pricereduction_sec_recycling")
+    demand_production = get_entity(instance, "demand_production")
+    P_sec_relative = get_entity(instance, "P_sec_relative")
+    ##########################################################################
+    #                                                                        #
+    # IEW RELEVANT                                                           #
+    #                                                                        #
+    ##########################################################################
+
+    # OPTION 1: If get_entities supports lists
+    minerals_df = get_entities(instance, [
+        "demand_material_total",
+        "material_imported",
+        "material_mined",
+        "material_recycled"
+    ])
+    process_capacities = get_entities(instance, ["capacity_processing_total","processing_cap_new"])
+    domestic_caps = get_entity(instance, "capacity_produced_output")
+    imported_caps = get_entity(instance, "capacity_imported")
+    supply = get_entity(instance, "Supply")
+    stock = get_entity(instance, "components_stockpile")
+    bd_one_tech_base = get_entity(instance, "BD_onetech")
+    bd_one_tech_scrap = get_entity(instance, "BD_scrap_onetech")
+    costs_extension = get_entities(instance, ["cost_capex_total_extension","cost_opex_total_extension","cost_trade_total_extension","cost_stockpile_holding"])
+    new_balance = get_entity(instance, "balance_yearly_new_capacity")
+
+
+
+    process_cost = get_entity(instance, "process_costs")
+    # print("process cost", process_cost)
+    gas_usage_block = get_entity(instance, "gas_usage_block")
+    # print("ext_cost", ext_costs)
+
+
+
+    bext = get_entity(instance, "balance_ext")
+    # print("bext", bext)
+    # print("yearly ext cost", yearly_cost_ext)
+    capacity_ext_total = get_entity(instance, "capacity_ext")
+    # print("capacity ext total", capacity_ext_total)
+    e_pro_out_df = get_entity(instance, "e_pro_out")
+    e_pro_in_df = get_entity(instance, "e_pro_in")
+    df_e_pro_in_grouped = (
+        e_pro_in_df.groupby(["stf", "sit", "pro", "com"]).sum().reset_index()
+    )
+
+    # print("e pro out df", e_pro_out_df)
+    scrapdf = get_entity(instance, "capacity_scrap_total") #scrapsheet
+    decomdf = get_entity(instance, "capacity_dec") #decom sheet
+    ####us_co2
+    e_pro_out_co2 = e_pro_out_df.loc[
+        e_pro_out_df.index.get_level_values("com") == "CO2"
+    ]
+    co2_df = e_pro_out_co2.reset_index()
+    co2_df.columns = [
+        "tm",
+        "stf",
+        "sit",
+        "pro",
+        "com",
+        "value",
+    ]  # Rename last column for clarity
+    grouped_co2 = co2_df.groupby(["stf", "sit", "pro"], as_index=False)["value"].sum()
+    grouped_co2 = grouped_co2.sort_values(by=["stf", "sit", "pro"])
+
+    ####extension_balance
+    # Filter e_pro_out_df for 'Elec'
+    e_pro_out_elec = {
+        key: value for key, value in e_pro_out_df.items() if key[-1] == "Elec"
+    }
+
+    # Convert to DataFrame
+    df_Elec = pd.DataFrame(list(e_pro_out_elec.items()), columns=["Index", "Value"])
+    df_Elec["Timestep"] = df_Elec["Index"].apply(
+        lambda x: x[0]
+    )  # Extract timestep from the MultiIndex
+    df_Elec["Stf"] = df_Elec["Index"].apply(
+        lambda x: int(x[1])
+    )  # Extract year from the MultiIndex
+    df_Elec["Site"] = df_Elec["Index"].apply(
+        lambda x: x[2]
+    )  # Extract site from the MultiIndex
+    df_Elec["Process"] = df_Elec["Index"].apply(
+        lambda x: x[3]
+    )  # Extract process from the MultiIndex
+
+    # Drop the 'Elec' column (not needed in the final DataFrame)
+    df_Elec = df_Elec.drop(columns=["Index"])
+
+    # Process bext data
+    df_bext = pd.DataFrame(bext.items(), columns=["Index", "balance_ext"])
+    df_bext["Timestep"] = df_bext["Index"].apply(
+        lambda x: x[0]
+    )  # Extract timestep from the Index
+    df_bext["Stf"] = df_bext["Index"].apply(
+        lambda x: x[1]
+    )  # Extract year from the Index
+    df_bext["Site"] = df_bext["Index"].apply(
+        lambda x: x[2]
+    )  # Extract site from the Index
+    df_bext["Process"] = df_bext["Index"].apply(
+        lambda x: x[3]
+    )  # Extract technology from the Index
+
+    # Drop the 'Index' column (not needed in the final DataFrame)
+    df_bext = df_bext.drop(columns=["Index"])
+
+    # Create ext_process DataFrame dynamically
+    ext_process_list = []
+    for timestep in df_bext["Timestep"].unique():
+        for year in df_bext[df_bext["Timestep"] == timestep]["Stf"].unique():
+            for site in df_bext[
+                (df_bext["Timestep"] == timestep) & (df_bext["Stf"] == year)
+            ]["Site"].unique():
+                for tech in df_bext[
+                    (df_bext["Timestep"] == timestep)
+                    & (df_bext["Stf"] == year)
+                    & (df_bext["Site"] == site)
+                ]["Process"].unique():
+                    ext_process_list.append(
+                        {
+                            "Value": df_bext[
+                                (df_bext["Timestep"] == timestep)
+                                & (df_bext["Stf"] == year)
+                                & (df_bext["Site"] == site)
+                                & (df_bext["Process"] == tech)
+                            ]["balance_ext"].values[0],
+                            "Timestep": timestep,
+                            "Stf": year,
+                            "Site": site,
+                            "Process": tech,
+                        }
+                    )
+
+    ext_process = pd.DataFrame(ext_process_list)
+
+    # Combine the data
+    combined_balance = pd.concat([df_Elec, ext_process], ignore_index=True)
+
+    # Group by 'Stf' (year)
+
+    combined_balance = (
+        combined_balance.groupby(["Stf", "Site", "Process"]).sum().reset_index()
+    )
+    combined_balance = combined_balance.drop(columns=["Timestep"])
+    ########################################################################################################################
+
+    if not ctra.empty:
+        ctra.index.names = ["Stf", "Site In", "Site Out", "Transmission", "Commodity"]
+        ctra.columns = ["Total", "New"]
+        ctra.sort_index(inplace=True)
+    if not csto.empty:
+        csto.index.names = ["Stf", "Site", "Storage", "Commodity"]
+        csto.columns = ["C Total", "C New", "P Total", "P New"]
+        csto.sort_index(inplace=True)
+
+    return (
+        costs,
+        cpro,
+        ctra,
+        csto,
+        capacity_ext_total,
+        grouped_co2,
+        combined_balance,
+        decisionvalues_sec,
+        decisionvalue_scrap,
+        scrapdf,
+        decomdf,
+        inst_processes_time,
+        df_e_pro_in_grouped,
+        pricereduction_sec,
+        gas_usage_block,
+        pricereduction_scrap,
+        demand_production,
+        P_sec_relative,
+        minerals_df,
+        process_capacities,
+        domestic_caps,
+        imported_caps,
+        supply,
+        stock,
+        bd_one_tech_scrap,
+        bd_one_tech_base,
+        costs_extension,
+        new_balance
+    )
+
+
+def get_timeseries(instance, stf, com, sites, timesteps=None):
+    """Return DataFrames of all timeseries referring to given commodity
+
+    Usage:
+        created, consumed, stored, imported, exported,
+        dsm = get_timeseries(instance, commodity, sites, timesteps)
+
+    Args:
+        - instance: a urbs model instance
+        - com: a commodity name
+        - sites: a site name or list of site names
+        - timesteps: optional list of timesteps, default: all modelled
+          timesteps
+
+    Returns:
+        a tuple of (created, consumed, storage, imported, exported, dsm) with
+        DataFrames timeseries. These are:
+
+        - created: timeseries of commodity creation, including stock source
+        - consumed: timeseries of commodity consumption, including demand
+        - storage: timeseries of commodity storage (level, stored, retrieved)
+        - imported: timeseries of commodity import
+        - exported: timeseries of commodity export
+        - dsm: timeseries of demand-side management
+    """
+    if timesteps is None:
+        # default to all simulated timesteps
+        timesteps = sorted(get_entity(instance, "tm").index)
+    else:
+        timesteps = sorted(timesteps)  # implicit: convert range to list
+
+    if is_string(sites):
+        # wrap single site name into list
+        sites = [sites]
+
+    # DEMAND
+    # default to zeros if commodity has no demand, get timeseries
+    try:
+        # select relevant timesteps (=rows)
+        # select commodity (xs), then the sites from remaining simple columns
+        # and sum all together to form a Series
+        demand = (
+            pd.DataFrame.from_dict(get_input(instance, "demand_dict"))
+            .loc[stf]
+            .loc[timesteps]
+            .xs(com, axis=1, level=1)[sites]
+            .sum(axis=1)
+        )
+    except KeyError:
+        demand = pd.Series(0, index=timesteps)
+    demand.name = "Demand"
+
+    # STOCK
+    eco = get_entity(instance, "e_co_stock")
+    try:
+        eco = eco.xs((stf, com, "Stock"), level=["stf", "com", "com_type"])
+        stock = eco.unstack()[sites].sum(axis=1)
+    except KeyError:
+        stock = pd.Series(0, index=timesteps)
+    stock.name = "Stock"
+
+    # PROCESS
+    created = get_entity(instance, "e_pro_out")
+
+    try:
+        created = created.xs((stf, com), level=["stf", "com"]).loc[timesteps]
+        created = created.unstack(level="sit")[sites].fillna(0).sum(axis=1)
+        created = created.unstack(level="pro")
+        created = drop_all_zero_columns(created)
+
+    except KeyError:
+        created = pd.DataFrame(index=timesteps[1:])
+
+    consumed = get_entity(instance, "e_pro_in")
+    try:
+        consumed = consumed.xs((stf, com), level=["stf", "com"]).loc[timesteps]
+        consumed = consumed.unstack(level="sit")[sites].fillna(0).sum(axis=1)
+        consumed = consumed.unstack(level="pro")
+        consumed = drop_all_zero_columns(consumed)
+    except KeyError:
+        consumed = pd.DataFrame(index=timesteps[1:])
+
+    # TRANSMISSION
+    other_sites = (
+        get_input(instance, "site")
+        .xs(stf, level="support_timeframe")
+        .index.difference(sites)
+    )
+
+    # if commodity is transportable
+    try:
+        df_transmission = get_input(instance, "transmission")
+        if com in set(df_transmission.index.get_level_values("Commodity")):
+            imported = get_entity(instance, "e_tra_out")
+            # avoid negative value import for DCPF transmissions
+            if instance.mode["dpf"]:
+                # -0.01 to avoid numerical errors such as -0
+                minus_imported = imported[(imported < -0.01)]
+                minus_imported = -1 * minus_imported.swaplevel("sit", "sit_")
+                imported = imported[imported >= 0]
+                imported = pd.concat([imported, minus_imported])
+            imported = imported.loc[timesteps].xs((stf, com), level=["stf", "com"])
+            imported = imported.unstack(level="tra").sum(axis=1)
+            imported = imported.unstack(level="sit_")[sites].fillna(0).sum(axis=1)
+            imported = imported.unstack(level="sit")
+
+            internal_import = imported[sites].sum(axis=1)  # ...from sites
+            if instance.mode["dpf"]:
+                imported = imported[
+                    [x for x in other_sites if x in imported.keys()]
+                ]  # ...to existing other_sites
+            else:
+                imported = imported[other_sites]  # ...from other_sites
+            imported = drop_all_zero_columns(imported.fillna(0))
+
+            exported = get_entity(instance, "e_tra_in")
+            # avoid negative value export for DCPF transmissions
+            if instance.mode["dpf"]:
+                # -0.01 to avoid numerical errors such as -0
+                minus_exported = exported[(exported < -0.01)]
+                minus_exported = -1 * minus_exported.swaplevel("sit", "sit_")
+                exported = exported[exported >= 0]
+                exported = pd.concat([exported, minus_exported])
+            exported = exported.loc[timesteps].xs((stf, com), level=["stf", "com"])
+            exported = exported.unstack(level="tra").sum(axis=1)
+            exported = exported.unstack(level="sit")[sites].fillna(0).sum(axis=1)
+            exported = exported.unstack(level="sit_")
+
+            internal_export = exported[sites].sum(axis=1)  # ...to sites (internal)
+            if instance.mode["dpf"]:
+                exported = exported[
+                    [x for x in other_sites if x in exported.keys()]
+                ]  # ...to existing other_sites
+            else:
+                exported = exported[other_sites]  # ...to other_sites
+            exported = drop_all_zero_columns(exported.fillna(0))
+        else:
+            imported = pd.DataFrame(index=timesteps)
+            exported = pd.DataFrame(index=timesteps)
+            internal_export = pd.Series(0, index=timesteps)
+            internal_import = pd.Series(0, index=timesteps)
+
+        # to be discussed: increase demand by internal transmission losses
+        internal_transmission_losses = internal_export - internal_import
+        demand = demand + internal_transmission_losses
+    except KeyError:
+        # imported and exported are empty
+        imported = exported = pd.DataFrame(index=timesteps)
+
+    # STORAGE
+    # group storage energies by commodity
+    # select all entries with desired commodity co
+    stored = get_entities(instance, ["e_sto_con", "e_sto_in", "e_sto_out"])
+    try:
+        stored = stored.loc[timesteps].xs((stf, com), level=["stf", "com"])
+        stored = stored.groupby(level=["t", "sit"]).sum()
+        stored = stored.loc[(slice(None), sites), :].groupby("t").sum()
+        stored.columns = ["Level", "Stored", "Retrieved"]
+    except (KeyError, ValueError):
+        stored = pd.DataFrame(
+            0, index=timesteps, columns=["Level", "Stored", "Retrieved"]
+        )
+
+    # DEMAND SIDE MANAGEMENT (load shifting)
+    dsmup = get_entity(instance, "dsm_up")
+    dsmdo = get_entity(instance, "dsm_down")
+
+    if dsmup.empty:
+        # if no DSM happened, the demand is not modified (delta = 0)
+        delta = pd.Series(0, index=timesteps)
+
+    else:
+        # DSM happened (dsmup implies that dsmdo must be non-zero, too)
+        # so the demand will be modified by the difference of DSM up and
+        # DSM down uses
+        # for sit in m.dsm_site_tuples:
+        try:
+            # select commodity
+            dsmup = dsmup.xs((stf, com), level=["stf", "com"])
+            dsmdo = dsmdo.xs((stf, com), level=["stf", "com"])
+
+            # select sites
+            dsmup = dsmup.unstack()[sites].sum(axis=1)
+            dsmdo = dsmdo.unstack()[sites].sum(axis=1)
+
+            # convert dsmdo to Series by summing over the first time level
+            dsmdo = dsmdo.unstack().sum(axis=0)
+            dsmdo.index.names = ["t"]
+
+            # derive secondary timeseries
+            delta = dsmup - dsmdo
+        except KeyError:
+            delta = pd.Series(0, index=timesteps)
+
+    shifted = demand + delta
+
+    shifted.name = "Shifted"
+    demand.name = "Unshifted"
+    delta.name = "Delta"
+
+    dsm = pd.concat((shifted, demand, delta), axis=1)
+
+    # JOINS
+    created = created.join(stock)  # show stock as created
+    consumed = consumed.join(shifted.rename("Demand"))
+
+    # VOLTAGE ANGLE of sites
+
+    try:
+        voltage_angle = get_entity(instance, "voltage_angle")
+        voltage_angle = voltage_angle.xs(stf, level=["stf"]).loc[timesteps]
+        voltage_angle = voltage_angle.unstack(level="sit")[sites]
+    except (KeyError, AttributeError, TypeError):
+        voltage_angle = pd.DataFrame(index=timesteps)
+    voltage_angle.name = "Voltage Angle"
+
+    return created, consumed, stored, imported, exported, dsm, voltage_angle
+
+
+def drop_all_zero_columns(df):
+    """Drop columns from DataFrame if they contain only zeros.
+
+    Args:
+        df: a DataFrame
+
+    Returns:
+        the DataFrame without columns that only contain zeros
+    """
+    return df.loc[:, (df != 0).any(axis=0)]
