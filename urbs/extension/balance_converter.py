@@ -10,17 +10,20 @@ class AbstractConstraint(ABC):
 
 class ConvertTotalCapacityToBalance(AbstractConstraint):
     def apply_rule(self, m, timesteps_ext, stf, location, tech):
+        """
+        Calculates the actual power generation based on installed capacity and solar profiles.
+        """
+        # CON: Solar Balance Conversion | Constrains generation profile based on capacity and solar load factor
         balance_value = (
-            m.capacity_ext[stf, location, tech]
-            * m.lf_solar[timesteps_ext, stf, location, tech]
-            * m.hours[timesteps_ext]
+                m.capacity_ext[stf, location, tech]
+                * m.lf_solar[timesteps_ext, stf, location, tech]
+                * m.hours[timesteps_ext]
         )
         # print(
         #    f"Debug: time = {timesteps_ext}, STF = {stf}, Location = {location}, Tech = {tech}"
         # )
         # print(f"Total Capacity to Balance (Solar) = {balance_value}")
         return m.balance_ext[timesteps_ext, stf, location, tech] == balance_value
-
 
 
 def apply_balance_constraints(m):
@@ -30,6 +33,8 @@ def apply_balance_constraints(m):
 
     for i, constraint in enumerate(constraints):
         constraint_name = f"balance_constraint_{i + 1}"
+
+        # We attach the constraint to the model dynamically
         setattr(
             m,
             constraint_name,

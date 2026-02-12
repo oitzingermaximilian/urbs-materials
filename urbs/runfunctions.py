@@ -50,23 +50,14 @@ def setup_solver(optim, logfile="solver.log"):
         # =========================================================
         # 1. DETERMINISM & PARALLELISM
         # =========================================================
-        # FIX THE ALGORITHM: Dual Simplex (1)
-        # For small/medium models (like your current 10k rows), Simplex is
-        # usually faster than Barrier and very stable.
-        # By forcing '1', we stop the "race" between algorithms.
-        optim.set_options("Method=1")
-        optim.set_options("Heuristics=0")
-        optim.set_options("Presolve=1")
 
-        # Use 8 threads for stability and efficiency on small/medium models.
-        optim.set_options("Threads=8")
 
         # =========================================================
         # 2. ACCURACY (The "Flat Valley" Fix)
         # =========================================================
         # Keep the gap extremely tight to ensure high accuracy and prevent
         # early stopping at suboptimal solutions.
-        optim.set_options("MIPGap=1e-9")
+        optim.set_options("MIPGap=1e-3")
 
         # =========================================================
         # 3. STABILITY (The "Warning" Fix)

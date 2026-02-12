@@ -9,13 +9,14 @@ def apply_gas_block_pricing(m, data):
     Uses separate sets for years (stf) and block names.
     """
     # --- Sets ---
+    # NOM: B | Set of Gas Blocks | -
     m.blocks = pyomo.Set(initialize=list(data["block_names"]))  # block names only
 
     # m.stf should already exist in your model as years
     # m.tm, m.sit, m.com, m.com_type are assumed defined
 
     # --- Parameters ---
-    # Indexed over (year, block)
+    # NOM: L^{gas}_{y,b} | Gas Block Volume Limit | MWh
     m.block_limits = pyomo.Param(
         m.stf,
         m.blocks,
@@ -23,6 +24,8 @@ def apply_gas_block_pricing(m, data):
         within=pyomo.NonNegativeReals,
         doc="Max volume per block per year",
     )
+
+    # NOM: P^{gas}_{y,b} | Gas Block Price | EUR/MWh
     m.block_prices = pyomo.Param(
         m.stf,
         m.blocks,
@@ -32,6 +35,7 @@ def apply_gas_block_pricing(m, data):
     )
 
     # --- Variables ---
+    # NOM: Gas^{stock}_{t,y,s,b} | Gas usage per timestep/block | MWh
     m.e_co_stock_block = pyomo.Var(
         m.tm,
         m.stf,
@@ -43,13 +47,17 @@ def apply_gas_block_pricing(m, data):
         doc="Gas usage per timestep, site, commodity, type, year, block",
     )
 
+    # NOM: \xi^{gas}_{y} | Yearly LNG block cost | EUR
     m.gas_cost = pyomo.Var(
         m.stf, within=pyomo.NonNegativeReals, doc="Total gas cost per block per year"
     )
 
+    # NOM: \xi^{gas,tot} | Total LNG block cost | EUR
     m.gas_total_cost = pyomo.Var(
         within=pyomo.NonNegativeReals, doc="Total gas cost over all years"
     )
+
+    # NOM: Gas^{usage}_{y,b} | Total Gas Usage per Block | MWh
     m.gas_usage_block = pyomo.Var(
         m.stf,
         m.blocks,
@@ -69,6 +77,7 @@ def apply_gas_block_pricing(m, data):
             <= m.block_limits[stf, blk]
         )
 
+    # CON: Gas Block Limit | Restricts annual gas usage per block to defined limits
     m.block_limit_constraint = pyomo.Constraint(
         m.stf, m.blocks, rule=yearly_block_limit_rule
     )
@@ -84,6 +93,7 @@ def apply_gas_block_pricing(m, data):
                 m.e_co_stock_block[tm, stf, sit, com, com_type, blk] for blk in m.blocks
             )
 
+    # CON: Gas Block Balance | Ensures sum of block usage equals total gas stock usage
     m.link_block_to_original_rule = pyomo.Constraint(
         m.tm, m.stf, m.sit, m.com, m.com_type, rule=link_block_to_original_rule
     )
@@ -105,12 +115,14 @@ def apply_gas_block_pricing(m, data):
 
         return m.gas_cost[stf] == yearly_gas_cost * gas_cost_factor
 
+    # CON: Gas Cost Calculation | Calculates annual gas cost with discount factors
     m.yearly_cost_constraint = pyomo.Constraint(m.stf, rule=yearly_cost_rule)
 
     # 4) Total discounted cost across all years
     def total_cost_rule(m):
         return m.gas_total_cost == sum(m.gas_cost[stf] for stf in m.stf)
 
+    # CON: Total Gas Cost | Sums annual gas costs into a total objective term
     m.total_cost_constraint = pyomo.Constraint(rule=total_cost_rule)
 
     # 5) Yearly usage per block
@@ -121,6 +133,7 @@ def apply_gas_block_pricing(m, data):
             for sit in m.sit
         )
 
+    # CON: Gas Usage Definition | Tracks total gas usage per block for reporting
     m.yearly_usage_block_constraint = pyomo.Constraint(
         m.stf, m.blocks, rule=yearly_usage_block_rule
     )

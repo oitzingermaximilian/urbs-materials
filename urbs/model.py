@@ -7,7 +7,6 @@ from urbs.extension import (
     apply_scrap_constraints,
     apply_stockpiling_constraints,
     apply_balance_constraints,
-    apply_costs_constraints,
     apply_variables,
     apply_sets_and_params,
     apply_scenario_constraints,
@@ -368,16 +367,6 @@ def create_model(
             doc="empty set needed for (partial) process output",
         )
 
-    # Equation declarations
-    # equation bodies are defined in separate functions, referred to here by
-    # their name in the "rule" keyword.
-    # Constraints for Scenarios ToDo ENABLE IF NEEDED
-    # m.net_zero_industrialactbenchmark_a = pyomo.Constraint(m.stf, m.location, m.tech, rule=net_zero_industrialactbenchmark_rule_a)
-    # m.net_zero_industrialactbenchmark_b = pyomo.Constraint(m.stf, rule=net_zero_industrialactbenchmark_rule_b)
-    # m.best_estimate_TYNDP2030 = pyomo.Constraint(m.stf, rule=best_estimate_TYNDP2030_rule)
-    # m.best_estimate_TYNDP2040 = pyomo.Constraint(m.stf, rule=best_estimate_TYNDP2040_rule)
-    # m.best_estimate_TYNDP2050 = pyomo.Constraint(m.stf, rule=best_estimate_TYNDP2050_rule)
-    # m.minimum_stock_level = pyomo.Constraint(m.stf, rule=minimum_stock_level_rule)
 
     ####################################################################################################################
     ####################################################################################################################
@@ -420,8 +409,6 @@ def create_model(
     apply_scrap_constraints(m)
 
     apply_balance_constraints(m)
-
-    #apply_costs_constraints(m)
 
     apply_material_constraints(m)
 

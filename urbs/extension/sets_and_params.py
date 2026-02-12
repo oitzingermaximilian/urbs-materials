@@ -13,18 +13,29 @@ def apply_sets_and_params(m, data_urbsextensionv1):
 
     # Excel read in
     base_params = data_urbsextensionv1["base_params"]
+
     # hard coded cost_types
+    # NOM: CostType_{new} | Set of cost types (hard-coded) | -
     m.cost_type_new = pyomo.Set(
         initialize=m.cost_new_list, doc="Set of cost types (hard-coded)"
     )
     # Base sheet read in
+    # NOM: T_{ext} | Set of extended timesteps | -
     m.timesteps_ext = pyomo.Set(initialize=range(1, 13), doc="Timesteps")
+
+    # NOM: y_0 | Initial year of the model | Year
     m.y0 = pyomo.Param(initialize=base_params["y0"], mutable=True)  # Initial year
+
+    # NOM: y_{end} | End year of the model | Year
     m.y_end = pyomo.Param(initialize=base_params["y_end"], mutable=True)  # End year
+
+    # NOM: h_t | Number of hours per timestep | h
     m.hours = pyomo.Param(
         m.timesteps_ext, initialize=base_params["hours"]
     )  # Hours per year
+
     # locations sheet read in
+    # NOM: L | Set of locations (sites) | -
     m.location = pyomo.Set(
         initialize=data_urbsextensionv1["locations_list"]
     )  # sites to be modelled
@@ -35,6 +46,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         all_techs.update(data_urbsextensionv1["technologies"][loc].keys())
 
     # Define the technology set
+    # NOM: K | Set of technologies | -
     m.tech = pyomo.Set(initialize=sorted(list(all_techs)))
 
     #
@@ -50,84 +62,118 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         }
 
     # Define parameters using the helper function
+    # NOM: n^{turnover} | Turnover rate of stockpile | 1/a
     m.n = pyomo.Param(
         m.location,
         m.tech,
         initialize=initialize_param("n turnover stockpile", default_value=0),
     )  # Turnover of stockpile
+
+    # NOM: l_{k} | Technical lifetime | a
     m.l = pyomo.Param(
         m.location, m.tech, initialize=initialize_param("l", default_value=0)
     )
 
+    # NOM: i | Global WACC / Interest Rate | %
     m.i = pyomo.Param(initialize=0.071, doc="Global WACC / Interest Rate")
 
+    # NOM: Q_{init} | Initial installed capacity | MW
     m.Installed_Capacity_Q_s = pyomo.Param(
         m.location,
         m.tech,
         initialize=initialize_param("InitialCapacity", default_value=0),
     )  # Initial installed capacity MW
+
+    # NOM: S_{init} | Initial stockpile level | MW
     m.Existing_Stock_Q_stock = pyomo.Param(
         m.location,
         m.tech,
         initialize=initialize_param("InitialStockpile", default_value=0),
     )  # Initial stocked capacity
+
+    # NOM: FT | Calibration Factor | -
     m.FT = pyomo.Param(
         m.location, m.tech, initialize=initialize_param("FT", default_value=0)
     )  # Factor
+
+    # NOM: I_{dump} | Anti-dumping index | -
     m.anti_dumping_index = pyomo.Param(
         m.location,
         m.tech,
         initialize=initialize_param("anti duping Index", default_value=0),
     )  # Anti-dumping index
+
+    # NOM: \Delta Q^{prim} | Change in EU primary capacity | MW
     m.deltaQ_EUprimary = pyomo.Param(
         m.location,
         m.tech,
         initialize=initialize_param("dQ EU Primary", default_value=0),
     )  # ΔQ EU Primary
+
+    # NOM: \Delta Q^{sec} | Change in EU secondary capacity | MW
     m.deltaQ_EUsecondary = pyomo.Param(
         m.location,
         m.tech,
         initialize=initialize_param("dQ EU Secondary", default_value=0),
     )  # ΔQ EU Secondary
+
+    # NOM: IR^{prim} | Increase rate EU Primary | %
     m.IR_EU_primary = pyomo.Param(
         m.location,
         m.tech,
         initialize=initialize_param("IR EU Primary", default_value=0),
     )  # IR EU Primary
+
+    # NOM: IR^{sec} | Increase rate EU Secondary | %
     m.IR_EU_secondary = pyomo.Param(
         m.location,
         m.tech,
         initialize=initialize_param("IR EU Secondary", default_value=0),
     )  # IR EU Secondary
+
+    # NOM: DR^{prim} | Decrease rate Primary | %
     m.DR_primary = pyomo.Param(
         m.location, m.tech, initialize=initialize_param("DR Primary", default_value=0)
     )  # DR Primary
+
+    # NOM: DR^{sec} | Decrease rate Secondary | %
     m.DR_secondary = pyomo.Param(
         m.location, m.tech, initialize=initialize_param("DR Secondary", default_value=0)
     )  # DR Secondary
+
+    # NOM: C^{store} | Storage cost | EUR/MW
     m.STORAGECOST = pyomo.Param(
         m.location, m.tech, initialize=initialize_param("Storagecost", default_value=0)
     )
+
+    # NOM: C^{log} | Logistic cost | EUR/MW
     m.logisticcost = pyomo.Param(
         m.location, m.tech, initialize=initialize_param("logisticcost", default_value=0)
     )
 
     # cost sheet read in
+    # NOM: C^{imp} | Import cost | EUR/MW
     m.IMPORTCOST = pyomo.Param(
         m.stf, m.location, m.tech, initialize=data_urbsextensionv1["importcost_dict"]
     )
+
+    # NOM: C^{prim} | Manufacturing cost EU Primary | EUR/MW
     m.EU_primary_costs = pyomo.Param(
         m.stf,
         m.location,
         m.tech,
         initialize=data_urbsextensionv1["manufacturingcost_dict"],
     )
+
+    # NOM: C^{sec} | Remanufacturing cost EU Secondary | EUR/MW
     m.EU_secondary_costs = pyomo.Param(
         m.stf,
         m.location,
         m.tech,
         initialize=data_urbsextensionv1["remanufacturingcost_dict"],
     )
+
+    # NOM: C^{O\&M} | Operation and Maintenance costs | EUR/MW/a
     m.O_and_M_costs = pyomo.Param(
         m.stf,
         m.location,
@@ -136,6 +182,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     )
 
     # instalable_capacity_sheet read in
+    # NOM: Q^{new}_{lim} | New installable capacity limit | MW
     m.Q_ext_new = pyomo.Param(
         m.stf,
         m.location,
@@ -143,15 +190,19 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         initialize=data_urbsextensionv1["installable_capacity_dict"],
     )
     # DCR sheet read in
+    # NOM: DCR | Domestic Content Requirement | %
     m.DCR_solar = pyomo.Param(
         m.stf, m.location, m.tech, initialize=data_urbsextensionv1["dcr_dict"]
     )  # DCR Solar
+
     # stocklvl sheet read in
+    # NOM: S_{min} | Minimum stock level requirement | %
     m.min_stocklvl = pyomo.Param(
         m.stf, m.location, m.tech, initialize=data_urbsextensionv1["stocklvl_dict"]
     )
     # loadfactors sheet read in
     # Capacity to Balance with loadfactor and h/a
+    # NOM: LF | Load Factor | -
     m.lf_solar = pyomo.Param(
         m.timesteps_ext,
         m.stf,
@@ -165,6 +216,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     ########################################
     # -------EU-Secondary-------#
     # index set for n (=steps of linearization)
+    # NOM: N_{steps} | Set of linearization steps | -
     m.nsteps_sec = pyomo.Set(initialize=range(0, 7))
 
     # Define m.stages
@@ -173,6 +225,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         for (loc, tech, stage) in data_urbsextensionv1["static_tech_specs"]["init_cap"].keys():
             all_stages.add(stage)
 
+    # NOM: S | Set of Manufacturing stages | -
     m.stages = pyomo.Set(initialize=sorted(list(all_stages)), doc="Manufacturing stages")
 
     # Define m.materials
@@ -181,8 +234,10 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         for (tech, stage, mat) in data_urbsextensionv1["material_intensity_dict"].keys():
             all_mats.add(mat)
 
+    # NOM: M | Set of Raw materials | -
     m.materials = pyomo.Set(initialize=sorted(list(all_mats)), doc="Raw materials")
 
+    # NOM: KS | Set of Valid Tech-Stage pairs | -
     m.tech_stage_combinations = pyomo.Set(
         dimen=2,
         initialize=data_urbsextensionv1.get("valid_tech_stage_list", []),
@@ -194,6 +249,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     # ==============================================================================
 
     # Static parameters (No time index)
+    # NOM: t_{build} | Time lag for building capacity | years
     m.build_time = pyomo.Param(
         m.location, m.tech, m.stages,
         initialize=data_urbsextensionv1["static_tech_specs"].get("build_time", {}),
@@ -201,6 +257,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc="Time lag for building capacity"
     )
 
+    # NOM: E_{need} | Energy required for processing | MWh/unit
     m.energy_needs = pyomo.Param(
         m.location, m.tech, m.stages,
         initialize=data_urbsextensionv1["static_tech_specs"].get("energy_needs", {}),
@@ -214,6 +271,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     m.energy_needs.display()
 
     # Initial Capacity (Time-indexed, but only populated for start year by the Slicer)
+    # NOM: Cap^{proc}_{0} | Initial processing capacity | t/yr
     m.processing_cap_init = pyomo.Param(
         m.location, m.tech, m.stages,
         # FIX: Point to static_tech_specs -> init_cap
@@ -222,17 +280,21 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc="Initial processing capacity (Active only at y0)"
     )
 
+    # NOM: \Delta Cap^{proc} | Processing growth delta | t/yr
     m.processing_delta_grow = pyomo.Param(
         m.location, m.tech, m.stages,
-        initialize = 3000,
-        default = 3000,
-    )
-    m.processing_avg_growth = pyomo.Param(
-        m.location, m.tech, m.stages,
-        initialize = 0.05,
-        default = 0.05,
+        initialize=3000,
+        default=3000,
     )
 
+    # NOM: r^{proc} | Processing avg growth rate | %
+    m.processing_avg_growth = pyomo.Param(
+        m.location, m.tech, m.stages,
+        initialize=0.05,
+        default=0.05,
+    )
+
+    # NOM: Cap^{scrap}_{0} | Initial scrap handling capacity | t/yr
     m.capacity_scrap_handling_init = pyomo.Param(
         m.location, m.tech,
         # FIX: Point to static_tech_specs -> init_cap
@@ -241,18 +303,21 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc="Initial processing capacity (Active only at y0)"
     )
 
+    # NOM: \Delta Cap^{scrap} | Scrap handling growth delta | t/yr
     m.scraphandling_delta_grow = pyomo.Param(
         m.location, m.tech,
-        initialize = 20000,
-        default = 20000,
+        initialize=20000,
+        default=20000,
     )
+
+    # NOM: r^{scrap} | Scrap handling avg growth rate | %
     m.scraphandling_avg_growth = pyomo.Param(
         m.location, m.tech,
-        initialize = 0.15,
-        default = 0.15,
+        initialize=0.15,
+        default=0.15,
     )
 
-
+    # NOM: Map^{final} | Final stage mapping | -
     m.final_stage = pyomo.Param(
         m.tech,
         initialize=data_urbsextensionv1.get("final_stage_map", {}),
@@ -264,6 +329,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     # 3. MATERIAL INTENSITY & RECYCLING
     # ==============================================================================
 
+    # NOM: I_{mat} | Material input intensity | t/MW
     m.material_intensity = pyomo.Param(
         m.tech, m.stages, m.materials,
         initialize=data_urbsextensionv1.get("material_intensity_dict", {}),
@@ -271,6 +337,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc="Material input required per unit of output"
     )
 
+    # NOM: C_{scrap} | Scrap content available | t
     m.scrap_content = pyomo.Param(
         m.tech, m.materials,
         initialize=data_urbsextensionv1.get("material_content_dict", {}),
@@ -278,6 +345,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc="Scrap content available from recycling"
     )
 
+    # NOM: \eta_{rec} | Recycling efficiency | %
     m.recycling_efficiency = pyomo.Param(
         m.tech, m.materials,
         initialize=data_urbsextensionv1.get("recycling_efficiency_dict", {}),
@@ -287,6 +355,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
 
     # 1. Energy Sector Share Parameter (Dynamic over time)
     # Represents: The % of the mining limit accessible to the energy sector in Year Y.
+    # NOM: \sigma^{mine} | Mining energy sector share | %
     m.mining_energy_transission_share = pyomo.Param(
         m.stf, m.materials,  # <--- NOW INDEXED BY TIME
         initialize=data_urbsextensionv1.get("mining_energy_share_dict", {}),
@@ -296,6 +365,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
 
     # 2. Conversion Factor (Stays Static) #todo initialize!
     # Physics doesn't change over time, so this remains indexed by Material only.
+    # NOM: f^{conv} | Mining conversion factor | -
     m.mining_conversion_factor = pyomo.Param(
         m.stf, m.materials,
         initialize=data_urbsextensionv1.get("conversion_factor_mat", {}),
@@ -303,13 +373,12 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc="Ratio of Raw Input to Metal Content (e.g. 5.0 for Bauxite->Al)"
     )
 
-
-
     # ==============================================================================
     # 4. MATERIAL MARKET (Broadcasted to Time by Slicer)
     # ==============================================================================
 
     # 1. Availability / Limit
+    # NOM: Lim^{mine} | Global mining limit per year | t/yr
     m.primary_material_availability = pyomo.Param(
         m.stf, m.materials,
         # MUST MATCH the key name you used in the return dictionary
@@ -319,6 +388,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     )
 
     # 2. Mining Cost
+    # NOM: C^{mine} | Cost of mining raw material | EUR/t
     m.cost_mining = pyomo.Param(
         m.stf, m.materials,
         # MUST MATCH the key name you used in the return dictionary
@@ -328,6 +398,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     )
 
     # 3. Import Cost
+    # NOM: C^{imp,mat} | Cost of importing raw material | EUR/t
     m.cost_import_material = pyomo.Param(
         m.stf, m.materials,
         # MUST MATCH the key name you used in the return dictionary
@@ -336,6 +407,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc="Cost of importing raw material"
     )
 
+    # NOM: C^{elec} | Cost of electricity | EUR/MWh
     m.cost_electricity = pyomo.Param(
         m.stf,
         initialize=74.06,
@@ -347,6 +419,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     # 5. PROCESSING COSTS (Time-Indexed)
     # ==============================================================================
 
+    # NOM: C^{capex}_{proc} | CAPEX for processing plants | EUR
     m.cost_capex = pyomo.Param(
         m.stf, m.location, m.tech, m.stages,
         initialize=data_urbsextensionv1.get("processing_stage_cost_dict", {}),
@@ -354,6 +427,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc="CAPEX for processing plants"
     )
 
+    # NOM: C^{var}_{proc} | Variable OPEX for processing | EUR
     m.cost_variable = pyomo.Param(
         m.stf, m.location, m.tech, m.stages,
         initialize=data_urbsextensionv1.get("processing_opex_var_dict", {}),
@@ -361,6 +435,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc="Variable OPEX for processing"
     )
 
+    # NOM: C^{fix}_{proc} | Fixed OPEX for processing | EUR
     m.cost_fixed = pyomo.Param(
         m.stf, m.location, m.tech, m.stages,
         initialize=data_urbsextensionv1.get("processing_opex_dict", {}),
@@ -368,6 +443,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc="Fixed OPEX for processing"
     )
 
+    # NOM: C^{imp,part} | Cost to import intermediate parts | EUR
     m.cost_import_part = pyomo.Param(
         m.stf, m.location, m.tech, m.stages,
         initialize=data_urbsextensionv1.get("part_import_cost_dict", {}),
@@ -380,6 +456,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     # 6. BILL OF MATERIALS (BOM) MAP
     # ==============================================================================
 
+    # NOM: BOM | Bill of Materials Ratio | -
     m.bom_map = pyomo.Param(
         m.tech, m.stages, m.tech, m.stages,
         initialize=data_urbsextensionv1.get("bom_map_dict", {}),
@@ -391,6 +468,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     # 7. STOCK INITIALIZATION (Defaults)
     # ==============================================================================
 
+    # NOM: S^{dom}_{0} | Initial domestic stock | MW
     m.stock_domestic_init = pyomo.Param(
         m.location, m.tech, m.stages,
         initialize=0, default=0
@@ -401,18 +479,18 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     }
 
     # 2. Update your Parameter definition
+    # NOM: S^{imp}_{0} | Initial imported stock | MW
     m.stock_imported_init = pyomo.Param(
         m.location, m.tech, m.stages,
         initialize=stock_data,  # <--- Pass the dictionary here
-        default=0 ) # All other combos (e.g. Wind, Batteries) stay 0
+        default=0)  # All other combos (e.g. Wind, Batteries) stay 0
 
-
-    #Todo fix this
+    # Todo fix this
+    # NOM: R_{0} | Initial total reserves | t
     m.initial_total_reserves = pyomo.Param(
         m.materials,
         initialize=1e9, default=1e9
     )
-
 
     # ========================================
     # LEARNING RATE REDUCTION PERCENTAGES (sorted by learning rate %)
@@ -534,6 +612,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
 
     # Get the cost data for absolute value calculations
     recycling_costs = data_urbsextensionv1["recyclingcost_dict"]
+
     # Create absolute value dictionaries for recycling costs (f_scrap_rec)
     def create_absolute_recycling_dict(reduction_percentages):
         absolute_dict = {}
@@ -541,7 +620,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
             absolute_dict[n] = {}
             for (stf, location, tech), cost in recycling_costs.items():
                 absolute_dict[n][(stf, location, tech)] = cost * (
-                    1 - reduction_percentages[n]
+                        1 - reduction_percentages[n]
                 )
         return absolute_dict
 
@@ -621,6 +700,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     print(f"Selected recycling reduction values for {LEARNING_RATE}")
 
     # Initialize P_sec_investment with absolute stage cost reductions
+    # NOM: \Delta P^{inv} | Absolute OPEX reduction per stage | EUR
     m.P_sec_investment = pyomo.Param(
         m.location,
         m.tech,
@@ -634,6 +714,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     )
 
     # Define a Pyomo Param for the selected relative reductions
+    # NOM: P^{rel} | Selected relative reductions | -
     m.P_sec_relative = pyomo.Param(
         m.nsteps_sec,  # Steps
         initialize=lambda m, n: selected_relative_reductions.get(n, 0),
@@ -642,6 +723,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     )
 
     # Initialize P_sec_recycling with absolute recycling cost reductions
+    # NOM: \Delta C^{rec} | Absolute recycling cost reduction | EUR
     m.P_sec_recycling = pyomo.Param(
         m.location,  # Locations
         m.tech,  # Technologies
@@ -663,12 +745,13 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     }
 
     tons_init_values = {
-        (loc, tech,n): tons_step_values.get(n, 0)
+        (loc, tech, n): tons_step_values.get(n, 0)
         for loc in m.location
         for tech in m.tech
         for n in m.nsteps_sec
     }
 
+    # NOM: T_{step} | Tons per step recycling | t
     m.tons_perstep_recycling = pyomo.Param(
         m.location,
         m.tech,
@@ -676,6 +759,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         initialize=tons_init_values,
     )
 
+    # NOM: Cap^{rec}_{0} | Initial total recycling capacity history | t
     m.total_recycling_cap_initial = pyomo.Param(
         m.location,
         m.tech,
@@ -684,6 +768,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc="Global accumulated recycling history (tons)"
     )
 
+    # NOM: \gamma^{scrap} | Gamma scrap factor | -
     m.gamma_scrap = pyomo.Param(initialize=1e9)
 
     # Define the step values (same for all technologies)
@@ -699,15 +784,15 @@ def apply_sets_and_params(m, data_urbsextensionv1):
 
     # Initialize the dictionary with uniform values for all (n, loc, tech)
     capacity_init_values = {
-        (loc, tech, stage,n): uniform_step_values.get(n, 0)
+        (loc, tech, stage, n): uniform_step_values.get(n, 0)
         for loc in m.location
         for tech in m.tech
         for stage in m.stages
         for n in m.nsteps_sec
     }
 
-
     # Initialize the Pyomo Param
+    # NOM: Cap_{step}^{prod} | Capacity per step production | MW
     m.capacityperstep_production = pyomo.Param(
         m.location,
         m.tech,
@@ -717,8 +802,10 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     )
 
     # param for gamma
+    # NOM: \gamma^{prod} | Gamma production factor | -
     m.gamma_prod = pyomo.Param(initialize=200000)
 
+    # NOM: Cap^{prod}_{0} | Initial total production capacity history | MW
     m.total_production_cap_inital = pyomo.Param(
         m.location,
         m.tech,
@@ -730,24 +817,28 @@ def apply_sets_and_params(m, data_urbsextensionv1):
 
     ##########----------end EEM Addition-----------###############
     ##########----------    urbs-scrap  -----------###############
+    # NOM: f_{scrap} | Scrap generation factor | t/MW
     m.f_scrap = pyomo.Param(
         m.location,
         m.tech,
         initialize=initialize_param("scrap", default_value=0),
         doc="tons per MW",
     )
+    # NOM: f_{mining} | Mining generation factor | t/MW
     m.f_mining = pyomo.Param(
         m.location,
         m.tech,
         initialize=initialize_param("mining"),
         doc="tons per MW",
     )
+    # NOM: f_{recycling} | Recycling factor | %
     m.f_recycling = pyomo.Param(
         m.location,
         m.tech,
         initialize=initialize_param("recycling_efficiency"),
         doc="recycling efficiency in %",
     )
+    # NOM: C_{rec} | Recycling cost per ton | EUR/ton
     m.f_scrap_rec = pyomo.Param(
         m.stf,
         m.location,
@@ -755,12 +846,14 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         initialize=data_urbsextensionv1["recyclingcost_dict"],
         doc="cost for recycling in EUR/ton",
     )
+    # NOM: f_{inc} | Fraction of increase in production | -
     m.f_increase = pyomo.Param(
         m.location,
         m.tech,
         initialize=initialize_param("IR_recycling", default_value=0),
         doc="Fraction of increase in production",
     )
+    # NOM: Cap^{dec}_{0} | Initial decommissioned capacity | MW
     m.capacity_dec_start = pyomo.Param(
         m.location,
         m.tech,
@@ -770,6 +863,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
 
     ##########----------end urbs-scrap  -----------###############
     # added for carry over - updated for new absolute value system
+    # NOM: P^{red}_{init} | Initial investment price reduction | EUR
     m.pricereduction_sec_init = pyomo.Param(
         m.location,
         m.tech,
@@ -777,12 +871,14 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc="Initial investment price reduction for carryover (absolute values)",
     )
 
+    # NOM: Cap^{prim}_{prior} | Last primary capacity | MW
     m.cap_prim_prior = pyomo.Param(
         m.location,
         m.tech,
         initialize=initialize_param("last_prim_cap", default_value=0),
         doc="last_prim_cap",
     )
+    # NOM: Cap^{sec}_{prior} | Last secondary capacity | MW
     m.cap_sec_prior = pyomo.Param(
         m.location,
         m.tech,
@@ -790,6 +886,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc="last_sec_cap",
     )
 
+    # NOM: f_{bess} | BESS Factor | -
     m.factor_bess = pyomo.Param(
         m.location,
         m.tech,
@@ -797,12 +894,14 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc="factor_bess",
     )
 
+    # NOM: S^{tot} | Total capacity scrap | t
     m.scrap_total = pyomo.Param(
         m.location,
         m.tech,
         initialize=initialize_param("capacity_scrap_total", default_value=0),
         doc="capacity_scrap_total",
     )
+    # NOM: Cap^{fac}_{0} | Initial total facility capacity | MW
     m.total_facility_cap_initial = pyomo.Param(
         m.location,
         m.tech,
@@ -810,26 +909,11 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         doc="total_facility_cap_initial",
     )
 
-    embedded_energy = {
-        "solarPV": 2452,  # MWh/MW (from 12-24 months EPBT)
-        "windon": 1277,  # MWh/MW (from 5-8 months EPBT)
-        "windoff": 1277,
-        "Batteries": 1500,  # MWh/MW
-    }
-
-    # Pyomo Param to store embedded electricity needs
-    m.needs = pyomo.Param(
-        m.tech,
-        initialize=embedded_energy,
-        doc="Embedded electricity needs in MWh per MW of capacity",
-    )
 
     ####################################################################
     # solar only economies of
     ####################################################################
 
     # Create the subset 'gatekeeper'
+    # NOM: K_{sol} | Solar Technology Subset | -
     m.one_tech_only = pyomo.Set(initialize=['solarPV'], within=m.tech)
-
-
-
