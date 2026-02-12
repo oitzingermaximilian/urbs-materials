@@ -96,32 +96,6 @@ def apply_variables(m):
     )
 
     """
-    These Variables are used for the costs.py script constraints
-    """
-    # NOM: C^{new}_{type} | New cost components | EUR
-    m.costs_new = pyomo.Var(m.cost_type_new, domain=pyomo.NonNegativeReals)
-
-    # NOM: \xi^{imp}_{y,\ell,k} | Yearly import cost | EUR
-    m.costs_ext_import = pyomo.Var(
-        m.stf, m.location, m.tech, within=pyomo.NonNegativeReals
-    )
-
-    # NOM: \xi^{stor}_{y,\ell,k} | Yearly storage cost | EUR
-    m.costs_ext_storage = pyomo.Var(
-        m.stf, m.location, m.tech, within=pyomo.NonNegativeReals
-    )
-
-    # NOM: \xi^{eu-prim}_{y,\ell,k} | Yearly EU primary production cost | EUR
-    m.costs_EU_primary = pyomo.Var(
-        m.stf, m.location, m.tech, within=pyomo.NonNegativeReals
-    )
-
-    # NOM: \xi^{eu-sec}_{y,\ell,k} | Yearly EU secondary production cost | EUR
-    m.costs_EU_secondary = pyomo.Var(
-        m.stf, m.location, m.tech, within=pyomo.NonNegativeReals
-    )
-
-    """
     These Variables are used for the economiesofscale_base.py script constraints.
     """
     # NOM: \delta_{y,\ell,k,n} | Binary decision variable for learning stage | {0/1}
@@ -306,10 +280,6 @@ def apply_variables(m):
 
     # NOM: C^{hold}_{y} | Stockpile Holding Cost | EUR
     m.cost_stockpile_holding = pyomo.Var(m.stf, domain=pyomo.NonNegativeReals)
-
-    # NOM: NZIA^{short}_{y,\ell,k,s} | NZIA Shortfall | Units
-    m.nzia_shortfall = pyomo.Var(
-        m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
 
     # NOM: E^{fac}_{y,\ell,k} | Factory Energy Annual | MWh
     m.FACTORY_ENERGY_ANNUAL = pyomo.Var(

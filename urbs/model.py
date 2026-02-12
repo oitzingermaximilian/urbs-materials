@@ -1176,24 +1176,18 @@ def def_specific_process_costs_rule(m, stf, sit, pro, cost_type):
 def cost_rule(m):
     # --- Base model costs ---
     total_base_costs = pyomo.summation(m.costs)  # existing costs
-    total_ext_costs = pyomo.summation(m.costs_new)  # extension costs
     gross_supply_chain_costs = (pyomo.summation(m.cost_capex_total_extension) +
                                pyomo.summation(m.cost_opex_total_extension) +
                                pyomo.summation(m.cost_trade_total_extension)+
-                                pyomo.summation(m.cost_stockpile_holding)) #todo we need to apply the discount factor etc to that.
+                                pyomo.summation(m.cost_stockpile_holding))
 
-    # --- LNG block costs ---
-    # m.lng_total_costs is a scalar representing total LNG cost over all years
-    # total_lng_costs = m.lng_total_costs
 
     # --- Total objective ---
-    total_costs = total_base_costs  + gross_supply_chain_costs# + total_ext_costs
+    total_costs = total_base_costs  + gross_supply_chain_costs
 
     # Optional debug print
     # print("Objective breakdown:")
-    print("Base costs:", total_base_costs)
-    # print("Extension costs:", total_ext_costs)
-    # print("LNG costs:", total_lng_costs)
+    # print("Base costs:", total_base_costs)
     # print("Total costs:", total_costs)
 
     return total_costs
