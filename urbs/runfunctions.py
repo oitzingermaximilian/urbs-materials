@@ -57,14 +57,14 @@ def setup_solver(optim, logfile="solver.log"):
         # =========================================================
         # Keep the gap extremely tight to ensure high accuracy and prevent
         # early stopping at suboptimal solutions.
-        optim.set_options("MIPGap=1e-3")
+        optim.set_options("MIPGap=1e-5")
 
         # =========================================================
         # 3. STABILITY (The "Warning" Fix)
         # =========================================================
         # This fixes the "Constraint Violation" warning and handles large number ranges safely.
         # It tells Gurobi: "Be slightly slower, but be much more careful with rounding."
-        optim.set_options("NumericFocus=3")
+        optim.set_options("NumericFocus=2")
 
         # Standard tolerances
         optim.set_options("IntFeasTol=1e-09")
@@ -759,7 +759,30 @@ def run_scenario(
         )
 
         # print(initial_conditions)
+    import pyomo.environ as pyo
 
+    # --- STEP 1: Define the Diagnostic Function ---
+    def find_huge_rhs(model, top_n=5):
+        """Scans the model for the largest Right-Hand Side values."""
+        rhs_values = []
+        print("\n" + "!" * 40)
+        print("🚨 SCANNING FOR LARGE RHS VALUES (Goal: find the 1e11)")
+
+        for con in model.component_objects(pyo.Constraint, active=True):
+            for index in con:
+                c_obj = con[index]
+                # Check Upper Bound
+                if c_obj.upper is not None and c_obj.upper != float('inf'):
+                    rhs_values.append((abs(pyo.value(c_obj.upper)), con.name, index, "Upper"))
+                # Check Lower Bound
+                if c_obj.lower is not None and c_obj.lower != float('-inf'):
+                    rhs_values.append((abs(pyo.value(c_obj.lower)), con.name, index, "Lower"))
+
+        # Sort and print the biggest offenders
+        rhs_values.sort(key=lambda x: x[0], reverse=True)
+        for val, name, index, side in rhs_values[:top_n]:
+            print(f"VALUE: {val:.2e} | CONSTRAINT: {name} | INDEX: {index} ({side})")
+        print("!" * 40 + "\n")
     # create model
     prob = create_model(
         data,
@@ -773,6 +796,51 @@ def run_scenario(
         indexlist=indexlist,
     )
 
+    import pyomo.environ as pyo
+
+    def find_tiny_coefficients(model, threshold=1e-4):
+        print(f"\n--- SCANNING FOR TINY COEFFICIENTS (< {threshold}) ---")
+
+        # Try to import from the two most common locations in Pyomo
+        try:
+            from pyomo.core.expr.visitor import yield_coefficients
+        except ImportError:
+            try:
+                from pyomo.core.expr.current_fundamental_expr import yield_coefficients
+            except ImportError:
+                print("❌ Could not import yield_coefficients. Manual scan initiated.")
+                _manual_scan(model, threshold)
+                return
+
+        found = False
+        for con in model.component_objects(pyo.Constraint, active=True):
+            for index in con:
+                try:
+                    for var, coeff in yield_coefficients(con[index].body):
+                        abs_coeff = abs(coeff)
+                        if 0 < abs_coeff < threshold:
+                            print(
+                                f"⚠️ Small Coeff: {abs_coeff:.2e} | Constraint: {con.name}[{index}] | Var: {var.name}")
+                            found = True
+                except Exception:
+                    continue
+
+        if not found:
+            print("✅ No tiny coefficients found.")
+
+    def _manual_scan(model, threshold):
+        # Fallback for very specific Pyomo versions
+        from pyomo.repn import generate_standard_repn
+        found = False
+        for con in model.component_objects(pyo.Constraint, active=True):
+            for index in con:
+                repn = generate_standard_repn(con[index].body)
+                for i, coeff in enumerate(repn.linear_coefs):
+                    if 0 < abs(coeff) < threshold:
+                        print(f"⚠️ Small Coeff: {abs(coeff):.2e} | Constraint: {con.name}[{index}]")
+                        found = True
+        if not found: print("✅ No tiny coefficients found.")
+
     #print("--- BINARY COUNT DEBUG ---")
     #print(f"1. Base Manufacturing Binaries: {len(prob.BD_onetech)}")
     #if hasattr(prob, 'BD_scrap_onetech'):
@@ -780,6 +848,7 @@ def run_scenario(
     #print(f"3. Elements in m.stages: {len(prob.stages)}")
     #print(f"4. Elements in m.tech_one_tech: {len(prob.tech_one_tech)}")
     # refresh time stamp string and create filename for logfile
+    find_tiny_coefficients(prob, threshold=1e-4)
     log_filename = os.path.join(result_dir, "{}.log").format(sce)
     # solve model and read results
     optim = SolverFactory("gurobi")  #

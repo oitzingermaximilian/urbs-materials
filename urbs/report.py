@@ -46,6 +46,7 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         supply,
         stock,
         bd_one_tech_scrap,
+        scrap_processed,
         bd_one_tech_base,
         costs_extension,
         new_balance
@@ -78,6 +79,7 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         supply.to_excel(writer, sheet_name="supply_mix")
         stock.to_excel(writer, sheet_name="stock_levels")
         bd_one_tech_scrap.to_excel(writer, sheet_name="bd_one_tech_scrap")
+        scrap_processed.to_excel(writer, sheet_name="scrap_processed")
         bd_one_tech_base.to_excel(writer, sheet_name="bd_one_tech_base")
         costs_extension.to_excel(writer,sheet_name="costs_extension")
         new_balance.to_excel(writer,sheet_name="new_balance")

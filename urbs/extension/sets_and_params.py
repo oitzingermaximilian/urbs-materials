@@ -769,7 +769,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     )
 
     # NOM: \gamma^{scrap} | Gamma scrap factor | -
-    m.gamma_scrap = pyomo.Param(initialize=1e9)
+    m.gamma_scrap = pyomo.Param(initialize=1e6)
 
     # Define the step values (same for all technologies)
     uniform_step_values = {

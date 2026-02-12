@@ -75,6 +75,7 @@ def get_constants(instance):
     stock = get_entity(instance, "components_stockpile")
     bd_one_tech_base = get_entity(instance, "BD_onetech")
     bd_one_tech_scrap = get_entity(instance, "BD_scrap_onetech")
+    scrap_processed = get_entity(instance, "capacity_scrap_rec")
     costs_extension = get_entities(instance, ["cost_capex_total_extension","cost_opex_total_extension","cost_trade_total_extension","cost_stockpile_holding"])
     new_balance = get_entity(instance, "balance_yearly_new_capacity")
 
@@ -234,6 +235,7 @@ def get_constants(instance):
         supply,
         stock,
         bd_one_tech_scrap,
+        scrap_processed,
         bd_one_tech_base,
         costs_extension,
         new_balance
