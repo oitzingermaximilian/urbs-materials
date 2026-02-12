@@ -23,6 +23,7 @@ def debug_print(*args, **kwargs):
 
 class ProcessingCapacitiesOutputLimitRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
+        # CON: Processing Output Limit | Ensures processing capacity covers production output
         return(
             m.capacity_processing_total[stf, location, tech, stage]
             >= m.capacity_produced_output[stf, location, tech, stage]
@@ -30,12 +31,14 @@ class ProcessingCapacitiesOutputLimitRule(AbstractConstraint):
 
 class ProcessingCapacitiesSizeRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
+        # CON: Processing Capacity Balance | Tracks total processing capacity accumulation
         lhs = m.capacity_processing_total[stf, location, tech, stage]
         rhs = m.processing_cap_init[location, tech, stage] + sum(m.processing_cap_new[y, location, tech, stage] for y in m.stf if y <= stf)
         return lhs == rhs
 
 class ProcessingCapacityGrowthLimitRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
+        # CON: Processing Growth Limit | Limits annual processing capacity expansion
         if stf == 2024:
             if tech in ["solarPV", "Batteries"]:
                 max_capacity = 2500  # 2.5 GW limit for renewable technologies
@@ -57,6 +60,7 @@ class ProcessingCapacityGrowthLimitRule(AbstractConstraint):
 #--------------------------------------------------------------------------------#
 class ScrapHandlingCapacitiesOutputLimitRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
+        # CON: Scrap Handling Limit | Ensures scrap handling capacity covers scrap recycling
         return(
             m.capacity_scrap_handling_total[stf, location, tech]
             >= m.capacity_scrap_rec[stf, location, tech]
@@ -64,12 +68,14 @@ class ScrapHandlingCapacitiesOutputLimitRule(AbstractConstraint):
 
 class ScrapHandlingCapacitiesSizeRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
+        # CON: Scrap Capacity Balance | Tracks total scrap handling capacity accumulation
         lhs = m.capacity_scrap_handling_total[stf, location, tech]
         rhs = m.capacity_scrap_handling_init[location, tech] + sum(m.scraphandling_cap_new[y, location, tech] for y in m.stf if y <= stf)
         return lhs == rhs
 
 class ScrapHandlingCapacityGrowthLimitRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
+        # CON: Scrap Growth Limit | Limits annual scrap handling capacity expansion
         if stf == 2024:
             if tech in ["solarPV", "Batteries"]:
                 max_capacity = 15000  # 2.5 GW limit for renewable technologies
@@ -92,6 +98,7 @@ class ScrapHandlingCapacityGrowthLimitRule(AbstractConstraint):
 
 class CapacityProducedOutputCompositionRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
+        # CON: Production Composition | Splits production into flow and storage
         return(
             m.capacity_produced_output[stf, location, tech, stage] ==
             m.capacity_produced_flow[stf, location, tech, stage] +
@@ -100,6 +107,7 @@ class CapacityProducedOutputCompositionRule(AbstractConstraint):
 
 class CapacityImportedCompositionRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
+        # CON: Import Composition | Splits imports into flow and storage
         return(
             m.capacity_imported[stf, location, tech, stage] ==
             m.capacity_imported_flow[stf, location, tech, stage] +
@@ -108,6 +116,7 @@ class CapacityImportedCompositionRule(AbstractConstraint):
 
 class StockpileTotalRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
+        # CON: Stockpile Total | Sums domestic and imported stockpiles
         return (
             m.components_stockpile[stf, location, tech, stage] ==
             m.stock_domestic[stf, location, tech, stage] +
@@ -118,6 +127,7 @@ class StockpileTotalRule(AbstractConstraint):
 obsolescence_factor = 0.041 # 4.1% per year https://www.ise.fraunhofer.de/en/publications/studies/photovoltaics-report.html page 9 of Photovoltaics report
 class StockpileDomesticRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
+        # CON: Domestic Stockpile Balance | Tracks domestic stock levels with obsolescence
         if stf == 2024:
             return (
                     m.stock_domestic[stf, location, tech, stage] ==
@@ -136,6 +146,7 @@ class StockpileDomesticRule(AbstractConstraint):
 
 class StockpileImportedRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
+        # CON: Imported Stockpile Balance | Tracks imported stock levels with obsolescence
         if stf == 2024:
             return (
                     m.stock_imported[stf, location, tech, stage] ==
@@ -154,12 +165,14 @@ class StockpileImportedRule(AbstractConstraint):
 
 class MaximumStockpileImportsRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
+        # CON: Max Import Stockpile | Limits imported storage to 25% of total imports
         lhs = m.capacity_imported_storage[stf,location, tech, stage]
         rhs = 0.25 * m.capacity_imported[stf, location, tech, stage]
         return lhs <= rhs
 
 class MaximumStockpileDomesticRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
+        # CON: Max Domestic Stockpile | Limits domestic storage to 25% of production
         lhs = m.capacity_produced_storage[stf,location, tech, stage]
         rhs = 0.25 * m.capacity_produced_output[stf, location, tech, stage]
         return lhs <= rhs
@@ -167,6 +180,7 @@ class MaximumStockpileDomesticRule(AbstractConstraint):
 
 class TurnvoverStockImportsNewRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
+        # CON: Stockpile Turnover Imports | Enforces minimum turnover rate for imported stock
         valid_years = [2025, 2030, 2035, 2040, 2045]
 
         if stf not in valid_years:
@@ -197,6 +211,7 @@ class TurnvoverStockImportsNewRule(AbstractConstraint):
 
 class TurnvoverStockDomesticNewRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
+        # CON: Stockpile Turnover Domestic | Enforces minimum turnover rate for domestic stock
         valid_years = [2025, 2030, 2035, 2040, 2045]
 
         if stf not in valid_years:
@@ -228,6 +243,7 @@ class TurnvoverStockDomesticNewRule(AbstractConstraint):
 
 class SupplyCompositionRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
+        # CON: Supply Definition | Aggregates flow and stockout variables into total Supply
         return(
                 m.Supply[stf, location, tech, stage] ==
                 (m.capacity_produced_flow[stf, location, tech, stage] + m.capacity_produced_stockout[stf, location, tech, stage])+
@@ -237,6 +253,7 @@ class SupplyCompositionRule(AbstractConstraint):
 
 class ComponentBalanceRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, input_tech, input_stage):
+        # CON: Component Balance | Ensures component supply meets manufacturing demand
         supply = m.Supply[stf, location, input_tech, input_stage]
 
         demand = sum(
@@ -258,6 +275,7 @@ class InstallationSupplyLinkRule(AbstractConstraint):
     Capacity Added (MW) == Supply of Final Stage (MW)
     """
     def apply_rule(self, m, stf, location, tech):
+        # CON: Installation Supply Link | Links manufacturing output to energy model capacity additions
         # 1. Retrieve the Final Stage Name
         # We wrap this in a try-block in case the parameter is missing or empty
         try:
@@ -269,18 +287,12 @@ class InstallationSupplyLinkRule(AbstractConstraint):
         # 2. Define the sides of the equation
         lhs = m.capacity_ext_new[stf, location, tech] # Or m.capacity_ext_new depending on your var name
         rhs = m.Supply[stf, location, tech, final_stage]
-        # --- DEBUG PRINT ---
-        # This will print once for every (stf, location, tech) combo during model build
-        #print(f"LINKING: {tech} (Loc: {location})")
-        #print(f"   -> Final Stage Identified: '{final_stage}'")
-        #print(f"   -> Constraint: {lhs.name} == {rhs.name}")
-        #print("-" * 30)
-        # -------------------
 
         return lhs == rhs
 
 class NewlyAddedBalanceLCOE(AbstractConstraint):
     def apply_rule(self, m, stf,location,tech):
+        # CON: New Capacity Balance | Calculates energy generation from newly installed capacity
         return m.balance_yearly_new_capacity[stf,location,tech] == sum(
                 m.capacity_ext_new[stf, location, tech] * m.lf_solar[t, stf, location, tech]
                * m.hours[t]
@@ -293,6 +305,7 @@ class NewlyAddedBalanceLCOE(AbstractConstraint):
 
 class ProcessingOutputMaterialRule(AbstractConstraint):
     def apply_rule(self, m, stf, material):
+        # CON: Material Demand Calculation | Calculates material demand based on production and intensity
         # We sum over all locations, technologies, and stages
         # that actually consume this material.
 
@@ -310,6 +323,7 @@ class ProcessingOutputMaterialRule(AbstractConstraint):
 
 class MaterialDemandBalanceRule(AbstractConstraint):
     def apply_rule(self, m, stf, material):
+        # CON: Material Supply Balance | Balances material demand with mining, imports, and recycling
         return(
             m.demand_material_total[stf, material] == m.material_imported[stf,material] + m.material_mined[stf,material] + m.material_recycled[stf,material]
         )
@@ -317,6 +331,7 @@ class MaterialDemandBalanceRule(AbstractConstraint):
 
 class ScrapMaterialLinkageRule(AbstractConstraint):
     def apply_rule(self, m, stf, material):
+        # CON: Scrap Recycling Link | Calculates pure material recovered from scrap processing
         # LHS: Total Pure Material Recovered (e.g., Tons of Copper)
         lhs = m.material_recycled[stf, material]
 
@@ -338,6 +353,7 @@ class ScrapMaterialLinkageRule(AbstractConstraint):
 
 class MiningLimit(AbstractConstraint):
     def apply_rule(self, m, stf, material):
+        # CON: Annual Mining Limit | Restricts mining based on global availability and sector share
         # LHS: Actual Metal Mined (Useful/Refined Metal)
         lhs = m.material_mined[stf, material]
 
@@ -354,6 +370,7 @@ class MiningLimit(AbstractConstraint):
 
 class LimitResourceExistanceRule(AbstractConstraint):
     def apply_rule(self, m, stf, material):
+        # CON: Global Resource Depletion | Tracks remaining global reserves
         """
         Calculates remaining reserves based on the Total Allowable Budget (Initial * Share)
         minus everything we have mined so far.
@@ -383,6 +400,7 @@ class LimitResourceExistanceRule(AbstractConstraint):
 # --- PART A: Calculate Annual Total (Complex, run ONCE per year) ---
 class FactoryEnergyAnnualRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
+        # CON: Factory Energy Demand | Calculates total annual energy required for manufacturing
 
         # Filter: Only apply to techs that have production demand
         # (You might need a check here to skip non-manufacturing techs)
@@ -404,6 +422,7 @@ class FactoryEnergyAnnualRule(AbstractConstraint):
 # --- PART B: Distribute to Grid (Simple, run MANY times) ---
 class ElecNeedsProductionRule(AbstractConstraint):
     def apply_rule(self, m, tm, stf, location, tech):
+        # CON: Factory Power Profile | Distributes annual factory energy demand to timesteps
         # Just link the variables. Very fast for solver.
         # Ensure '12' is correct!
         # If 'tm' is MONTHS: Divide by 12.
@@ -414,6 +433,7 @@ class ElecNeedsProductionRule(AbstractConstraint):
 # CLONED URBS COST CALCULATION
 class CapexCostRule(AbstractConstraint):
     def apply_rule(self, m, stf):
+        # CON: Extension CAPEX | Calculates total CAPEX for processing and manufacturing
         # --- urbs Intertemporal Factors ---
         j = 0.03  # Social Discount Rate
         i = 0.071  # WACC (Interest Rate)
@@ -457,6 +477,7 @@ class CapexCostRule(AbstractConstraint):
 
 class OpexCostRule(AbstractConstraint):
     def apply_rule(self, m, stf):
+        # CON: Extension OPEX | Calculates total OPEX including mining and electricity
         j = 0.03
         stf_min = min(m.stf)
 
@@ -481,6 +502,7 @@ class OpexCostRule(AbstractConstraint):
 
 class TradeCostRule(AbstractConstraint):
     def apply_rule(self, m, stf):
+        # CON: Extension Trade Cost | Calculates costs for material and part imports
         j = 0.03
         stf_min = min(m.stf)
         f_cost = (1 + j)**(1 - (stf - stf_min))
@@ -495,6 +517,7 @@ class TradeCostRule(AbstractConstraint):
 # Trade&Storage
 class StockpileHoldingCostRule(AbstractConstraint):
     def apply_rule(self, m, stf):
+        # CON: Stockpile Holding Cost | Calculates cost for holding inventory
         j = 0.03
         stf_min = min(m.stf)
         f_cost = (1 + j) ** (1 - (stf - stf_min))

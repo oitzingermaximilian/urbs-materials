@@ -26,6 +26,7 @@ class decommissioned_capacity_rule(AbstractConstraint):
         self.use_lifetime = use_lifetime
 
     def apply_rule(self, m, stf, location, tech):
+        # CON: Decommissioned Capacity | Calculates capacity reaching end of life based on lifetime or exogenous factors
         # --- determine exogenous ---
         if tech == "solarPV":
             _exogenous = 7.5 * 1000
@@ -75,6 +76,7 @@ class decommissioned_capacity_rule(AbstractConstraint):
 
 class capacity_scrap_dec_rule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
+        # CON: Scrap from Decommissioning | Calculates scrap amount generated from decommissioned capacity
         expr = (
             m.capacity_scrap_dec[stf, location, tech]
             == m.f_scrap[location, tech] * m.capacity_dec[stf, location, tech]
@@ -88,6 +90,7 @@ class capacity_scrap_dec_rule(AbstractConstraint):
 
 class capacity_scrap_rec_rule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
+        # CON: Scrap for Recycling | Calculates scrap input required for secondary production
         lhs = (
             m.f_scrap[location, tech]
             / m.f_recycling[
@@ -104,6 +107,7 @@ class capacity_scrap_rec_rule(AbstractConstraint):
 
 class capacity_scrap_total_rule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
+        # CON: Total Scrap Accumulation | Tracks cumulative scrap availability
         if stf == 2024:
             expr = (
                 m.capacity_scrap_total[stf, location, tech]
@@ -124,6 +128,7 @@ class capacity_scrap_total_rule(AbstractConstraint):
 
 class cost_scrap_rule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
+        # CON: Scrap Processing Cost | Calculates cost of recycling minus learning benefits
         # 1. Base Cost (Recycling Fee * Capacity)
         base_cost = m.f_scrap_rec[stf, location, tech] * m.capacity_scrap_rec[stf, location, tech]
 
@@ -141,6 +146,7 @@ class cost_scrap_rule(AbstractConstraint):
 
 class scrap_total_decrease_rule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
+        # CON: Scrap Reduction Target | Forces reduction of scrap pile over time
         if tech == "solarPV":
             if stf <= 2030:
                 return pyomo.Constraint.Skip
@@ -160,6 +166,7 @@ class scrap_total_decrease_rule(AbstractConstraint):
 
 class scrap_recycling_increase_rule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
+        # CON: Recycling Growth Limit | Limits annual increase in recycling capacity
         if stf == value(m.y0):
             return pyomo.Constraint.Skip
 
@@ -186,7 +193,6 @@ def apply_scrap_constraints(m):
     constraints = [
         decommissioned_capacity_rule(),
         capacity_scrap_dec_rule(),
-        #capacity_scrap_rec_rule(),
         capacity_scrap_total_rule(),
         cost_scrap_rule(),
         # Removed obsolete linearization constraints - now using direct absolute values
@@ -206,12 +212,6 @@ def apply_scrap_constraints(m):
         m.tech,
         rule=lambda m, stf, loc, tech: constraints[1].apply_rule(m, stf, loc, tech),
     )
-    #m.capacity_scrap_rec_rule = pyomo.Constraint(
-    #    m.stf,
-    #    m.location,
-    #    m.tech,
-    #    rule=lambda m, stf, loc, tech: constraints[2].apply_rule(m, stf, loc, tech),
-    #)
     m.capacity_scrap_total_rule = pyomo.Constraint(
         m.stf,
         m.location,
