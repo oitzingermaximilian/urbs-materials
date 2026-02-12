@@ -1,0 +1,48 @@
+name: Auto-Update Documentation
+
+on:
+  # Trigger on push to main branch
+  push:
+    branches:
+      - main
+    # CRITICAL: Ignore pushes that ONLY change the docs (prevents infinite loops)
+    paths-ignore:
+      - 'model_docs.tex'
+      - '**.md'
+
+  # Allow manual run button
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout your code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # 2. Install Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      # 3. Run the Harvester Script
+      - name: Run Harvester
+        run: python scripts/generate_docs.py
+
+      # 4. Commit and Push the .tex file back to repo
+      - name: Commit and Push
+        run: |
+          git config --global user.name 'Documentation Bot'
+          git config --global user.email 'doc-bot@noreply.github.com'
+          
+          # Add the generated file
+          git add model_docs.tex
+          
+          # Check if changed, then commit. Skip CI to be double safe.
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update model docs [skip ci]" && git push)
