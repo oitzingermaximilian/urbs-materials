@@ -4,7 +4,7 @@ on:
   # Trigger on push to main branch
   push:
     branches:
-      - main
+      - iew2026
     # CRITICAL: Ignore pushes that ONLY change the docs (prevents infinite loops)
     paths-ignore:
       - 'model_docs.tex'
