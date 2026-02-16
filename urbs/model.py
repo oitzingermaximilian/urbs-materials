@@ -896,10 +896,15 @@ def res_area_rule(m, stf, sit):
 
 
 # total CO2 output <= Global CO2 limit
+# total CO2 output <= Global CO2 limit
 def res_global_co2_limit_rule(m, stf):
-    if math.isinf(m.global_prop_dict["value"][stf, "CO2 limit"]):
+    # 1. Retrieve the raw value (Tons)
+    limit_val = m.global_prop_dict["value"].get((stf, "CO2 limit"), float('inf'))
+
+    if math.isinf(limit_val):
         return pyomo.Constraint.Skip
-    elif m.global_prop_dict["value"][stf, "CO2 limit"] >= 0:
+
+    elif limit_val >= 0:
         co2_output_sum = 0
         for tm in m.tm:
             for sit in m.sit:
@@ -909,9 +914,13 @@ def res_global_co2_limit_rule(m, stf):
 
         # scaling to annual output (cf. definition of m.weight)
         co2_output_sum *= m.weight
-        return co2_output_sum <= m.global_prop_dict["value"][stf, "CO2 limit"]
-    else:
-        return pyomo.Constraint.Skip
+
+        # 2. APPLY SCALING HERE (Tons -> kton)
+        # The model's CO2 output is in kton. The Excel limit is in Tons.
+        # We must divide the limit by 1000 to match.
+        scaled_limit = limit_val * 1e-3
+
+        return co2_output_sum <= scaled_limit
 
 
 # CO2 output in entire period <= Global CO2 budget
@@ -1161,23 +1170,19 @@ def def_specific_process_costs_rule(m, stf, sit, pro, cost_type):
 
 
 def cost_rule(m):
-    # --- Base model costs ---
-    total_base_costs = pyomo.summation(m.costs)  # existing costs
-    gross_supply_chain_costs = (pyomo.summation(m.cost_capex_total_extension) +
-                               pyomo.summation(m.cost_opex_total_extension) +
-                               pyomo.summation(m.cost_trade_total_extension)+
-                                pyomo.summation(m.cost_stockpile_holding))
+    # 1. Base urbs costs
+    total_base_costs = pyomo.summation(m.costs)
 
+    # 2. Extension costs (explicitly summing over the timeframe)
+    # Using 'sum' ensures we catch every year in the model's horizon
+    ext_capex = sum(m.cost_capex_total_extension[stf] for stf in m.stf)
+    ext_opex = sum(m.cost_opex_total_extension[stf] for stf in m.stf)
+    ext_trade = sum(m.cost_trade_total_extension[stf] for stf in m.stf)
+    ext_stock = sum(m.cost_stockpile_holding[stf] for stf in m.stf)
 
-    # --- Total objective ---
-    total_costs = total_base_costs  + gross_supply_chain_costs
+    gross_supply_chain_costs = ext_capex + ext_opex + ext_trade + ext_stock
 
-    # Optional debug print
-    # print("Objective breakdown:")
-    # print("Base costs:", total_base_costs)
-    # print("Total costs:", total_costs)
-
-    return total_costs
+    return total_base_costs + gross_supply_chain_costs
 
 
 # CO2 output in entire period <= Global CO2 budget

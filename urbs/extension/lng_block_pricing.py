@@ -8,9 +8,6 @@ def apply_gas_block_pricing(m, data):
     Apply block-based gas pricing with internal GWh scaling for numerical stability.
     Input data remains in MWh/€ per MWh, but internal math is scaled.
     """
-    # --- SCALING CONFIGURATION ---
-    # Convert MWh to GWh internally to shrink the 1e9 range.
-    scale = 1e-3
 
     # --- Sets ---
     m.blocks = pyomo.Set(initialize=list(data["block_names"]))
@@ -19,7 +16,7 @@ def apply_gas_block_pricing(m, data):
     # NOM: L^{gas}_{y,b} | Scaled to GWh
     m.block_limits = pyomo.Param(
         m.stf, m.blocks,
-        initialize=lambda m, stf, blk: data["block_limits"][(stf, blk)] * scale,
+        initialize=lambda m, stf, blk: data["block_limits"][(stf, blk)] ,
         within=pyomo.NonNegativeReals,
         doc="Max volume per block per year (Internal: GWh)",
     )
@@ -28,7 +25,7 @@ def apply_gas_block_pricing(m, data):
     # Price must be divided by scale so that (EUR/GWh * GWh) = EUR
     m.block_prices = pyomo.Param(
         m.stf, m.blocks,
-        initialize=lambda m, stf, blk: data["block_price"][(stf, blk)] / scale,
+        initialize=lambda m, stf, blk: data["block_price"][(stf, blk)],
         within=pyomo.NonNegativeReals,
         doc="Price per block per year (Internal: EUR/GWh)",
     )
@@ -64,7 +61,7 @@ def apply_gas_block_pricing(m, data):
             return pyomo.Constraint.Skip
         return m.e_co_stock[tm, stf, sit, com, com_type] == sum(
             m.e_co_stock_block[tm, stf, sit, com, com_type, blk] for blk in m.blocks
-        ) / scale
+        )
 
     m.link_block_to_original_constraint = pyomo.Constraint(
         m.tm, m.stf, m.sit, m.com, m.com_type, rule=link_block_to_original_rule
@@ -92,8 +89,7 @@ def apply_gas_block_pricing(m, data):
         return m.gas_usage_block[stf, blk] == sum(
             m.e_co_stock_block[tm, stf, sit, "Gas", "Stock", blk]
             for tm in m.tm for sit in m.sit
-        ) / scale
+        )
 
     m.yearly_usage_block_constraint = pyomo.Constraint(m.stf, m.blocks, rule=yearly_usage_block_rule)
 
-    print(f"✅ Gas block pricing stabilized with scale {scale} (GWh internal).")

@@ -76,7 +76,7 @@ class ConstraintBatteryCapRule(AbstractConstraint):
         debug_print(
             f"Battery cap constraint for {stf}, {location}: lhs demand = {lhs}, rhs battery cap = {rhs}"
         )
-        return lhs <= rhs
+        return lhs == rhs
 
 
 def apply_stockpiling_constraints(m):

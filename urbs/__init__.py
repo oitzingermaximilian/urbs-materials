@@ -22,3 +22,6 @@ from .runfunctions import *
 from .saveload import load, save
 from .scenarios import *
 from .identify import identify_mode, identify_expansion
+# urbs/__init__.py
+from .runfunctions import prepare_result_directory, run_scenario
+from .input import read_input

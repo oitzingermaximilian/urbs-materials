@@ -194,21 +194,16 @@ def read_input(input_files, year):
     for key in data:
         if isinstance(data[key].index, pd.MultiIndex):
             data[key].sort_index(inplace=True)
+
+    data = apply_numerical_scaling(data)
+
     return data
 
 
 # preparing the pyomo model
 def pyomo_model_prep(data, timesteps, window_start, window_end):
     """Performs calculations on the data frames in dictionary "data" for
-    further usage by the model.
-
-    Args:
-        - data: input data dictionary
-        - timesteps: range of modeled timesteps
-
-    Returns:
-        a rudimentary pyomo.CancreteModel instance
-    """
+    further usage by the model."""
 
     m = pyomo.ConcreteModel()
     print(f"\n--- Debugging pyomo_model_prep ---")
@@ -216,12 +211,6 @@ def pyomo_model_prep(data, timesteps, window_start, window_end):
     print("--------------------------\n")
     # Preparations
     # ============
-    # Data import. Syntax to access a value within equation definitions looks
-    # like this:
-    #
-    #     storage.loc[site, storage, commodity][attribute]
-    #
-    # Dynamically filter global_prop for rolling horizon
     if window_start is not None and window_end is not None:
         valid_timeframes = range(window_start, window_end + 1)
         data["global_prop"] = data["global_prop"][
@@ -231,7 +220,7 @@ def pyomo_model_prep(data, timesteps, window_start, window_end):
         # Reset the index to remove unused levels
         data["global_prop"] = data[
             "global_prop"
-        ].copy()  # Important: Avoid chained indexing warnings
+        ].copy()
         data["global_prop"].index = data["global_prop"].index.remove_unused_levels()
 
         print("\n--- Rolling Horizon Mode in pyomo_model_prep ---")
@@ -345,18 +334,12 @@ def pyomo_model_prep(data, timesteps, window_start, window_end):
     m.proc_area_dict = proc_area.to_dict()
 
     # input ratios for partial efficiencies
-    # only keep those entries whose values are
-    # a) positive and
-    # b) numeric (implicitely, as NaN or NV compare false against 0)
     r_in_min_fraction = data["process_commodity"].xs("In", level="Direction")
     r_in_min_fraction = r_in_min_fraction["ratio-min"]
     r_in_min_fraction = r_in_min_fraction[r_in_min_fraction > 0]
     m.r_in_min_fraction_dict = r_in_min_fraction.to_dict()
 
     # output ratios for partial efficiencies
-    # only keep those entries whose values are
-    # a) positive and
-    # b) numeric (implicitely, as NaN or NV compare false against 0)
     r_out_min_fraction = data["process_commodity"].xs("Out", level="Direction")
     r_out_min_fraction = r_out_min_fraction["ratio-min"]
     r_out_min_fraction = r_out_min_fraction[r_out_min_fraction > 0]
@@ -718,3 +701,53 @@ def get_input(prob, name):
     else:
         # unknown
         raise ValueError("Unknown input DataFrame name!")
+
+
+def apply_numerical_scaling(data):
+    """
+    Fixed Scaling: MW -> GW conversion.
+    - Capacities & Demand: Multiply by 1e-3 (MW to GW)
+    - Costs: LEAVE ALONE. Numerically, €/MW is identical to k€/GW.
+    """
+    print("\n--- ⚖️ CORRECTED SCALING (MW->GW, €->k€) ---")
+
+    MW_to_GW = 1e-3
+
+    # 1. Demand & Intermittent Supply (RHS)
+    # Must be scaled to GW/GWh
+    if 'demand' in data: data['demand'] *= MW_to_GW
+    if 'supim' in data:  data['supim'] *= MW_to_GW
+
+    # 2. Process Data
+    if 'process' in data:
+        p = data['process']
+        cap_cols = ['inst-cap', 'cap-lo', 'cap-up']
+        # IMPORTANT: REMOVED cost_cols from scaling.
+        # 150000 €/MW == 150000 k€/GW.
+        for col in cap_cols:
+            if col in p.columns: p[col] *= MW_to_GW
+
+    # 3. Commodity Data
+    if 'commodity' in data:
+        c = data['commodity']
+        # Scale Max limits (Mass/Energy) to kton/GWh
+        if 'max' in c.columns: c['max'] *= MW_to_GW
+        # Note: Prices are left alone (€/MWh == k€/GWh)
+
+    # 4. Transmission & Storage
+    if not data['transmission'].empty:
+        t = data['transmission']
+        for col in ['inst-cap', 'cap-up']:
+            if col in t.columns: t[col] *= MW_to_GW
+
+    if not data['storage'].empty:
+        s = data['storage']
+        for col in ['inst-cap-c', 'cap-up-c', 'inst-cap-p', 'cap-up-p']:
+            if col in s.columns: s[col] *= MW_to_GW
+
+    # 5. Process-Commodity (Material Intensity)
+    # Tons/MW is numerically identical to kton/GW.
+    # If your data is 3.047, keep it 3.047.
+
+    print(f"✅ Scaling Corrected. RHS -> 1e-3. Costs/Ratios -> 1.0 (Stay as is).")
+    return data
