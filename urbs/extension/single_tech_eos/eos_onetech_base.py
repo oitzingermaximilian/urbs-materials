@@ -3,25 +3,56 @@ import pyomo.environ as pyomo
 from pyomo.environ import value
 
 
+def _normalize_target_techs(target_tech_name):
+    """Allow a single tech string or an iterable of tech strings."""
+    if isinstance(target_tech_name, str):
+        techs = [target_tech_name]
+    else:
+        try:
+            techs = list(target_tech_name)
+        except TypeError as exc:
+            raise ValueError("target_tech_name must be a string or a list/tuple of strings") from exc
+
+    techs = [t for t in techs if t is not None and str(t).strip() != ""]
+    if not techs:
+        raise ValueError("target_tech_name is empty. Provide at least one technology.")
+
+    return list(dict.fromkeys(techs))
+
+
 # ==============================================================================
 # 1. SETUP FUNCTION
 # ==============================================================================
 
-def setup_onetech_learning(m, target_tech_name='SolarPV', target_stages=None):
+def setup_onetech_learning(m, target_tech_name='solarPV', target_stages=None):
     """
-    Sets up learning variables for a single target technology and specific stages.
+    Sets up learning variables for one or multiple target technologies and specific stages.
+
+    Args:
+        target_tech_name: str or iterable[str]
+            - "solarPV" for one technology
+            - ["solarPV", "windon"] for multiple technologies
     """
-    print(f"--- Initializing Single-Tech Learning Module for {target_tech_name} ---")
+    tech_targets = _normalize_target_techs(target_tech_name)
+
+    unknown_techs = [t for t in tech_targets if t not in m.tech]
+    if unknown_techs:
+        raise ValueError(f"Unknown technologies in setup_onetech_learning: {unknown_techs}")
+
+    print(f"--- Initializing Single-Tech Learning Module for {tech_targets} ---")
 
     # A. Define the Tech Subset
     if not hasattr(m, 'tech_one_tech'):
-        m.tech_one_tech = pyomo.Set(initialize=[target_tech_name], within=m.tech)
+        m.tech_one_tech = pyomo.Set(initialize=tech_targets, within=m.tech)
 
     # B. Define the Stage Subset (NEW)
     # If the user provides specific stages, use them. Otherwise, default to all stages.
     stage_set_name = 'stages_one_tech'
 
     if target_stages:
+        unknown_stages = [s for s in target_stages if s not in m.stages]
+        if unknown_stages:
+            raise ValueError(f"Unknown stages in setup_onetech_learning: {unknown_stages}")
         # Create a subset of stages specifically for this tech
         if not hasattr(m, stage_set_name):
             m.stages_one_tech = pyomo.Set(initialize=target_stages, within=m.stages)

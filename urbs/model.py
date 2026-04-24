@@ -392,15 +392,36 @@ def create_model(
 
     apply_stockpiling_constraints(m)
 
-    relevant_stages = ['Polysilicon', 'Wafer', 'Cell', 'Module']
+    # Toggle learning scope here:
+    # - "single": only solarPV
+    # - "all": solarPV + windon + windoff
+    learning_mode = "single"
+
+    learning_stages_by_tech = {
+        "solarPV": ["Polysilicon", "Wafer", "Cell", "Module"],
+        "windon": ["Module"],
+        "windoff": ["Module"],
+    }
+
+    if learning_mode == "all":
+        learning_techs = ["solarPV", "windon", "windoff"]
+    else:
+        learning_techs = ["solarPV"]
+
+    # The base learning setup currently uses one shared stage subset for all selected techs.
+    selected_stages = sorted({
+        stage
+        for tech in learning_techs
+        for stage in learning_stages_by_tech.get(tech, [])
+    })
 
     setup_onetech_learning(
         m,
-        target_tech_name='solarPV',
-        target_stages=relevant_stages  # <--- Pass the list here
+        target_tech_name=learning_techs,
+        target_stages=selected_stages,
     )
 
-    setup_scrap_onetech_learning(m, target_tech_name='solarPV')
+    setup_scrap_onetech_learning(m, target_tech_name=learning_techs)
 
     #apply_combined_lr_constraints(m) #this is for multiple techs
 

@@ -3,6 +3,23 @@ import pyomo.environ as pyomo
 from pyomo.environ import value
 
 
+def _normalize_target_techs(target_tech_name):
+    """Allow a single tech string or an iterable of tech strings."""
+    if isinstance(target_tech_name, str):
+        techs = [target_tech_name]
+    else:
+        try:
+            techs = list(target_tech_name)
+        except TypeError as exc:
+            raise ValueError("target_tech_name must be a string or a list/tuple of strings") from exc
+
+    techs = [t for t in techs if t is not None and str(t).strip() != ""]
+    if not techs:
+        raise ValueError("target_tech_name is empty. Provide at least one technology.")
+
+    return list(dict.fromkeys(techs))
+
+
 # ==============================================================================
 # 1. SETUP FUNCTION
 # ==============================================================================
@@ -12,12 +29,18 @@ def setup_scrap_onetech_learning(m, target_tech_name='solarPV'):
     Sets up economies of scale specifically for the SCRAP/RECYCLING module.
     Limits variables to a single technology to prevent memory bloat/crashes.
     """
-    print(f"--- Initializing Scrap Learning Module for {target_tech_name} ---")
+    tech_targets = _normalize_target_techs(target_tech_name)
+
+    unknown_techs = [t for t in tech_targets if t not in m.tech]
+    if unknown_techs:
+        raise ValueError(f"Unknown technologies in setup_scrap_onetech_learning: {unknown_techs}")
+
+    print(f"--- Initializing Scrap Learning Module for {tech_targets} ---")
 
     # A. Define the Subset (The Gatekeeper)
     # This creates a generic set 'm.tech_scrap_onetech' containing only your target
     if not hasattr(m, 'tech_scrap_onetech'):
-        m.tech_scrap_onetech = pyomo.Set(initialize=[target_tech_name], within=m.tech)
+        m.tech_scrap_onetech = pyomo.Set(initialize=tech_targets, within=m.tech)
 
     # B. Define Variables (Indexed by tech_scrap_onetech)
 

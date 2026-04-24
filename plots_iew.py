@@ -16,7 +16,7 @@ def load_simulation_results(base_dir):
     # 1. Define the folders we want to access
     scenarios = {
         'Base_case': ['high'],  # Only 'high' for Base_case
-        'LR4_nziastrict': ['low', 'medium', 'high'],
+        'LR4_nziastrict_test': ['low', 'medium', 'high'],
         'LR4_nziaflex': ['low', 'medium', 'high']
     }
 
