@@ -17,6 +17,12 @@ def check_valid_indices(m, tech, stage):
     """
     return (tech, stage) in m.tech_stage_combinations
 
+class ProcessingCapNewInvalidZeroRule(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage):
+        if (tech, stage) in m.tech_stage_combinations:
+            return pyomo.Constraint.Skip
+        return m.processing_cap_new[stf, location, tech, stage] == 0
+
 
 #################################################################################
 # GROWTH CONSTRAINTS FOR PROCESSING AND SCRAP-PROCESSING
@@ -114,6 +120,7 @@ class CapacityImportedCompositionRule(AbstractConstraint):
 
 class LimitFinalWindImportsRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
+        if not check_valid_indices(m, tech, stage): return pyomo.Constraint.Skip
         # 1. Spezifische Prüfung: Nur für Wind-Technologien und die passenden Assembly-Stages
         if tech == 'windon' and stage == 'AssemblyOn':
             percentage_factor = 0.10
@@ -481,6 +488,7 @@ def apply_material_constraints(m):
     # FIX: NOW ITERATING OVER ALL COMBINATIONS (tech, stages)
     # The 'check_valid_indices' helper in each rule prevents crashing on invalid combos.
     stage_constraints = [
+        ProcessingCapNewInvalidZeroRule(),
         ProcessingCapacitiesSizeRule(),
         ProcessingCapacityGrowthLimitRule(),
         ProcessingCapacitiesOutputLimitRule(),
