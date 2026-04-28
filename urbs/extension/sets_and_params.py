@@ -387,6 +387,12 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         initialize=data_urbsextensionv1.get("processing_opex_var_dict", {}),
         doc="Variable OPEX for processing"
     )
+    m.material_downstream_manufacturing_cost = pyomo.Param(
+        m.stf, m.location, m.tech_stage_combinations,
+        initialize=data_urbsextensionv1.get("material_downstream_cost_dict", {}),
+        default=0,
+        doc="Material downstream cost"
+    )
 
     # NOM: C^{fix}_{proc} | Fixed OPEX for processing | k€/GW
     m.cost_fixed = pyomo.Param(

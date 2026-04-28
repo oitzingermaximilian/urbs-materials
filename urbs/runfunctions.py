@@ -412,6 +412,7 @@ def load_data_from_excel(file_path):
     proc_capex_dict = {}
     proc_opex_dict = {}
     proc_opex_var_dict = {}
+    mat_down_cost_dict = {}
 
     if not proc_cost_data.empty:
         if 'Year' in proc_cost_data.columns:
@@ -426,6 +427,7 @@ def load_data_from_excel(file_path):
         proc_capex_dict = (proc_cost_data['capex_base'] * COST_SCALE).to_dict()
         proc_opex_dict = (proc_cost_data['opex_fixed'] * COST_SCALE).to_dict()
         proc_opex_var_dict = (proc_cost_data['opex_var_base'] * COST_SCALE).to_dict()
+        mat_down_cost_dict = (proc_cost_data['material_downstream_manufacturing'] * COST_SCALE).to_dict()
 
         # E. Import Cost Stage
         proc_part_import_dict = {}
@@ -517,6 +519,7 @@ def load_data_from_excel(file_path):
         "processing_stage_cost_dict": proc_capex_dict,  # k€/GW
         "processing_opex_dict": proc_opex_dict,  # k€/GW
         "processing_opex_var_dict": proc_opex_var_dict,  # k€/GW
+        "material_downstream_cost_dict": mat_down_cost_dict, #k€/GW
         "part_import_cost_dict": proc_part_import_dict,  # k€/GW
         "bom_map_dict": bom_map_dict,
         "valid_tech_stage_list": valid_tech_stage_list,

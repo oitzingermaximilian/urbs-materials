@@ -386,7 +386,7 @@ class ElecNeedsProductionRule(AbstractConstraint):
 
 class CapexCostRule(AbstractConstraint):
     def apply_rule(self, m, stf):
-        j, i, n = 0.03, 0.071, 20
+        j, i, n = 0.03, 0.071, 25
         stf_min, stf_end = min(m.stf), max(m.stf)
         f_inv = ((1 + j) ** (1 - (stf - stf_min)) * (i * (1 + i) ** n * ((1 + j) ** n - 1)) / (
                 j * (1 + j) ** n * ((1 + i) ** n - 1)))
@@ -419,7 +419,8 @@ class OpexCostRule(AbstractConstraint):
         total_opex = (
                 sum(m.capacity_processing_total[stf, loc, tech, stage] * m.cost_fixed[stf, loc, tech, stage]
                     for loc in m.location for (tech, stage) in m.tech_stage_combinations) +
-                sum(m.capacity_produced_output[stf, loc, tech, stage] * m.cost_variable[stf, loc, tech, stage]
+                sum(m.capacity_produced_output[stf, loc, tech, stage] * (m.cost_variable[stf, loc, tech, stage]
+                +m.material_downstream_manufacturing_cost[stf, loc, tech,stage])
                     for loc in m.location for (tech, stage) in m.tech_stage_combinations) +
                 sum(m.cost_electricity[stf] * m.FACTORY_ENERGY_ANNUAL[stf, loc, tech]
                     for loc in m.location for tech in m.tech) +
