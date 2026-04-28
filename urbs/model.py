@@ -399,8 +399,8 @@ def create_model(
 
     learning_stages_by_tech = {
         "solarPV": ["Polysilicon", "Wafer", "Cell", "Module"],
-        "windon": ["Module"],
-        "windoff": ["Module"],
+        "windon": ["BladeOn", "TowerOn", "NacelleOn"],
+        "windoff": ["BladeOff", "TowerOff", "NacelleOff"],
     }
 
     if learning_mode == "all":
