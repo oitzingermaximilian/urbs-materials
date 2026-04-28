@@ -388,14 +388,12 @@ def create_model(
 
     apply_gas_block_pricing(m, data_urbsextensionv1)
 
-    apply_scenario_constraints(m, nzia_mode='strict', crma_active=True)
-
     apply_stockpiling_constraints(m)
 
     # Toggle learning scope here:
     # - "single": only solarPV
     # - "all": solarPV + windon + windoff
-    learning_mode = "single"
+    learning_mode = "all"
 
     learning_stages_by_tech = {
         "solarPV": ["Polysilicon", "Wafer", "Cell", "Module"],
@@ -426,6 +424,13 @@ def create_model(
     #apply_combined_lr_constraints(m) #this is for multiple techs
 
     #apply_scrap_scaling_constraints(m) #this is for multiple techs
+
+    apply_scenario_constraints(
+        m,
+        nzia_mode='strict',  # 'strict', 'flex' oder 'none'
+        crma_active=True,  # True oder False
+        target_techs=learning_techs
+    )
 
     apply_scrap_constraints(m)
 

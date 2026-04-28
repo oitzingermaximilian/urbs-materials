@@ -112,6 +112,23 @@ class CapacityImportedCompositionRule(AbstractConstraint):
                 m.capacity_imported_storage[stf, location, tech, stage])
 
 
+class LimitFinalWindImportsRule(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage):
+        # 1. Spezifische Prüfung: Nur für Wind-Technologien und die passenden Assembly-Stages
+        if tech == 'windon' and stage == 'AssemblyOn':
+            percentage_factor = 0.10
+        elif tech == 'windoff' and stage == 'AssemblyOff':
+            percentage_factor = 0.02
+        else:
+            # Für alle anderen Kombinationen (z.B. EU-Assembly oder andere Techs) überspringen
+            return pyomo.Constraint.Skip
+
+        # 2. Der Constraint: Import-Kapazität vs. Gesamtzubau (Q_ext_new)
+        # Hinweis: Stelle sicher, dass m.capacity_imported nur den CHINA-Import-Pfad trackt!
+        return m.capacity_imported[stf, location, tech, stage] <= \
+            percentage_factor * m.Q_ext_new[stf, location, tech]
+
+
 class StockpileTotalRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
         if not check_valid_indices(m, tech, stage): return pyomo.Constraint.Skip
@@ -220,6 +237,7 @@ class SupplyCompositionRule(AbstractConstraint):
                     stf, location, tech, stage]) +
                 (m.capacity_imported_flow[stf, location, tech, stage] + m.capacity_imported_stockout[
                     stf, location, tech, stage]))
+
 
 
 class ComponentBalanceRule(AbstractConstraint):
@@ -468,6 +486,7 @@ def apply_material_constraints(m):
         ProcessingCapacitiesOutputLimitRule(),
         CapacityProducedOutputCompositionRule(),
         CapacityImportedCompositionRule(),
+        LimitFinalWindImportsRule(),
         StockpileTotalRule(),
         StockpileDomesticRule(),
         StockpileImportedRule(),
