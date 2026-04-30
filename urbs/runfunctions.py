@@ -674,6 +674,8 @@ def run_scenario(
 
     optim = setup_solver(optim, logfile=log_filename)
 
+    prob.write("my_debug_model.lp", io_options={'symbolic_solver_labels': True})
+
 
     result = optim.solve(prob, tee=True)
 
