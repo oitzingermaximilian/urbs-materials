@@ -452,7 +452,17 @@ class OpexCostRule(AbstractConstraint):
                 sum(m.cost_scrap[stf, loc, tech] for loc in m.location for tech in m.tech) +
                 sum(m.material_mined[stf, mat] * m.cost_mining[stf, mat] for mat in m.materials)
         )
-        return m.cost_opex_total_extension[stf] == total_opex * f_cost
+        # EoS-Einsparungen für bulk material downstream manufacturing abziehen
+        savings_bulkmat = 0
+        if hasattr(m, 'PRICEREDUCTION_BULKMAT_ONETECH_TOTAL'):
+            savings_bulkmat = sum(
+                m.PRICEREDUCTION_BULKMAT_ONETECH_TOTAL[stf, loc, tech, stage]
+                for loc in m.location
+                for tech in getattr(m, 'tech_one_tech', [])
+                for stage in getattr(m, 'stages_one_tech', [])
+                if (stf, loc, tech, stage) in m.PRICEREDUCTION_BULKMAT_ONETECH_TOTAL
+            )
+        return m.cost_opex_total_extension[stf] == (total_opex - savings_bulkmat) * f_cost
 
 
 class TradeCostRule(AbstractConstraint):

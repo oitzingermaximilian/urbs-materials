@@ -708,8 +708,9 @@ def apply_numerical_scaling(data):
     Fixed Scaling: MW -> GW conversion.
     - Capacities & Demand: Multiply by 1e-3 (MW to GW)
     - Costs: LEAVE ALONE. Numerically, €/MW is identical to k€/GW.
+    - CO2 Limit: Multiply by 1e-3 (t to kton)
     """
-    print("\n--- ⚖️ CORRECTED SCALING (MW->GW, €->k€) ---")
+    print("\n--- ⚖️ CORRECTED SCALING (MW->GW, €->k€, t->kton) ---")
 
     MW_to_GW = 1e-3
 
@@ -749,5 +750,20 @@ def apply_numerical_scaling(data):
     # Tons/MW is numerically identical to kton/GW.
     # If your data is 3.047, keep it 3.047.
 
-    print(f"✅ Scaling Corrected. RHS -> 1e-3. Costs/Ratios -> 1.0 (Stay as is).")
+    # 6. Global Properties (CO2 Limit)
+    if 'global_prop' in data:
+        df_global = data['global_prop']
+        cols = df_global.columns.tolist()
+
+        # Safely find the standard urbs column names
+        name_col = 'Property' if 'Property' in cols else ('prop' if 'prop' in cols else cols[0])
+        val_col = 'value' if 'value' in cols else ('Value' if 'Value' in cols else cols[-1])
+
+        # Apply scaling to the absolute CO2 limit
+        mask = df_global[name_col] == 'CO2 limit'
+        if mask.any():
+            df_global.loc[mask, val_col] *= MW_to_GW
+            print(f"  -> CO2 limit scaled to ktons.")
+
+    print("✅ Scaling Corrected. RHS -> 1e-3. Costs/Ratios -> 1.0 (Stay as is).")
     return data

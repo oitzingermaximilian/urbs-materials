@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import pyomo.environ as pyomo
-from pyomo.environ import value
+from pyomo.environ import value, Binary, NonNegativeReals
 
 
 def _normalize_target_techs(target_tech_name):
@@ -70,13 +70,13 @@ def setup_onetech_learning(m, target_tech_name='solarPV', target_stages=None):
         domain=pyomo.Binary
     )
 
-    # 2. Total Savings Variable ($)
+    # 2. Total Savings Variable ($) - Investment
     m.PRICEREDUCTION_ONETECH_TOTAL = pyomo.Var(
         m.stf, m.location, m.tech_one_tech, m.stages_one_tech,
         domain=pyomo.NonNegativeReals
     )
 
-    # 3. Unit Price Reduction ($/MW)
+    # 3. Unit Price Reduction ($/MW) - Investment
     m.pricereduction_onetech_unit = pyomo.Var(
         m.stf, m.location, m.tech_one_tech, m.stages_one_tech,
         domain=pyomo.NonNegativeReals
@@ -88,8 +88,21 @@ def setup_onetech_learning(m, target_tech_name='solarPV', target_stages=None):
         domain=pyomo.NonNegativeReals
     )
 
+    # 5. Total Savings Variable ($) - Bulk Material Downstream Manufacturing
+    m.PRICEREDUCTION_BULKMAT_ONETECH_TOTAL = pyomo.Var(
+        m.stf, m.location, m.tech_one_tech, m.stages_one_tech,
+        domain=pyomo.NonNegativeReals
+    )
+
+    # 6. Unit Price Reduction ($/MW) - Bulk Material Downstream Manufacturing
+    m.pricereduction_bulkmat_onetech_unit = pyomo.Var(
+        m.stf, m.location, m.tech_one_tech, m.stages_one_tech,
+        domain=pyomo.NonNegativeReals
+    )
+
     # D. Apply Constraints
     _apply_constraints(m)
+    _apply_bulkmat_constraints(m)
     print("--- Single-Tech Learning Module Ready ---")
 
 
@@ -163,6 +176,60 @@ class OneTech_Q_PerStep(AbstractConstraint):
         )
         return cumulative_prod >= active_threshold
 
+
+# --- BULK MATERIAL EOS CONSTRAINTS ---
+
+class OneTech_BulkMat_CostSavings_Constraint(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage):
+        # 1. Safety Check: Does this Tech/Stage combination exist in the data?
+        first_step = list(m.nsteps_sec)[0]
+        if (location, tech, stage, first_step) not in m.P_sec_downstream_manufacturing:
+            # It's an invalid combo (e.g. Solar + Blades). Force the variable to 0.
+            return m.PRICEREDUCTION_BULKMAT_ONETECH_TOTAL[stf, location, tech, stage] == 0
+
+        # 2. Normal Calculation
+        reduction_value = sum(
+            m.P_sec_downstream_manufacturing[location, tech, stage, n]
+            * m.aux_onetech_prod[stf, location, tech, stage, n]
+            for n in m.nsteps_sec
+        )
+        return m.PRICEREDUCTION_BULKMAT_ONETECH_TOTAL[stf, location, tech, stage] == reduction_value
+
+
+class OneTech_BulkMat_PriceReduction_Calc(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage):
+        # 1. Safety Check
+        first_step = list(m.nsteps_sec)[0]
+        if (location, tech, stage, first_step) not in m.P_sec_downstream_manufacturing:
+            return m.pricereduction_bulkmat_onetech_unit[stf, location, tech, stage] == 0
+
+        # 2. Normal Calculation
+        unit_val = sum(
+            m.P_sec_downstream_manufacturing[location, tech, stage, n] * m.BD_onetech[stf, location, tech, stage, n]
+            for n in m.nsteps_sec
+        )
+        return m.pricereduction_bulkmat_onetech_unit[stf, location, tech, stage] == unit_val
+
+
+class OneTech_BulkMat_Relation_Pnew_Pprior(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage):
+        # 1. Safety Check
+        first_step = list(m.nsteps_sec)[0]
+        if (location, tech, stage, first_step) not in m.P_sec_downstream_manufacturing:
+            return pyomo.Constraint.Skip  # Already forced to 0 above, no need to relate them
+
+        # 2. Normal Monotonicity Logic
+        if stf == 2024:
+            return pyomo.Constraint.Skip
+
+        if stf == value(m.y0):
+            lhs = m.pricereduction_bulkmat_onetech_unit[stf, location, tech, stage]
+            rhs = 0
+            return lhs >= rhs
+        else:
+            lhs = m.pricereduction_bulkmat_onetech_unit[stf, location, tech, stage]
+            rhs = m.pricereduction_bulkmat_onetech_unit[stf - 1, location, tech, stage]
+            return lhs >= rhs
 
 # --- GROUP 2: LINEARIZATION CONSTRAINTS ---
 
@@ -248,3 +315,25 @@ def _apply_constraints(m):
                              rule=lambda m, t, l, tech, s, n: OneTech_NonNegativity_Z().apply_rule(m, t, l, tech, s,
                                                                                                    n)))
 
+
+# ==============================================================================
+# 4. BULK MATERIAL CONSTRAINT APPLIER
+# ==============================================================================
+def _apply_bulkmat_constraints(m):
+    # 1. Total Cost Savings
+    setattr(m, "c_bulkmat_onetech_costsavings", pyomo.Constraint(
+        m.stf, m.location, m.tech_one_tech, m.stages_one_tech,
+        rule=lambda m, t, l, tech, s: OneTech_BulkMat_CostSavings_Constraint().apply_rule(m, t, l, tech, s)
+    ))
+
+    # 2. Unit Price Reduction
+    setattr(m, "c_bulkmat_onetech_pricered", pyomo.Constraint(
+        m.stf, m.location, m.tech_one_tech, m.stages_one_tech,
+        rule=lambda m, t, l, tech, s: OneTech_BulkMat_PriceReduction_Calc().apply_rule(m, t, l, tech, s)
+    ))
+
+    # 3. NEW: Force learning to go forward for bulk materials
+    setattr(m, "c_bulkmat_onetech_relation", pyomo.Constraint(
+        m.stf, m.location, m.tech_one_tech, m.stages_one_tech,
+        rule=lambda m, t, l, tech, s: OneTech_BulkMat_Relation_Pnew_Pprior().apply_rule(m, t, l, tech, s)
+    ))

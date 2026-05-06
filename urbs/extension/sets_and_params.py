@@ -468,6 +468,7 @@ def apply_sets_and_params(m, data_urbsextensionv1):
 
     recycling_costs = data_urbsextensionv1["recyclingcost_dict"]
     processing_stage_costs = data_urbsextensionv1["processing_stage_cost_dict"]
+    material_and_downstream_manufacturing = data_urbsextensionv1["material_downstream_cost_dict"]
 
     def create_absolute_recycling_dict(reduction_percentages):
         absolute_dict = {}
@@ -485,6 +486,17 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         for n in reduction_percentages.keys():
             absolute_dict[n] = {}
             for (stf, location, tech, stage), cost in processing_stage_costs.items():
+                # Costs are already k€/GW. No scaling needed.
+                absolute_dict[n][(stf, location, tech, stage)] = cost * (
+                        1 - reduction_percentages[n]
+                )
+        return absolute_dict
+
+    def create_absolute_mat_and_downstream_dicts(reduction_percentages):
+        absolute_dict = {}
+        for n in reduction_percentages.keys():
+            absolute_dict[n] = {}
+            for (stf, location, tech, stage), cost in material_and_downstream_manufacturing.items():
                 # Costs are already k€/GW. No scaling needed.
                 absolute_dict[n][(stf, location, tech, stage)] = cost * (
                         1 - reduction_percentages[n]
@@ -515,6 +527,18 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         "LR25": create_absolute_recycling_dict(reduction_percentage_25),
     }
 
+    absolute_mat_downstream_reductions = {
+        "LR1": create_absolute_mat_and_downstream_dicts(reduction_percentage_1),
+        "LR3_5": create_absolute_mat_and_downstream_dicts(reduction_percentage_3_5),
+        "LR4": create_absolute_mat_and_downstream_dicts(reduction_percentage_4),
+        "LR6": create_absolute_mat_and_downstream_dicts(reduction_percentage_6),
+        "LR7": create_absolute_mat_and_downstream_dicts(reduction_percentage_7),
+        "LR8": create_absolute_mat_and_downstream_dicts(reduction_percentage_8),
+        "LR9": create_absolute_mat_and_downstream_dicts(reduction_percentage_9),
+        "LR10": create_absolute_mat_and_downstream_dicts(reduction_percentage_10),
+        "LR25": create_absolute_mat_and_downstream_dicts(reduction_percentage_25),
+    }
+
     all_relative_reductions = {
         "LR1": reduction_percentage_1,
         "LR3_5": reduction_percentage_3_5,
@@ -535,6 +559,10 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     )
     selected_recycling_reductions = absolute_recycling_reductions.get(
         LEARNING_RATE, absolute_recycling_reductions["LR4"]
+    )
+
+    selected_mats_and_downstream_reductions = absolute_mat_downstream_reductions.get(
+        LEARNING_RATE, absolute_mat_downstream_reductions["LR4"]
     )
 
     # NOM: \Delta P^{inv} | Absolute OPEX reduction per stage | k€
@@ -566,6 +594,16 @@ def apply_sets_and_params(m, data_urbsextensionv1):
             (2024, loc, tech), 0
         ),
         doc=f"Absolute recycling cost reduction values for {LEARNING_RATE} (k€)",
+    )
+
+    m.P_sec_downstream_manufacturing = pyomo.Param(
+        m.location,
+        m.tech,
+        m.stages,
+        m.nsteps_sec,
+        initialize=lambda m, loc, tech, stage, n: selected_mats_and_downstream_reductions[n].get(
+            (2024, loc, tech, stage), 0
+        ),
     )
 
     # ========================================

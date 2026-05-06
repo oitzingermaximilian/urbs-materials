@@ -338,7 +338,7 @@ def load_data_from_excel(file_path):
         # SCALING APPLIED: Init Cap (MW -> GW), Energy Needs (MWh -> GWh)
         static_tech_specs["init_cap"] = {k: v * GW_SCALE for k, v in tech_stage_data['init_cap'].to_dict().items()}
         static_tech_specs["build_time"] = tech_stage_data['build_time_lag'].to_dict()
-        static_tech_specs["energy_needs"] = {k: v * GW_SCALE for k, v in
+        static_tech_specs["energy_needs"] = {k: v for k, v in
                                              tech_stage_data['energy_needs'].to_dict().items()}
 
     # B. Material Intensity
@@ -627,31 +627,30 @@ def run_scenario(
     validate_input(data)
     validate_dc_objective(data, objective)
 
-    import pandas as pd
+    # =================================================================
+    # THE "DATA" DICTIONARY DUMP (Fixed for Empty DataFrames)
+    # =================================================================
+    print("Dumping standard urbs 'data' dictionary to Excel...")
+    data_dump_file = os.path.join(result_dir, "standard_urbs_data_dump.xlsx")
 
-    def simple_data_audit(data_urbs, data_ext, filename="simple_audit.xlsx"):
-        print("Writing simple audit...")
-        with pd.ExcelWriter(filename) as writer:
-            # 1. Audit Extension Dicts (Manufacturing, Material, etc.)
-            for key, val in data_ext.items():
-                if isinstance(val, dict):
-                    # Flatten dictionary: Keys become columns, Value becomes the last column
-                    df = pd.Series(val).reset_index()
-                    # Dynamically rename columns based on number of index levels
-                    df.columns = [f'attr_{i}' for i in range(len(df.columns) - 1)] + ['value']
+    with pd.ExcelWriter(data_dump_file) as writer:
+        for sheet_name, df in data.items():
+            # Excel sheet names have a strict 31 character limit
+            safe_sheet_name = str(sheet_name)[:31]
 
-                    sheet_name = str(key)[:30]
-                    df.to_excel(writer, sheet_name=sheet_name, index=False)
+            if isinstance(df, pd.DataFrame):
+                if df.empty:
+                    # FIX: If it's empty, just write a placeholder to avoid the Pandas crash
+                    pd.DataFrame(["[Empty DataFrame]"]).to_excel(writer, sheet_name=safe_sheet_name, index=False,
+                                                                 header=False)
+                else:
+                    df.to_excel(writer, sheet_name=safe_sheet_name)
+            else:
+                # For basic strings or numbers in the dictionary
+                pd.DataFrame([str(df)]).to_excel(writer, sheet_name=safe_sheet_name, index=False, header=False)
 
-            # 2. Audit Energy Data (standard Urbs DataFrames)
-            # unittype, demand, etc., are already DataFrames
-            if 'unittype' in data_urbs:
-                data_urbs['unittype'].to_excel(writer, sheet_name='Base_Tech_Specs')
-
-        print(f"✅ Simple audit saved to {filename}")
-
-    # Usage:
-    simple_data_audit(data, data_urbsextensionv1)
+    print(f"✅ Standard urbs data saved to: {data_dump_file}")
+    # =================================================================
 
 
     # create model
@@ -666,6 +665,26 @@ def run_scenario(
         window_end=window_end,
         indexlist=indexlist,
     )
+
+    # ---> ADD THIS RAW PARAMETER DUMP RIGHT HERE <---
+    print("Dumping all Pyomo parameters to Excel...")
+    rows = []
+    # Loop through every actual parameter inside the Pyomo model
+    for param in prob.component_objects(pyomo.Param, active=True):
+        for index in param:
+            # Extract the raw number Pyomo is using
+            val = pyomo.value(param[index], exception=False)
+            rows.append({
+                "Parameter Name": param.name,
+                "Index": str(index),
+                "Value": val
+            })
+
+    df_params = pd.DataFrame(rows)
+    dump_file = os.path.join(result_dir, "actual_pyomo_parameters.xlsx")
+    df_params.to_excel(dump_file, index=False)
+    print(f"✅ Raw Pyomo parameters saved to: {dump_file}")
+    # ---------------------------------------------------------
 
 
     log_filename = os.path.join(result_dir, "{}.log").format(sce)
