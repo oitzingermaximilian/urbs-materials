@@ -36,8 +36,10 @@ def setup_solver(optim, logfile="solver.log"):
     """Configure the solver with high-precision settings."""
     if optim.name == "gurobi":
         optim.set_options("logfile={}".format(logfile))
-        # 1. ACCURACY & STABILITY
+        optim.set_options("DualReductions=0")
+        optim.set_options("ResultFile=model_conflict.ilp")
         optim.set_options("MIPGap=1e-5")
+
     elif optim.name == "glpk":
         optim.set_options("log={}".format(logfile))
         optim.set_options("--mipgap 0")

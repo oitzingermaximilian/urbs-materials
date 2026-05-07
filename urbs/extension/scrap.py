@@ -88,7 +88,7 @@ class capacity_scrap_dec_rule(AbstractConstraint):
         return expr
 
 
-class capacity_scrap_rec_rule(AbstractConstraint):
+class capacity_scrap_rec_rule(AbstractConstraint): #INACTIVE
     def apply_rule(self, m, stf, location, tech):
         # CON: Scrap for Recycling | Calculates scrap input required for secondary production
         lhs = (

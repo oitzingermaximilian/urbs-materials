@@ -33,7 +33,7 @@ def scenario_solar_recycling_medium(data, data_urbsextensionv1):
         recyclingcost = data_urbsextensionv1["recyclingcost_dict"]
         location = "EU27"
 
-        # FIXED: 1720.584 EUR/t -> kEUR/t
+        # FIXED: 1720.584 EUR/t -> kEUR/kt
         solar_recycling_price = 1720.584
 
         for stf in range(2024, 2051):

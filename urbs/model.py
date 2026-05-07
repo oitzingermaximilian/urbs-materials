@@ -928,7 +928,7 @@ def res_global_co2_limit_rule(m, stf):
     raw_limit_val = m.global_prop_dict["value"].get((stf, "CO2 limit"), float('inf'))
 
     # Apply the k-Universe MASS_SCALE (1e-3) directly
-    limit_val = raw_limit_val * 1e-3
+    limit_val = raw_limit_val
 
     if math.isinf(limit_val):
         return pyomo.Constraint.Skip
