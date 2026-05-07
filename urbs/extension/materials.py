@@ -467,13 +467,27 @@ class OpexCostRule(AbstractConstraint):
 
 class TradeCostRule(AbstractConstraint):
     def apply_rule(self, m, stf):
+        # Calculate discount factor
         j, stf_min = 0.03, min(m.stf)
         f_cost = (1 + j) ** (1 - (stf - stf_min))
-        total_trade = (
-                sum(m.capacity_imported[stf, loc, tech, stage] * m.cost_import_part[stf, loc, tech, stage]
-                    for loc in m.location for (tech, stage) in m.tech_stage_combinations) +
-                sum(m.material_imported[stf, mat] * m.cost_import_material[stf, mat] for mat in m.materials)
+
+        # 1. Base cost of imported parts/capacities
+        cost_parts = sum(
+            m.capacity_imported[stf, loc, tech, stage] * m.cost_import_part[stf, loc, tech, stage]
+            for loc in m.location for (tech, stage) in m.tech_stage_combinations
         )
+
+        # 2. Base cost of imported materials (Dynamic Block Pricing)
+        # We multiply the volume in each block by that specific block's price
+        cost_materials = sum(
+            m.material_imported_block[stf, mat, blk] * m.mat_block_prices[stf, mat, blk]
+            for mat in m.materials for blk in m.price_blocks
+        )
+
+        # Total base trade cost
+        total_trade = cost_parts + cost_materials
+
+        # Apply the discount factor to the total
         return m.cost_trade_total_extension[stf] == total_trade * f_cost
 
 

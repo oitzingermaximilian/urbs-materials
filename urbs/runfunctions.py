@@ -253,6 +253,68 @@ def process_gas_block_sheet(sheet_data):
     return block_names, block_limits, block_prices
 
 
+def process_material_block_sheet(sheet_data):
+    """
+    Processes dynamic material pricing.
+    Reads the baseline/scenario settings, linearly interpolates demand
+    across 2024-2050, and builds the block limits/prices for Pyomo.
+    """
+    # 1. Validate columns
+    required_cols = [
+        "material", "base_2024", "lds_2030", "lds_2050",
+        "hds_2030", "hds_2050", "price_t1", "price_t2", "price_t3"
+    ]
+    for col in required_cols:
+        if col not in sheet_data.columns:
+            raise ValueError(f"Material block sheet must have column '{col}'")
+
+    # 2. Setup standard arrays
+    years = np.arange(2024, 2051)
+    anchor_years = [2024, 2030, 2050]
+
+    block_names = ["Tier1", "Tier2", "Tier3"]
+    material_block_limits = {}
+    material_block_prices = {}
+
+    # 3. Iterate and interpolate
+    for _, row in sheet_data.iterrows():
+        mat = row["material"]
+
+        # Anchor points for the specific material
+        lds_anchors = [row["base_2024"], row["lds_2030"], row["lds_2050"]]
+        hds_anchors = [row["base_2024"], row["hds_2030"], row["hds_2050"]]
+
+        # Linearly interpolate for all years
+        lds_curve = np.interp(years, anchor_years, lds_anchors)
+        hds_curve = np.interp(years, anchor_years, hds_anchors)
+
+        # Prices (Add * COST_SCALE here if your model requires it globally!)
+        prices = {
+            "Tier1": float(row["price_t1"]),
+            "Tier2": float(row["price_t2"]),
+            "Tier3": float(row["price_t3"])
+        }
+
+        # Calculate limits and map them
+        for i, year in enumerate(years):
+            current_lds = lds_curve[i]
+            current_hds = hds_curve[i]
+
+            limits = {
+                "Tier1": current_lds,
+                "Tier2": max(0, current_hds - current_lds),  # max(0, ...) prevents negative limits
+                "Tier3": 999999.0  # Effectively infinite
+            }
+
+            # Populate the dictionaries with keys: (stf, material, block)
+            for block in block_names:
+                material_block_limits[(year, mat, block)] = limits[block]
+                material_block_prices[(year, mat, block)] = prices[block]
+
+    print(f"Material Blocks Processed. Generated {len(material_block_limits)} limit entries dynamically.")
+
+    return block_names, material_block_limits, material_block_prices
+
 def load_data_from_excel(file_path):
     """Loads data from Excel and processes all relevant sheets with SCALING."""
 
@@ -279,9 +341,11 @@ def load_data_from_excel(file_path):
     stocklvl_data = pd.read_excel(file_path, sheet_name="stocklvl")
     installable_capacity_data = pd.read_excel(file_path, sheet_name="installable_capacity")
     gas_block_data = pd.read_excel(file_path, sheet_name="gas_block")
+    mats_block_data = pd.read_excel(file_path, sheet_name="material_blocks")
 
     # Process Gas Blocks
     block_names, block_limits_dict, block_price_dict = process_gas_block_sheet(gas_block_data)
+    mat_blocks, mat_limits, mat_prices = process_material_block_sheet(mats_block_data)
 
     # Material Sheets
     tech_stage_data = clean_headers(clean_df_strings(pd.read_excel(file_path, "Tech_Stage_Specs")))
@@ -509,7 +573,9 @@ def load_data_from_excel(file_path):
         "block_limits": block_limits_dict,  # GWh
         "block_price": block_price_dict,  # k€/GWh
         "block_names": block_names,
-
+        "mat_blocks":mat_blocks,
+        "mat_limits":mat_limits,
+        "mat_prices":mat_prices,
         "static_tech_specs": static_tech_specs,  # GW & GWh
         "final_stage_map": final_stage_map,
         "mat_mining_limit_dict": mat_mining_limit_dict,  # kton

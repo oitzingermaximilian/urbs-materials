@@ -15,7 +15,8 @@ from urbs.extension import (
     apply_gas_block_pricing,
     apply_material_constraints,
     setup_onetech_learning,
-    setup_scrap_onetech_learning
+    setup_scrap_onetech_learning,
+    apply_material_block_pricing
 )
 
 
@@ -387,6 +388,8 @@ def create_model(
     apply_variables(m)
 
     apply_gas_block_pricing(m, data_urbsextensionv1)
+
+    apply_material_block_pricing(m, data_urbsextensionv1)
 
     apply_stockpiling_constraints(m)
 
