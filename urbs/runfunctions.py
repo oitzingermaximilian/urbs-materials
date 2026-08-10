@@ -37,8 +37,12 @@ def setup_solver(optim, logfile="solver.log"):
     if optim.name == "gurobi":
         optim.set_options("logfile={}".format(logfile))
         optim.set_options("DualReductions=0")
-        optim.set_options("ResultFile=model_conflict.ilp")
-        optim.set_options("MIPGap=1e-5")
+        optim.set_options("MIPGap=1e-4")
+        # optim.set_options("NumericFocus=2")  # Can cause solver crashes on hard MIPs
+        # optim.set_options("ScaleFlag=2")     # Can cause solver crashes on hard MIPs
+        optim.set_options("FeasibilityTol=1e-6")
+        optim.set_options("IntFeasTol=1e-6")
+        optim.set_options("OptimalityTol=1e-6")
 
     elif optim.name == "glpk":
         optim.set_options("log={}".format(logfile))
@@ -90,6 +94,14 @@ def process_cost_sheet(cost_sheet):
     manufacturingcost_dict = {}
     remanufacturingcost_dict = {}
     recyclingcost_dict = {}
+    recyclingcost_magnet_dict = {}
+    recyclingcost_bulk_dict = {}
+    recyclingcapex_dict = {}
+    recyclingfom_magnet_dict = {}
+    recyclingfom_bulk_dict = {}
+    recyclingfom_dict = {}
+    recyclingcapex_magnet_dict = {}
+    recyclingcapex_bulk_dict = {}
     o_and_m_dict = {}
 
     years = cost_sheet["Stf"].unique()
@@ -113,6 +125,16 @@ def process_cost_sheet(cost_sheet):
 
             if costtype == "recycling":
                 recyclingcost_dict[key] = scaled_val
+            elif costtype == "recyclingcostmagnet":
+                recyclingcost_magnet_dict[key] = scaled_val
+            elif costtype == "recyclingcostbulk":
+                recyclingcost_bulk_dict[key] = scaled_val
+            elif costtype == "recyclingcapex":
+                recyclingcapex_dict[key] = scaled_val
+            elif costtype == "recyclingcapexmagnet":
+                recyclingcapex_magnet_dict[key] = scaled_val
+            elif costtype == "recyclingcapexbulk":
+                recyclingcapex_bulk_dict[key] = scaled_val
             elif costtype == "import":
                 importcost_dict[key] = scaled_val
             elif costtype == "manufacturing":
@@ -127,6 +149,14 @@ def process_cost_sheet(cost_sheet):
         manufacturingcost_dict,
         remanufacturingcost_dict,
         recyclingcost_dict,
+        recyclingcost_magnet_dict,
+        recyclingcost_bulk_dict,
+        recyclingcapex_dict,
+        recyclingfom_magnet_dict,
+        recyclingfom_bulk_dict,
+        recyclingfom_dict,
+        recyclingcapex_magnet_dict,
+        recyclingcapex_bulk_dict,
         o_and_m_dict,
     )
 
@@ -225,6 +255,31 @@ def process_loadfactors_sheet(sheet_data):
         for (year, timestep), value in sheet_data[col].items():
             loadfactors_dict[(timestep, year, location, tech)] = value
     return loadfactors_dict
+
+
+def process_decommissioning_sheet(sheet_data):
+    """Processes decommissioning capacity. SCALING: MW -> GW"""
+    decom_dict = {}
+    if sheet_data.empty:
+        return decom_dict
+    
+    if "Year" not in sheet_data.columns:
+        return decom_dict
+
+    sheet_data = sheet_data.set_index("Year")
+    for col in sheet_data.columns:
+        if str(col).startswith('Unnamed') or str(col) == 'Installed wind energy capacity': 
+            continue
+            
+        tech = str(col).strip()
+        location = "EU27"
+        
+        for year, value in sheet_data[col].items():
+            if pd.notna(value):
+                # SCALE: MW -> GW
+                decom_dict[(int(year), location, tech)] = float(value) * GW_SCALE
+                
+    return decom_dict
 
 
 def process_gas_block_sheet(sheet_data):
@@ -342,6 +397,11 @@ def load_data_from_excel(file_path):
     installable_capacity_data = pd.read_excel(file_path, sheet_name="installable_capacity")
     gas_block_data = pd.read_excel(file_path, sheet_name="gas_block")
     mats_block_data = pd.read_excel(file_path, sheet_name="material_blocks")
+
+    if "decommissioning" in xls.sheet_names:
+        decom_data = pd.read_excel(file_path, sheet_name="decommissioning")
+    else:
+        decom_data = pd.DataFrame()
 
     # Process Gas Blocks
     block_names, block_limits_dict, block_price_dict = process_gas_block_sheet(gas_block_data)
@@ -554,8 +614,50 @@ def load_data_from_excel(file_path):
         manufacturingcost_dict,
         remanufacturingcost_dict,
         recyclingcost_dict,
+        recyclingcost_magnet_dict,
+        recyclingcost_bulk_dict,
+        recyclingcapex_dict,
+        recyclingfom_magnet_dict,
+        recyclingfom_bulk_dict,
+        recyclingfom_dict,
+        recyclingcapex_magnet_dict,
+        recyclingcapex_bulk_dict,
         o_and_m_dict,
     ) = process_cost_sheet(cost_sheet)
+    
+    if "Recycling_Costs" in xls.sheet_names or "Recycling_Prices" in xls.sheet_names:
+        sheet_name_rec = "Recycling_Costs" if "Recycling_Costs" in xls.sheet_names else "Recycling_Prices"
+        rec_cost_sheet = clean_headers(clean_df_strings(pd.read_excel(xls, sheet_name=sheet_name_rec)))
+        
+        target_years_rec = range(2024, 2051)
+        
+        for _, row in rec_cost_sheet.iterrows():
+            loc = row.get('Location')
+            tech = row.get('Technology')
+            if not loc or not tech or pd.isna(loc) or pd.isna(tech): continue
+            
+            for y in target_years_rec:
+                key = (y, loc, tech)
+                if 'capex_magnet' in row and pd.notna(row['capex_magnet']):
+                    recyclingcapex_magnet_dict[key] = float(row['capex_magnet']) * COST_SCALE
+                if 'opex_var_magnet' in row and pd.notna(row['opex_var_magnet']):
+                    recyclingcost_magnet_dict[key] = float(row['opex_var_magnet']) * COST_SCALE
+                if 'capex_bulk' in row and pd.notna(row['capex_bulk']):
+                    recyclingcapex_bulk_dict[key] = float(row['capex_bulk']) * COST_SCALE
+                if 'opex_var_bulk' in row and pd.notna(row['opex_var_bulk']):
+                    recyclingcost_bulk_dict[key] = float(row['opex_var_bulk']) * COST_SCALE
+                if 'capex' in row and pd.notna(row['capex']):
+                    recyclingcapex_dict[key] = float(row['capex']) * COST_SCALE
+                if 'opex_var' in row and pd.notna(row['opex_var']):
+                    recyclingcost_dict[key] = float(row['opex_var']) * COST_SCALE
+                if 'opex_fixed_magnet' in row and pd.notna(row['opex_fixed_magnet']):
+                    recyclingfom_magnet_dict[key] = float(row['opex_fixed_magnet']) * COST_SCALE
+                if 'opex_fixed_bulk' in row and pd.notna(row['opex_fixed_bulk']):
+                    recyclingfom_bulk_dict[key] = float(row['opex_fixed_bulk']) * COST_SCALE
+                if 'opex_fixed' in row and pd.notna(row['opex_fixed']):
+                    recyclingfom_dict[key] = float(row['opex_fixed']) * COST_SCALE
+
+    decommissioned_cap_dict = process_decommissioning_sheet(decom_data)
 
     data_urbsextensionv1 = {
         "base_params": base_params,
@@ -563,6 +665,14 @@ def load_data_from_excel(file_path):
         "manufacturingcost_dict": manufacturingcost_dict,  # k€/GW
         "remanufacturingcost_dict": remanufacturingcost_dict,  # k€/GW
         "recyclingcost_dict": recyclingcost_dict,  # k€/kt
+        "recyclingcost_magnet_dict": recyclingcost_magnet_dict,
+        "recyclingcost_bulk_dict": recyclingcost_bulk_dict,
+        "recyclingcapex_dict": recyclingcapex_dict,
+        "recyclingfom_magnet_dict": recyclingfom_magnet_dict,
+        "recyclingfom_bulk_dict": recyclingfom_bulk_dict,
+        "recyclingfom_dict": recyclingfom_dict,
+        "recyclingcapex_magnet_dict": recyclingcapex_magnet_dict,
+        "recyclingcapex_bulk_dict": recyclingcapex_bulk_dict,
         "o_and_m_dict": o_and_m_dict,  # k€/GW
         "locations_list": locations_list,
         "loadfactors_dict": loadfactors_dict,
@@ -570,6 +680,7 @@ def load_data_from_excel(file_path):
         "dcr_dict": dcr_dict,
         "stocklvl_dict": stocklvl_dict,  # GW
         "installable_capacity_dict": installable_capacity_dict,  # GW
+        "decommissioned_cap_dict": decommissioned_cap_dict, # GW
         "block_limits": block_limits_dict,  # GWh
         "block_price": block_price_dict,  # k€/GWh
         "block_names": block_names,

@@ -17,11 +17,28 @@ def check_valid_indices(m, tech, stage):
     """
     return (tech, stage) in m.tech_stage_combinations
 
-class ProcessingCapNewInvalidZeroRule(AbstractConstraint):
+class GhostCapacityZeroRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
         if (tech, stage) in m.tech_stage_combinations:
             return pyomo.Constraint.Skip
-        return m.processing_cap_new[stf, location, tech, stage] == 0
+        
+        # Force all stage-dependent variables to 0 for invalid (ghost) tech/stage combinations
+        return (
+            m.capacity_processing_total[stf, location, tech, stage] +
+            m.processing_cap_new[stf, location, tech, stage] +
+            m.capacity_produced_output[stf, location, tech, stage] +
+            m.capacity_produced_flow[stf, location, tech, stage] +
+            m.capacity_produced_storage[stf, location, tech, stage] +
+            m.capacity_produced_stockout[stf, location, tech, stage] +
+            m.capacity_imported[stf, location, tech, stage] +
+            m.capacity_imported_flow[stf, location, tech, stage] +
+            m.capacity_imported_storage[stf, location, tech, stage] +
+            m.capacity_imported_stockout[stf, location, tech, stage] +
+            m.Supply[stf, location, tech, stage] +
+            m.stock_domestic[stf, location, tech, stage] +
+            m.stock_imported[stf, location, tech, stage] +
+            m.components_stockpile[stf, location, tech, stage] == 0
+        )
 
 
 #################################################################################
@@ -68,32 +85,7 @@ class ProcessingCapacityGrowthLimitRule(AbstractConstraint):
             return lhs <= rhs
 
 
-# --- Scrap Handling Rules ---
 
-class ScrapHandlingCapacitiesOutputLimitRule(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech):
-        return m.capacity_scrap_handling_total[stf, location, tech] >= m.capacity_scrap_rec[stf, location, tech]
-
-
-class ScrapHandlingCapacitiesSizeRule(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech):
-        lhs = m.capacity_scrap_handling_total[stf, location, tech]
-        rhs = m.capacity_scrap_handling_init[location, tech] + sum(
-            m.scraphandling_cap_new[y, location, tech] for y in m.stf if y <= stf)
-        return lhs == rhs
-
-
-class ScrapHandlingCapacityGrowthLimitRule(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech):
-        # SCALING NOTE: Values in kton (k-Universe)
-        if stf == 2024:
-            max_capacity = 15.0 if tech in ["solarPV", "Batteries"] else 25.0
-            return m.scraphandling_cap_new[stf, location, tech] <= max_capacity
-        else:
-            lhs = (m.scraphandling_cap_new[stf, location, tech] - m.scraphandling_cap_new[stf - 1, location, tech])
-            rhs = (m.scraphandling_delta_grow[location, tech] + m.scraphandling_avg_growth[location, tech] *
-                   m.scraphandling_cap_new[stf - 1, location, tech])
-            return lhs <= rhs
 
 
 ##################################################################################
@@ -358,14 +350,25 @@ class MaterialDemandBalanceRule(AbstractConstraint):
 
 class ScrapMaterialLinkageRule(AbstractConstraint):
     def apply_rule(self, m, stf, material):
+        magnet_materials = ["dysprosium", "neodymium", "praseodymium", "terbium"]
         lhs = m.material_recycled[stf, material]
-        rhs = sum(
-            m.capacity_scrap_rec[stf, location, tech] * (m.scrap_content[tech, material] / m.f_scrap[location, tech]) *
-            m.recycling_efficiency[tech, material]
-            for location in m.location
-            for tech in m.tech
-            if (tech, material) in m.scrap_content and m.f_scrap[location, tech] > 0
-        )
+        
+        rhs = 0
+        for location in m.location:
+            for tech in m.tech:
+                if (tech, material) in m.scrap_content and m.f_scrap[location, tech] > 0:
+                    actual_f_scrap = m.f_scrap[location, tech]
+
+                    if tech in ["windon", "windoff"]:
+                        if material in magnet_materials:
+                            # Magnets are ONLY recovered if the turbine goes through the advanced magnet route
+                            rhs += m.capacity_scrap_magnet_route[stf, location, tech] * (m.scrap_content[tech, material] / actual_f_scrap) * m.recycling_efficiency[tech, material]
+                        else:
+                            # Bulk materials (steel, copper, aluminum) are recovered regardless of which route the turbine takes.
+                            # We explicitly sum both routes here so both pathways are visibly contributing.
+                            rhs += (m.capacity_scrap_magnet_route[stf, location, tech] + m.capacity_scrap_bulk_route[stf, location, tech]) * (m.scrap_content[tech, material] / actual_f_scrap) * m.recycling_efficiency[tech, material]
+                    else:
+                        rhs += m.capacity_scrap_rec[stf, location, tech] * (m.scrap_content[tech, material] / actual_f_scrap) * m.recycling_efficiency[tech, material]
         return lhs == rhs
 
 
@@ -377,15 +380,44 @@ class MiningLimit(AbstractConstraint):
         return lhs <= rhs
 
 
-class LimitResourceExistanceRule(AbstractConstraint):
+#class LimitResourceExistanceRule(AbstractConstraint): #deactivated
+#    def apply_rule(self, m, stf, material):
+#        total_allowable_metal_stock = (
+#                m.initial_total_reserves[material]
+#                + m.initial_total_resources[material] * 0.1
+#        )
+#        cumulative_mined = sum(m.material_mined[y, material] for y in m.stf if y <= stf)
+#        return m.remaining_reserves[stf, material] == total_allowable_metal_stock - cumulative_mined
+
+
+class MiningQuantityIncreaseRule(AbstractConstraint):
     def apply_rule(self, m, stf, material):
-        total_allowable_metal_stock = (
-                m.initial_total_reserves[material]
-                * m.mining_energy_transission_share[stf, material]
-                * m.mining_conversion_factor[stf, material]
-        )
-        cumulative_mined = sum(m.material_mined[year, material] for year in m.stf if year <= stf)
-        return m.remaining_reserves[stf, material] == total_allowable_metal_stock - cumulative_mined
+        # Define the maximum allowed increase (30%)
+        max_increase_rate = 0.30
+        prev_stf = stf - 1
+        if prev_stf not in m.stf:
+            return pyomo.Constraint.Skip
+
+        current_mining = m.material_mined[stf, material]
+        previous_mining = m.material_mined[prev_stf, material]
+
+        # Rule: Current <= Previous * 1.30
+        return current_mining <= previous_mining * (1 + max_increase_rate)
+
+
+class MiningQuantityDecreaseRule(AbstractConstraint):
+    def apply_rule(self, m, stf, material):
+        # Define the maximum allowed decrease (30%)
+        max_decrease_rate = 0.30
+        prev_stf = stf - 1
+        if prev_stf not in m.stf:
+            return pyomo.Constraint.Skip
+
+        current_mining = m.material_mined[stf, material]
+        previous_mining = m.material_mined[prev_stf, material]
+
+        # Rule: Current >= Previous * 0.70
+        return current_mining >= previous_mining * (1 - max_decrease_rate)
 
 
 class FactoryEnergyAnnualRule(AbstractConstraint):
@@ -426,15 +458,24 @@ class CapexCostRule(AbstractConstraint):
             for loc in m.location for (tech, stage) in m.tech_stage_combinations
         )
 
-        savings = 0
-        if hasattr(m, 'PRICEREDUCTION_ONETECH_TOTAL'):
-            savings = sum(
-                m.PRICEREDUCTION_ONETECH_TOTAL[stf, loc, tech, stage] * (f_inv - f_over)
+        # Hardcoded grid connection fee for offshore wind (500,000 kEUR/GW)
+        if 'windoff' in m.tech:
+            gross += sum(
+                m.capacity_ext_new[stf, loc, 'windoff'] * 250000 * (f_inv - f_over)
                 for loc in m.location
-                for (tech, stage) in m.tech_stage_combinations
-                if (stf, loc, tech, stage) in m.PRICEREDUCTION_ONETECH_TOTAL
+           )
+            
+        savings_capex = 0
+        if hasattr(m, 'PRICEREDUCTION_CAPEX_ONETECH_TOTAL'):
+            savings_capex = sum(
+                m.PRICEREDUCTION_CAPEX_ONETECH_TOTAL[stf, loc, tech, stage]
+                for loc in m.location
+                for tech in getattr(m, 'tech_one_tech', [])
+                for stage in getattr(m, 'stages_one_tech', [])
+                if (stf, loc, tech, stage) in m.PRICEREDUCTION_CAPEX_ONETECH_TOTAL
             )
-        return m.cost_capex_total_extension[stf] == gross - savings
+
+        return m.cost_capex_total_extension[stf] == gross - savings_capex * (f_inv - f_over)
 
 
 class OpexCostRule(AbstractConstraint):
@@ -452,6 +493,7 @@ class OpexCostRule(AbstractConstraint):
                 sum(m.cost_scrap[stf, loc, tech] for loc in m.location for tech in m.tech) +
                 sum(m.material_mined[stf, mat] * m.cost_mining[stf, mat] for mat in m.materials)
         )
+        
         # EoS-Einsparungen für bulk material downstream manufacturing abziehen
         savings_bulkmat = 0
         if hasattr(m, 'PRICEREDUCTION_BULKMAT_ONETECH_TOTAL'):
@@ -462,7 +504,29 @@ class OpexCostRule(AbstractConstraint):
                 for stage in getattr(m, 'stages_one_tech', [])
                 if (stf, loc, tech, stage) in m.PRICEREDUCTION_BULKMAT_ONETECH_TOTAL
             )
-        return m.cost_opex_total_extension[stf] == (total_opex - savings_bulkmat) * f_cost
+            
+        # EoS-Einsparungen für variable OPEX abziehen
+        savings_opex_var = 0
+        if hasattr(m, 'PRICEREDUCTION_ONETECH_TOTAL'):
+            savings_opex_var = sum(
+                m.PRICEREDUCTION_ONETECH_TOTAL[stf, loc, tech, stage]
+                for loc in m.location
+                for tech in getattr(m, 'tech_one_tech', [])
+                for stage in getattr(m, 'stages_one_tech', [])
+                if (stf, loc, tech, stage) in m.PRICEREDUCTION_ONETECH_TOTAL
+            )
+            
+        savings_fom = 0
+        if hasattr(m, 'PRICEREDUCTION_FOM_ONETECH_TOTAL'):
+            savings_fom = sum(
+                m.PRICEREDUCTION_FOM_ONETECH_TOTAL[stf, loc, tech, stage]
+                for loc in m.location
+                for tech in getattr(m, 'tech_one_tech', [])
+                for stage in getattr(m, 'stages_one_tech', [])
+                if (stf, loc, tech, stage) in m.PRICEREDUCTION_FOM_ONETECH_TOTAL
+            )
+            
+        return m.cost_opex_total_extension[stf] == (total_opex - savings_bulkmat - savings_opex_var - savings_fom) * f_cost
 
 
 class TradeCostRule(AbstractConstraint):
@@ -512,7 +576,7 @@ def apply_material_constraints(m):
     # FIX: NOW ITERATING OVER ALL COMBINATIONS (tech, stages)
     # The 'check_valid_indices' helper in each rule prevents crashing on invalid combos.
     stage_constraints = [
-        ProcessingCapNewInvalidZeroRule(),
+        GhostCapacityZeroRule(),
         ProcessingCapacitiesSizeRule(),
         ProcessingCapacityGrowthLimitRule(),
         ProcessingCapacitiesOutputLimitRule(),
@@ -538,9 +602,6 @@ def apply_material_constraints(m):
 
     # GROUP 2: (stf, location, tech)
     tech_constraints = [
-        ScrapHandlingCapacitiesSizeRule(),
-        ScrapHandlingCapacityGrowthLimitRule(),
-        ScrapHandlingCapacitiesOutputLimitRule(),
         FactoryEnergyAnnualRule(),
         NewlyAddedBalanceLCOE(),
         InstallationSupplyLinkRule(),
@@ -565,7 +626,9 @@ def apply_material_constraints(m):
         MaterialDemandBalanceRule(),
         ScrapMaterialLinkageRule(),
         MiningLimit(),
-        LimitResourceExistanceRule(),
+        #LimitResourceExistanceRule(),
+        MiningQuantityDecreaseRule(),
+        MiningQuantityIncreaseRule()
     ]
     for constraint_obj in material_constraints:
         name = constraint_obj.__class__.__name__

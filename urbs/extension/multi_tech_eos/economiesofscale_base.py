@@ -23,11 +23,13 @@ def debug_print(*args, **kwargs):
 
 class costsavings_constraint_sec_investment(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
+        if (tech, stage) not in m.tech_stage_combinations:
+            return pyomo.Constraint.Skip
         # CON: Stage Cost Savings | Calculates total cost savings based on active learning step
         # Savings = Sum_n( Reduction_Value[n] * Aux_Production[n] )
 
         investment_reduction_value = sum(
-            m.P_sec_investment[location, tech, stage, n]
+            m.P_sec_capex[location, tech, stage, n]
             * m.auxiliary_product_BD_q[stf, location, tech, stage, n]
             for n in m.nsteps_sec
         )
@@ -37,11 +39,13 @@ class costsavings_constraint_sec_investment(AbstractConstraint):
 
 class pricereduction_stage_calc(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
+        if (tech, stage) not in m.tech_stage_combinations:
+            return pyomo.Constraint.Skip
         # CON: Unit Price Reduction | Calculates current unit price reduction based on active binary
         # Calculates Unit Price Reduction (EUR/MW) based on active binary
 
         unit_reduction_value = sum(
-            m.P_sec_investment[location, tech, stage, n] * m.BD_sec[stf, location, tech, stage, n]
+            m.P_sec_capex[location, tech, stage, n] * m.BD_sec[stf, location, tech, stage, n]
             for n in m.nsteps_sec
         )
 
@@ -50,6 +54,8 @@ class pricereduction_stage_calc(AbstractConstraint):
 
 class BD_limitation_constraint_sec(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
+        if (tech, stage) not in m.tech_stage_combinations:
+            return pyomo.Constraint.Skip
         # CON: Learning Step Selection | Forces exactly one learning step to be active per stage
         bd_sum = sum(m.BD_sec[stf, location, tech, stage, n] for n in m.nsteps_sec)
         return bd_sum == 1
@@ -57,6 +63,8 @@ class BD_limitation_constraint_sec(AbstractConstraint):
 
 class relation_pnew_to_pprior_constraint_sec(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
+        if (tech, stage) not in m.tech_stage_combinations:
+            return pyomo.Constraint.Skip
         # CON: Price Monotonicity | Ensures price reductions cannot decrease (no unlearning)
         # Enforce Monotonicity: Price Reduction(y) >= Price Reduction(y-1)
         # "We cannot unlearn"
@@ -79,6 +87,8 @@ class relation_pnew_to_pprior_constraint_sec(AbstractConstraint):
 
 class q_perstep_constraint_sec(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
+        if (tech, stage) not in m.tech_stage_combinations:
+            return pyomo.Constraint.Skip
         """
         THE DRIVER: Cumulative Production >= Threshold of active step.
         """
@@ -109,6 +119,8 @@ class q_perstep_constraint_sec(AbstractConstraint):
 
 class upper_bound_z_constraint_sec(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage, n):
+        if (tech, stage) not in m.tech_stage_combinations:
+            return pyomo.Constraint.Skip
         # CON: Linearization Upper Bound Z | Big-M constraint for linearization (Aux <= M * Binary)
         # Aux <= BigM * Binary
         # Using m.gamma_prod as BigM
@@ -119,6 +131,8 @@ class upper_bound_z_constraint_sec(AbstractConstraint):
 
 class upper_bound_z_q1_eq_sec(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage, n):
+        if (tech, stage) not in m.tech_stage_combinations:
+            return pyomo.Constraint.Skip
         # CON: Linearization Upper Bound Q | Ensures Aux variable does not exceed actual production
         # Aux <= Current Production
         # We apply cost savings to CURRENT production
@@ -129,6 +143,8 @@ class upper_bound_z_q1_eq_sec(AbstractConstraint):
 
 class lower_bound_z_eq_sec(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage, n):
+        if (tech, stage) not in m.tech_stage_combinations:
+            return pyomo.Constraint.Skip
         # CON: Linearization Lower Bound | Ensures Aux variable tracks production when binary is active
         # Aux >= Current Production - BigM * (1 - Binary)
         lhs = m.auxiliary_product_BD_q[stf, location, tech, stage, n]
@@ -141,8 +157,16 @@ class lower_bound_z_eq_sec(AbstractConstraint):
 
 class non_negativity_z_eq_sec(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage, n):
+        if (tech, stage) not in m.tech_stage_combinations:
+            return pyomo.Constraint.Skip
         # CON: Linearization Non-Negativity | Ensures auxiliary variable is non-negative
         return m.auxiliary_product_BD_q[stf, location, tech, stage, n] >= 0
+
+class GhostBinariesZeroRule(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage, n):
+        if (tech, stage) in m.tech_stage_combinations:
+            return pyomo.Constraint.Skip
+        return m.BD_sec[stf, location, tech, stage, n] + m.auxiliary_product_BD_q[stf, location, tech, stage, n] == 0
 
 
 
@@ -166,6 +190,7 @@ def apply_combined_lr_constraints(m):
         upper_bound_z_q1_eq_sec(),
         lower_bound_z_eq_sec(),
         non_negativity_z_eq_sec(),
+        GhostBinariesZeroRule(),
     ]
 
     print(f"DEBUG: Registering Learning Rate Constraints with Stages...")

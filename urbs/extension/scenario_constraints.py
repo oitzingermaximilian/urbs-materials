@@ -68,18 +68,16 @@ class eu_extraction_constraint(AbstractConstraint):
         if mat not in CRMA_TARGET_MATERIALS or mat not in m.materials:
             return pyomo.Constraint.Skip
 
-        # DYNAMIC GEOLOGY CHECK (Prevents Infeasibility for elements like Rare Earths)
-        # Sums the reserves across all locations for this material
-        total_availability = sum(
-            pyomo.value(m.primary_material_availability[stf, loc, mat])
-            for loc in m.location
-            if (stf, loc, mat) in m.primary_material_availability
-        )
-
-        # Geology Exception (EUR-Lex): No physical reserves = No quota applied
-        if total_availability <= 0:
+        # FIXED: Match the 2-index structure [stf, mat]
+        if (stf, mat) not in m.primary_material_availability:
             return pyomo.Constraint.Skip
+        availability = m.primary_material_availability[stf, mat]
 
+        if isinstance(availability, pyomo.Param) or isinstance(availability, (int, float)):
+            if availability <= 0:
+                return pyomo.Constraint.Skip
+
+        # Enforce the 10% benchmark
         return m.material_mined[stf, mat] >= 0.10 * m.demand_material_total[stf, mat]
 
 class eu_recycling_constraint(AbstractConstraint):
@@ -94,10 +92,28 @@ class eu_recycling_constraint(AbstractConstraint):
         return m.material_recycled[stf, mat] >= 0.25 * m.demand_material_total[stf, mat]
 
 
+class crma_combined_independence_constraint(AbstractConstraint):
+    def apply_rule(self, m, stf, mat, target_quota):
+        # Erst ab dem Zieljahr 2030 anwenden
+        if stf < 2030:
+            return pyomo.Constraint.Skip
+
+        # Nur für strategische Materialien, die im Modell existieren
+        if mat not in CRMA_TARGET_MATERIALS or mat not in m.materials:
+            return pyomo.Constraint.Skip
+
+        # Die Summe aus heimischem Bergbau und Sekundärrohstoffen (Recycling)
+        domestic_supply = m.material_mined[stf, mat] + m.material_recycled[stf, mat]
+
+        # Absolute Hürde (dynamisch durch Parameter übergeben)
+        return domestic_supply >= target_quota * m.demand_material_total[stf, mat]
+
+
 # ==============================================================================
 # 4. APPLICATION LOGIC (The Setup Function)
 # ==============================================================================
-def apply_scenario_constraints(m, nzia_mode='strict', crma_active=True, target_techs=None):
+# ADDED crma_quota=0.35 TO THE FUNCTION ARGUMENTS
+def apply_scenario_constraints(m, nzia_mode='strict', crma_mode='combined', crma_active=True, target_techs=None, crma_quota=0.35):
     if target_techs is None:
         target_techs = ['solarPV', 'windon', 'windoff', 'Batteries']
 
@@ -146,13 +162,32 @@ def apply_scenario_constraints(m, nzia_mode='strict', crma_active=True, target_t
         rule=lambda m, y, mat: recycling_logic.apply_rule(m, y, mat)
     )
 
-    if crma_active:
-        m.eu_extraction_constraint.activate()
-        m.eu_recycling_constraint.activate()
-        print("✅ CRMA:        Active (>=2030) - 10% Mining (Dynamic) / 40% Processing / 25% Recycling")
-    else:
+    # 2. Instantiate the COMBINED rule (Dynamic >= target_quota Independence)
+    combined_crma_logic = crma_combined_independence_constraint()
+    m.eu_crma_combined_constraint = pyomo.Constraint(
+        m.stf, m.materials,
+        # PASS THE crma_quota VARIABLE HERE
+        rule=lambda m, y, mat: combined_crma_logic.apply_rule(m, y, mat, crma_quota)
+    )
+
+    # 3. Activation Logic Loop based on runtime selection
+    if not crma_active:
         m.eu_extraction_constraint.deactivate()
         m.eu_recycling_constraint.deactivate()
+        m.eu_crma_combined_constraint.deactivate()
         print("❌ CRMA:        Disabled")
+
+    elif crma_mode == 'separated':
+        m.eu_extraction_constraint.activate()
+        m.eu_recycling_constraint.activate()
+        m.eu_crma_combined_constraint.deactivate()
+        print("✅ CRMA SEPARATED: Active (>=2030) - Strict 10% Mining & 25% Recycling enforced separately.")
+
+    elif crma_mode == 'combined':
+        m.eu_extraction_constraint.deactivate()
+        m.eu_recycling_constraint.deactivate()
+        m.eu_crma_combined_constraint.activate()
+        # UPDATE PRINT STATEMENT TO SHOW CURRENT QUOTA
+        print(f"✅ CRMA COMBINED:  Active (>=2030) - Joint (Mining + Recycling) >= {int(crma_quota*100)}% resilience pool.")
 
     print("-----------------------------------------\n")

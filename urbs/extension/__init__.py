@@ -10,6 +10,7 @@ from .lng_block_pricing import apply_gas_block_pricing
 from.materials import apply_material_constraints
 from .single_tech_eos.eos_onetech_base import setup_onetech_learning
 from .single_tech_eos.eos_onetech_scrap import setup_scrap_onetech_learning
+from .single_tech_eos.eos_split_scrap import setup_split_scrap_learning
 from .material_imports_block_pricing import apply_material_block_pricing
 
 __all__ = [
@@ -24,6 +25,7 @@ __all__ = [
     "apply_gas_block_pricing",
     "apply_material_constraints",
     "setup_onetech_learning",
-    "setup_scrap_onetech_learning"
+    "setup_scrap_onetech_learning",
+    "setup_split_scrap_learning",
     "apply_material_block_pricing"
 ]

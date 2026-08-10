@@ -3,6 +3,11 @@ import pyomo.environ as pyomo
 from pyomo.environ import value, Binary, NonNegativeReals
 
 
+class AbstractConstraint(ABC):
+    @abstractmethod
+    def apply_rule(self, m, *args): pass
+
+
 def _normalize_target_techs(target_tech_name):
     if isinstance(target_tech_name, str):
         techs = [target_tech_name]
@@ -29,7 +34,7 @@ def check_valid_indices(m, location, tech, stage):
     Checks if investment data exists for the first step.
     """
     first_step = list(m.nsteps_sec)[0]
-    return (location, tech, stage, first_step) in m.P_sec_investment
+    return (location, tech, stage, first_step) in m.P_sec_capex
 
 
 # ==============================================================================
@@ -92,20 +97,154 @@ def setup_onetech_learning(m, target_tech_name='solarPV', target_stages=None):
         domain=pyomo.NonNegativeReals
     )
 
+    m.PRICEREDUCTION_CAPEX_ONETECH_TOTAL = pyomo.Var(
+        m.stf, m.location, m.tech_one_tech, m.stages_one_tech,
+        domain=pyomo.NonNegativeReals
+    )
+    m.pricereduction_capex_onetech_unit = pyomo.Var(
+        m.stf, m.location, m.tech_one_tech, m.stages_one_tech,
+        domain=pyomo.NonNegativeReals
+    )
+    m.aux_onetech_capex = pyomo.Var(
+        m.stf, m.location, m.tech_one_tech, m.stages_one_tech, m.nsteps_sec,
+        domain=pyomo.NonNegativeReals
+    )
+
+    m.PRICEREDUCTION_FOM_ONETECH_TOTAL = pyomo.Var(
+        m.stf, m.location, m.tech_one_tech, m.stages_one_tech,
+        domain=pyomo.NonNegativeReals
+    )
+    m.pricereduction_fom_onetech_unit = pyomo.Var(
+        m.stf, m.location, m.tech_one_tech, m.stages_one_tech,
+        domain=pyomo.NonNegativeReals
+    )
+    m.aux_onetech_fom = pyomo.Var(
+        m.stf, m.location, m.tech_one_tech, m.stages_one_tech, m.nsteps_sec,
+        domain=pyomo.NonNegativeReals
+    )
+
     # D. Apply Constraints
     _apply_constraints(m)
     _apply_bulkmat_constraints(m)
+    # 3. Add the classes for CAPEX and FOM
+    _apply_capex_fom_constraints(m)
     print("--- Single-Tech Learning Module Ready ---")
+
+class OneTech_Capex_InvalidZeroRule(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage):
+        if check_valid_indices(m, location, tech, stage): return pyomo.Constraint.Skip
+        return m.PRICEREDUCTION_CAPEX_ONETECH_TOTAL[stf, location, tech, stage] == 0
+
+class OneTech_Fom_InvalidZeroRule(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage):
+        if check_valid_indices(m, location, tech, stage): return pyomo.Constraint.Skip
+        return m.PRICEREDUCTION_FOM_ONETECH_TOTAL[stf, location, tech, stage] == 0
+
+class OneTech_Capex_CostSavings_Constraint(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage):
+        if not check_valid_indices(m, location, tech, stage): return pyomo.Constraint.Skip
+        val = sum(m.P_sec_capex[location, tech, stage, n] * m.aux_onetech_capex[stf, location, tech, stage, n] for n in m.nsteps_sec)
+        return m.PRICEREDUCTION_CAPEX_ONETECH_TOTAL[stf, location, tech, stage] == val
+
+class OneTech_Fom_CostSavings_Constraint(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage):
+        if not check_valid_indices(m, location, tech, stage): return pyomo.Constraint.Skip
+        val = sum(m.P_sec_fom[location, tech, stage, n] * m.aux_onetech_fom[stf, location, tech, stage, n] for n in m.nsteps_sec)
+        return m.PRICEREDUCTION_FOM_ONETECH_TOTAL[stf, location, tech, stage] == val
+
+class OneTech_Capex_PriceReduction_Calc(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage):
+        if not check_valid_indices(m, location, tech, stage): return pyomo.Constraint.Skip
+        val = sum(m.P_sec_capex[location, tech, stage, n] * m.BD_onetech[stf, location, tech, stage, n] for n in m.nsteps_sec)
+        return m.pricereduction_capex_onetech_unit[stf, location, tech, stage] == val
+
+class OneTech_Fom_PriceReduction_Calc(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage):
+        if not check_valid_indices(m, location, tech, stage): return pyomo.Constraint.Skip
+        val = sum(m.P_sec_fom[location, tech, stage, n] * m.BD_onetech[stf, location, tech, stage, n] for n in m.nsteps_sec)
+        return m.pricereduction_fom_onetech_unit[stf, location, tech, stage] == val
+
+class OneTech_Capex_Relation_Pnew_Pprior(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage):
+        if not check_valid_indices(m, location, tech, stage): return pyomo.Constraint.Skip
+        if stf == 2024: return pyomo.Constraint.Skip
+        if stf == pyomo.value(m.y0): return m.pricereduction_capex_onetech_unit[stf, location, tech, stage] >= 0
+        return m.pricereduction_capex_onetech_unit[stf, location, tech, stage] >= m.pricereduction_capex_onetech_unit[stf - 1, location, tech, stage]
+
+class OneTech_Fom_Relation_Pnew_Pprior(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage):
+        if not check_valid_indices(m, location, tech, stage): return pyomo.Constraint.Skip
+        if stf == 2024: return pyomo.Constraint.Skip
+        if stf == pyomo.value(m.y0): return m.pricereduction_fom_onetech_unit[stf, location, tech, stage] >= 0
+        return m.pricereduction_fom_onetech_unit[stf, location, tech, stage] >= m.pricereduction_fom_onetech_unit[stf - 1, location, tech, stage]
+
+class OneTech_Capex_UpperBound_Z(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage, n):
+        if not check_valid_indices(m, location, tech, stage): return pyomo.Constraint.Skip
+        return m.aux_onetech_capex[stf, location, tech, stage, n] <= m.gamma_prod * m.BD_onetech[stf, location, tech, stage, n]
+
+class OneTech_Capex_UpperBound_Z_Q1(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage, n):
+        if not check_valid_indices(m, location, tech, stage): return pyomo.Constraint.Skip
+        return m.aux_onetech_capex[stf, location, tech, stage, n] <= m.processing_cap_new[stf, location, tech, stage]
+
+class OneTech_Capex_LowerBound_Z(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage, n):
+        if not check_valid_indices(m, location, tech, stage): return pyomo.Constraint.Skip
+        return m.aux_onetech_capex[stf, location, tech, stage, n] >= m.processing_cap_new[stf, location, tech, stage] - (1 - m.BD_onetech[stf, location, tech, stage, n]) * m.gamma_prod
+
+class OneTech_Capex_NonNegativity_Z(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage, n):
+        if not check_valid_indices(m, location, tech, stage): return pyomo.Constraint.Skip
+        return m.aux_onetech_capex[stf, location, tech, stage, n] >= 0
+
+class OneTech_Fom_UpperBound_Z(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage, n):
+        if not check_valid_indices(m, location, tech, stage): return pyomo.Constraint.Skip
+        return m.aux_onetech_fom[stf, location, tech, stage, n] <= m.gamma_prod * m.BD_onetech[stf, location, tech, stage, n]
+
+class OneTech_Fom_UpperBound_Z_Q1(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage, n):
+        if not check_valid_indices(m, location, tech, stage): return pyomo.Constraint.Skip
+        return m.aux_onetech_fom[stf, location, tech, stage, n] <= m.capacity_processing_total[stf, location, tech, stage]
+
+class OneTech_Fom_LowerBound_Z(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage, n):
+        if not check_valid_indices(m, location, tech, stage): return pyomo.Constraint.Skip
+        return m.aux_onetech_fom[stf, location, tech, stage, n] >= m.capacity_processing_total[stf, location, tech, stage] - (1 - m.BD_onetech[stf, location, tech, stage, n]) * m.gamma_prod
+
+class OneTech_Fom_NonNegativity_Z(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage, n):
+        if not check_valid_indices(m, location, tech, stage): return pyomo.Constraint.Skip
+        return m.aux_onetech_fom[stf, location, tech, stage, n] >= 0
+
+def _apply_capex_fom_constraints(m):
+    setattr(m, "c_onetech_invalid_zero_capex", pyomo.Constraint(m.stf, m.location, m.tech_one_tech, m.stages_one_tech, rule=lambda m, t, l, tech, s: OneTech_Capex_InvalidZeroRule().apply_rule(m, t, l, tech, s)))
+    setattr(m, "c_onetech_invalid_zero_fom", pyomo.Constraint(m.stf, m.location, m.tech_one_tech, m.stages_one_tech, rule=lambda m, t, l, tech, s: OneTech_Fom_InvalidZeroRule().apply_rule(m, t, l, tech, s)))
+    
+    setattr(m, "c_onetech_costsavings_capex", pyomo.Constraint(m.stf, m.location, m.tech_one_tech, m.stages_one_tech, rule=lambda m, t, l, tech, s: OneTech_Capex_CostSavings_Constraint().apply_rule(m, t, l, tech, s)))
+    setattr(m, "c_onetech_costsavings_fom", pyomo.Constraint(m.stf, m.location, m.tech_one_tech, m.stages_one_tech, rule=lambda m, t, l, tech, s: OneTech_Fom_CostSavings_Constraint().apply_rule(m, t, l, tech, s)))
+    
+    setattr(m, "c_onetech_pricered_capex", pyomo.Constraint(m.stf, m.location, m.tech_one_tech, m.stages_one_tech, rule=lambda m, t, l, tech, s: OneTech_Capex_PriceReduction_Calc().apply_rule(m, t, l, tech, s)))
+    setattr(m, "c_onetech_pricered_fom", pyomo.Constraint(m.stf, m.location, m.tech_one_tech, m.stages_one_tech, rule=lambda m, t, l, tech, s: OneTech_Fom_PriceReduction_Calc().apply_rule(m, t, l, tech, s)))
+    
+    setattr(m, "c_onetech_relation_capex", pyomo.Constraint(m.stf, m.location, m.tech_one_tech, m.stages_one_tech, rule=lambda m, t, l, tech, s: OneTech_Capex_Relation_Pnew_Pprior().apply_rule(m, t, l, tech, s)))
+    setattr(m, "c_onetech_relation_fom", pyomo.Constraint(m.stf, m.location, m.tech_one_tech, m.stages_one_tech, rule=lambda m, t, l, tech, s: OneTech_Fom_Relation_Pnew_Pprior().apply_rule(m, t, l, tech, s)))
+    
+    setattr(m, "c_onetech_z_upper_capex", pyomo.Constraint(m.stf, m.location, m.tech_one_tech, m.stages_one_tech, m.nsteps_sec, rule=lambda m, t, l, tech, s, n: OneTech_Capex_UpperBound_Z().apply_rule(m, t, l, tech, s, n)))
+    setattr(m, "c_onetech_z_q1_up_capex", pyomo.Constraint(m.stf, m.location, m.tech_one_tech, m.stages_one_tech, m.nsteps_sec, rule=lambda m, t, l, tech, s, n: OneTech_Capex_UpperBound_Z_Q1().apply_rule(m, t, l, tech, s, n)))
+    setattr(m, "c_onetech_z_low_capex", pyomo.Constraint(m.stf, m.location, m.tech_one_tech, m.stages_one_tech, m.nsteps_sec, rule=lambda m, t, l, tech, s, n: OneTech_Capex_LowerBound_Z().apply_rule(m, t, l, tech, s, n)))
+    setattr(m, "c_onetech_z_noneg_capex", pyomo.Constraint(m.stf, m.location, m.tech_one_tech, m.stages_one_tech, m.nsteps_sec, rule=lambda m, t, l, tech, s, n: OneTech_Capex_NonNegativity_Z().apply_rule(m, t, l, tech, s, n)))
+    
+    setattr(m, "c_onetech_z_upper_fom", pyomo.Constraint(m.stf, m.location, m.tech_one_tech, m.stages_one_tech, m.nsteps_sec, rule=lambda m, t, l, tech, s, n: OneTech_Fom_UpperBound_Z().apply_rule(m, t, l, tech, s, n)))
+    setattr(m, "c_onetech_z_q1_up_fom", pyomo.Constraint(m.stf, m.location, m.tech_one_tech, m.stages_one_tech, m.nsteps_sec, rule=lambda m, t, l, tech, s, n: OneTech_Fom_UpperBound_Z_Q1().apply_rule(m, t, l, tech, s, n)))
+    setattr(m, "c_onetech_z_low_fom", pyomo.Constraint(m.stf, m.location, m.tech_one_tech, m.stages_one_tech, m.nsteps_sec, rule=lambda m, t, l, tech, s, n: OneTech_Fom_LowerBound_Z().apply_rule(m, t, l, tech, s, n)))
+    setattr(m, "c_onetech_z_noneg_fom", pyomo.Constraint(m.stf, m.location, m.tech_one_tech, m.stages_one_tech, m.nsteps_sec, rule=lambda m, t, l, tech, s, n: OneTech_Fom_NonNegativity_Z().apply_rule(m, t, l, tech, s, n)))
 
 
 # ==============================================================================
 # 2. CONSTRAINT LOGIC
 # ==============================================================================
-
-class AbstractConstraint(ABC):
-    @abstractmethod
-    def apply_rule(self, m, *args): pass
-
 
 # --- INVALID COMBO CLEANUP ---
 class OneTech_InvalidZeroRule(AbstractConstraint):
@@ -139,7 +278,7 @@ class OneTech_CostSavings_Constraint(AbstractConstraint):
         if not check_valid_indices(m, location, tech, stage): return pyomo.Constraint.Skip
 
         investment_reduction_value = sum(
-            m.P_sec_investment[location, tech, stage, n]
+            m.P_sec_opex_var[location, tech, stage, n]
             * m.aux_onetech_prod[stf, location, tech, stage, n]
             for n in m.nsteps_sec
         )
@@ -151,7 +290,7 @@ class OneTech_PriceReduction_Calc(AbstractConstraint):
         if not check_valid_indices(m, location, tech, stage): return pyomo.Constraint.Skip
 
         unit_val = sum(
-            m.P_sec_investment[location, tech, stage, n] * m.BD_onetech[stf, location, tech, stage, n]
+            m.P_sec_opex_var[location, tech, stage, n] * m.BD_onetech[stf, location, tech, stage, n]
             for n in m.nsteps_sec
         )
         return m.pricereduction_onetech_unit[stf, location, tech, stage] == unit_val

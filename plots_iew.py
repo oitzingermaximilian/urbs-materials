@@ -59,7 +59,7 @@ def load_simulation_results(base_dir):
     data = {}
     scenarios = {
         "Base_case": ["high"],
-        "LR4_nziastrict_test": ["low", "medium", "high"],
+        "LR4_seperate_CRMA_1905": ["low", "medium", "high"],
     }
     file_prefix = "scenario_solar_recycling_"
 
@@ -313,50 +313,56 @@ def create_vertical_marginal_plot(group_name, scenario_data, output_name, stages
         gap = 0.03
         indices = np.arange(n_stages)
 
+        STEP_ORDER = ["Base_case", "high", "medium", "low"]
+
         for j, stage in enumerate(stages):
             center_x = indices[j]
-            val_map = {}
-            for key in SCENARIO_ORDER:
-                df = scenario_data[key]
-                val = df.loc[year, stage] if (df is not None and year in df.index) else 0
-                val_map[key] = val
 
-            sorted_items = sorted(val_map.items(), key=lambda x: x[1])
-            plot_params = {}
-            prev_val = 0
-            step_levels = []
+            # Wir halten fest, wo der letzte Balken geendet hat (Startwert = 0)
+            # Aber für die marginale Anzeige: Der erste Vergleichspunkt ist der Base_case Wert
+            running_bottom = 0
 
-            for rank, (key, val) in enumerate(sorted_items):
-                delta = val - prev_val
-                plot_params[key] = (prev_val, delta)
-                if rank > 0:
-                    step_levels.append(prev_val)
-                prev_val = val
-
-            group_left = center_x - (n_scens * (bar_width + gap)) / 2
-            group_right = center_x + (n_scens * (bar_width + gap)) / 2
-
-            for level in step_levels:
-                ax.plot([group_left, group_right], [level, level],
-                        color="gray", linestyle=":", linewidth=0.8, alpha=0.6, zorder=1)
-
-            for k, scen_key in enumerate(SCENARIO_ORDER):
-                x_pos = center_x + (k - (n_scens - 1) / 2) * (bar_width + gap)
+            for k, scen_key in enumerate(STEP_ORDER):
+                x_pos = center_x + (k - (len(STEP_ORDER) - 1) / 2) * (bar_width + gap)
                 color = SCENARIO_COLORS[scen_key]
-                bottom, height = plot_params[scen_key]
+
+                df_scen = scenario_data[scen_key]
+                current_val = df_scen.loc[year, stage] if (df_scen is not None and stage in df_scen.columns) else 0
 
                 if scen_key == "Base_case":
-                    ax.bar(x_pos, height, bottom=bottom, width=bar_width,
+                    # Der Anker: Solider Balken von 0 bis Base_case
+                    ax.bar(x_pos, current_val, width=bar_width,
                            color=color, edgecolor="black", linewidth=0.5, zorder=3)
+                    running_bottom = current_val  # Ab hier messen wir die Deltas
                 else:
-                    if height > 0.05:
-                        ax.bar(x_pos, height, bottom=bottom, width=bar_width,
+                    # Berechne das Delta zum VORGÄNGER in der STEP_ORDER
+                    # Wir brauchen den Wert des Szenarios, das in der Liste davor steht
+                    prev_scen_key = STEP_ORDER[k - 1]
+                    df_prev = scenario_data[prev_scen_key]
+                    prev_val = df_prev.loc[year, stage] if (df_prev is not None and stage in df_prev.columns) else 0
+
+                    delta = current_val - prev_val
+
+                    if abs(delta) > 0.05:
+                        # Zeichne das schraffierte Delta
+                        # Wir setzen es auf die Höhe des vorherigen Szenarios (prev_val)
+                        hatch_bottom = prev_val
+                        ax.bar(x_pos, delta, bottom=hatch_bottom, width=bar_width,
                                facecolor="white", edgecolor=color, hatch="////", linewidth=0.8, zorder=3)
-                        ax.text(x_pos, bottom + height + (y_limit * 0.01), f"+{height:.1f}",
-                                ha="center", va="bottom", fontsize=16, color=color, fontweight="bold")
+
+                        # Label: Zeigt die Differenz zum Vorgänger
+                        prefix = "+" if delta > 0 else ""
+                        ax.text(x_pos, current_val + (y_limit * 0.01) if delta > 0 else current_val - (y_limit * 0.03),
+                                f"{prefix}{delta:.1f}", ha="center", va="bottom" if delta > 0 else "top",
+                                fontsize=11, color=color, fontweight="bold")
+
+                        # Hilfslinie vom Vorgänger zum aktuellen Delta
+                        ax.plot([x_pos - (bar_width + gap), x_pos], [prev_val, prev_val],
+                                color="gray", linestyle=":", linewidth=0.8, alpha=0.5, zorder=2)
                     else:
-                        ax.plot([x_pos - bar_width / 2, x_pos + bar_width / 2],
-                                [bottom, bottom], color=color, linewidth=2, zorder=4)
+                        # Wenn kein Unterschied zum Vorgänger: Nur eine flache Linie auf dessen Höhe
+                        ax.plot([x_pos - bar_width / 2, x_pos + bar_width / 2], [prev_val, prev_val],
+                                color=color, linewidth=2, zorder=4)
 
         ax.set_title(f"{year}", fontweight="bold", fontsize=16)
         ax.set_xticks(indices)
@@ -411,17 +417,29 @@ def load_mineral_data_pair(base_dir, folder, filename):
         df = df[df[mat_col].isin(CRMA_TARGET_MATERIALS)].copy()
 
         results = {}
-        for metric, col_name in [("total", "demand_material_total"), ("imports", "material_imported")]:
+        # Added mined and recycled to the extraction list
+        metrics_to_extract = [
+            ("total", "demand_material_total"),
+            ("imports", "material_imported"),
+            ("mined", "material_mined"),
+            ("recycled", "material_recycled")
+        ]
+
+        for metric, col_name in metrics_to_extract:
+            # We use a default of 0 if the column is missing to prevent breaking
             if col_name in df.columns:
                 agg = df.groupby(["stf", mat_col])[col_name].sum().unstack()
                 agg = agg.reindex(columns=CRMA_TARGET_MATERIALS).fillna(0)
                 agg = agg.loc[agg.index.isin(range(2024, 2041))]
                 results[metric] = agg
             else:
-                return None
+                # If your model drops zero-value variables entirely, we create an empty frame
+                print(f"⚠️ Warning: Column '{col_name}' missing in {filename}. Defaulting to 0.")
+                empty_df = pd.DataFrame(0, index=range(2024, 2041), columns=CRMA_TARGET_MATERIALS)
+                empty_df.index.name = 'stf'
+                results[metric] = empty_df
 
-        if "total" in results and "imports" in results:
-            results["domestic"] = (results["total"] - results["imports"]).clip(lower=0)
+        # Removed the old "domestic" calculation since we now have mined and recycled explicitly.
 
         return results
 
@@ -431,7 +449,6 @@ def load_mineral_data_pair(base_dir, folder, filename):
 
 
 # Define units and conversion factors (Assuming input is in kt)
-# kt -> kt: 1.0 | kt -> tons: 1000.0 | kt -> kg: 1000000.0
 UNIT_CONFIG = {
     "aluminum": {"unit": "kt", "factor": 1.0},
     "copper": {"unit": "kt", "factor": 1.0},
@@ -454,8 +471,6 @@ UNIT_CONFIG = {
 
 
 def create_big_grid_plot(group_name, data_dict, output_name, main_color, output_dir=PLOT_OUTPUT_DIR):
-    # 1. Sort materials by unit (kt, then tons, then kg)
-    # We create a sorting key based on unit order
     unit_order = {"kt": 0, "tons": 1, "kg": 2}
     sorted_materials = sorted(
         CRMA_TARGET_MATERIALS,
@@ -466,8 +481,11 @@ def create_big_grid_plot(group_name, data_dict, output_name, main_color, output_
     n_cols = 3
     fig, axs = plt.subplots(n_rows, n_cols, figsize=(14, 3.5 * n_rows))
 
-    DOMESTIC_COLOR = "#70C4C0"
-    IMPORT_COLOR = "#EF85B0"
+    # Updated Color Palette
+    DOMESTIC_MINED_COLOR = "#70C4C0"  # Teal for primary mining
+    DOMESTIC_RECYCLED_COLOR = "#F4A261"  # Orange/Sand for recycled
+    IMPORT_COLOR = "#EF85B0"  # Pink for imports
+
     plot_order = ["high", "medium", "low"]
     col_titles = ["High Scrap Prices", "Medium Scrap Prices", "Low Scrap Prices"]
 
@@ -483,14 +501,26 @@ def create_big_grid_plot(group_name, data_dict, output_name, main_color, output_
             ax = axs[i, j]
             if sens in data_dict and data_dict[sens] is not None:
                 # Apply unit conversion
-                df_total = data_dict[sens]["total"] * factor
-                df_imports = data_dict[sens]["imports"] * factor
+                y_total = data_dict[sens]["total"][mat] * factor
+                y_imports = data_dict[sens]["imports"][mat] * factor
+                y_mined = data_dict[sens]["mined"][mat] * factor
+                y_recycled = data_dict[sens]["recycled"][mat] * factor
 
-                y_total = df_total[mat]
-                y_imports = df_imports[mat]
+                # Calculate stacking boundaries
+                bottom_mined = y_imports
+                top_mined = y_imports + y_mined
+                top_recycled = top_mined + y_recycled
 
+                # Layer 1: Imports (0 to Imports)
                 ax.fill_between(y_imports.index, 0, y_imports, color=IMPORT_COLOR, alpha=0.6, linewidth=0)
-                ax.fill_between(y_total.index, y_imports, y_total, color=DOMESTIC_COLOR, alpha=0.8, linewidth=0)
+                # Layer 2: Mined (Imports to Mined)
+                ax.fill_between(y_imports.index, bottom_mined, top_mined, color=DOMESTIC_MINED_COLOR, alpha=0.8,
+                                linewidth=0)
+                # Layer 3: Recycled (Mined to Recycled)
+                ax.fill_between(y_imports.index, top_mined, top_recycled, color=DOMESTIC_RECYCLED_COLOR, alpha=0.8,
+                                linewidth=0)
+
+                # Top Line: Total Demand
                 ax.plot(y_total.index, y_total, color=main_color, lw=2.5)
 
                 # Formatting
@@ -500,20 +530,21 @@ def create_big_grid_plot(group_name, data_dict, output_name, main_color, output_
                 ax.spines["right"].set_visible(False)
                 ax.grid(axis='y', linestyle='--', alpha=0.3)
 
-                # Add the Material name and Unit to the Y-axis of the first column
                 if j == 0:
                     ax.set_ylabel(f"{mat.capitalize()}\n[{unit_label}]", fontsize=11, weight="bold")
 
                 if i != n_rows - 1:
                     ax.set_xticklabels([])
 
+    # Updated Legend
     handles = [
         plt.Line2D([], [], color=main_color, lw=2.5, label="Total Demand"),
-        mpatches.Patch(facecolor=DOMESTIC_COLOR, alpha=0.8, label="Domestic Supply (Production + Recycling)"),
+        mpatches.Patch(facecolor=DOMESTIC_RECYCLED_COLOR, alpha=0.8, label="Domestic Recycled"),
+        mpatches.Patch(facecolor=DOMESTIC_MINED_COLOR, alpha=0.8, label="Domestic Mined"),
         mpatches.Patch(facecolor=IMPORT_COLOR, alpha=0.6, label="Material Imports"),
     ]
 
-    fig.legend(handles=handles, loc="lower center", ncol=3, frameon=False,
+    fig.legend(handles=handles, loc="lower center", ncol=4, frameon=False,
                fontsize=13, bbox_to_anchor=(0.5, 0.005))
 
     plt.tight_layout()
@@ -527,44 +558,578 @@ def create_big_grid_plot(group_name, data_dict, output_name, main_color, output_
     plt.close()
 
 
-# ================= MAIN EXECUTION =================
-# Quick check for loading
-_ = load_simulation_results(RESULT_DIRECTORY)
+# ==============================================================================
+# 4. NEW PLOTTING: SCRAP LINE PLOTS (kt)
+# ==============================================================================
+def create_scrap_line_plots(base_dir, output_dir=PLOT_OUTPUT_DIR):
+    """
+    Loads data from the 'scrap' sheet and creates a separate line plot
+    for each technology showing scrap generation over time across scenarios.
+    """
+    print("\n📊 Generating Scrap Line Plots...")
 
-# 1) Solar cumulative plot
-solar_series = get_total_capacity_ext(RESULT_DIRECTORY, "scenario_solar_recycling_high.xlsx", "solarPV")
-if solar_series is not None:
-    plot_cumulative_capacity_with_benchmarks(solar_series, tech_label="Solar PV")
-
-# 2) Capacity plots per tech
-for tech, stages in TECH_STAGE_MAP.items():
-    df_base = load_clean_data(RESULT_DIRECTORY, "Base_case", "scenario_solar_recycling_high.xlsx",
-                              tech_filter=[tech], stages=stages)
-    if df_base is None:
-        print(f"❌ Base Case data missing for {tech}")
-        continue
-
-    data_strict = {
-        "Base_case": df_base,
-        "low": load_clean_data(RESULT_DIRECTORY, "LR4_nziastrict_test", "scenario_solar_recycling_low.xlsx",
-                               tech_filter=[tech], stages=stages),
-        "medium": load_clean_data(RESULT_DIRECTORY, "LR4_nziastrict_test", "scenario_solar_recycling_medium.xlsx",
-                                  tech_filter=[tech], stages=stages),
-        "high": load_clean_data(RESULT_DIRECTORY, "LR4_nziastrict_test", "scenario_solar_recycling_high.xlsx",
-                                tech_filter=[tech], stages=stages),
+    scenarios = {
+        "Base_case": ("Base_case", "scenario_solar_recycling_high.xlsx"),
+        "high": ("LR4_seperate_CRMA_1905", "scenario_solar_recycling_high.xlsx"),
+        "medium": ("LR4_seperate_CRMA_1905", "scenario_solar_recycling_medium.xlsx"),
+        "low": ("LR4_seperate_CRMA_1905", "scenario_solar_recycling_low.xlsx")
     }
 
-    print(f"📊 Generating Marginal Plot (Strict) for {tech}...")
-    create_vertical_marginal_plot(f"{TECH_LABELS[tech]} NZIA Strict", data_strict,
-                                  f"Plot_Vertical_Strict_{tech}", stages)
+    # Structure to hold scrap data: {tech: {scenario: series_of_scrap}}
+    scrap_master_data = {tech: {} for tech in TECH_STAGE_MAP.keys()}
 
-# 3) Materials grids (CRMA)
-strict_data = {
-    "low": load_mineral_data_pair(RESULT_DIRECTORY, "LR4_nziastrict_test", "scenario_solar_recycling_low.xlsx"),
-    "medium": load_mineral_data_pair(RESULT_DIRECTORY, "LR4_nziastrict_test", "scenario_solar_recycling_medium.xlsx"),
-    "high": load_mineral_data_pair(RESULT_DIRECTORY, "LR4_nziastrict_test", "scenario_solar_recycling_high.xlsx"),
+    # --- 1. DATA LOADING & EXTRACTION ---
+    for scen_name, (folder, filename) in scenarios.items():
+        path = os.path.join(base_dir, folder, filename)
+        if not os.path.exists(path):
+            print(f"   ⚠️ Skipping scrap data for {scen_name}: {path} missing.")
+            continue
+
+        try:
+            df = pd.read_excel(path, sheet_name="scrap")
+
+            # Close formatting gaps via ffill
+            cols_to_fill = ["stf", "tech"]
+            existing_cols = [c for c in cols_to_fill if c in df.columns]
+            df[existing_cols] = df[existing_cols].ffill()
+
+            # Look for common mass/quantity columns
+            qty_col = "scrap_quantity" if "scrap_quantity" in df.columns else df.columns[-1]
+
+            for tech in TECH_STAGE_MAP.keys():
+                # Filter by explicit tech key
+                df_tech = df[df["tech"].astype(str).str.contains(tech, case=False, na=False)]
+
+                if not df_tech.empty:
+                    # Aggregate duplicates if your model tracks sub-nodes
+                    series = df_tech.groupby("stf")[qty_col].sum()
+                    # Keep timeframe locked between baseline and targets
+                    series = series.reindex(range(2024, 2041)).fillna(0)
+                    scrap_master_data[tech][scen_name] = series
+
+        except Exception as e:
+            print(f"   ❌ Error processing scrap for {scen_name}: {e}")
+
+    # --- 2. RENDERING CHARTS ---
+    for tech, scen_dict in scrap_master_data.items():
+        if not scen_dict:
+            continue
+
+        fig, ax = plt.subplots(figsize=(11, 6))
+        ax.grid(axis='y', linestyle='--', alpha=0.5, zorder=0)
+        ax.set_facecolor('#F8F9FA')
+
+        for scen_key in SCENARIO_ORDER:
+            if scen_key in scen_dict:
+                data_series = scen_dict[scen_key]
+                ax.plot(
+                    data_series.index,
+                    data_series.values,
+                    label=SCENARIO_LABELS[scen_key],
+                    color=SCENARIO_COLORS[scen_key],
+                    linewidth=3,
+                    marker='o',
+                    markersize=5,
+                    zorder=3
+                )
+
+        ax.set_title(f"Scrap Generation Profile: {TECH_LABELS[tech]}", fontsize=15, weight='bold', pad=12)
+        ax.set_xlabel("Year", fontsize=12, weight='bold')
+        ax.set_ylabel("Scrap Generated (kt)", fontsize=12, weight='bold')
+        ax.set_xlim(2024, 2040)
+        ax.set_xticks([2024, 2026, 2028, 2030, 2032, 2034, 2035, 2036, 2038, 2040])
+
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.legend(frameon=True, facecolor='white', edgecolor='none', fontsize=11)
+
+        plt.tight_layout()
+        output_dir = Path(output_dir)
+        output_dir.mkdir(parents=True, exist_ok=True)
+        out_file = output_dir / f"Scrap_Lineplot_{tech}.pdf"
+        plt.savefig(out_file, bbox_inches="tight")
+        plt.close()
+        print(f"   ✔ Scrap plot successfully saved → {out_file}")
+
+
+# ==============================================================================
+# 5. NEW PLOTTING: STACKED STOCK LEVEL CHARTS (GW) - CORRECTED SHEET NAME
+# ==============================================================================
+def create_stock_level_stacked_bars(base_dir, output_dir=PLOT_OUTPUT_DIR):
+    """
+    Loads data from the 'stock_levels' sheet.
+    Generates a 4-chart layout for each technology (one grid plot per tech).
+    Each subplot tracks stacked capacity over every individual model year (2024-2040).
+    """
+    print("\n📊 Generating Stacked Stock Level Profiles...")
+
+    scenarios = {
+        "Base_case": ("Base_case", "scenario_solar_recycling_high.xlsx"),
+        "high": ("LR4_seperate_CRMA_1905", "scenario_solar_recycling_high.xlsx"),
+        "medium": ("LR4_seperate_CRMA_1905", "scenario_solar_recycling_medium.xlsx"),
+        "low": ("LR4_seperate_CRMA_1905", "scenario_solar_recycling_low.xlsx")
+    }
+
+    # Configuration for targeting structural tracking limits
+    STOCK_CONFIG = {
+        "solarPV": ["Polysilicon", "Wafer", "Cell", "Module"],
+        "windon": ["AssemblyOn", "BladeOn", "NacelleOn", "TowerOn"],
+        "windoff": ["AssemblyOff", "BladeOff", "NacelleOff", "TowerOff"]
+    }
+
+    # Clean visual palette for stages stacking
+    STAGE_PALETTE = ["#2A9D8F", "#E9C46A", "#F4A261", "#E76F51"]
+
+    for tech, target_stages in STOCK_CONFIG.items():
+        # Setup matrix: 2x2 grid for our 4 execution states
+        fig, axs = plt.subplots(2, 2, figsize=(16, 12), sharex=True, sharey=True)
+        axs = axs.flatten()
+
+        has_plotted_data = False
+
+        for idx, scen_key in enumerate(SCENARIO_ORDER):
+            ax = axs[idx]
+            folder, filename = scenarios[scen_key]
+            path = os.path.join(base_dir, folder, filename)
+
+            # Setup layout grid system backgrounds
+            ax.grid(axis='y', linestyle=':', alpha=0.5, zorder=0)
+            ax.set_facecolor('#FDFDFD')
+
+            if not os.path.exists(path):
+                ax.text(0.5, 0.5, "Data File Missing", ha='center', va='center', color='red')
+                ax.set_title(f"{SCENARIO_LABELS[scen_key]} (N/A)", fontsize=12, weight='bold')
+                continue
+
+            try:
+                # FIXED: Targeted the explicit user provided worksheet name
+                sheet_name = "stock_levels"
+                df = pd.read_excel(path, sheet_name=sheet_name)
+
+                # Clear formatting gaps
+                cols_to_fill = ["stf", "tech", "stages"]
+                existing_cols = [c for c in cols_to_fill if c in df.columns]
+                df[existing_cols] = df[existing_cols].ffill()
+
+                # Isolate target variables
+                df_filtered = df[
+                    df["tech"].astype(str).str.contains(tech, case=False, na=False) &
+                    df["stages"].isin(target_stages)
+                    ].copy()
+
+                if df_filtered.empty:
+                    ax.text(0.5, 0.5, "No Matching Tech/Stage Entries", ha='center', va='center')
+                    ax.set_title(f"{SCENARIO_LABELS[scen_key]}", fontsize=12, weight='bold')
+                    continue
+
+                # FIXED: Target the explicit column name for values
+                val_col = "components_stockpile"
+
+                if val_col not in df_filtered.columns:
+                    # Fallback to last column if column name has a stray space in Excel
+                    val_col = [c for c in df_filtered.columns if "stockpile" in str(c).lower()][0]
+
+                # Transform data mapping into year-by-stage dimensions
+                pivot_df = df_filtered.groupby(["stf", "stages"])[val_col].sum().unstack()
+                # Enforce continuous time tracking
+                pivot_df = pivot_df.reindex(index=range(2024, 2041), columns=target_stages).fillna(0)
+
+                # Render Stacked Bars
+                bottoms = np.zeros(len(pivot_df.index))
+                for s_idx, stage in enumerate(target_stages):
+                    ax.bar(
+                        pivot_df.index,
+                        pivot_df[stage],
+                        bottom=bottoms,
+                        label=stage if idx == 0 else "",
+                        color=STAGE_PALETTE[s_idx],
+                        edgecolor='black',
+                        linewidth=0.4,
+                        width=0.75,
+                        zorder=3
+                    )
+                    bottoms += pivot_df[stage].values
+
+                ax.set_title(SCENARIO_LABELS[scen_key], fontsize=13, weight='bold')
+                ax.set_xlim(2023, 2041)
+                ax.set_xticks(range(2024, 2041, 2))
+                ax.spines['top'].set_visible(False)
+                ax.spines['right'].set_visible(False)
+                has_plotted_data = True
+
+            except Exception as e:
+                ax.text(0.5, 0.5, f"Execution Error", ha='center', va='center', fontsize=9)
+                ax.set_title(SCENARIO_LABELS[scen_key], fontsize=12, weight='bold')
+                print(f"   ❌ Error on stock stacked chart parsing [{scen_key}]: {e}")
+
+        if has_plotted_data:
+            fig.suptitle(f"Stock Deployment Capacity Profile: {TECH_LABELS[tech]}", fontsize=18, weight='bold', y=0.98)
+
+            fig.text(0.5, 0.04, 'Model Evaluation Year', ha='center', fontsize=14, weight='bold')
+            fig.text(0.02, 0.5, 'Cumulative Stock Volume (GW)', va='center', rotation='vertical', fontsize=14,
+                     weight='bold')
+
+            handles = [mpatches.Patch(facecolor=STAGE_PALETTE[i], edgecolor='black', label=stage) for i, stage in
+                       enumerate(target_stages)]
+            fig.legend(handles=handles, loc='lower center', ncol=4, frameon=True, facecolor='white', edgecolor='none',
+                       fontsize=12, bbox_to_anchor=(0.5, -0.02))
+
+            plt.tight_layout()
+            plt.subplots_adjust(left=0.07, bottom=0.08, right=0.96, top=0.92, hspace=0.22, wspace=0.15)
+
+            output_path = Path(output_dir) / f"Stock_StackedBars_{tech}.pdf"
+            plt.savefig(output_path, bbox_inches="tight")
+            plt.close()
+            print(f"   ✔ Stock level grid saved successfully → {output_path}")
+        else:
+            plt.close()
+
+
+# ================= MAIN EXECUTION =================
+def run_old_plots():
+    # Quick check for loading
+    _ = load_simulation_results(RESULT_DIRECTORY)
+
+    # 1) Solar cumulative plot
+    solar_series = get_total_capacity_ext(RESULT_DIRECTORY, "scenario_solar_recycling_high.xlsx", "solarPV")
+    if solar_series is not None:
+        plot_cumulative_capacity_with_benchmarks(solar_series, tech_label="Solar PV")
+
+    # 2) Capacity plots per tech
+    for tech, stages in TECH_STAGE_MAP.items():
+        df_base = load_clean_data(RESULT_DIRECTORY, "Base_case", "scenario_solar_recycling_high.xlsx",
+                                  tech_filter=[tech], stages=stages)
+        if df_base is None:
+            print(f"❌ Base Case data missing for {tech}")
+            continue
+
+        data_strict = {
+            "Base_case": df_base,
+            "low": load_clean_data(RESULT_DIRECTORY, "LR4_seperate_CRMA_1905", "scenario_solar_recycling_low.xlsx",
+                                   tech_filter=[tech], stages=stages),
+            "medium": load_clean_data(RESULT_DIRECTORY, "LR4_seperate_CRMA_1905", "scenario_solar_recycling_medium.xlsx",
+                                      tech_filter=[tech], stages=stages),
+            "high": load_clean_data(RESULT_DIRECTORY, "LR4_seperate_CRMA_1905", "scenario_solar_recycling_high.xlsx",
+                                    tech_filter=[tech], stages=stages),
+        }
+
+        # --- Data Preparation for Combined Nacelle Plot ---
+        nacelle_stages = ["Nacelle Onshore", "Nacelle Offshore"]
+        combined_nacelle_data = {scen: pd.DataFrame() for scen in SCENARIO_ORDER}
+
+        for scen in SCENARIO_ORDER:
+            # Load Onshore
+            df_on = load_clean_data(RESULT_DIRECTORY, "LR4_seperate_CRMA_1905" if scen != "Base_case" else "Base_case",
+                                    f"scenario_solar_recycling_{scen.lower() if scen != 'Base_case' else 'high'}.xlsx",
+                                    tech_filter=["windon"], stages=["NacelleOn"])
+
+            # Load Offshore
+            df_off = load_clean_data(RESULT_DIRECTORY, "LR4_seperate_CRMA_1905" if scen != "Base_case" else "Base_case",
+                                     f"scenario_solar_recycling_{scen.lower() if scen != 'Base_case' else 'high'}.xlsx",
+                                     tech_filter=["windoff"], stages=["NacelleOff"])
+
+            if df_on is not None and df_off is not None:
+                # Rename columns to distinguish them on the X-axis
+                df_on = df_on.rename(columns={"NacelleOn": "Nacelle Onshore"})
+                df_off = df_off.rename(columns={"NacelleOff": "Nacelle Offshore"})
+                # Combine
+                combined_nacelle_data[scen] = pd.concat([df_on, df_off], axis=1)
+
+        # Now call the plot function with this combined data
+        create_vertical_marginal_plot("Wind Nacelle Combined", combined_nacelle_data,
+                                      "Plot_Vertical_Nacelle_Combined", nacelle_stages)
+
+        print(f"📊 Generating Marginal Plot (Strict) for {tech}...")
+        create_vertical_marginal_plot(f"{TECH_LABELS[tech]} NZIA Strict", data_strict,
+                                      f"Plot_Vertical_Strict_{tech}", stages)
+
+    # 3) Materials grids (CRMA)
+    strict_data = {
+        "low": load_mineral_data_pair(RESULT_DIRECTORY, "LR4_seperate_CRMA_1905", "scenario_solar_recycling_low.xlsx"),
+        "medium": load_mineral_data_pair(RESULT_DIRECTORY, "LR4_seperate_CRMA_1905", "scenario_solar_recycling_medium.xlsx"),
+        "high": load_mineral_data_pair(RESULT_DIRECTORY, "LR4_seperate_CRMA_1905", "scenario_solar_recycling_high.xlsx"),
+    }
+
+    if any(v is not None for v in strict_data.values()):
+        print("📊 Generating Grid for Strict...")
+        create_big_grid_plot("NZIA Strict", strict_data, "Grid_CRMA_Strict", "#EB5B44")
+
+    # ==================== RUN NEW COOPERATIVE PLOTS ====================
+    # 4) Process and generate tech scrap metrics lineplots (kt)
+    create_scrap_line_plots(RESULT_DIRECTORY)
+
+    # 5) Process and generate annual stacked inventory/stock layers (GW)
+    create_stock_level_stacked_bars(RESULT_DIRECTORY)
+
+# ==============================================================================
+# 6. CRMA COMPARISON PLOTS (ALL SENSITIVITY SCENARIOS)
+# ==============================================================================
+POLICY_COLORS = {
+    5: "#1A9850",   # Green
+    10: "#66BD63",  # Light Green
+    15: "#A6D96A",  # Yellow-Green
+    20: "#FDAE61",  # Orange
+    25: "#F46D43",  # Dark Orange
+    30: "#D73027",  # Light Red
+    35: "#A50026",  # Deep Red
 }
 
-if any(v is not None for v in strict_data.values()):
-    print("📊 Generating Grid for Strict...")
-    create_big_grid_plot("NZIA Strict", strict_data, "Grid_CRMA_Strict", "#EB5B44")
+SCENARIO_CACHE = {}
+
+def get_scenario_sheet(base_dir, folder, filename, sheet_name):
+    file_path = os.path.join(base_dir, folder, filename)
+    if not os.path.exists(file_path):
+        return None
+        
+    cache_key = (file_path, sheet_name)
+    if cache_key in SCENARIO_CACHE:
+        return SCENARIO_CACHE[cache_key].copy()
+        
+    try:
+        df = pd.read_excel(file_path, sheet_name=sheet_name)
+        SCENARIO_CACHE[cache_key] = df
+        return df.copy()
+    except Exception as e:
+        print(f"⚠️ Error reading {sheet_name} from {file_path}: {e}")
+        return None
+
+def get_total_capacity_for_scenario(base_dir, folder, filename, tech_filter="solarPV"):
+    df = get_scenario_sheet(base_dir, folder, filename, "extension_only_totalcapacity")
+    if df is None:
+        return None
+    cols_to_fix = ["stf", "location", "tech"]
+    existing_cols = [c for c in cols_to_fix if c in df.columns]
+    df[existing_cols] = df[existing_cols].ffill()
+    mask = df["tech"].astype(str).str.contains(tech_filter, case=False, na=False)
+    capacity_series = df[mask].groupby("stf")["capacity_ext"].sum()
+    return capacity_series.reindex(range(2024, 2041)).fillna(0)
+
+def get_scrap_for_scenario(base_dir, folder, filename, tech):
+    df = get_scenario_sheet(base_dir, folder, filename, "scrap")
+    if df is None:
+        return None
+    cols_to_fill = ["stf", "tech"]
+    existing_cols = [c for c in cols_to_fill if c in df.columns]
+    df[existing_cols] = df[existing_cols].ffill()
+    qty_col = "scrap_quantity" if "scrap_quantity" in df.columns else df.columns[-1]
+    df_tech = df[df["tech"].astype(str).str.contains(tech, case=False, na=False)]
+    if df_tech.empty:
+        return pd.Series(0.0, index=range(2024, 2041))
+    series = df_tech.groupby("stf")[qty_col].sum()
+    return series.reindex(range(2024, 2041)).fillna(0)
+
+def get_recycled_share_for_scenario(base_dir, folder, filename, material):
+    df = get_scenario_sheet(base_dir, folder, filename, "minerals")
+    if df is None:
+        return None
+    cols_to_fill = ["stf", "materials"]
+    existing_cols = [c for c in cols_to_fill if c in df.columns]
+    df[existing_cols] = df[existing_cols].ffill()
+    
+    mat_col = "materials" if "materials" in df.columns else "material"
+    df_mat = df[df[mat_col] == material]
+    if df_mat.empty:
+        return pd.Series(0.0, index=range(2024, 2041))
+        
+    recycled_col = "material_recycled"
+    total_col = "demand_material_total"
+    
+    recycled_series = df_mat.groupby("stf")[recycled_col].sum().reindex(range(2024, 2041)).fillna(0)
+    total_series = df_mat.groupby("stf")[total_col].sum().reindex(range(2024, 2041)).fillna(0)
+    
+    share = (recycled_series / total_series * 100).fillna(0)
+    share[total_series == 0] = 0.0
+    return share
+
+def compare_installed_capacities_crma(base_dir=RESULT_DIRECTORY, output_dir=PLOT_OUTPUT_DIR):
+    print("\n📊 Generating CRMA Installed Capacity Comparison plots...")
+    technologies = ["solarPV", "windon", "windoff"]
+    prices = ["low", "medium", "high"]
+    targets = [5, 10, 15, 20, 25, 30, 35]
+    
+    for tech in technologies:
+        fig, axs = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
+        tech_label = TECH_LABELS.get(tech, tech)
+        
+        for idx, price in enumerate(prices):
+            ax = axs[idx]
+            ax.set_facecolor('#F8F9FA')
+            ax.grid(axis='both', linestyle='--', alpha=0.5, zorder=0)
+            
+            for target in targets:
+                folder = f"scenario_solar_recycling_{price}_crma_{target}"
+                filename = f"scenario_solar_recycling_{price}_crma_{target}.xlsx"
+                series = get_total_capacity_for_scenario(base_dir, folder, filename, tech)
+                
+                if series is not None:
+                    ax.plot(
+                        series.index,
+                        series.values,
+                        label=f"{target}%",
+                        color=POLICY_COLORS[target],
+                        linewidth=2.5,
+                        zorder=3
+                    )
+            
+            ax.set_title(f"{price.capitalize()} Scrap Price", fontsize=14, weight='bold')
+            ax.set_xlabel("Year", fontsize=12)
+            if idx == 0:
+                ax.set_ylabel("Installed Capacity (GW)", fontsize=12, weight='bold')
+            ax.set_xlim(2024, 2040)
+            ax.set_xticks([2024, 2028, 2032, 2036, 2040])
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            
+        fig.suptitle(f"Installed Capacity Comparison: {tech_label} (5% - 35% Policy Targets)", fontsize=16, weight='bold', y=0.98)
+        
+        # Legend
+        handles, labels = axs[0].get_legend_handles_labels()
+        fig.legend(handles, labels, loc='lower center', ncol=7, frameon=True, facecolor='white', edgecolor='none',
+                   title="CRMA Recycling Policy Target", title_fontsize=12, fontsize=11, bbox_to_anchor=(0.5, -0.06))
+        
+        plt.tight_layout()
+        plt.subplots_adjust(bottom=0.18, top=0.88, wspace=0.15)
+        
+        output_dir_path = Path(output_dir)
+        output_dir_path.mkdir(parents=True, exist_ok=True)
+        out_file = output_dir_path / f"Compare_Capacity_{tech}.pdf"
+        plt.savefig(out_file, bbox_inches="tight")
+        plt.close()
+        print(f"   ✔ Installed capacity comparison saved for {tech} → {out_file}")
+
+def compare_scrap_generation_crma(base_dir=RESULT_DIRECTORY, output_dir=PLOT_OUTPUT_DIR):
+    print("\n📊 Generating CRMA Scrap Generation Comparison plots...")
+    technologies = ["solarPV", "windon", "windoff"]
+    prices = ["low", "medium", "high"]
+    targets = [5, 10, 15, 20, 25, 30, 35]
+    
+    for tech in technologies:
+        fig, axs = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
+        tech_label = TECH_LABELS.get(tech, tech)
+        
+        for idx, price in enumerate(prices):
+            ax = axs[idx]
+            ax.set_facecolor('#F8F9FA')
+            ax.grid(axis='both', linestyle='--', alpha=0.5, zorder=0)
+            
+            for target in targets:
+                folder = f"scenario_solar_recycling_{price}_crma_{target}"
+                filename = f"scenario_solar_recycling_{price}_crma_{target}.xlsx"
+                series = get_scrap_for_scenario(base_dir, folder, filename, tech)
+                
+                if series is not None:
+                    ax.plot(
+                        series.index,
+                        series.values,
+                        label=f"{target}%",
+                        color=POLICY_COLORS[target],
+                        linewidth=2.5,
+                        zorder=3
+                    )
+            
+            ax.set_title(f"{price.capitalize()} Scrap Price", fontsize=14, weight='bold')
+            ax.set_xlabel("Year", fontsize=12)
+            if idx == 0:
+                ax.set_ylabel("Scrap Generated (kt)", fontsize=12, weight='bold')
+            ax.set_xlim(2024, 2040)
+            ax.set_xticks([2024, 2028, 2032, 2036, 2040])
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            
+        fig.suptitle(f"Scrap Generation Comparison: {tech_label} (5% - 35% Policy Targets)", fontsize=16, weight='bold', y=0.98)
+        
+        # Legend
+        handles, labels = axs[0].get_legend_handles_labels()
+        fig.legend(handles, labels, loc='lower center', ncol=7, frameon=True, facecolor='white', edgecolor='none',
+                   title="CRMA Recycling Policy Target", title_fontsize=12, fontsize=11, bbox_to_anchor=(0.5, -0.06))
+        
+        plt.tight_layout()
+        plt.subplots_adjust(bottom=0.18, top=0.88, wspace=0.15)
+        
+        output_dir_path = Path(output_dir)
+        output_dir_path.mkdir(parents=True, exist_ok=True)
+        out_file = output_dir_path / f"Compare_Scrap_{tech}.pdf"
+        plt.savefig(out_file, bbox_inches="tight")
+        plt.close()
+        print(f"   ✔ Scrap generation comparison saved for {tech} → {out_file}")
+
+def compare_crma_grid_crma(base_dir=RESULT_DIRECTORY, output_dir=PLOT_OUTPUT_DIR):
+    print("\n📊 Generating CRMA Grid Recycling Share Comparison...")
+    unit_order = {"kt": 0, "tons": 1, "kg": 2}
+    sorted_materials = sorted(
+        CRMA_TARGET_MATERIALS,
+        key=lambda m: (unit_order.get(UNIT_CONFIG[m]["unit"], 3), m)
+    )
+    
+    n_rows = len(sorted_materials)
+    n_cols = 3
+    fig, axs = plt.subplots(n_rows, n_cols, figsize=(15, 3.5 * n_rows))
+    
+    prices = ["low", "medium", "high"]
+    targets = [5, 10, 15, 20, 25, 30, 35]
+    col_titles = ["Low Scrap Prices", "Medium Scrap Prices", "High Scrap Prices"]
+    
+    for ax, title in zip(axs[0], col_titles):
+        ax.set_title(title, fontsize=14, weight="bold", pad=15)
+        
+    for i, mat in enumerate(sorted_materials):
+        for j, price in enumerate(prices):
+            ax = axs[i, j]
+            ax.set_facecolor('#F8F9FA')
+            ax.grid(axis='both', linestyle='--', alpha=0.3)
+            
+            for target in targets:
+                folder = f"scenario_solar_recycling_{price}_crma_{target}"
+                filename = f"scenario_solar_recycling_{price}_crma_{target}.xlsx"
+                share = get_recycled_share_for_scenario(base_dir, folder, filename, mat)
+                
+                if share is not None:
+                    ax.plot(
+                        share.index,
+                        share.values,
+                        label=f"{target}%",
+                        color=POLICY_COLORS[target],
+                        linewidth=2.0,
+                        zorder=3
+                    )
+            
+            ax.set_xlim(2024, 2040)
+            ax.set_ylim(-5, 105)
+            ax.set_xticks([2025, 2030, 2035, 2040])
+            ax.spines["top"].set_visible(False)
+            ax.spines["right"].set_visible(False)
+            
+            if j == 0:
+                ax.set_ylabel(f"{mat.capitalize()}\nRecycled Share [%]", fontsize=11, weight="bold")
+                
+            if i != n_rows - 1:
+                ax.set_xticklabels([])
+                
+    # Legend
+    handles = [plt.Line2D([], [], color=POLICY_COLORS[t], lw=2.5, label=f"{t}% Policy Target") for t in targets]
+    fig.legend(handles=handles, loc="lower center", ncol=7, frameon=True, facecolor='white', edgecolor='none',
+               fontsize=13, bbox_to_anchor=(0.5, 0.005))
+    
+    plt.tight_layout()
+    plt.subplots_adjust(top=0.97, bottom=0.03, hspace=0.3, wspace=0.18)
+    
+    output_dir_path = Path(output_dir)
+    output_dir_path.mkdir(parents=True, exist_ok=True)
+    out_file = output_dir_path / "Compare_CRMA_Recycling_Share.pdf"
+    plt.savefig(out_file, bbox_inches="tight")
+    plt.close()
+    print(f"   ✔ CRMA grid comparison saved → {out_file}")
+
+def run_all_crma_comparisons():
+    print("\n🚀 Starting CRMA Comparison Plots Generation...")
+    compare_installed_capacities_crma(RESULT_DIRECTORY, PLOT_OUTPUT_DIR)
+    compare_scrap_generation_crma(RESULT_DIRECTORY, PLOT_OUTPUT_DIR)
+    compare_crma_grid_crma(RESULT_DIRECTORY, PLOT_OUTPUT_DIR)
+    print("\n🚀 All comparison plots generated successfully!")
+
+# Run all sensitivity comparisons
+run_all_crma_comparisons()
+
+print("\n🚀 All structural chart extensions and CRMA comparisons evaluated successfully.")
+
+

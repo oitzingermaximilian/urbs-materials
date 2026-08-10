@@ -15,7 +15,7 @@ from urbs.extension import (
     apply_gas_block_pricing,
     apply_material_constraints,
     setup_onetech_learning,
-    setup_scrap_onetech_learning,
+    setup_split_scrap_learning,
     apply_material_block_pricing
 )
 
@@ -422,18 +422,13 @@ def create_model(
         target_stages=selected_stages,
     )
 
-    setup_scrap_onetech_learning(m, target_tech_name=learning_techs)
+    from .extension.single_tech_eos.eos_split_scrap import setup_split_scrap_learning
+    setup_split_scrap_learning(m)
 
-    #apply_combined_lr_constraints(m) #this is for multiple techs
 
-    #apply_scrap_scaling_constraints(m) #this is for multiple techs
-
-    apply_scenario_constraints(
-        m,
-        nzia_mode='strict',  # 'strict', 'flex' oder 'none'
-        crma_active=True,  # True oder False
-        target_techs=learning_techs
-    )
+    current_quota = data_urbsextensionv1.get('crma_quota', 0.35)
+    apply_scenario_constraints(m, nzia_mode='strict', crma_mode='combined', crma_active=True,
+                               crma_quota=current_quota)
 
     apply_scrap_constraints(m)
 
@@ -1212,6 +1207,7 @@ def cost_rule(m):
     ext_trade = sum(m.cost_trade_total_extension[stf] for stf in m.stf)
     ext_stock = sum(m.cost_stockpile_holding[stf] for stf in m.stf)
 
+
     gross_supply_chain_costs = ext_capex + ext_opex + ext_trade + ext_stock
 
     return total_base_costs + gross_supply_chain_costs
@@ -1237,5 +1233,3 @@ def co2_rule(m):
                     )
 
     return co2_output_sum
-
-

@@ -164,6 +164,18 @@ def apply_variables(m):
     # NOM: \xi^{scrap}_{y,\ell,k} | Yearly scrap processing cost | EUR
     m.cost_scrap = pyomo.Var(m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals)
 
+    # --- MILP Recycling Pathway Variables ---
+
+    # NOM: \hat{\pi}^{scrap,magnet}_{y,\ell,k} | Scrap capacity routed to High-Value Magnet Pathway | t
+    m.capacity_scrap_magnet_route = pyomo.Var(
+        m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
+    )
+
+    # NOM: \hat{\pi}^{scrap,bulk}_{y,\ell,k} | Scrap capacity routed to Bulk Pathway | t
+    m.capacity_scrap_bulk_route = pyomo.Var(
+        m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
+    )
+
     """
     BESS variables
     """
@@ -199,6 +211,13 @@ def apply_variables(m):
 
     # NOM: \hat{\pi}^{scrap,hand,new}_{y,\ell,k} | New Scrap Handling Capacity | t/yr
     m.scraphandling_cap_new = pyomo.Var(m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals)
+
+    # --- MILP Recycling Pathway Facility Capacity Variables ---
+    m.capacity_scrap_handling_magnet_total = pyomo.Var(m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals)
+    m.scraphandling_cap_new_magnet = pyomo.Var(m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals)
+    
+    m.capacity_scrap_handling_bulk_total = pyomo.Var(m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals)
+    m.scraphandling_cap_new_bulk = pyomo.Var(m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals)
 
     # --- 2. PRODUCTION & FLOWS ---
     # NOM: \hat{\pi}^{prod}_{y,\ell,k,s} | Produced Output Capacity | MW
@@ -311,4 +330,9 @@ def apply_variables(m):
     # NOM: \Delta P^{stage}_{y,\ell,k} | Price Reduction Stage | EUR
     m.pricereduction_stage = pyomo.Var(
         m.stf, m.location, m.tech, within=pyomo.NonNegativeReals
+    )
+
+    # NOM: \hat{z}^{scrap}_{y,\ell,k} | Utilization slack | kton
+    m.scrap_utilization_slack = pyomo.Var(
+        m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
     )

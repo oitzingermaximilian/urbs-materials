@@ -46,6 +46,8 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         supply,
         stock,
         bd_one_tech_scrap,
+        bd_scrap_solar,
+        bd_scrap_wind,
         scrap_processed,
         bd_one_tech_base,
         costs_extension,
@@ -78,7 +80,12 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         imported_caps.to_excel(writer, sheet_name="imported_caps")
         supply.to_excel(writer, sheet_name="supply_mix")
         stock.to_excel(writer, sheet_name="stock_levels")
-        bd_one_tech_scrap.to_excel(writer, sheet_name="bd_one_tech_scrap")
+        if not bd_one_tech_scrap.empty:
+            bd_one_tech_scrap.to_excel(writer, sheet_name="bd_one_tech_scrap")
+        if not bd_scrap_solar.empty:
+            bd_scrap_solar.to_excel(writer, sheet_name="bd_scrap_solar")
+        if not bd_scrap_wind.empty:
+            bd_scrap_wind.to_excel(writer, sheet_name="bd_scrap_wind")
         scrap_processed.to_excel(writer, sheet_name="scrap_processed")
         bd_one_tech_base.to_excel(writer, sheet_name="bd_one_tech_base")
         costs_extension.to_excel(writer,sheet_name="costs_extension")
