@@ -178,3 +178,13 @@ cython_debug/
 
 # Results
 .results/
+
+#local conference stuff
+.presentation_iew/
+.plot_iew/
+.junie/
+
+
+
+*.txt
+!requirements.txt
