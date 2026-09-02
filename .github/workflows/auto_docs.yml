@@ -7,7 +7,7 @@ on:
       - iew2026
     # CRITICAL: Ignore pushes that ONLY change the docs (prevents infinite loops)
     paths-ignore:
-      - 'model_docs.tex'
+      - '../../debug/model_docs.tex'
       - '**.md'
 
   # Allow manual run button

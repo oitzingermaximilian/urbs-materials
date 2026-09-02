@@ -892,7 +892,7 @@ def run_scenario(
     if str(result.solver.termination_condition) != "optimal":
         print(f"Solver termination condition: {result.solver.termination_condition}")
 
-        if result.solver.termination_condition == TerminationCondition.infeasibleOrUnbounded:
+        if "infeasible" in str(result.solver.termination_condition):
             print("Model is either infeasible or unbounded. Proceeding with IIS analysis...")
             lp_file_path = os.path.abspath("model.lp")
             prob.write(lp_file_path, io_options={"symbolic_solver_labels": True})

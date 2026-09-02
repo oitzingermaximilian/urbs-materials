@@ -28,7 +28,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "--lr",
-    choices=["LR1", "LR3_5", "LR4", "LR4", "LR6", "LR7", "LR8", "LR9", "LR10", "LR25"],
+    choices=["LR1", "LR3_5", "LR4", "LR5", "LR6", "LR7", "LR8", "LR9", "LR10", "LR25"],
     default="LR4",
     help="Learning rate scenario (default: LR4)",
 )
@@ -38,7 +38,8 @@ args = parser.parse_args()
 os.environ["URBS_LR"] = args.lr
 
 # Original setup (unchanged)
-input_files = "urbs_intertemporal_2050"
+# Use the new master Excel file instead of the directory
+input_files = "urbs_intertemporal_master_vintages.xlsx"
 input_dir = "Input"
 input_path = os.path.join(input_dir, input_files)
 

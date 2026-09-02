@@ -173,6 +173,8 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
+#junie
+.junie/
 # Git Idea
 .idea/
 
@@ -182,7 +184,7 @@ cython_debug/
 #local conference stuff
 .presentation_iew/
 .plot_iew/
-.junie/
+
 
 
 
