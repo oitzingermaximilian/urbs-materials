@@ -7,7 +7,7 @@ from .multi_tech_eos.economiesofscale_base import apply_combined_lr_constraints
 from .multi_tech_eos.economiesofscale_scrap import apply_scrap_scaling_constraints
 from .scenario_constraints import apply_scenario_constraints
 from .lng_block_pricing import apply_gas_block_pricing
-from.materials import apply_material_constraints
+from .materials import apply_material_constraints
 from .single_tech_eos.eos_onetech_base import setup_onetech_learning
 from .single_tech_eos.eos_onetech_scrap import setup_scrap_onetech_learning
 from .single_tech_eos.eos_split_scrap import setup_split_scrap_learning
@@ -27,5 +27,5 @@ __all__ = [
     "setup_onetech_learning",
     "setup_scrap_onetech_learning",
     "setup_split_scrap_learning",
-    "apply_material_block_pricing"
+    "apply_material_block_pricing",
 ]

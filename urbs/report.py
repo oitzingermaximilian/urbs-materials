@@ -49,7 +49,7 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         scrap_processed,
         bd_one_tech_base,
         costs_extension,
-        new_balance
+        new_balance,
     ) = get_constants(instance)
 
     # create spreadsheet writer object
@@ -81,9 +81,8 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
             bd_scrap_wind.to_excel(writer, sheet_name="bd_scrap_wind")
         scrap_processed.to_excel(writer, sheet_name="scrap_processed")
         bd_one_tech_base.to_excel(writer, sheet_name="bd_one_tech_base")
-        costs_extension.to_excel(writer,sheet_name="costs_extension")
-        new_balance.to_excel(writer,sheet_name="new_balance")
-
+        costs_extension.to_excel(writer, sheet_name="costs_extension")
+        new_balance.to_excel(writer, sheet_name="new_balance")
 
         #################################################################################
 

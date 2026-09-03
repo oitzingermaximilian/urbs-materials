@@ -15,9 +15,9 @@ class ConvertTotalCapacityToBalance(AbstractConstraint):
         """
         # CON: Solar Balance Conversion | Constrains generation profile based on capacity and solar load factor
         balance_value = (
-                m.capacity_ext[stf, location, tech]
-                * m.lf_solar[timesteps_ext, stf, location, tech]
-                * m.hours[timesteps_ext]
+            m.capacity_ext[stf, location, tech]
+            * m.lf_solar[timesteps_ext, stf, location, tech]
+            * m.hours[timesteps_ext]
         )
         # print(
         #    f"Debug: time = {timesteps_ext}, STF = {stf}, Location = {location}, Tech = {tech}"

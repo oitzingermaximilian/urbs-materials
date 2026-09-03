@@ -100,7 +100,9 @@ def apply_stockpiling_constraints(m):
                 m.stf,
                 m.location,
                 m.tech,
-                rule=lambda m, stf, loc, tech: constraint_obj.apply_rule(m, stf, loc, tech),
+                rule=lambda m, stf, loc, tech: constraint_obj.apply_rule(
+                    m, stf, loc, tech
+                ),
             ),
         )
 

@@ -59,6 +59,8 @@ def setup_solver(optim, logfile="solver.log"):
         print(f"Warning: no options set for solver '{optim.name}'!")
 
     return optim
+
+
 # =============================================================================
 #  GLOBAL SCALING FACTORS (The "k-Universe")
 # =============================================================================
@@ -80,10 +82,10 @@ MASS_SCALE = 1e-3  # Mass:  Ton -> kton
 COST_SCALE = 1
 
 
-
 # =============================================================================
 #  GLOBAL HELPER FUNCTIONS (Must be strictly Global to apply scaling correctly)
 # =============================================================================
+
 
 def process_cost_sheet(cost_sheet):
     """
@@ -107,17 +109,20 @@ def process_cost_sheet(cost_sheet):
     years = cost_sheet["Stf"].unique()
 
     for col in cost_sheet.columns:
-        if col == "Stf": continue
+        if col == "Stf":
+            continue
 
         parts = col.split("_")
-        if len(parts) < 3: continue
+        if len(parts) < 3:
+            continue
 
         costtype = parts[0]
         location = parts[1]
         process = "_".join(parts[2:])
 
         for year, value in zip(cost_sheet["Stf"], cost_sheet[col]):
-            if year not in years: continue
+            if year not in years:
+                continue
             key = (year, location, process)
 
             # --- APPLY SCALING (1.0 for k-Universe) ---
@@ -189,7 +194,8 @@ def process_stocklvl_sheet(sheet_data):
 
     for col in sheet_data.columns:
         parts = col.split("_")
-        if len(parts) < 2: continue
+        if len(parts) < 2:
+            continue
 
         location = parts[0]
         # FIX: Capture full name (e.g. 'solarPV_Module')
@@ -209,7 +215,8 @@ def process_installable_capacity_sheet(sheet_data):
 
     for col in sheet_data.columns:
         parts = col.split("_")
-        if len(parts) < 2: continue
+        if len(parts) < 2:
+            continue
 
         location = parts[0]
         tech = "_".join(parts[1:])
@@ -228,7 +235,8 @@ def process_dcr_sheet(sheet_data):
 
     for col in sheet_data.columns:
         parts = col.split("_")
-        if len(parts) < 2: continue
+        if len(parts) < 2:
+            continue
         tech = parts[1]
         location = parts[0]
 
@@ -248,7 +256,8 @@ def process_loadfactors_sheet(sheet_data):
 
     for col in sheet_data.columns:
         parts = col.split("_")
-        if len(parts) < 2: continue
+        if len(parts) < 2:
+            continue
         location = parts[0]
         tech = parts[1]
 
@@ -262,23 +271,26 @@ def process_decommissioning_sheet(sheet_data):
     decom_dict = {}
     if sheet_data.empty:
         return decom_dict
-    
+
     if "Year" not in sheet_data.columns:
         return decom_dict
 
     sheet_data = sheet_data.set_index("Year")
     for col in sheet_data.columns:
-        if str(col).startswith('Unnamed') or str(col) == 'Installed wind energy capacity': 
+        if (
+            str(col).startswith("Unnamed")
+            or str(col) == "Installed wind energy capacity"
+        ):
             continue
-            
+
         tech = str(col).strip()
         location = "EU27"
-        
+
         for year, value in sheet_data[col].items():
             if pd.notna(value):
                 # SCALE: MW -> GW
                 decom_dict[(int(year), location, tech)] = float(value) * GW_SCALE
-                
+
     return decom_dict
 
 
@@ -316,8 +328,15 @@ def process_material_block_sheet(sheet_data):
     """
     # 1. Validate columns
     required_cols = [
-        "material", "base_2024", "lds_2030", "lds_2050",
-        "hds_2030", "hds_2050", "price_t1", "price_t2", "price_t3"
+        "material",
+        "base_2024",
+        "lds_2030",
+        "lds_2050",
+        "hds_2030",
+        "hds_2050",
+        "price_t1",
+        "price_t2",
+        "price_t3",
     ]
     for col in required_cols:
         if col not in sheet_data.columns:
@@ -347,7 +366,7 @@ def process_material_block_sheet(sheet_data):
         prices = {
             "Tier1": float(row["price_t1"]),
             "Tier2": float(row["price_t2"]),
-            "Tier3": float(row["price_t3"])
+            "Tier3": float(row["price_t3"]),
         }
 
         # Calculate limits and map them
@@ -357,8 +376,10 @@ def process_material_block_sheet(sheet_data):
 
             limits = {
                 "Tier1": current_lds,
-                "Tier2": max(0, current_hds - current_lds),  # max(0, ...) prevents negative limits
-                "Tier3": 999999.0  # Effectively infinite
+                "Tier2": max(
+                    0, current_hds - current_lds
+                ),  # max(0, ...) prevents negative limits
+                "Tier3": 999999.0,  # Effectively infinite
             }
 
             # Populate the dictionaries with keys: (stf, material, block)
@@ -366,16 +387,19 @@ def process_material_block_sheet(sheet_data):
                 material_block_limits[(year, mat, block)] = limits[block]
                 material_block_prices[(year, mat, block)] = prices[block]
 
-    print(f"Material Blocks Processed. Generated {len(material_block_limits)} limit entries dynamically.")
+    print(
+        f"Material Blocks Processed. Generated {len(material_block_limits)} limit entries dynamically."
+    )
 
     return block_names, material_block_limits, material_block_prices
+
 
 def load_data_from_excel(file_path):
     """Loads data from Excel and processes all relevant sheets with SCALING."""
 
     # --- HELPERS ---
     def clean_df_strings(df):
-        obj_cols = df.select_dtypes(include=['object']).columns
+        obj_cols = df.select_dtypes(include=["object"]).columns
         for col in obj_cols:
             df[col] = df[col].astype(str).str.strip()
         return df
@@ -394,7 +418,9 @@ def load_data_from_excel(file_path):
     technologies_data = pd.read_excel(file_path, sheet_name="Technologies")
     dcr_data = pd.read_excel(file_path, sheet_name="dcr")
     stocklvl_data = pd.read_excel(file_path, sheet_name="stocklvl")
-    installable_capacity_data = pd.read_excel(file_path, sheet_name="installable_capacity")
+    installable_capacity_data = pd.read_excel(
+        file_path, sheet_name="installable_capacity"
+    )
     gas_block_data = pd.read_excel(file_path, sheet_name="gas_block")
     mats_block_data = pd.read_excel(file_path, sheet_name="material_blocks")
 
@@ -404,27 +430,47 @@ def load_data_from_excel(file_path):
         decom_data = pd.DataFrame()
 
     # Process Gas Blocks
-    block_names, block_limits_dict, block_price_dict = process_gas_block_sheet(gas_block_data)
+    block_names, block_limits_dict, block_price_dict = process_gas_block_sheet(
+        gas_block_data
+    )
     mat_blocks, mat_limits, mat_prices = process_material_block_sheet(mats_block_data)
 
     # Material Sheets
-    tech_stage_data = clean_headers(clean_df_strings(pd.read_excel(file_path, "Tech_Stage_Specs")))
-    mat_intensity_data = clean_headers(clean_df_strings(pd.read_excel(file_path, "Material_Intensity")))
+    tech_stage_data = clean_headers(
+        clean_df_strings(pd.read_excel(file_path, "Tech_Stage_Specs"))
+    )
+    mat_intensity_data = clean_headers(
+        clean_df_strings(pd.read_excel(file_path, "Material_Intensity"))
+    )
 
     # Material Markets
-    mat_mining_limit = clean_headers(clean_df_strings(pd.read_excel(file_path, "mining_limit")))
-    mat_mining_cost = clean_headers(clean_df_strings(pd.read_excel(file_path, "mining_cost")))
-    mat_import_cost_mining = clean_headers(clean_df_strings(pd.read_excel(file_path, "import_cost_mining")))
-    energy_transision_factor = clean_headers(clean_df_strings(pd.read_excel(file_path, "energy_transition_factor")))
-    conversion_factor_mat = clean_headers(clean_df_strings(pd.read_excel(file_path, "ore_metal_factor")))
+    mat_mining_limit = clean_headers(
+        clean_df_strings(pd.read_excel(file_path, "mining_limit"))
+    )
+    mat_mining_cost = clean_headers(
+        clean_df_strings(pd.read_excel(file_path, "mining_cost"))
+    )
+    mat_import_cost_mining = clean_headers(
+        clean_df_strings(pd.read_excel(file_path, "import_cost_mining"))
+    )
+    energy_transision_factor = clean_headers(
+        clean_df_strings(pd.read_excel(file_path, "energy_transition_factor"))
+    )
+    conversion_factor_mat = clean_headers(
+        clean_df_strings(pd.read_excel(file_path, "ore_metal_factor"))
+    )
 
     if "Cost_Data" in xls.sheet_names:
-        proc_cost_data = clean_headers(clean_df_strings(pd.read_excel(xls, "Cost_Data")))
+        proc_cost_data = clean_headers(
+            clean_df_strings(pd.read_excel(xls, "Cost_Data"))
+        )
     else:
         proc_cost_data = pd.DataFrame()
 
     if "Component_Map" in xls.sheet_names:
-        component_map_data = clean_headers(clean_df_strings(pd.read_excel(xls, "Component_Map")))
+        component_map_data = clean_headers(
+            clean_df_strings(pd.read_excel(xls, "Component_Map"))
+        )
     else:
         component_map_data = pd.DataFrame()
 
@@ -432,13 +478,21 @@ def load_data_from_excel(file_path):
     technologies_dict = process_technology_sheet(technologies_data)
     stocklvl_dict = process_stocklvl_sheet(stocklvl_data)
     dcr_dict = process_dcr_sheet(dcr_data)
-    installable_capacity_dict = process_installable_capacity_sheet(installable_capacity_data)
+    installable_capacity_dict = process_installable_capacity_sheet(
+        installable_capacity_data
+    )
     loadfactors_dict = process_loadfactors_sheet(loadfactors_data)
 
     base_params = {
-        "y0": int(base_data.loc[base_data["Param"] == "Start Year y0", "Value"].values[0]),
-        "y_end": int(base_data.loc[base_data["Param"] == "End Year yn", "Value"].values[0]),
-        "hours": int(base_data.loc[base_data["Param"] == "hours per year", "Value"].values[0]),
+        "y0": int(
+            base_data.loc[base_data["Param"] == "Start Year y0", "Value"].values[0]
+        ),
+        "y_end": int(
+            base_data.loc[base_data["Param"] == "End Year yn", "Value"].values[0]
+        ),
+        "hours": int(
+            base_data.loc[base_data["Param"] == "hours per year", "Value"].values[0]
+        ),
     }
 
     # --- 3. PROCESS MATERIAL DATA ---
@@ -450,22 +504,25 @@ def load_data_from_excel(file_path):
 
     if not tech_stage_data.empty:
         for _, row in tech_stage_data.iterrows():
-            t = row['Technology']
-            s = row['Stage']
+            t = row["Technology"]
+            s = row["Stage"]
             valid_tech_stage_list.append((t, s))
-            val = str(row.get('is_final_stage', '0')).strip().lower()
-            if val in ['1', '1.0', 'true', 'yes', 'y']:
+            val = str(row.get("is_final_stage", "0")).strip().lower()
+            if val in ["1", "1.0", "true", "yes", "y"]:
                 final_stage_map[t] = s
 
         valid_tech_stage_list = sorted(list(set(valid_tech_stage_list)))
 
-        tech_stage_data.set_index(['Location', 'Technology', 'Stage'], inplace=True)
+        tech_stage_data.set_index(["Location", "Technology", "Stage"], inplace=True)
 
         # SCALING APPLIED: Init Cap (MW -> GW), Energy Needs (MWh -> GWh)
-        static_tech_specs["init_cap"] = {k: v * GW_SCALE for k, v in tech_stage_data['init_cap'].to_dict().items()}
-        static_tech_specs["build_time"] = tech_stage_data['build_time_lag'].to_dict()
-        static_tech_specs["energy_needs"] = {k: v for k, v in
-                                             tech_stage_data['energy_needs'].to_dict().items()}
+        static_tech_specs["init_cap"] = {
+            k: v * GW_SCALE for k, v in tech_stage_data["init_cap"].to_dict().items()
+        }
+        static_tech_specs["build_time"] = tech_stage_data["build_time_lag"].to_dict()
+        static_tech_specs["energy_needs"] = {
+            k: v for k, v in tech_stage_data["energy_needs"].to_dict().items()
+        }
 
     # B. Material Intensity
     mat_intensity_dict = {}
@@ -477,16 +534,19 @@ def load_data_from_excel(file_path):
         # (1e-3 mass / 1e-3 power) = 1.0. NO CHANGE NEEDED.
         # mat_intensity_data['intensity'] *= 1000  <-- REMOVED FOR K-UNIVERSE
 
-        if 'scrap_content' in mat_intensity_data.columns:
-            mat_intensity_data['scrap_content'] *= 1
+        if "scrap_content" in mat_intensity_data.columns:
+            mat_intensity_data["scrap_content"] *= 1
 
-        mat_intensity_dict = mat_intensity_data.set_index(['Technology', 'Stage', 'Material'])[
-            'intensity'].to_dict()
+        mat_intensity_dict = mat_intensity_data.set_index(
+            ["Technology", "Stage", "Material"]
+        )["intensity"].to_dict()
 
         for _, row in mat_intensity_data.iterrows():
-            k = (row['Technology'], row['Material'])
-            mat_content_dict[k] = mat_content_dict.get(k, 0) + float(row.get('scrap_content', 0))
-            mat_eff_dict[k] = float(row.get('rec_efficiency', 0))
+            k = (row["Technology"], row["Material"])
+            mat_content_dict[k] = mat_content_dict.get(k, 0) + float(
+                row.get("scrap_content", 0)
+            )
+            mat_eff_dict[k] = float(row.get("rec_efficiency", 0))
 
     # C. Material Market
     mat_mining_limit_dict = {}
@@ -500,28 +560,30 @@ def load_data_from_excel(file_path):
         (mat_mining_cost, mat_mining_cost_dict),
         (mat_import_cost_mining, mat_import_cost_dict),
         (conversion_factor_mat, mat_conversion_dict),
-        (energy_transision_factor, mat_energy_transision_factor_dict)
+        (energy_transision_factor, mat_energy_transision_factor_dict),
     ]
 
     for df_source, target_dict in tasks:
-        if df_source.empty: continue
+        if df_source.empty:
+            continue
         df = df_source.copy()
-        if 'Stf' in df.columns:
-            df['Stf'] = df['Stf'].ffill().astype(int)
-            df.rename(columns={'Stf': 'Year'}, inplace=True)
+        if "Stf" in df.columns:
+            df["Stf"] = df["Stf"].ffill().astype(int)
+            df.rename(columns={"Stf": "Year"}, inplace=True)
 
-        df_melt = df.melt(id_vars=['Year'], var_name='Material', value_name='Value')
-        df_melt['Value'] = pd.to_numeric(
-            df_melt['Value'].astype(str).str.replace(',', '.', regex=False),
-            errors='coerce'
+        df_melt = df.melt(id_vars=["Year"], var_name="Material", value_name="Value")
+        df_melt["Value"] = pd.to_numeric(
+            df_melt["Value"].astype(str).str.replace(",", ".", regex=False),
+            errors="coerce",
         )
-        df_melt.dropna(subset=['Value'], inplace=True)
+        df_melt.dropna(subset=["Value"], inplace=True)
 
         for _, row in df_melt.iterrows():
-            year = int(row['Year'])
-            mat = str(row['Material']).strip()
-            val = row['Value']
-            if val > 900000000: continue
+            year = int(row["Year"])
+            mat = str(row["Material"]).strip()
+            val = row["Value"]
+            if val > 900000000:
+                continue
 
             # SCALE LIMITS ONLY
             if target_dict is mat_mining_limit_dict:
@@ -541,19 +603,23 @@ def load_data_from_excel(file_path):
     mat_down_cost_dict = {}
 
     if not proc_cost_data.empty:
-        if 'Year' in proc_cost_data.columns:
-            proc_cost_data = proc_cost_data.drop(columns=['Year'])
+        if "Year" in proc_cost_data.columns:
+            proc_cost_data = proc_cost_data.drop(columns=["Year"])
 
         target_years = range(2024, 2051)
         expanded_dfs = [proc_cost_data.assign(Year=y) for y in target_years]
         proc_cost_data = pd.concat(expanded_dfs)
-        proc_cost_data.set_index(['Year', 'Location', 'Technology', 'Stage'], inplace=True)
+        proc_cost_data.set_index(
+            ["Year", "Location", "Technology", "Stage"], inplace=True
+        )
 
         # SCALING APPLIED: EUR/MW -> k€/GW (Factor 1.0)
-        proc_capex_dict = (proc_cost_data['capex_base'] * COST_SCALE).to_dict()
-        proc_opex_dict = (proc_cost_data['opex_fixed'] * COST_SCALE).to_dict()
-        proc_opex_var_dict = (proc_cost_data['opex_var_base'] * COST_SCALE).to_dict()
-        mat_down_cost_dict = (proc_cost_data['material_downstream_manufacturing'] * COST_SCALE).to_dict()
+        proc_capex_dict = (proc_cost_data["capex_base"] * COST_SCALE).to_dict()
+        proc_opex_dict = (proc_cost_data["opex_fixed"] * COST_SCALE).to_dict()
+        proc_opex_var_dict = (proc_cost_data["opex_var_base"] * COST_SCALE).to_dict()
+        mat_down_cost_dict = (
+            proc_cost_data["material_downstream_manufacturing"] * COST_SCALE
+        ).to_dict()
 
         # E. Import Cost Stage
         proc_part_import_dict = {}
@@ -561,50 +627,57 @@ def load_data_from_excel(file_path):
 
         if sheet_name in xls.sheet_names:
             import_ts_data = pd.read_excel(xls, sheet_name)
-            if 'Stf' in import_ts_data.columns:
-                import_ts_data['Stf'] = import_ts_data['Stf'].ffill().astype(int)
-                import_ts_data.rename(columns={'Stf': 'Year'}, inplace=True)
+            if "Stf" in import_ts_data.columns:
+                import_ts_data["Stf"] = import_ts_data["Stf"].ffill().astype(int)
+                import_ts_data.rename(columns={"Stf": "Year"}, inplace=True)
 
-            import_ts_data.dropna(subset=['Year'], inplace=True)
-            df_melt = import_ts_data.melt(id_vars=['Year'], var_name='Header', value_name='Cost')
+            import_ts_data.dropna(subset=["Year"], inplace=True)
+            df_melt = import_ts_data.melt(
+                id_vars=["Year"], var_name="Header", value_name="Cost"
+            )
             processed_records = []
 
             for index, row in df_melt.iterrows():
-                header = str(row['Header']).strip()
-                if header == 'Year': continue
+                header = str(row["Header"]).strip()
+                if header == "Year":
+                    continue
 
                 try:
-                    cost = float(str(row['Cost']).replace(',', '.'))
+                    cost = float(str(row["Cost"]).replace(",", "."))
                 except:
                     continue  # Skip non-numeric
 
                 # Logic: Split 'solarPV_Polysilicon' into ['solarPV', 'Polysilicon']
-                if '_' in header:
-                    parts = header.split('_', 1)
+                if "_" in header:
+                    parts = header.split("_", 1)
                     tech = parts[0]
                     stage = parts[1]
 
                     # Use COST_SCALE (1.0 for k-Universe)
                     scaled_cost = cost * COST_SCALE
 
-                    processed_records.append({
-                        'Year': int(row['Year']),
-                        'Location': 'EU27',
-                        'Technology': tech,
-                        'Stage': stage,
-                        'Cost': scaled_cost
-                    })
+                    processed_records.append(
+                        {
+                            "Year": int(row["Year"]),
+                            "Location": "EU27",
+                            "Technology": tech,
+                            "Stage": stage,
+                            "Cost": scaled_cost,
+                        }
+                    )
 
             if processed_records:
                 df_final = pd.DataFrame(processed_records)
-                proc_part_import_dict = df_final.set_index(['Year', 'Location', 'Technology', 'Stage'])[
-                    'Cost'].to_dict()
+                proc_part_import_dict = df_final.set_index(
+                    ["Year", "Location", "Technology", "Stage"]
+                )["Cost"].to_dict()
 
     # F. BOM
     bom_map_dict = {}
     if not component_map_data.empty:
-        bom_map_dict = component_map_data.set_index(['Cons_Tech', 'Cons_Stage', 'Input_Tech', 'Input_Stage'])[
-            'Ratio'].to_dict()
+        bom_map_dict = component_map_data.set_index(
+            ["Cons_Tech", "Cons_Stage", "Input_Tech", "Input_Stage"]
+        )["Ratio"].to_dict()
 
     locations_list = locations_data.iloc[:, 0].dropna().tolist()
 
@@ -624,38 +697,57 @@ def load_data_from_excel(file_path):
         recyclingcapex_bulk_dict,
         o_and_m_dict,
     ) = process_cost_sheet(cost_sheet)
-    
+
     if "Recycling_Costs" in xls.sheet_names or "Recycling_Prices" in xls.sheet_names:
-        sheet_name_rec = "Recycling_Costs" if "Recycling_Costs" in xls.sheet_names else "Recycling_Prices"
-        rec_cost_sheet = clean_headers(clean_df_strings(pd.read_excel(xls, sheet_name=sheet_name_rec)))
-        
+        sheet_name_rec = (
+            "Recycling_Costs"
+            if "Recycling_Costs" in xls.sheet_names
+            else "Recycling_Prices"
+        )
+        rec_cost_sheet = clean_headers(
+            clean_df_strings(pd.read_excel(xls, sheet_name=sheet_name_rec))
+        )
+
         target_years_rec = range(2024, 2051)
-        
+
         for _, row in rec_cost_sheet.iterrows():
-            loc = row.get('Location')
-            tech = row.get('Technology')
-            if not loc or not tech or pd.isna(loc) or pd.isna(tech): continue
-            
+            loc = row.get("Location")
+            tech = row.get("Technology")
+            if not loc or not tech or pd.isna(loc) or pd.isna(tech):
+                continue
+
             for y in target_years_rec:
                 key = (y, loc, tech)
-                if 'capex_magnet' in row and pd.notna(row['capex_magnet']):
-                    recyclingcapex_magnet_dict[key] = float(row['capex_magnet']) * COST_SCALE
-                if 'opex_var_magnet' in row and pd.notna(row['opex_var_magnet']):
-                    recyclingcost_magnet_dict[key] = float(row['opex_var_magnet']) * COST_SCALE
-                if 'capex_bulk' in row and pd.notna(row['capex_bulk']):
-                    recyclingcapex_bulk_dict[key] = float(row['capex_bulk']) * COST_SCALE
-                if 'opex_var_bulk' in row and pd.notna(row['opex_var_bulk']):
-                    recyclingcost_bulk_dict[key] = float(row['opex_var_bulk']) * COST_SCALE
-                if 'capex' in row and pd.notna(row['capex']):
-                    recyclingcapex_dict[key] = float(row['capex']) * COST_SCALE
-                if 'opex_var' in row and pd.notna(row['opex_var']):
-                    recyclingcost_dict[key] = float(row['opex_var']) * COST_SCALE
-                if 'opex_fixed_magnet' in row and pd.notna(row['opex_fixed_magnet']):
-                    recyclingfom_magnet_dict[key] = float(row['opex_fixed_magnet']) * COST_SCALE
-                if 'opex_fixed_bulk' in row and pd.notna(row['opex_fixed_bulk']):
-                    recyclingfom_bulk_dict[key] = float(row['opex_fixed_bulk']) * COST_SCALE
-                if 'opex_fixed' in row and pd.notna(row['opex_fixed']):
-                    recyclingfom_dict[key] = float(row['opex_fixed']) * COST_SCALE
+                if "capex_magnet" in row and pd.notna(row["capex_magnet"]):
+                    recyclingcapex_magnet_dict[key] = (
+                        float(row["capex_magnet"]) * COST_SCALE
+                    )
+                if "opex_var_magnet" in row and pd.notna(row["opex_var_magnet"]):
+                    recyclingcost_magnet_dict[key] = (
+                        float(row["opex_var_magnet"]) * COST_SCALE
+                    )
+                if "capex_bulk" in row and pd.notna(row["capex_bulk"]):
+                    recyclingcapex_bulk_dict[key] = (
+                        float(row["capex_bulk"]) * COST_SCALE
+                    )
+                if "opex_var_bulk" in row and pd.notna(row["opex_var_bulk"]):
+                    recyclingcost_bulk_dict[key] = (
+                        float(row["opex_var_bulk"]) * COST_SCALE
+                    )
+                if "capex" in row and pd.notna(row["capex"]):
+                    recyclingcapex_dict[key] = float(row["capex"]) * COST_SCALE
+                if "opex_var" in row and pd.notna(row["opex_var"]):
+                    recyclingcost_dict[key] = float(row["opex_var"]) * COST_SCALE
+                if "opex_fixed_magnet" in row and pd.notna(row["opex_fixed_magnet"]):
+                    recyclingfom_magnet_dict[key] = (
+                        float(row["opex_fixed_magnet"]) * COST_SCALE
+                    )
+                if "opex_fixed_bulk" in row and pd.notna(row["opex_fixed_bulk"]):
+                    recyclingfom_bulk_dict[key] = (
+                        float(row["opex_fixed_bulk"]) * COST_SCALE
+                    )
+                if "opex_fixed" in row and pd.notna(row["opex_fixed"]):
+                    recyclingfom_dict[key] = float(row["opex_fixed"]) * COST_SCALE
 
     decommissioned_cap_dict = process_decommissioning_sheet(decom_data)
 
@@ -680,13 +772,13 @@ def load_data_from_excel(file_path):
         "dcr_dict": dcr_dict,
         "stocklvl_dict": stocklvl_dict,  # GW
         "installable_capacity_dict": installable_capacity_dict,  # GW
-        "decommissioned_cap_dict": decommissioned_cap_dict, # GW
+        "decommissioned_cap_dict": decommissioned_cap_dict,  # GW
         "block_limits": block_limits_dict,  # GWh
         "block_price": block_price_dict,  # k€/GWh
         "block_names": block_names,
-        "mat_blocks":mat_blocks,
-        "mat_limits":mat_limits,
-        "mat_prices":mat_prices,
+        "mat_blocks": mat_blocks,
+        "mat_limits": mat_limits,
+        "mat_prices": mat_prices,
         "static_tech_specs": static_tech_specs,  # GW & GWh
         "final_stage_map": final_stage_map,
         "mat_mining_limit_dict": mat_mining_limit_dict,  # kton
@@ -698,7 +790,7 @@ def load_data_from_excel(file_path):
         "processing_stage_cost_dict": proc_capex_dict,  # k€/GW
         "processing_opex_dict": proc_opex_dict,  # k€/GW
         "processing_opex_var_dict": proc_opex_var_dict,  # k€/GW
-        "material_downstream_cost_dict": mat_down_cost_dict, #k€/GW
+        "material_downstream_cost_dict": mat_down_cost_dict,  # k€/GW
         "part_import_cost_dict": proc_part_import_dict,  # k€/GW
         "bom_map_dict": bom_map_dict,
         "valid_tech_stage_list": valid_tech_stage_list,
@@ -708,8 +800,6 @@ def load_data_from_excel(file_path):
 
     print("✅ EXTENSION Data loading complete. All units scaled to GW / k€ / kton.")
     return data_urbsextensionv1
-
-
 
 
 def read_scenario_prices(window_start):
@@ -722,9 +812,15 @@ def read_scenario_prices(window_start):
 
     try:
         # Read Excel
-        import_prices = pd.read_excel(scenario_file, sheet_name="import_prices", index_col="Stf")
-        manufacturing_prices = pd.read_excel(scenario_file, sheet_name="manufacturing_prices", index_col="Stf")
-        piped_gas_prices = pd.read_excel(scenario_file, sheet_name="piped_gas_prices", index_col="Stf")
+        import_prices = pd.read_excel(
+            scenario_file, sheet_name="import_prices", index_col="Stf"
+        )
+        manufacturing_prices = pd.read_excel(
+            scenario_file, sheet_name="manufacturing_prices", index_col="Stf"
+        )
+        piped_gas_prices = pd.read_excel(
+            scenario_file, sheet_name="piped_gas_prices", index_col="Stf"
+        )
 
         # SCALING FACTORS (Matches Global Constants)
         COST_SCALE_SCENARIO = 1.0  # Input €/MW -> Output k€/GW (1.0)
@@ -737,10 +833,7 @@ def read_scenario_prices(window_start):
         if gas_col in piped_gas_prices:
             piped_gas_dict = (piped_gas_prices[gas_col] * GAS_SCALE_SCENARIO).to_dict()
 
-        result = {
-            "tech_prices": {},
-            "piped_gas": piped_gas_dict
-        }
+        result = {"tech_prices": {}, "piped_gas": piped_gas_dict}
 
         technologies = ["solarPV", "windon", "windoff", "Batteries"]
         for tech in technologies:
@@ -754,7 +847,9 @@ def read_scenario_prices(window_start):
 
             man_dict = {}
             if manufacturing_col in manufacturing_prices:
-                man_dict = (manufacturing_prices[manufacturing_col] * COST_SCALE_SCENARIO).to_dict()
+                man_dict = (
+                    manufacturing_prices[manufacturing_col] * COST_SCALE_SCENARIO
+                ).to_dict()
 
             result["tech_prices"][tech] = {
                 "import": imp_dict,
@@ -769,24 +864,24 @@ def read_scenario_prices(window_start):
 
 
 def run_scenario(
-        input_files,
-        Solver,
-        timesteps,
-        scenario,
-        result_dir,
-        dt,
-        objective,
-        plot_tuples=None,
-        plot_sites_name=None,
-        plot_periods=None,
-        report_tuples=None,
-        report_sites_name=None,
-        initial_conditions=None,
-        window_start=None,
-        window_end=None,
-        indexlist=None,
-        windows=None,
-        window_length=None,
+    input_files,
+    Solver,
+    timesteps,
+    scenario,
+    result_dir,
+    dt,
+    objective,
+    plot_tuples=None,
+    plot_sites_name=None,
+    plot_periods=None,
+    report_tuples=None,
+    report_sites_name=None,
+    initial_conditions=None,
+    window_start=None,
+    window_end=None,
+    indexlist=None,
+    windows=None,
+    window_length=None,
 ):
     """run an urbs model for given input, time steps and scenario"""
 
@@ -803,16 +898,16 @@ def run_scenario(
     # Apply Scenario Logic
     data, data_urbsextensionv1 = scenario(data, data_urbsextensionv1.copy())
 
-    #validate_input(data)
-    #validate_dc_objective(data, objective)
+    validate_input(data)
+    validate_dc_objective(data, objective)
 
     # =================================================================
     # THE "DATA" DICTIONARY DUMP (Fixed for Empty DataFrames)
     # =================================================================
-    #print("Dumping standard urbs 'data' dictionary to Excel...")
-    #data_dump_file = os.path.join(result_dir, "standard_urbs_data_dump.xlsx")
+    # print("Dumping standard urbs 'data' dictionary to Excel...")
+    # data_dump_file = os.path.join(result_dir, "standard_urbs_data_dump.xlsx")
 
-    #with pd.ExcelWriter(data_dump_file) as writer:
+    # with pd.ExcelWriter(data_dump_file) as writer:
     #    for sheet_name, df in data.items():
     #        # Excel sheet names have a strict 31 character limit
     #        safe_sheet_name = str(sheet_name)[:31]
@@ -827,9 +922,8 @@ def run_scenario(
     #            # For basic strings or numbers in the dictionary
     #            pd.DataFrame([str(df)]).to_excel(writer, sheet_name=safe_sheet_name, index=False, header=False)
 
-    #print(f"✅ Standard urbs data saved to: {data_dump_file}")
+    # print(f"✅ Standard urbs data saved to: {data_dump_file}")
     # =================================================================
-
 
     # create model
     prob = create_model(
@@ -845,10 +939,10 @@ def run_scenario(
     )
 
     # ---> ADD THIS RAW PARAMETER DUMP RIGHT HERE <---
-    #print("Dumping all Pyomo parameters to Excel...")
-    #rows = []
+    # print("Dumping all Pyomo parameters to Excel...")
+    # rows = []
     # Loop through every actual parameter inside the Pyomo model
-    #for param in prob.component_objects(pyomo.Param, active=True):
+    # for param in prob.component_objects(pyomo.Param, active=True):
     #    for index in param:
     #        # Extract the raw number Pyomo is using
     #        val = pyomo.value(param[index], exception=False)
@@ -858,12 +952,11 @@ def run_scenario(
     #            "Value": val
     #        })
 
-    #df_params = pd.DataFrame(rows)
-    #dump_file = os.path.join(result_dir, "actual_pyomo_parameters.xlsx")
-    #df_params.to_excel(dump_file, index=False)
-    #print(f"✅ Raw Pyomo parameters saved to: {dump_file}")
+    # df_params = pd.DataFrame(rows)
+    # dump_file = os.path.join(result_dir, "actual_pyomo_parameters.xlsx")
+    # df_params.to_excel(dump_file, index=False)
+    # print(f"✅ Raw Pyomo parameters saved to: {dump_file}")
     # ---------------------------------------------------------
-
 
     log_filename = os.path.join(result_dir, "{}.log").format(sce)
     # solve model and read results
@@ -871,8 +964,7 @@ def run_scenario(
 
     optim = setup_solver(optim, logfile=log_filename)
 
-    prob.write("my_debug_model.lp", io_options={'symbolic_solver_labels': True})
-
+    prob.write("my_debug_model.lp", io_options={"symbolic_solver_labels": True})
 
     result = optim.solve(prob, tee=True)
 
@@ -881,7 +973,7 @@ def run_scenario(
     print("   NUMERICAL QUALITY CHECK")
     print("=" * 30)
 
-    if hasattr(optim, '_solver_model'):
+    if hasattr(optim, "_solver_model"):
         try:
             optim._solver_model.printQuality()
         except:
@@ -892,7 +984,9 @@ def run_scenario(
         print(f"Solver termination condition: {result.solver.termination_condition}")
 
         if "infeasible" in str(result.solver.termination_condition):
-            print("Model is either infeasible or unbounded. Proceeding with IIS analysis...")
+            print(
+                "Model is either infeasible or unbounded. Proceeding with IIS analysis..."
+            )
             lp_file_path = os.path.abspath("model.lp")
             prob.write(lp_file_path, io_options={"symbolic_solver_labels": True})
             print(f"Pyomo model written to LP file: {lp_file_path}")

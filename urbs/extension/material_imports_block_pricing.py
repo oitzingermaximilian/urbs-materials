@@ -1,6 +1,7 @@
 import pyomo.core as pyomo
 import pandas as pd
 
+
 def apply_material_block_pricing(m, data):
     """
     Apply block-based allocation for imported materials.
@@ -13,27 +14,37 @@ def apply_material_block_pricing(m, data):
     # ==========================================
     m.price_blocks = pyomo.Set(
         initialize=list(data["mat_blocks"]),
-        doc="Material pricing blocks (e.g., Tier1, Tier2, Tier3)"
+        doc="Material pricing blocks (e.g., Tier1, Tier2, Tier3)",
     )
 
     # ==========================================
     # PARAMETERS
     # ==========================================
     m.mat_block_limits = pyomo.Param(
-        m.stf, m.materials, m.price_blocks,
-        initialize=lambda m, stf, mat, blk: data["mat_limits"].get((stf, mat, blk), 0.0),
+        m.stf,
+        m.materials,
+        m.price_blocks,
+        initialize=lambda m, stf, mat, blk: data["mat_limits"].get(
+            (stf, mat, blk), 0.0
+        ),
         within=pyomo.NonNegativeReals,
-        doc="Maximum import volume per block per year"
+        doc="Maximum import volume per block per year",
     )
 
     m.mat_block_prices = pyomo.Param(
-        m.stf, m.materials, m.price_blocks,
-        initialize=lambda m, stf, mat, blk: data["mat_prices"].get((stf, mat, blk), 0.0),
+        m.stf,
+        m.materials,
+        m.price_blocks,
+        initialize=lambda m, stf, mat, blk: data["mat_prices"].get(
+            (stf, mat, blk), 0.0
+        ),
         within=pyomo.NonNegativeReals,
-        doc="Price per unit for a specific block"
+        doc="Price per unit for a specific block",
     )
 
-    def export_block_params_to_excel(m, output_filename="pyomo_block_params_debug.xlsx"):
+    def export_block_params_to_excel(
+        m, output_filename="pyomo_block_params_debug.xlsx"
+    ):
         """
         Extracts the initialized block limits and prices directly from
         the Pyomo model and saves them to an Excel file.
@@ -43,18 +54,20 @@ def apply_material_block_pricing(m, data):
         rows = []
 
         # Iterate over the indices of the Parameter (stf, material, block)
-        for (stf, mat, blk) in m.mat_block_limits:
+        for stf, mat, blk in m.mat_block_limits:
             # Extract the numerical values
             limit_val = pyomo.value(m.mat_block_limits[stf, mat, blk])
             price_val = pyomo.value(m.mat_block_prices[stf, mat, blk])
 
-            rows.append({
-                "stf": stf,
-                "material": mat,
-                "block": blk,
-                "mat_block_limit": limit_val,
-                "mat_block_price": price_val
-            })
+            rows.append(
+                {
+                    "stf": stf,
+                    "material": mat,
+                    "block": blk,
+                    "mat_block_limit": limit_val,
+                    "mat_block_price": price_val,
+                }
+            )
 
         # Convert to DataFrame and export
         df = pd.DataFrame(rows)
@@ -69,9 +82,11 @@ def apply_material_block_pricing(m, data):
     # VARIABLES
     # ==========================================
     m.material_imported_block = pyomo.Var(
-        m.stf, m.materials, m.price_blocks,
+        m.stf,
+        m.materials,
+        m.price_blocks,
         within=pyomo.NonNegativeReals,
-        doc="Material imported allocated to specific pricing blocks"
+        doc="Material imported allocated to specific pricing blocks",
     )
 
     # ==========================================
@@ -84,7 +99,10 @@ def apply_material_block_pricing(m, data):
         if m.mat_block_limits[stf, mat, blk] == 0:
             return m.material_imported_block[stf, mat, blk] == 0
 
-        return m.material_imported_block[stf, mat, blk] <= m.mat_block_limits[stf, mat, blk]
+        return (
+            m.material_imported_block[stf, mat, blk]
+            <= m.mat_block_limits[stf, mat, blk]
+        )
 
     m.mat_block_limit_constraint = pyomo.Constraint(
         m.stf, m.materials, m.price_blocks, rule=mat_block_limit_rule

@@ -16,7 +16,7 @@ from urbs.extension import (
     apply_material_constraints,
     setup_onetech_learning,
     setup_split_scrap_learning,
-    apply_material_block_pricing
+    apply_material_block_pricing,
 )
 
 
@@ -368,7 +368,6 @@ def create_model(
             doc="empty set needed for (partial) process output",
         )
 
-
     ####################################################################################################################
     ####################################################################################################################
     ####################################################################################################################
@@ -410,11 +409,13 @@ def create_model(
         learning_techs = ["solarPV"]
 
     # The base learning setup currently uses one shared stage subset for all selected techs.
-    selected_stages = sorted({
-        stage
-        for tech in learning_techs
-        for stage in learning_stages_by_tech.get(tech, [])
-    })
+    selected_stages = sorted(
+        {
+            stage
+            for tech in learning_techs
+            for stage in learning_stages_by_tech.get(tech, [])
+        }
+    )
 
     setup_onetech_learning(
         m,
@@ -423,12 +424,12 @@ def create_model(
     )
 
     from .extension.single_tech_eos.eos_split_scrap import setup_split_scrap_learning
+
     setup_split_scrap_learning(m)
 
-
-    current_quota = data_urbsextensionv1.get('crma_quota', 0.35)
-    apply_scenario_constraints(m, nzia_mode='strict', crma_mode='combined', crma_active=True,
-                               crma_quota=current_quota)
+    current_quota = data_urbsextensionv1.get("crma_quota", 0.35)
+    # apply_scenario_constraints(m, nzia_mode='strict', crma_mode='combined', crma_active=True,
+    #                           crma_quota=current_quota)
 
     apply_scrap_constraints(m)
 
@@ -656,8 +657,9 @@ def res_vertex_rule(m, tm, stf, sit, com, com_type):
         for tech in m.tech:
             if (tm, stf, sit, tech) in m.balance_ext:
                 power_surplus += m.balance_ext[tm, stf, sit, tech]
-                power_surplus -= m.demand_production[tm, stf, sit, tech]  # subtract production demand
-
+                power_surplus -= m.demand_production[
+                    tm, stf, sit, tech
+                ]  # subtract production demand
 
                 # print(power_surplus)
     # if com is a stock commodity, the commodity source term e_co_stock
@@ -923,7 +925,7 @@ def res_area_rule(m, stf, sit):
 def res_global_co2_limit_rule(m, stf):
     # 1. Retrieve the raw value (Tons)
     # Extract the raw value from the dictionary
-    raw_limit_val = m.global_prop_dict["value"].get((stf, "CO2 limit"), float('inf'))
+    raw_limit_val = m.global_prop_dict["value"].get((stf, "CO2 limit"), float("inf"))
 
     # Apply the k-Universe MASS_SCALE (1e-3) directly
     limit_val = raw_limit_val
@@ -1206,7 +1208,6 @@ def cost_rule(m):
     ext_opex = sum(m.cost_opex_total_extension[stf] for stf in m.stf)
     ext_trade = sum(m.cost_trade_total_extension[stf] for stf in m.stf)
     ext_stock = sum(m.cost_stockpile_holding[stf] for stf in m.stf)
-
 
     gross_supply_chain_costs = ext_capex + ext_opex + ext_trade + ext_stock
 

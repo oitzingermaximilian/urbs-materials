@@ -17,27 +17,29 @@ def check_valid_indices(m, tech, stage):
     """
     return (tech, stage) in m.tech_stage_combinations
 
+
 class GhostCapacityZeroRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
         if (tech, stage) in m.tech_stage_combinations:
             return pyomo.Constraint.Skip
-        
+
         # Force all stage-dependent variables to 0 for invalid (ghost) tech/stage combinations
         return (
-            m.capacity_processing_total[stf, location, tech, stage] +
-            m.processing_cap_new[stf, location, tech, stage] +
-            m.capacity_produced_output[stf, location, tech, stage] +
-            m.capacity_produced_flow[stf, location, tech, stage] +
-            m.capacity_produced_storage[stf, location, tech, stage] +
-            m.capacity_produced_stockout[stf, location, tech, stage] +
-            m.capacity_imported[stf, location, tech, stage] +
-            m.capacity_imported_flow[stf, location, tech, stage] +
-            m.capacity_imported_storage[stf, location, tech, stage] +
-            m.capacity_imported_stockout[stf, location, tech, stage] +
-            m.Supply[stf, location, tech, stage] +
-            m.stock_domestic[stf, location, tech, stage] +
-            m.stock_imported[stf, location, tech, stage] +
-            m.components_stockpile[stf, location, tech, stage] == 0
+            m.capacity_processing_total[stf, location, tech, stage]
+            + m.processing_cap_new[stf, location, tech, stage]
+            + m.capacity_produced_output[stf, location, tech, stage]
+            + m.capacity_produced_flow[stf, location, tech, stage]
+            + m.capacity_produced_storage[stf, location, tech, stage]
+            + m.capacity_produced_stockout[stf, location, tech, stage]
+            + m.capacity_imported[stf, location, tech, stage]
+            + m.capacity_imported_flow[stf, location, tech, stage]
+            + m.capacity_imported_storage[stf, location, tech, stage]
+            + m.capacity_imported_stockout[stf, location, tech, stage]
+            + m.Supply[stf, location, tech, stage]
+            + m.stock_domestic[stf, location, tech, stage]
+            + m.stock_imported[stf, location, tech, stage]
+            + m.components_stockpile[stf, location, tech, stage]
+            == 0
         )
 
 
@@ -45,29 +47,34 @@ class GhostCapacityZeroRule(AbstractConstraint):
 # GROWTH CONSTRAINTS FOR PROCESSING AND SCRAP-PROCESSING
 #################################################################################
 
+
 class ProcessingCapacitiesOutputLimitRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
-        if not check_valid_indices(m, tech, stage): return pyomo.Constraint.Skip
+        if not check_valid_indices(m, tech, stage):
+            return pyomo.Constraint.Skip
 
         return (
-                m.capacity_processing_total[stf, location, tech, stage]
-                >= m.capacity_produced_output[stf, location, tech, stage]
+            m.capacity_processing_total[stf, location, tech, stage]
+            >= m.capacity_produced_output[stf, location, tech, stage]
         )
 
 
 class ProcessingCapacitiesSizeRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
-        if not check_valid_indices(m, tech, stage): return pyomo.Constraint.Skip
+        if not check_valid_indices(m, tech, stage):
+            return pyomo.Constraint.Skip
 
         lhs = m.capacity_processing_total[stf, location, tech, stage]
-        rhs = m.processing_cap_init[location, tech, stage] + \
-              sum(m.processing_cap_new[y, location, tech, stage] for y in m.stf if y <= stf)
+        rhs = m.processing_cap_init[location, tech, stage] + sum(
+            m.processing_cap_new[y, location, tech, stage] for y in m.stf if y <= stf
+        )
         return lhs == rhs
 
 
 class ProcessingCapacityGrowthLimitRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
-        if not check_valid_indices(m, tech, stage): return pyomo.Constraint.Skip
+        if not check_valid_indices(m, tech, stage):
+            return pyomo.Constraint.Skip
 
         # SCALING NOTE: Values are in GW (k-Universe)
         if stf == 2024:
@@ -77,46 +84,55 @@ class ProcessingCapacityGrowthLimitRule(AbstractConstraint):
                 max_capacity = 1.5
             return m.processing_cap_new[stf, location, tech, stage] <= max_capacity
         else:
-            lhs = (m.processing_cap_new[stf, location, tech, stage] -
-                   m.processing_cap_new[stf - 1, location, tech, stage])
-            rhs = (m.processing_delta_grow[location, tech, stage] +
-                   m.processing_avg_growth[location, tech, stage] * m.processing_cap_new[
-                       stf - 1, location, tech, stage])
+            lhs = (
+                m.processing_cap_new[stf, location, tech, stage]
+                - m.processing_cap_new[stf - 1, location, tech, stage]
+            )
+            rhs = (
+                m.processing_delta_grow[location, tech, stage]
+                + m.processing_avg_growth[location, tech, stage]
+                * m.processing_cap_new[stf - 1, location, tech, stage]
+            )
             return lhs <= rhs
-
-
-
 
 
 ##################################################################################
 # COMPOSITION & STOCK RULES
 ##################################################################################
 
+
 class CapacityProducedOutputCompositionRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
-        if not check_valid_indices(m, tech, stage): return pyomo.Constraint.Skip
+        if not check_valid_indices(m, tech, stage):
+            return pyomo.Constraint.Skip
 
-        return (m.capacity_produced_output[stf, location, tech, stage] ==
-                m.capacity_produced_flow[stf, location, tech, stage] +
-                m.capacity_produced_storage[stf, location, tech, stage])
+        return (
+            m.capacity_produced_output[stf, location, tech, stage]
+            == m.capacity_produced_flow[stf, location, tech, stage]
+            + m.capacity_produced_storage[stf, location, tech, stage]
+        )
 
 
 class CapacityImportedCompositionRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
-        if not check_valid_indices(m, tech, stage): return pyomo.Constraint.Skip
+        if not check_valid_indices(m, tech, stage):
+            return pyomo.Constraint.Skip
 
-        return (m.capacity_imported[stf, location, tech, stage] ==
-                m.capacity_imported_flow[stf, location, tech, stage] +
-                m.capacity_imported_storage[stf, location, tech, stage])
+        return (
+            m.capacity_imported[stf, location, tech, stage]
+            == m.capacity_imported_flow[stf, location, tech, stage]
+            + m.capacity_imported_storage[stf, location, tech, stage]
+        )
 
 
 class LimitFinalWindImportsRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
-        if not check_valid_indices(m, tech, stage): return pyomo.Constraint.Skip
+        if not check_valid_indices(m, tech, stage):
+            return pyomo.Constraint.Skip
         # 1. Spezifische Prüfung: Nur für Wind-Technologien und die passenden Assembly-Stages
-        if tech == 'windon' and stage == 'AssemblyOn':
+        if tech == "windon" and stage == "AssemblyOn":
             percentage_factor = 0.10
-        elif tech == 'windoff' and stage == 'AssemblyOff':
+        elif tech == "windoff" and stage == "AssemblyOff":
             percentage_factor = 0.02
         else:
             # Für alle anderen Kombinationen (z.B. EU-Assembly oder andere Techs) überspringen
@@ -124,17 +140,22 @@ class LimitFinalWindImportsRule(AbstractConstraint):
 
         # 2. Der Constraint: Import-Kapazität vs. Gesamtzubau (Q_ext_new)
         # Hinweis: Stelle sicher, dass m.capacity_imported nur den CHINA-Import-Pfad trackt!
-        return m.capacity_imported[stf, location, tech, stage] <= \
-            percentage_factor * m.Q_ext_new[stf, location, tech]
+        return (
+            m.capacity_imported[stf, location, tech, stage]
+            <= percentage_factor * m.Q_ext_new[stf, location, tech]
+        )
 
 
 class StockpileTotalRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
-        if not check_valid_indices(m, tech, stage): return pyomo.Constraint.Skip
+        if not check_valid_indices(m, tech, stage):
+            return pyomo.Constraint.Skip
 
-        return (m.components_stockpile[stf, location, tech, stage] ==
-                m.stock_domestic[stf, location, tech, stage] +
-                m.stock_imported[stf, location, tech, stage])
+        return (
+            m.components_stockpile[stf, location, tech, stage]
+            == m.stock_domestic[stf, location, tech, stage]
+            + m.stock_imported[stf, location, tech, stage]
+        )
 
 
 obsolescence_factor = 0.041
@@ -142,117 +163,161 @@ obsolescence_factor = 0.041
 
 class StockpileDomesticRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
-        if not check_valid_indices(m, tech, stage): return pyomo.Constraint.Skip
+        if not check_valid_indices(m, tech, stage):
+            return pyomo.Constraint.Skip
 
         if stf == 2024:
-            return (m.stock_domestic[stf, location, tech, stage] ==
-                    m.stock_domestic_init[location, tech, stage] +
-                    m.capacity_produced_storage[stf, location, tech, stage] -
-                    m.capacity_produced_stockout[stf, location, tech, stage])
+            return (
+                m.stock_domestic[stf, location, tech, stage]
+                == m.stock_domestic_init[location, tech, stage]
+                + m.capacity_produced_storage[stf, location, tech, stage]
+                - m.capacity_produced_stockout[stf, location, tech, stage]
+            )
         else:
-            return (m.stock_domestic[stf, location, tech, stage] ==
-                    m.stock_domestic[stf - 1, location, tech, stage] * (1 - obsolescence_factor) +
-                    m.capacity_produced_storage[stf, location, tech, stage] -
-                    m.capacity_produced_stockout[stf, location, tech, stage])
+            return (
+                m.stock_domestic[stf, location, tech, stage]
+                == m.stock_domestic[stf - 1, location, tech, stage]
+                * (1 - obsolescence_factor)
+                + m.capacity_produced_storage[stf, location, tech, stage]
+                - m.capacity_produced_stockout[stf, location, tech, stage]
+            )
 
 
 class StockpileImportedRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
-        if not check_valid_indices(m, tech, stage): return pyomo.Constraint.Skip
+        if not check_valid_indices(m, tech, stage):
+            return pyomo.Constraint.Skip
 
         if stf == 2024:
-            return (m.stock_imported[stf, location, tech, stage] ==
-                    m.stock_imported_init[location, tech, stage] +
-                    m.capacity_imported_storage[stf, location, tech, stage] -
-                    m.capacity_imported_stockout[stf, location, tech, stage])
+            return (
+                m.stock_imported[stf, location, tech, stage]
+                == m.stock_imported_init[location, tech, stage]
+                + m.capacity_imported_storage[stf, location, tech, stage]
+                - m.capacity_imported_stockout[stf, location, tech, stage]
+            )
         else:
-            return (m.stock_imported[stf, location, tech, stage] ==
-                    m.stock_imported[stf - 1, location, tech, stage] * (1 - obsolescence_factor) +
-                    m.capacity_imported_storage[stf, location, tech, stage] -
-                    m.capacity_imported_stockout[stf, location, tech, stage])
+            return (
+                m.stock_imported[stf, location, tech, stage]
+                == m.stock_imported[stf - 1, location, tech, stage]
+                * (1 - obsolescence_factor)
+                + m.capacity_imported_storage[stf, location, tech, stage]
+                - m.capacity_imported_stockout[stf, location, tech, stage]
+            )
 
 
 class MaximumStockpileImportsRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
-        if not check_valid_indices(m, tech, stage): return pyomo.Constraint.Skip
+        if not check_valid_indices(m, tech, stage):
+            return pyomo.Constraint.Skip
 
-        return m.capacity_imported_storage[stf, location, tech, stage] <= 0.25 * m.capacity_imported[
-            stf, location, tech, stage]
+        return (
+            m.capacity_imported_storage[stf, location, tech, stage]
+            <= 0.25 * m.capacity_imported[stf, location, tech, stage]
+        )
 
 
 class MaximumStockpileDomesticRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
-        if not check_valid_indices(m, tech, stage): return pyomo.Constraint.Skip
+        if not check_valid_indices(m, tech, stage):
+            return pyomo.Constraint.Skip
 
-        return m.capacity_produced_storage[stf, location, tech, stage] <= 0.25 * m.capacity_produced_output[
-            stf, location, tech, stage]
+        return (
+            m.capacity_produced_storage[stf, location, tech, stage]
+            <= 0.25 * m.capacity_produced_output[stf, location, tech, stage]
+        )
 
 
 class TurnoverStockImportsNewRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
-        if not check_valid_indices(m, tech, stage): return pyomo.Constraint.Skip
+        if not check_valid_indices(m, tech, stage):
+            return pyomo.Constraint.Skip
 
         valid_years = [2025, 2030, 2035, 2040, 2045]
         if stf not in valid_years:
             return pyomo.Constraint.Skip
 
         step_size = 5
-        lhs = sum(m.capacity_imported_stockout[j, location, tech, stage]
-                  for j in range(stf, stf + step_size)
-                  if (j, location, tech, stage) in m.capacity_imported_stockout)
+        lhs = sum(
+            m.capacity_imported_stockout[j, location, tech, stage]
+            for j in range(stf, stf + step_size)
+            if (j, location, tech, stage) in m.capacity_imported_stockout
+        )
 
-        rhs = (1 * (1 / step_size) * sum(m.stock_imported[j, location, tech, stage]
-                                         for j in range(stf, stf + step_size)
-                                         if (j, location, tech, stage) in m.stock_imported))
+        rhs = (
+            1
+            * (1 / step_size)
+            * sum(
+                m.stock_imported[j, location, tech, stage]
+                for j in range(stf, stf + step_size)
+                if (j, location, tech, stage) in m.stock_imported
+            )
+        )
         return lhs >= rhs
 
 
 class TurnoverStockDomesticNewRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
-        if not check_valid_indices(m, tech, stage): return pyomo.Constraint.Skip
+        if not check_valid_indices(m, tech, stage):
+            return pyomo.Constraint.Skip
 
         valid_years = [2025, 2030, 2035, 2040, 2045]
         if stf not in valid_years:
             return pyomo.Constraint.Skip
 
         step_size = 2
-        lhs = sum(m.capacity_produced_stockout[j, location, tech, stage]
-                  for j in range(stf, stf + step_size)
-                  if (j, location, tech, stage) in m.capacity_produced_stockout)
+        lhs = sum(
+            m.capacity_produced_stockout[j, location, tech, stage]
+            for j in range(stf, stf + step_size)
+            if (j, location, tech, stage) in m.capacity_produced_stockout
+        )
 
-        rhs = (1 * (1 / step_size) * sum(m.stock_domestic[j, location, tech, stage]
-                                         for j in range(stf, stf + step_size)
-                                         if (j, location, tech, stage) in m.stock_domestic))
+        rhs = (
+            1
+            * (1 / step_size)
+            * sum(
+                m.stock_domestic[j, location, tech, stage]
+                for j in range(stf, stf + step_size)
+                if (j, location, tech, stage) in m.stock_domestic
+            )
+        )
         return lhs >= rhs
 
 
 class SupplyCompositionRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
-        if not check_valid_indices(m, tech, stage): return pyomo.Constraint.Skip
+        if not check_valid_indices(m, tech, stage):
+            return pyomo.Constraint.Skip
 
         # CON: Supply Definition | Aggregates flow and stockout variables into total Supply
-        return (m.Supply[stf, location, tech, stage] ==
-                (m.capacity_produced_flow[stf, location, tech, stage] + m.capacity_produced_stockout[
-                    stf, location, tech, stage]) +
-                (m.capacity_imported_flow[stf, location, tech, stage] + m.capacity_imported_stockout[
-                    stf, location, tech, stage]))
-
+        return m.Supply[stf, location, tech, stage] == (
+            m.capacity_produced_flow[stf, location, tech, stage]
+            + m.capacity_produced_stockout[stf, location, tech, stage]
+        ) + (
+            m.capacity_imported_flow[stf, location, tech, stage]
+            + m.capacity_imported_stockout[stf, location, tech, stage]
+        )
 
 
 class ComponentBalanceRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, input_tech, input_stage):
         # NOTE: Supply exists for (input_tech, input_stage) which we assume is valid since it's passed here.
         # But we need to make sure we don't crash if it's invalid.
-        if not check_valid_indices(m, input_tech, input_stage): return pyomo.Constraint.Skip
+        if not check_valid_indices(m, input_tech, input_stage):
+            return pyomo.Constraint.Skip
 
         supply = m.Supply[stf, location, input_tech, input_stage]
 
         # ROBUST SUMMATION: Iterate over the BOM MAP directly
         # This catches any consumer that is defined in the data, even if sets are wonky.
         demand = sum(
-            m.capacity_produced_output[stf, location, consumer_tech, consumer_stage] * val
-
-            for (consumer_tech, consumer_stage, i_tech, i_stage), val in m.bom_map.items()
+            m.capacity_produced_output[stf, location, consumer_tech, consumer_stage]
+            * val
+            for (
+                consumer_tech,
+                consumer_stage,
+                i_tech,
+                i_stage,
+            ), val in m.bom_map.items()
             if i_tech == input_tech and i_stage == input_stage
             # Safety: ensure consumer is valid in the model variables
             if check_valid_indices(m, consumer_tech, consumer_stage)
@@ -293,19 +358,24 @@ class InstallationSupplyLinkRule(AbstractConstraint):
         # We assume 'EU27' and 2030 exist to test the key
         if (stf, location, tech, final_s) not in m.Supply:
             # OPTIONAL: Print warning only once
-            if stf == 2030 and location == 'EU27':
+            if stf == 2030 and location == "EU27":
                 print(f"🚨 LINK BROKEN: Supply variable missing for {tech} - {final_s}")
             return pyomo.Constraint.Skip
 
         # 3. The Link Constraint
         # Installation (GW) == Supply of Final Stage (GW)
-        return m.capacity_ext_new[stf, location, tech] == m.Supply[stf, location, tech, final_s]
+        return (
+            m.capacity_ext_new[stf, location, tech]
+            == m.Supply[stf, location, tech, final_s]
+        )
 
 
 class NewlyAddedBalanceLCOE(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
         return m.balance_yearly_new_capacity[stf, location, tech] == sum(
-            m.capacity_ext_new[stf, location, tech] * m.lf_solar[t, stf, location, tech] * m.hours[t]
+            m.capacity_ext_new[stf, location, tech]
+            * m.lf_solar[t, stf, location, tech]
+            * m.hours[t]
             for t in m.timesteps_ext
         )
 
@@ -314,6 +384,7 @@ class NewlyAddedBalanceLCOE(AbstractConstraint):
 # MATERIAL & ENERGY RULES
 ##################################################################################
 
+
 class ProcessingOutputMaterialRule(AbstractConstraint):
     def apply_rule(self, m, stf, material):
         # ROBUST SUMMATION: Iterate over the INTENSITY DICT directly.
@@ -321,7 +392,8 @@ class ProcessingOutputMaterialRule(AbstractConstraint):
 
         # 1. Grab all valid (Tech, Stage) pairs for THIS material from the intensity dict
         relevant_keys = [
-            (t, s, val) for (t, s, mat), val in m.material_intensity.items()
+            (t, s, val)
+            for (t, s, mat), val in m.material_intensity.items()
             if mat == material
         ]
 
@@ -330,7 +402,6 @@ class ProcessingOutputMaterialRule(AbstractConstraint):
 
         total_demand = sum(
             m.capacity_produced_output[stf, location, t, s] * val
-
             for (t, s, val) in relevant_keys
             for location in m.location
             # Safety: Ensure variable exists before accessing
@@ -342,45 +413,67 @@ class ProcessingOutputMaterialRule(AbstractConstraint):
 
 class MaterialDemandBalanceRule(AbstractConstraint):
     def apply_rule(self, m, stf, material):
-        return (m.demand_material_total[stf, material] ==
-                m.material_imported[stf, material] +
-                m.material_mined[stf, material] +
-                m.material_recycled[stf, material])
+        return (
+            m.demand_material_total[stf, material]
+            == m.material_imported[stf, material]
+            + m.material_mined[stf, material]
+            + m.material_recycled[stf, material]
+        )
 
 
 class ScrapMaterialLinkageRule(AbstractConstraint):
     def apply_rule(self, m, stf, material):
         magnet_materials = ["dysprosium", "neodymium", "praseodymium", "terbium"]
         lhs = m.material_recycled[stf, material]
-        
+
         rhs = 0
         for location in m.location:
             for tech in m.tech:
-                if (tech, material) in m.scrap_content and m.f_scrap[location, tech] > 0:
+                if (tech, material) in m.scrap_content and m.f_scrap[
+                    location, tech
+                ] > 0:
                     actual_f_scrap = m.f_scrap[location, tech]
 
                     if tech in ["windon", "windoff"]:
                         if material in magnet_materials:
                             # Magnets are ONLY recovered if the turbine goes through the advanced magnet route
-                            rhs += m.capacity_scrap_magnet_route[stf, location, tech] * (m.scrap_content[tech, material] / actual_f_scrap) * m.recycling_efficiency[tech, material]
+                            rhs += (
+                                m.capacity_scrap_magnet_route[stf, location, tech]
+                                * (m.scrap_content[tech, material] / actual_f_scrap)
+                                * m.recycling_efficiency[tech, material]
+                            )
                         else:
                             # Bulk materials (steel, copper, aluminum) are recovered regardless of which route the turbine takes.
                             # We explicitly sum both routes here so both pathways are visibly contributing.
-                            rhs += (m.capacity_scrap_magnet_route[stf, location, tech] + m.capacity_scrap_bulk_route[stf, location, tech]) * (m.scrap_content[tech, material] / actual_f_scrap) * m.recycling_efficiency[tech, material]
+                            rhs += (
+                                (
+                                    m.capacity_scrap_magnet_route[stf, location, tech]
+                                    + m.capacity_scrap_bulk_route[stf, location, tech]
+                                )
+                                * (m.scrap_content[tech, material] / actual_f_scrap)
+                                * m.recycling_efficiency[tech, material]
+                            )
                     else:
-                        rhs += m.capacity_scrap_rec[stf, location, tech] * (m.scrap_content[tech, material] / actual_f_scrap) * m.recycling_efficiency[tech, material]
+                        rhs += (
+                            m.capacity_scrap_rec[stf, location, tech]
+                            * (m.scrap_content[tech, material] / actual_f_scrap)
+                            * m.recycling_efficiency[tech, material]
+                        )
         return lhs == rhs
 
 
 class MiningLimit(AbstractConstraint):
     def apply_rule(self, m, stf, material):
         lhs = m.material_mined[stf, material]
-        rhs = (m.primary_material_availability[stf, material] * m.mining_energy_transission_share[stf, material] /
-               m.mining_conversion_factor[stf, material])
+        rhs = (
+            m.primary_material_availability[stf, material]
+            * m.mining_energy_transission_share[stf, material]
+            / m.mining_conversion_factor[stf, material]
+        )
         return lhs <= rhs
 
 
-#class LimitResourceExistanceRule(AbstractConstraint): #deactivated
+# class LimitResourceExistanceRule(AbstractConstraint): #deactivated
 #    def apply_rule(self, m, stf, material):
 #        total_allowable_metal_stock = (
 #                m.initial_total_reserves[material]
@@ -423,7 +516,8 @@ class MiningQuantityDecreaseRule(AbstractConstraint):
 class FactoryEnergyAnnualRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
         total_gwh = sum(
-            m.energy_needs[location, tech, stage] * m.capacity_produced_output[stf, location, tech, stage]
+            m.energy_needs[location, tech, stage]
+            * m.capacity_produced_output[stf, location, tech, stage]
             for stage in m.stages
             if (location, tech, stage) in m.energy_needs
             # Safety check
@@ -434,48 +528,63 @@ class FactoryEnergyAnnualRule(AbstractConstraint):
 
 class ElecNeedsProductionRule(AbstractConstraint):
     def apply_rule(self, m, tm, stf, location, tech):
-        return m.demand_production[tm, stf, location, tech] == m.FACTORY_ENERGY_ANNUAL[stf, location, tech] / 12
+        return (
+            m.demand_production[tm, stf, location, tech]
+            == m.FACTORY_ENERGY_ANNUAL[stf, location, tech] / 12
+        )
 
 
 ##################################################################################
 # GLOBAL COST RULES (k-Universe: k€)
 ##################################################################################
 
+
 class CapexCostRule(AbstractConstraint):
     def apply_rule(self, m, stf):
         j, i, n = 0.03, 0.071, 25
         stf_min, stf_end = min(m.stf), max(m.stf)
-        f_inv = ((1 + j) ** (1 - (stf - stf_min)) * (i * (1 + i) ** n * ((1 + j) ** n - 1)) / (
-                j * (1 + j) ** n * ((1 + i) ** n - 1)))
+        f_inv = (
+            (1 + j) ** (1 - (stf - stf_min))
+            * (i * (1 + i) ** n * ((1 + j) ** n - 1))
+            / (j * (1 + j) ** n * ((1 + i) ** n - 1))
+        )
         op_time = (stf + n) - stf_end - 1
         f_over = 0
         if op_time > 0:
-            f_over = ((1 + j) ** (1 - (stf - stf_min)) * (i * (1 + i) ** n * ((1 + j) ** op_time - 1)) / (
-                    j * (1 + j) ** n * ((1 + i) ** n - 1)))
+            f_over = (
+                (1 + j) ** (1 - (stf - stf_min))
+                * (i * (1 + i) ** n * ((1 + j) ** op_time - 1))
+                / (j * (1 + j) ** n * ((1 + i) ** n - 1))
+            )
 
         gross = sum(
-            m.processing_cap_new[stf, loc, tech, stage] * m.cost_capex[stf, loc, tech, stage] * (f_inv - f_over)
-            for loc in m.location for (tech, stage) in m.tech_stage_combinations
+            m.processing_cap_new[stf, loc, tech, stage]
+            * m.cost_capex[stf, loc, tech, stage]
+            * (f_inv - f_over)
+            for loc in m.location
+            for (tech, stage) in m.tech_stage_combinations
         )
 
         # Hardcoded grid connection fee for offshore wind (500,000 kEUR/GW)
-        if 'windoff' in m.tech:
+        if "windoff" in m.tech:
             gross += sum(
-                m.capacity_ext_new[stf, loc, 'windoff'] * 250000 * (f_inv - f_over)
+                m.capacity_ext_new[stf, loc, "windoff"] * 250000 * (f_inv - f_over)
                 for loc in m.location
-           )
-            
+            )
+
         savings_capex = 0
-        if hasattr(m, 'PRICEREDUCTION_CAPEX_ONETECH_TOTAL'):
+        if hasattr(m, "PRICEREDUCTION_CAPEX_ONETECH_TOTAL"):
             savings_capex = sum(
                 m.PRICEREDUCTION_CAPEX_ONETECH_TOTAL[stf, loc, tech, stage]
                 for loc in m.location
-                for tech in getattr(m, 'tech_one_tech', [])
-                for stage in getattr(m, 'stages_one_tech', [])
+                for tech in getattr(m, "tech_one_tech", [])
+                for stage in getattr(m, "stages_one_tech", [])
                 if (stf, loc, tech, stage) in m.PRICEREDUCTION_CAPEX_ONETECH_TOTAL
             )
 
-        return m.cost_capex_total_extension[stf] == gross - savings_capex * (f_inv - f_over)
+        return m.cost_capex_total_extension[stf] == gross - savings_capex * (
+            f_inv - f_over
+        )
 
 
 class OpexCostRule(AbstractConstraint):
@@ -483,50 +592,69 @@ class OpexCostRule(AbstractConstraint):
         j, stf_min = 0.03, min(m.stf)
         f_cost = (1 + j) ** (1 - (stf - stf_min))
         total_opex = (
-                sum(m.capacity_processing_total[stf, loc, tech, stage] * m.cost_fixed[stf, loc, tech, stage]
-                    for loc in m.location for (tech, stage) in m.tech_stage_combinations) +
-                sum(m.capacity_produced_output[stf, loc, tech, stage] * (m.cost_variable[stf, loc, tech, stage]
-                +m.material_downstream_manufacturing_cost[stf, loc, tech,stage])
-                    for loc in m.location for (tech, stage) in m.tech_stage_combinations) +
-                sum(m.cost_electricity[stf] * m.FACTORY_ENERGY_ANNUAL[stf, loc, tech]
-                    for loc in m.location for tech in m.tech) +
-                sum(m.cost_scrap[stf, loc, tech] for loc in m.location for tech in m.tech) +
-                sum(m.material_mined[stf, mat] * m.cost_mining[stf, mat] for mat in m.materials)
+            sum(
+                m.capacity_processing_total[stf, loc, tech, stage]
+                * m.cost_fixed[stf, loc, tech, stage]
+                for loc in m.location
+                for (tech, stage) in m.tech_stage_combinations
+            )
+            + sum(
+                m.capacity_produced_output[stf, loc, tech, stage]
+                * (
+                    m.cost_variable[stf, loc, tech, stage]
+                    + m.material_downstream_manufacturing_cost[stf, loc, tech, stage]
+                )
+                for loc in m.location
+                for (tech, stage) in m.tech_stage_combinations
+            )
+            + sum(
+                m.cost_electricity[stf] * m.FACTORY_ENERGY_ANNUAL[stf, loc, tech]
+                for loc in m.location
+                for tech in m.tech
+            )
+            + sum(m.cost_scrap[stf, loc, tech] for loc in m.location for tech in m.tech)
+            + sum(
+                m.material_mined[stf, mat] * m.cost_mining[stf, mat]
+                for mat in m.materials
+            )
         )
-        
+
         # EoS-Einsparungen für bulk material downstream manufacturing abziehen
         savings_bulkmat = 0
-        if hasattr(m, 'PRICEREDUCTION_BULKMAT_ONETECH_TOTAL'):
+        if hasattr(m, "PRICEREDUCTION_BULKMAT_ONETECH_TOTAL"):
             savings_bulkmat = sum(
                 m.PRICEREDUCTION_BULKMAT_ONETECH_TOTAL[stf, loc, tech, stage]
                 for loc in m.location
-                for tech in getattr(m, 'tech_one_tech', [])
-                for stage in getattr(m, 'stages_one_tech', [])
+                for tech in getattr(m, "tech_one_tech", [])
+                for stage in getattr(m, "stages_one_tech", [])
                 if (stf, loc, tech, stage) in m.PRICEREDUCTION_BULKMAT_ONETECH_TOTAL
             )
-            
+
         # EoS-Einsparungen für variable OPEX abziehen
         savings_opex_var = 0
-        if hasattr(m, 'PRICEREDUCTION_ONETECH_TOTAL'):
+        if hasattr(m, "PRICEREDUCTION_ONETECH_TOTAL"):
             savings_opex_var = sum(
                 m.PRICEREDUCTION_ONETECH_TOTAL[stf, loc, tech, stage]
                 for loc in m.location
-                for tech in getattr(m, 'tech_one_tech', [])
-                for stage in getattr(m, 'stages_one_tech', [])
+                for tech in getattr(m, "tech_one_tech", [])
+                for stage in getattr(m, "stages_one_tech", [])
                 if (stf, loc, tech, stage) in m.PRICEREDUCTION_ONETECH_TOTAL
             )
-            
+
         savings_fom = 0
-        if hasattr(m, 'PRICEREDUCTION_FOM_ONETECH_TOTAL'):
+        if hasattr(m, "PRICEREDUCTION_FOM_ONETECH_TOTAL"):
             savings_fom = sum(
                 m.PRICEREDUCTION_FOM_ONETECH_TOTAL[stf, loc, tech, stage]
                 for loc in m.location
-                for tech in getattr(m, 'tech_one_tech', [])
-                for stage in getattr(m, 'stages_one_tech', [])
+                for tech in getattr(m, "tech_one_tech", [])
+                for stage in getattr(m, "stages_one_tech", [])
                 if (stf, loc, tech, stage) in m.PRICEREDUCTION_FOM_ONETECH_TOTAL
             )
-            
-        return m.cost_opex_total_extension[stf] == (total_opex - savings_bulkmat - savings_opex_var - savings_fom) * f_cost
+
+        return (
+            m.cost_opex_total_extension[stf]
+            == (total_opex - savings_bulkmat - savings_opex_var - savings_fom) * f_cost
+        )
 
 
 class TradeCostRule(AbstractConstraint):
@@ -537,15 +665,18 @@ class TradeCostRule(AbstractConstraint):
 
         # 1. Base cost of imported parts/capacities
         cost_parts = sum(
-            m.capacity_imported[stf, loc, tech, stage] * m.cost_import_part[stf, loc, tech, stage]
-            for loc in m.location for (tech, stage) in m.tech_stage_combinations
+            m.capacity_imported[stf, loc, tech, stage]
+            * m.cost_import_part[stf, loc, tech, stage]
+            for loc in m.location
+            for (tech, stage) in m.tech_stage_combinations
         )
 
         # 2. Base cost of imported materials (Dynamic Block Pricing)
         # We multiply the volume in each block by that specific block's price
         cost_materials = sum(
             m.material_imported_block[stf, mat, blk] * m.mat_block_prices[stf, mat, blk]
-            for mat in m.materials for blk in m.price_blocks
+            for mat in m.materials
+            for blk in m.price_blocks
         )
 
         # Total base trade cost
@@ -561,8 +692,12 @@ class StockpileHoldingCostRule(AbstractConstraint):
         f_cost = (1 + j) ** (1 - (stf - stf_min))
         HOLDING_COST = 27500  # k€/GW
         total_stock = sum(
-            (m.stock_domestic[stf, loc, tech, stage] + m.stock_imported[stf, loc, tech, stage])
-            for loc in m.location for (tech, stage) in m.tech_stage_combinations
+            (
+                m.stock_domestic[stf, loc, tech, stage]
+                + m.stock_imported[stf, loc, tech, stage]
+            )
+            for loc in m.location
+            for (tech, stage) in m.tech_stage_combinations
         )
         return m.cost_stockpile_holding[stf] == total_stock * HOLDING_COST * f_cost
 
@@ -570,6 +705,7 @@ class StockpileHoldingCostRule(AbstractConstraint):
 ##################################################################################
 # REGISTRATION
 ##################################################################################
+
 
 def apply_material_constraints(m):
     # GROUP 1: (stf, location, tech, stage)
@@ -595,30 +731,50 @@ def apply_material_constraints(m):
     ]
     for constraint_obj in stage_constraints:
         name = constraint_obj.__class__.__name__
-        setattr(m, name, pyomo.Constraint(
-            m.stf, m.location, m.tech, m.stages,  # <--- DENSE ITERATION
-            rule=lambda m, y, l, t, s: constraint_obj.apply_rule(m, y, l, t, s)
-        ))
+        setattr(
+            m,
+            name,
+            pyomo.Constraint(
+                m.stf,
+                m.location,
+                m.tech,
+                m.stages,  # <--- DENSE ITERATION
+                rule=lambda m, y, l, t, s: constraint_obj.apply_rule(m, y, l, t, s),
+            ),
+        )
 
     # GROUP 2: (stf, location, tech)
     tech_constraints = [
         FactoryEnergyAnnualRule(),
         NewlyAddedBalanceLCOE(),
         InstallationSupplyLinkRule(),
-
     ]
     for constraint_obj in tech_constraints:
         name = constraint_obj.__class__.__name__
-        setattr(m, name, pyomo.Constraint(
-            m.stf, m.location, m.tech,
-            rule=lambda m, y, l, k: constraint_obj.apply_rule(m, y, l, k)
-        ))
+        setattr(
+            m,
+            name,
+            pyomo.Constraint(
+                m.stf,
+                m.location,
+                m.tech,
+                rule=lambda m, y, l, k: constraint_obj.apply_rule(m, y, l, k),
+            ),
+        )
 
     # GROUP 3: (t, stf, location, tech)
-    setattr(m, "ElecNeedsProductionRule", pyomo.Constraint(
-        m.timesteps_ext, m.stf, m.location, m.tech,
-        rule=lambda m, t, y, l, k: m.demand_production[t, y, l, k] == m.FACTORY_ENERGY_ANNUAL[y, l, k] / 12
-    ))
+    setattr(
+        m,
+        "ElecNeedsProductionRule",
+        pyomo.Constraint(
+            m.timesteps_ext,
+            m.stf,
+            m.location,
+            m.tech,
+            rule=lambda m, t, y, l, k: m.demand_production[t, y, l, k]
+            == m.FACTORY_ENERGY_ANNUAL[y, l, k] / 12,
+        ),
+    )
 
     # GROUP 4: (stf, material)
     material_constraints = [
@@ -626,29 +782,35 @@ def apply_material_constraints(m):
         MaterialDemandBalanceRule(),
         ScrapMaterialLinkageRule(),
         MiningLimit(),
-        #LimitResourceExistanceRule(),
+        # LimitResourceExistanceRule(),
         MiningQuantityDecreaseRule(),
-        MiningQuantityIncreaseRule()
+        MiningQuantityIncreaseRule(),
     ]
     for constraint_obj in material_constraints:
         name = constraint_obj.__class__.__name__
-        setattr(m, name, pyomo.Constraint(
-            m.stf, m.materials,
-            rule=lambda m, y, mat: constraint_obj.apply_rule(m, y, mat)
-        ))
+        setattr(
+            m,
+            name,
+            pyomo.Constraint(
+                m.stf,
+                m.materials,
+                rule=lambda m, y, mat: constraint_obj.apply_rule(m, y, mat),
+            ),
+        )
 
     # GROUP 5: Global / Cost Constraints
     global_constraints = [
         CapexCostRule(),
         OpexCostRule(),
         TradeCostRule(),
-        StockpileHoldingCostRule()
+        StockpileHoldingCostRule(),
     ]
     for constraint_obj in global_constraints:
         name = constraint_obj.__class__.__name__
-        setattr(m, name, pyomo.Constraint(
-            m.stf,
-            rule=lambda m, y: constraint_obj.apply_rule(m, y)
-        ))
+        setattr(
+            m,
+            name,
+            pyomo.Constraint(m.stf, rule=lambda m, y: constraint_obj.apply_rule(m, y)),
+        )
 
     print("✅ All manufacturing constraints registered successfully (Robust Mode).")

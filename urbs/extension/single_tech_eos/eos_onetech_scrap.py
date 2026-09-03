@@ -11,7 +11,9 @@ def _normalize_target_techs(target_tech_name):
         try:
             techs = list(target_tech_name)
         except TypeError as exc:
-            raise ValueError("target_tech_name must be a string or a list/tuple of strings") from exc
+            raise ValueError(
+                "target_tech_name must be a string or a list/tuple of strings"
+            ) from exc
 
     techs = [t for t in techs if t is not None and str(t).strip() != ""]
     if not techs:
@@ -24,7 +26,8 @@ def _normalize_target_techs(target_tech_name):
 # 1. SETUP FUNCTION
 # ==============================================================================
 
-def setup_scrap_onetech_learning(m, target_tech_name='solarPV'):
+
+def setup_scrap_onetech_learning(m, target_tech_name="solarPV"):
     """
     Sets up economies of scale specifically for the SCRAP/RECYCLING module.
     Limits variables to a single technology to prevent memory bloat/crashes.
@@ -33,44 +36,56 @@ def setup_scrap_onetech_learning(m, target_tech_name='solarPV'):
 
     unknown_techs = [t for t in tech_targets if t not in m.tech]
     if unknown_techs:
-        raise ValueError(f"Unknown technologies in setup_scrap_onetech_learning: {unknown_techs}")
+        raise ValueError(
+            f"Unknown technologies in setup_scrap_onetech_learning: {unknown_techs}"
+        )
 
     print(f"--- Initializing Scrap Learning Module for {tech_targets} ---")
 
     # A. Define the Subset (The Gatekeeper)
     # This creates a generic set 'm.tech_scrap_onetech' containing only your target
-    if not hasattr(m, 'tech_scrap_onetech'):
+    if not hasattr(m, "tech_scrap_onetech"):
         m.tech_scrap_onetech = pyomo.Set(initialize=tech_targets, within=m.tech)
 
     # B. Define Variables (Indexed by tech_scrap_onetech)
 
     # 1. Binary Step Variable (Which learning step is active for Recycling?)
     m.BD_scrap_onetech = pyomo.Var(
-        m.stf, m.location, m.tech_scrap_onetech, m.nsteps_sec,
+        m.stf,
+        m.location,
+        m.tech_scrap_onetech,
+        m.nsteps_sec,
         domain=pyomo.Binary,
-        doc="Binary: 1 if this recycling scale step is active"
+        doc="Binary: 1 if this recycling scale step is active",
     )
 
     # 2. Total Savings Variable ($)
     # This is the variable you subtract from the Total Cost
     m.PRICEREDUCTION_SCRAP_ONETECH_TOTAL = pyomo.Var(
-        m.stf, m.location, m.tech_scrap_onetech,
+        m.stf,
+        m.location,
+        m.tech_scrap_onetech,
         domain=pyomo.NonNegativeReals,
-        doc="Total recycling cost savings ($)"
+        doc="Total recycling cost savings ($)",
     )
 
     # 3. Unit Price Reduction ($/ton) - Tracks the learning curve depth
     m.pricereduction_scrap_onetech_unit = pyomo.Var(
-        m.stf, m.location, m.tech_scrap_onetech,
+        m.stf,
+        m.location,
+        m.tech_scrap_onetech,
         domain=pyomo.NonNegativeReals,
-        doc="Unit recycling cost reduction ($/ton)"
+        doc="Unit recycling cost reduction ($/ton)",
     )
 
     # 4. Linearization Aux Variable
     m.aux_scrap_onetech = pyomo.Var(
-        m.stf, m.location, m.tech_scrap_onetech, m.nsteps_sec,
+        m.stf,
+        m.location,
+        m.tech_scrap_onetech,
+        m.nsteps_sec,
         domain=pyomo.NonNegativeReals,
-        doc="Linearization variable for Capacity * Binary"
+        doc="Linearization variable for Capacity * Binary",
     )
 
     # C. Apply Constraints
@@ -82,12 +97,15 @@ def setup_scrap_onetech_learning(m, target_tech_name='solarPV'):
 # 2. CONSTRAINT LOGIC
 # ==============================================================================
 
+
 class AbstractConstraint(ABC):
     @abstractmethod
-    def apply_rule(self, m, *args): pass
+    def apply_rule(self, m, *args):
+        pass
 
 
 # --- GROUP 1: LOGIC CONSTRAINTS ---
+
 
 class Scrap_TotalSavings_Calc(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
@@ -104,7 +122,8 @@ class Scrap_UnitReduction_Calc(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
         # Unit Price ($/ton) = Sum( Step_Price * Binary )
         val = sum(
-            m.P_sec_recycling[location, tech, n] * m.BD_scrap_onetech[stf, location, tech, n]
+            m.P_sec_recycling[location, tech, n]
+            * m.BD_scrap_onetech[stf, location, tech, n]
             for n in m.nsteps_sec
         )
         return m.pricereduction_scrap_onetech_unit[stf, location, tech] == val
@@ -113,7 +132,9 @@ class Scrap_UnitReduction_Calc(AbstractConstraint):
 class Scrap_Binary_Limit(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
         # Force exactly one step to be active
-        return sum(m.BD_scrap_onetech[stf, location, tech, n] for n in m.nsteps_sec) == 1
+        return (
+            sum(m.BD_scrap_onetech[stf, location, tech, n] for n in m.nsteps_sec) == 1
+        )
 
 
 class Scrap_Monotonicity(AbstractConstraint):
@@ -122,8 +143,10 @@ class Scrap_Monotonicity(AbstractConstraint):
         if stf == min(m.stf):
             return pyomo.Constraint.Skip
 
-        return m.pricereduction_scrap_onetech_unit[stf, location, tech] >= \
-            m.pricereduction_scrap_onetech_unit[stf - 1, location, tech]
+        return (
+            m.pricereduction_scrap_onetech_unit[stf, location, tech]
+            >= m.pricereduction_scrap_onetech_unit[stf - 1, location, tech]
+        )
 
 
 class Scrap_Production_Trigger(AbstractConstraint):
@@ -140,7 +163,8 @@ class Scrap_Production_Trigger(AbstractConstraint):
 
         # 2. Identify Threshold
         active_threshold = sum(
-            m.BD_scrap_onetech[stf, location, tech, n] * m.tons_perstep_recycling[location, tech, n]
+            m.BD_scrap_onetech[stf, location, tech, n]
+            * m.tons_perstep_recycling[location, tech, n]
             for n in m.nsteps_sec
         )
 
@@ -149,26 +173,31 @@ class Scrap_Production_Trigger(AbstractConstraint):
 
 # --- GROUP 2: LINEARIZATION CONSTRAINTS ---
 
+
 class Scrap_Lin_BigM_Upper(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, n):
         # Aux <= BigM * Binary
-        return m.aux_scrap_onetech[stf, location, tech, n] <= \
-            m.gamma_scrap * m.BD_scrap_onetech[stf, location, tech, n]
+        return (
+            m.aux_scrap_onetech[stf, location, tech, n]
+            <= m.gamma_scrap * m.BD_scrap_onetech[stf, location, tech, n]
+        )
 
 
 class Scrap_Lin_Cap_Upper(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, n):
         # Aux <= Current Recycling Capacity
-        return m.aux_scrap_onetech[stf, location, tech, n] <= \
-            m.capacity_scrap_rec[stf, location, tech]
+        return (
+            m.aux_scrap_onetech[stf, location, tech, n]
+            <= m.capacity_scrap_rec[stf, location, tech]
+        )
 
 
 class Scrap_Lin_Cap_Lower(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, n):
         # Aux >= Capacity - BigM * (1 - Binary)
         rhs = (
-                m.capacity_scrap_rec[stf, location, tech]
-                - (1 - m.BD_scrap_onetech[stf, location, tech, n]) * m.gamma_scrap
+            m.capacity_scrap_rec[stf, location, tech]
+            - (1 - m.BD_scrap_onetech[stf, location, tech, n]) * m.gamma_scrap
         )
         return m.aux_scrap_onetech[stf, location, tech, n] >= rhs
 
@@ -182,6 +211,7 @@ class Scrap_NonNegativity(AbstractConstraint):
 # 3. INTERNAL CONSTRAINT APPLIER
 # ==============================================================================
 
+
 def _apply_constraints(m):
     # A. Logic Constraints (Index: stf, location, tech_scrap_onetech)
     logic_map = {
@@ -193,10 +223,16 @@ def _apply_constraints(m):
     }
 
     for name, constr_obj in logic_map.items():
-        setattr(m, name, pyomo.Constraint(
-            m.stf, m.location, m.tech_scrap_onetech,  # <--- INDEXED ON SUBSET
-            rule=lambda m, t, l, tech: constr_obj.apply_rule(m, t, l, tech)
-        ))
+        setattr(
+            m,
+            name,
+            pyomo.Constraint(
+                m.stf,
+                m.location,
+                m.tech_scrap_onetech,  # <--- INDEXED ON SUBSET
+                rule=lambda m, t, l, tech: constr_obj.apply_rule(m, t, l, tech),
+            ),
+        )
 
     # B. Linearization Constraints (Index: stf, location, tech, n)
     lin_map = {
@@ -207,7 +243,14 @@ def _apply_constraints(m):
     }
 
     for name, constr_obj in lin_map.items():
-        setattr(m, name, pyomo.Constraint(
-            m.stf, m.location, m.tech_scrap_onetech, m.nsteps_sec,  # <--- INDEXED ON SUBSET
-            rule=lambda m, t, l, tech, n: constr_obj.apply_rule(m, t, l, tech, n)
-        ))
+        setattr(
+            m,
+            name,
+            pyomo.Constraint(
+                m.stf,
+                m.location,
+                m.tech_scrap_onetech,
+                m.nsteps_sec,  # <--- INDEXED ON SUBSET
+                rule=lambda m, t, l, tech, n: constr_obj.apply_rule(m, t, l, tech, n),
+            ),
+        )

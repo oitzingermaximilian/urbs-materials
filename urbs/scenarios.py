@@ -1,6 +1,7 @@
-#IEW SCENARIO FUNCTIONS FOR URBS
+# IEW SCENARIO FUNCTIONS FOR URBS
 import numpy as np
 # IEW SCENARIO FUNCTIONS FOR URBS - FIXED FOR NUMERICAL STABILITY
+
 
 def scenario_solar_recycling_low(data, data_urbsextensionv1):
     """
@@ -79,6 +80,7 @@ def scenario_solar_recycling_high(data, data_urbsextensionv1):
 
     return data, data_urbsextensionv1
 
+
 base_scenarios = [
     ("low", scenario_solar_recycling_low),
     ("medium", scenario_solar_recycling_medium),
@@ -99,7 +101,7 @@ def create_combined_scenario(base_func, target_quota):
         d, d_ext = base_func(data, data_urbsextensionv1)
 
         # Inject the CRMA quota as a parameter into the dictionary
-        d_ext['crma_quota'] = target_quota
+        d_ext["crma_quota"] = target_quota
         return d, d_ext
 
     return custom_scenario

@@ -2,9 +2,10 @@ from abc import ABC, abstractmethod
 import pyomo.environ as pyomo
 from pyomo.environ import value
 
+
 class AbstractConstraint(ABC):
     @abstractmethod
-    def apply_rule(self, m,stf, location, tech):
+    def apply_rule(self, m, stf, location, tech):
         pass
 
 
@@ -19,6 +20,7 @@ def debug_print(*args, **kwargs):
 # ==============================================================================#
 # GROUP 1: LOGIC CONSTRAINTS (Index: stf, location, tech)                       #
 # ==============================================================================#
+
 
 class ScrapCostSavingsCalculationRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
@@ -101,7 +103,8 @@ class ScrapCumulativeThresholdConstraint(AbstractConstraint):
 
         # 2. Identify Threshold of active step
         active_threshold = sum(
-            m.BDV_scrap[stf, location, tech, n] * m.tons_perstep_recycling[location, tech, n]
+            m.BDV_scrap[stf, location, tech, n]
+            * m.tons_perstep_recycling[location, tech, n]
             for n in m.nsteps_sec
         )
 
@@ -111,6 +114,7 @@ class ScrapCumulativeThresholdConstraint(AbstractConstraint):
 # ==============================================================================
 # GROUP 2: LINEARIZATION CONSTRAINTS (Index: stf, location, tech, n)
 # ==============================================================================
+
 
 class ScrapLinearizationBigMConstraint(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, n):
@@ -145,8 +149,8 @@ class ScrapLinearizationLowerBoundConstraint(AbstractConstraint):
         # CON: Scrap Linearization Lower Bound | Ensures scrap aux variable tracks output when binary is active
         lhs = m.ap_BDV_scrap[stf, location, tech, n]
         rhs = (
-                m.capacity_scrap_rec[stf, location, tech]
-                - (1 - m.BDV_scrap[stf, location, tech, n]) * m.gamma_scrap
+            m.capacity_scrap_rec[stf, location, tech]
+            - (1 - m.BDV_scrap[stf, location, tech, n]) * m.gamma_scrap
         )
         return lhs >= rhs
 
@@ -160,6 +164,7 @@ class ScrapLinearizationNonNegativityConstraint(AbstractConstraint):
 # ==============================================================================
 # APPLICATION LOGIC
 # ==============================================================================
+
 
 def apply_scrap_scaling_constraints(m):
     """
@@ -193,7 +198,9 @@ def apply_scrap_scaling_constraints(m):
             m,
             constraint_name,
             pyomo.Constraint(
-                m.stf, m.location, m.tech,
+                m.stf,
+                m.location,
+                m.tech,
                 rule=lambda m, stf, loc, tech: constraint.apply_rule(m, stf, loc, tech),
             ),
         )
@@ -206,8 +213,13 @@ def apply_scrap_scaling_constraints(m):
             m,
             constraint_name,
             pyomo.Constraint(
-                m.stf, m.location, m.tech, m.nsteps_sec,
-                rule=lambda m, stf, loc, tech, n: constraint.apply_rule(m, stf, loc, tech, n),
+                m.stf,
+                m.location,
+                m.tech,
+                m.nsteps_sec,
+                rule=lambda m, stf, loc, tech, n: constraint.apply_rule(
+                    m, stf, loc, tech, n
+                ),
             ),
         )
 

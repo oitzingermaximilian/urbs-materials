@@ -73,13 +73,13 @@ for country, color in my_colors.items():
     urbs.COLORS[country] = color
 base_scenarios = [
     ("scenario_solar_recycling_low", urbs.scenario_solar_recycling_low),
-    #("scenario_solar_recycling_medium", urbs.scenario_solar_recycling_medium),
-    #("scenario_solar_recycling_high", urbs.scenario_solar_recycling_high),
+    # ("scenario_solar_recycling_medium", urbs.scenario_solar_recycling_medium),
+    # ("scenario_solar_recycling_high", urbs.scenario_solar_recycling_high),
 ]
 
 # 2. Automatically generate all 21 scenarios (1 prices x 7 quotas)
 scenarios = []
-#quotas_to_test = [0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35]
+# quotas_to_test = [0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35]
 quotas_to_test = [0.35]
 
 for name, func in base_scenarios:
@@ -87,19 +87,17 @@ for name, func in base_scenarios:
         quota_percent = int(quota * 100)
         scen_name = f"{name}_crma_{quota_percent}"
 
-
         # Pass scen_name into the wrapper so we can rename the function
         def make_custom_scenario(base_func=func, q=quota, final_name=scen_name):
             def custom_scenario(data, data_urbsextensionv1):
                 d, d_ext = base_func(data, data_urbsextensionv1)
-                d_ext['crma_quota'] = q
+                d_ext["crma_quota"] = q
                 return d, d_ext
 
             # --- THE MAGIC FIX ---
             # This tricks URBS into naming the Excel file perfectly!
             custom_scenario.__name__ = final_name
             return custom_scenario
-
 
         scenarios.append((scen_name, make_custom_scenario()))
 
@@ -128,8 +126,6 @@ def run_perfect_foresight():
             report_tuples=report_tuples,
             report_sites_name=report_sites_name,
         )
-
-
 
 
 # Execute selected mode

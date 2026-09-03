@@ -118,4 +118,3 @@ def discount_factor(stf):
 def effective_distance(stf_dist):
     """Effective distance for variable, fuel, purchase, sell, and fix costs."""
     return calc_effective_distance(stf_dist, DISCOUNT)
-

@@ -21,6 +21,7 @@ def debug_print(*args, **kwargs):
 # GROUP 1: LOGIC CONSTRAINTS (Index: stf, location, tech, STAGE)
 # ==============================================================================
 
+
 class costsavings_constraint_sec_investment(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
         if (tech, stage) not in m.tech_stage_combinations:
@@ -34,7 +35,10 @@ class costsavings_constraint_sec_investment(AbstractConstraint):
             for n in m.nsteps_sec
         )
 
-        return m.PRICEREDUCTION_CAP_DEP_INV[stf, location, tech, stage] == investment_reduction_value
+        return (
+            m.PRICEREDUCTION_CAP_DEP_INV[stf, location, tech, stage]
+            == investment_reduction_value
+        )
 
 
 class pricereduction_stage_calc(AbstractConstraint):
@@ -45,11 +49,15 @@ class pricereduction_stage_calc(AbstractConstraint):
         # Calculates Unit Price Reduction (EUR/MW) based on active binary
 
         unit_reduction_value = sum(
-            m.P_sec_capex[location, tech, stage, n] * m.BD_sec[stf, location, tech, stage, n]
+            m.P_sec_capex[location, tech, stage, n]
+            * m.BD_sec[stf, location, tech, stage, n]
             for n in m.nsteps_sec
         )
 
-        return m.pricereduction_sec_investment[stf, location, tech, stage] == unit_reduction_value
+        return (
+            m.pricereduction_sec_investment[stf, location, tech, stage]
+            == unit_reduction_value
+        )
 
 
 class BD_limitation_constraint_sec(AbstractConstraint):
@@ -106,7 +114,8 @@ class q_perstep_constraint_sec(AbstractConstraint):
         # 2. Identify Threshold of active step
         # Note: capacityperstep_production now has [loc, tech, stage, n]
         active_threshold = sum(
-            m.BD_sec[stf, location, tech, stage, n] * m.capacityperstep_production[location, tech, stage, n]
+            m.BD_sec[stf, location, tech, stage, n]
+            * m.capacityperstep_production[location, tech, stage, n]
             for n in m.nsteps_sec
         )
 
@@ -116,6 +125,7 @@ class q_perstep_constraint_sec(AbstractConstraint):
 # ==============================================================================
 # GROUP 2: LINEARIZATION CONSTRAINTS (Index: stf, location, tech, STAGE, n)
 # ==============================================================================
+
 
 class upper_bound_z_constraint_sec(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage, n):
@@ -149,8 +159,8 @@ class lower_bound_z_eq_sec(AbstractConstraint):
         # Aux >= Current Production - BigM * (1 - Binary)
         lhs = m.auxiliary_product_BD_q[stf, location, tech, stage, n]
         rhs = (
-                m.capacity_produced_output[stf, location, tech, stage]
-                - (1 - m.BD_sec[stf, location, tech, stage, n]) * m.gamma_prod
+            m.capacity_produced_output[stf, location, tech, stage]
+            - (1 - m.BD_sec[stf, location, tech, stage, n]) * m.gamma_prod
         )
         return lhs >= rhs
 
@@ -162,17 +172,22 @@ class non_negativity_z_eq_sec(AbstractConstraint):
         # CON: Linearization Non-Negativity | Ensures auxiliary variable is non-negative
         return m.auxiliary_product_BD_q[stf, location, tech, stage, n] >= 0
 
+
 class GhostBinariesZeroRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage, n):
         if (tech, stage) in m.tech_stage_combinations:
             return pyomo.Constraint.Skip
-        return m.BD_sec[stf, location, tech, stage, n] + m.auxiliary_product_BD_q[stf, location, tech, stage, n] == 0
-
+        return (
+            m.BD_sec[stf, location, tech, stage, n]
+            + m.auxiliary_product_BD_q[stf, location, tech, stage, n]
+            == 0
+        )
 
 
 # ==============================================================================
 # APPLICATION LOGIC
 # ==============================================================================
+
 
 def apply_combined_lr_constraints(m):
     # 1. Logic Constraints (Index: ... STAGE)
@@ -204,8 +219,13 @@ def apply_combined_lr_constraints(m):
             m,
             constraint_name,
             pyomo.Constraint(
-                m.stf, m.location, m.tech, m.stages,  # <--- Added Stage
-                rule=lambda m, stf, loc, tech, stage: constraint.apply_rule(m, stf, loc, tech, stage),
+                m.stf,
+                m.location,
+                m.tech,
+                m.stages,  # <--- Added Stage
+                rule=lambda m, stf, loc, tech, stage: constraint.apply_rule(
+                    m, stf, loc, tech, stage
+                ),
             ),
         )
 
@@ -216,8 +236,14 @@ def apply_combined_lr_constraints(m):
             m,
             constraint_name,
             pyomo.Constraint(
-                m.stf, m.location, m.tech, m.stages, m.nsteps_sec,  # <--- Added Stage
-                rule=lambda m, stf, loc, tech, stage, n: constraint.apply_rule(m, stf, loc, tech, stage, n),
+                m.stf,
+                m.location,
+                m.tech,
+                m.stages,
+                m.nsteps_sec,  # <--- Added Stage
+                rule=lambda m, stf, loc, tech, stage, n: constraint.apply_rule(
+                    m, stf, loc, tech, stage, n
+                ),
             ),
         )
 

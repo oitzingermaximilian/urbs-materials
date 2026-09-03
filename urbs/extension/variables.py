@@ -106,7 +106,7 @@ def apply_variables(m):
         m.stages,
         m.nsteps_sec,
         domain=pyomo.Binary,
-        doc="Binary variable: 1 if stage is in learning step n, 0 otherwise"
+        doc="Binary variable: 1 if stage is in learning step n, 0 otherwise",
     )
 
     # NOM: \hat{z}_{y,\ell,k,n} | Auxiliary variable for linearization | MW
@@ -127,7 +127,7 @@ def apply_variables(m):
         m.tech,
         m.stages,
         domain=pyomo.NonNegativeReals,
-        doc="Current value of cost reduction (EUR/MW) based on active step"
+        doc="Current value of cost reduction (EUR/MW) based on active step",
     )
 
     # NOM: \Delta C_{y,\ell,k,n} | Total operational cost savings | EUR
@@ -137,7 +137,7 @@ def apply_variables(m):
         m.tech,
         m.stages,
         domain=pyomo.NonNegativeReals,
-        doc="Total operational cost savings (EUR) due to learning effects"
+        doc="Total operational cost savings (EUR) due to learning effects",
     )
 
     """
@@ -201,72 +201,116 @@ def apply_variables(m):
     Materials.py variables
     """
     # NOM: \hat{\pi}^{proc}_{y,\ell,k,s} | Total Processing Capacity | t/yr
-    m.capacity_processing_total = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    m.capacity_processing_total = pyomo.Var(
+        m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals
+    )
 
     # NOM: \hat{\pi}^{proc,new}_{y,\ell,k,s} | New Processing Capacity | t/yr
-    m.processing_cap_new = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    m.processing_cap_new = pyomo.Var(
+        m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals
+    )
 
     # NOM: \hat{\pi}^{scrap,hand}_{y,\ell,k} | Scrap Handling Capacity Total | t/yr
-    m.capacity_scrap_handling_total = pyomo.Var(m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals)
+    m.capacity_scrap_handling_total = pyomo.Var(
+        m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
+    )
 
     # NOM: \hat{\pi}^{scrap,hand,new}_{y,\ell,k} | New Scrap Handling Capacity | t/yr
-    m.scraphandling_cap_new = pyomo.Var(m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals)
+    m.scraphandling_cap_new = pyomo.Var(
+        m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
+    )
 
     # --- MILP Recycling Pathway Facility Capacity Variables ---
-    m.capacity_scrap_handling_magnet_total = pyomo.Var(m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals)
-    m.scraphandling_cap_new_magnet = pyomo.Var(m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals)
-    
-    m.capacity_scrap_handling_bulk_total = pyomo.Var(m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals)
-    m.scraphandling_cap_new_bulk = pyomo.Var(m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals)
+    m.capacity_scrap_handling_magnet_total = pyomo.Var(
+        m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
+    )
+    m.scraphandling_cap_new_magnet = pyomo.Var(
+        m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
+    )
+
+    m.capacity_scrap_handling_bulk_total = pyomo.Var(
+        m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
+    )
+    m.scraphandling_cap_new_bulk = pyomo.Var(
+        m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
+    )
 
     # --- 2. PRODUCTION & FLOWS ---
     # NOM: \hat{\pi}^{prod}_{y,\ell,k,s} | Produced Output Capacity | MW
-    m.capacity_produced_output = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    m.capacity_produced_output = pyomo.Var(
+        m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals
+    )
 
     # NOM: \hat{\pi}^{flow}_{y,\ell,k,s} | Produced Flow Capacity | MW
-    m.capacity_produced_flow = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    m.capacity_produced_flow = pyomo.Var(
+        m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals
+    )
 
     # NOM: \hat{\pi}^{prod,sto}_{y,\ell,k,s} | Produced Storage Capacity | MW
-    m.capacity_produced_storage = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    m.capacity_produced_storage = pyomo.Var(
+        m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals
+    )
 
     # NOM: \hat{\pi}^{prod,out}_{y,\ell,k,s} | Produced Stockout | MW
-    m.capacity_produced_stockout = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    m.capacity_produced_stockout = pyomo.Var(
+        m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals
+    )
 
     # Import Splits
     # NOM: \hat{\pi}^{imp,total}_{y,\ell,k,s} | Total Imported Capacity | MW
-    m.capacity_imported = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    m.capacity_imported = pyomo.Var(
+        m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals
+    )
 
     # NOM: \hat{\pi}^{imp,flow}_{y,\ell,k,s} | Imported Flow Capacity | MW
-    m.capacity_imported_flow = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    m.capacity_imported_flow = pyomo.Var(
+        m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals
+    )
 
     # NOM: \hat{\pi}^{imp,sto}_{y,\ell,k,s} | Imported Storage Capacity | MW
-    m.capacity_imported_storage = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    m.capacity_imported_storage = pyomo.Var(
+        m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals
+    )
 
     # NOM: \hat{\pi}^{imp,out}_{y,\ell,k,s} | Imported Stockout | MW
-    m.capacity_imported_stockout = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    m.capacity_imported_stockout = pyomo.Var(
+        m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals
+    )
 
     # NOM: S_{y,\ell,k,s} | Supply Available for Next Stage | MW
-    m.Supply = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    m.Supply = pyomo.Var(
+        m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals
+    )
 
     # --- 3. STOCKPILES ---
     # NOM: Sto^{dom}_{y,\ell,k,s} | Domestic Stockpile | MW
-    m.stock_domestic = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    m.stock_domestic = pyomo.Var(
+        m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals
+    )
 
     # NOM: Sto^{imp}_{y,\ell,k,s} | Imported Stockpile | MW
-    m.stock_imported = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    m.stock_imported = pyomo.Var(
+        m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals
+    )
 
     # NOM: R_{y,m} | Remaining Reserves | t
     m.remaining_reserves = pyomo.Var(m.stf, m.materials, domain=pyomo.NonNegativeReals)
 
     # NOM: Cap^{prim}_{y,m} | Primary Material Annual Capacity | t/yr
-    m.primary_material_capacity_annual = pyomo.Var(m.stf, m.materials, domain=pyomo.NonNegativeReals)
+    m.primary_material_capacity_annual = pyomo.Var(
+        m.stf, m.materials, domain=pyomo.NonNegativeReals
+    )
 
     # NOM: Comp^{sto}_{y,\ell,k,s} | Components Stockpile | Units
-    m.components_stockpile = pyomo.Var(m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals)
+    m.components_stockpile = pyomo.Var(
+        m.stf, m.location, m.tech, m.stages, domain=pyomo.NonNegativeReals
+    )
 
     # --- 4. MATERIAL FLOWS ---
     # NOM: D^{mat}_{y,m} | Total Material Demand | t
-    m.demand_material_total = pyomo.Var(m.stf, m.materials, domain=pyomo.NonNegativeReals)
+    m.demand_material_total = pyomo.Var(
+        m.stf, m.materials, domain=pyomo.NonNegativeReals
+    )
 
     # NOM: M^{mined}_{y,m} | Material Mined | t
     m.material_mined = pyomo.Var(m.stf, m.materials, domain=pyomo.NonNegativeReals)
@@ -284,7 +328,7 @@ def apply_variables(m):
         m.location,
         m.tech,
         within=pyomo.NonNegativeReals,
-        doc="Electricity demand for manufacturing per stage (MWh)"
+        doc="Electricity demand for manufacturing per stage (MWh)",
     )
 
     # --- 5. COSTS ---
@@ -302,12 +346,13 @@ def apply_variables(m):
 
     # NOM: E^{fac}_{y,\ell,k} | Factory Energy Annual | MWh
     m.FACTORY_ENERGY_ANNUAL = pyomo.Var(
-        m.stf, m.location, m.tech,
-        domain=pyomo.NonNegativeReals
+        m.stf, m.location, m.tech, domain=pyomo.NonNegativeReals
     )
 
     # NOM: Bal^{new}_{y,\ell,k} | Balance Yearly New Capacity | MW
-    m.balance_yearly_new_capacity = pyomo.Var(m.stf, m.location, m.tech, within=pyomo.NonNegativeReals)
+    m.balance_yearly_new_capacity = pyomo.Var(
+        m.stf, m.location, m.tech, within=pyomo.NonNegativeReals
+    )
 
     #########################
     # Scrap Economies of Scale Variables

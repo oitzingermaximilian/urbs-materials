@@ -59,13 +59,18 @@ def get_constants(instance):
     ##########################################################################
 
     # OPTION 1: If get_entities supports lists
-    minerals_df = get_entities(instance, [
-        "demand_material_total",
-        "material_imported",
-        "material_mined",
-        "material_recycled"
-    ])
-    process_capacities = get_entities(instance, ["capacity_processing_total","processing_cap_new"])
+    minerals_df = get_entities(
+        instance,
+        [
+            "demand_material_total",
+            "material_imported",
+            "material_mined",
+            "material_recycled",
+        ],
+    )
+    process_capacities = get_entities(
+        instance, ["capacity_processing_total", "processing_cap_new"]
+    )
     domestic_caps = get_entity(instance, "capacity_produced_output")
     imported_caps = get_entity(instance, "capacity_imported")
     supply = get_entity(instance, "Supply")
@@ -75,17 +80,21 @@ def get_constants(instance):
     bd_scrap_solar = get_entity(instance, "BD_scrap_solar")
     bd_scrap_wind = get_entity(instance, "BD_scrap_wind")
     scrap_processed = get_entity(instance, "capacity_scrap_rec")
-    costs_extension = get_entities(instance, ["cost_capex_total_extension","cost_opex_total_extension","cost_trade_total_extension","cost_stockpile_holding"])
+    costs_extension = get_entities(
+        instance,
+        [
+            "cost_capex_total_extension",
+            "cost_opex_total_extension",
+            "cost_trade_total_extension",
+            "cost_stockpile_holding",
+        ],
+    )
     new_balance = get_entity(instance, "balance_yearly_new_capacity")
-
-
 
     process_cost = get_entity(instance, "process_costs")
     # print("process cost", process_cost)
     gas_usage_block = get_entity(instance, "gas_usage_block")
     # print("ext_cost", ext_costs)
-
-
 
     bext = get_entity(instance, "balance_ext")
     # print("bext", bext)
@@ -99,8 +108,8 @@ def get_constants(instance):
     )
 
     # print("e pro out df", e_pro_out_df)
-    scrapdf = get_entity(instance, "capacity_scrap_total") #scrapsheet
-    decomdf = get_entity(instance, "capacity_dec") #decom sheet
+    scrapdf = get_entity(instance, "capacity_scrap_total")  # scrapsheet
+    decomdf = get_entity(instance, "capacity_dec")  # decom sheet
     ####us_co2
     e_pro_out_co2 = e_pro_out_df.loc[
         e_pro_out_df.index.get_level_values("com") == "CO2"
@@ -237,7 +246,7 @@ def get_constants(instance):
         scrap_processed,
         bd_one_tech_base,
         costs_extension,
-        new_balance
+        new_balance,
     )
 
 

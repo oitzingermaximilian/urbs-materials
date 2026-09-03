@@ -53,116 +53,184 @@ def read_input(input_files, year):
                 global_prop = global_prop.set_index(["Property"])
                 if "Support timeframe" in global_prop.value:
                     support_timeframe = global_prop.loc["Support timeframe"]["value"]
-                    global_prop = global_prop.drop(["Support timeframe"]).drop(["description"], axis=1)
+                    global_prop = global_prop.drop(["Support timeframe"]).drop(
+                        ["description"], axis=1
+                    )
                 else:
                     support_timeframe = year
-                global_prop = pd.concat([global_prop], keys=[support_timeframe], names=["support_timeframe"])
+                global_prop = pd.concat(
+                    [global_prop], keys=[support_timeframe], names=["support_timeframe"]
+                )
             gl.append(global_prop)
-            
+
             site = xls.parse("Site")
             if "Year" in site.columns:
-                site = site.rename(columns={"Year": "support_timeframe"}).set_index(["support_timeframe", "Name"])
+                site = site.rename(columns={"Year": "support_timeframe"}).set_index(
+                    ["support_timeframe", "Name"]
+                )
             else:
                 site = site.set_index(["Name"])
-                site = pd.concat([site], keys=[support_timeframe], names=["support_timeframe"])
+                site = pd.concat(
+                    [site], keys=[support_timeframe], names=["support_timeframe"]
+                )
             sit.append(site)
-            
+
             commodity = xls.parse("Commodity")
             commodity["Commodity"] = commodity["Commodity"].str.strip()
             if "Year" in commodity.columns:
-                commodity = commodity.rename(columns={"Year": "support_timeframe"}).set_index(["support_timeframe", "Site", "Commodity", "Type"])
+                commodity = commodity.rename(
+                    columns={"Year": "support_timeframe"}
+                ).set_index(["support_timeframe", "Site", "Commodity", "Type"])
             else:
                 commodity = commodity.set_index(["Site", "Commodity", "Type"])
-                commodity = pd.concat([commodity], keys=[support_timeframe], names=["support_timeframe"])
+                commodity = pd.concat(
+                    [commodity], keys=[support_timeframe], names=["support_timeframe"]
+                )
             com.append(commodity)
-            
+
             process = xls.parse("Process")
             if "Year" in process.columns:
-                process = process.rename(columns={"Year": "support_timeframe"}).set_index(["support_timeframe", "Site", "Process"])
+                process = process.rename(
+                    columns={"Year": "support_timeframe"}
+                ).set_index(["support_timeframe", "Site", "Process"])
             else:
                 process = process.set_index(["Site", "Process"])
-                process = pd.concat([process], keys=[support_timeframe], names=["support_timeframe"])
+                process = pd.concat(
+                    [process], keys=[support_timeframe], names=["support_timeframe"]
+                )
             pro.append(process)
-            
+
             process_commodity = xls.parse("Process-Commodity")
             process_commodity["Commodity"] = process_commodity["Commodity"].str.strip()
             if "Year" in process_commodity.columns:
-                process_commodity = process_commodity.rename(columns={"Year": "support_timeframe"}).set_index(["support_timeframe", "Process", "Commodity", "Direction"])
+                process_commodity = process_commodity.rename(
+                    columns={"Year": "support_timeframe"}
+                ).set_index(["support_timeframe", "Process", "Commodity", "Direction"])
             else:
-                process_commodity = process_commodity.set_index(["Process", "Commodity", "Direction"])
-                process_commodity = pd.concat([process_commodity], keys=[support_timeframe], names=["support_timeframe"])
+                process_commodity = process_commodity.set_index(
+                    ["Process", "Commodity", "Direction"]
+                )
+                process_commodity = pd.concat(
+                    [process_commodity],
+                    keys=[support_timeframe],
+                    names=["support_timeframe"],
+                )
             pro_com.append(process_commodity)
-            
+
             demand = xls.parse("Demand")
             if "Year" in demand.columns:
-                demand = demand.rename(columns={"Year": "support_timeframe"}).set_index(["support_timeframe", "t"])
+                demand = demand.rename(columns={"Year": "support_timeframe"}).set_index(
+                    ["support_timeframe", "t"]
+                )
             else:
                 demand = demand.set_index(["t"])
-                demand = pd.concat([demand], keys=[support_timeframe], names=["support_timeframe"])
+                demand = pd.concat(
+                    [demand], keys=[support_timeframe], names=["support_timeframe"]
+                )
             demand.columns = split_columns(demand.columns, ".")
             dem.append(demand)
-            
+
             supim = xls.parse("SupIm")
             if "Year" in supim.columns:
-                supim = supim.rename(columns={"Year": "support_timeframe"}).set_index(["support_timeframe", "t"])
+                supim = supim.rename(columns={"Year": "support_timeframe"}).set_index(
+                    ["support_timeframe", "t"]
+                )
             else:
                 supim = supim.set_index(["t"])
-                supim = pd.concat([supim], keys=[support_timeframe], names=["support_timeframe"])
+                supim = pd.concat(
+                    [supim], keys=[support_timeframe], names=["support_timeframe"]
+                )
             supim.columns = split_columns(supim.columns, ".")
             sup.append(supim)
 
             if "Transmission" in xls.sheet_names:
                 transmission = xls.parse("Transmission")
                 if "Year" in transmission.columns:
-                    transmission = transmission.rename(columns={"Year": "support_timeframe"}).set_index(["support_timeframe", "Site In", "Site Out", "Transmission", "Commodity"])
+                    transmission = transmission.rename(
+                        columns={"Year": "support_timeframe"}
+                    ).set_index(
+                        [
+                            "support_timeframe",
+                            "Site In",
+                            "Site Out",
+                            "Transmission",
+                            "Commodity",
+                        ]
+                    )
                 else:
-                    transmission = transmission.set_index(["Site In", "Site Out", "Transmission", "Commodity"])
-                    transmission = pd.concat([transmission], keys=[support_timeframe], names=["support_timeframe"])
+                    transmission = transmission.set_index(
+                        ["Site In", "Site Out", "Transmission", "Commodity"]
+                    )
+                    transmission = pd.concat(
+                        [transmission],
+                        keys=[support_timeframe],
+                        names=["support_timeframe"],
+                    )
             else:
                 transmission = pd.DataFrame()
             tra.append(transmission)
-            
+
             if "Storage" in xls.sheet_names:
                 storage = xls.parse("Storage")
                 if "Year" in storage.columns:
-                    storage = storage.rename(columns={"Year": "support_timeframe"}).set_index(["support_timeframe", "Site", "Storage", "Commodity"])
+                    storage = storage.rename(
+                        columns={"Year": "support_timeframe"}
+                    ).set_index(["support_timeframe", "Site", "Storage", "Commodity"])
                 else:
                     storage = storage.set_index(["Site", "Storage", "Commodity"])
-                    storage = pd.concat([storage], keys=[support_timeframe], names=["support_timeframe"])
+                    storage = pd.concat(
+                        [storage], keys=[support_timeframe], names=["support_timeframe"]
+                    )
             else:
                 storage = pd.DataFrame()
             sto.append(storage)
-            
+
             if "DSM" in xls.sheet_names:
                 dsm = xls.parse("DSM")
                 if "Year" in dsm.columns:
-                    dsm = dsm.rename(columns={"Year": "support_timeframe"}).set_index(["support_timeframe", "Site", "Commodity"])
+                    dsm = dsm.rename(columns={"Year": "support_timeframe"}).set_index(
+                        ["support_timeframe", "Site", "Commodity"]
+                    )
                 else:
                     dsm = dsm.set_index(["Site", "Commodity"])
-                    dsm = pd.concat([dsm], keys=[support_timeframe], names=["support_timeframe"])
+                    dsm = pd.concat(
+                        [dsm], keys=[support_timeframe], names=["support_timeframe"]
+                    )
             else:
                 dsm = pd.DataFrame()
             ds.append(dsm)
-            
+
             if "Buy-Sell-Price" in xls.sheet_names:
                 buy_sell_price = xls.parse("Buy-Sell-Price")
                 if "Year" in buy_sell_price.columns:
-                    buy_sell_price = buy_sell_price.rename(columns={"Year": "support_timeframe"}).set_index(["support_timeframe", "t"])
+                    buy_sell_price = buy_sell_price.rename(
+                        columns={"Year": "support_timeframe"}
+                    ).set_index(["support_timeframe", "t"])
                 else:
                     buy_sell_price = buy_sell_price.set_index(["t"])
-                    buy_sell_price = pd.concat([buy_sell_price], keys=[support_timeframe], names=["support_timeframe"])
+                    buy_sell_price = pd.concat(
+                        [buy_sell_price],
+                        keys=[support_timeframe],
+                        names=["support_timeframe"],
+                    )
                 buy_sell_price.columns = split_columns(buy_sell_price.columns, ".")
             else:
                 buy_sell_price = pd.DataFrame()
             bsp.append(buy_sell_price)
-            
+
             if "TimeVarEff" in xls.sheet_names:
                 eff_factor = xls.parse("TimeVarEff")
                 if "Year" in eff_factor.columns:
-                    eff_factor = eff_factor.rename(columns={"Year": "support_timeframe"}).set_index(["support_timeframe", "t"])
+                    eff_factor = eff_factor.rename(
+                        columns={"Year": "support_timeframe"}
+                    ).set_index(["support_timeframe", "t"])
                 else:
                     eff_factor = eff_factor.set_index(["t"])
-                    eff_factor = pd.concat([eff_factor], keys=[support_timeframe], names=["support_timeframe"])
+                    eff_factor = pd.concat(
+                        [eff_factor],
+                        keys=[support_timeframe],
+                        names=["support_timeframe"],
+                    )
                 eff_factor.columns = split_columns(eff_factor.columns, ".")
             else:
                 eff_factor = pd.DataFrame()
@@ -228,9 +296,7 @@ def pyomo_model_prep(data, timesteps, window_start, window_end):
         ]
 
         # Reset the index to remove unused levels
-        data["global_prop"] = data[
-            "global_prop"
-        ].copy()
+        data["global_prop"] = data["global_prop"].copy()
         data["global_prop"].index = data["global_prop"].index.remove_unused_levels()
 
         print("\n--- Rolling Horizon Mode in pyomo_model_prep ---")
@@ -731,47 +797,57 @@ def apply_numerical_scaling(data):
     # if 'supim' in data:  data['supim'] *= MW_to_GW
 
     # 2. Process Data
-    if 'process' in data:
-        p = data['process']
-        cap_cols = ['inst-cap', 'cap-lo', 'cap-up']
+    if "process" in data:
+        p = data["process"]
+        cap_cols = ["inst-cap", "cap-lo", "cap-up"]
         # IMPORTANT: REMOVED cost_cols from scaling.
         # 150000 €/MW == 150000 k€/GW.
         for col in cap_cols:
-            if col in p.columns: p[col] *= MW_to_GW
+            if col in p.columns:
+                p[col] *= MW_to_GW
 
     # 3. Commodity Data
-    if 'commodity' in data:
-        c = data['commodity']
+    if "commodity" in data:
+        c = data["commodity"]
         # Scale Max limits (Mass/Energy) to kton/GWh
-        if 'max' in c.columns: c['max'] *= MW_to_GW
+        if "max" in c.columns:
+            c["max"] *= MW_to_GW
         # Note: Prices are left alone (€/MWh == k€/GWh)
 
     # 4. Transmission & Storage
-    if not data['transmission'].empty:
-        t = data['transmission']
-        for col in ['inst-cap', 'cap-up']:
-            if col in t.columns: t[col] *= MW_to_GW
+    if not data["transmission"].empty:
+        t = data["transmission"]
+        for col in ["inst-cap", "cap-up"]:
+            if col in t.columns:
+                t[col] *= MW_to_GW
 
-    if not data['storage'].empty:
-        s = data['storage']
-        for col in ['inst-cap-c', 'cap-up-c', 'inst-cap-p', 'cap-up-p']:
-            if col in s.columns: s[col] *= MW_to_GW
+    if not data["storage"].empty:
+        s = data["storage"]
+        for col in ["inst-cap-c", "cap-up-c", "inst-cap-p", "cap-up-p"]:
+            if col in s.columns:
+                s[col] *= MW_to_GW
 
     # 5. Process-Commodity (Material Intensity)
     # Tons/MW is numerically identical to kton/GW.
     # If your data is 3.047, keep it 3.047.
 
     # 6. Global Properties (CO2 Limit)
-    if 'global_prop' in data:
-        df_global = data['global_prop']
+    if "global_prop" in data:
+        df_global = data["global_prop"]
         cols = df_global.columns.tolist()
 
         # Safely find the standard urbs column names
-        name_col = 'Property' if 'Property' in cols else ('prop' if 'prop' in cols else cols[0])
-        val_col = 'value' if 'value' in cols else ('Value' if 'Value' in cols else cols[-1])
+        name_col = (
+            "Property"
+            if "Property" in cols
+            else ("prop" if "prop" in cols else cols[0])
+        )
+        val_col = (
+            "value" if "value" in cols else ("Value" if "Value" in cols else cols[-1])
+        )
 
         # Apply scaling to the absolute CO2 limit
-        mask = df_global[name_col] == 'CO2 limit'
+        mask = df_global[name_col] == "CO2 limit"
         if mask.any():
             df_global.loc[mask, val_col] *= MW_to_GW
             print(f"  -> CO2 limit scaled to ktons.")
