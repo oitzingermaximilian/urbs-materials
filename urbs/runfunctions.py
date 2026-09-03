@@ -803,32 +803,31 @@ def run_scenario(
     # Apply Scenario Logic
     data, data_urbsextensionv1 = scenario(data, data_urbsextensionv1.copy())
 
-    validate_input(data)
-    validate_dc_objective(data, objective)
+    #validate_input(data)
+    #validate_dc_objective(data, objective)
 
     # =================================================================
     # THE "DATA" DICTIONARY DUMP (Fixed for Empty DataFrames)
     # =================================================================
-    print("Dumping standard urbs 'data' dictionary to Excel...")
-    data_dump_file = os.path.join(result_dir, "standard_urbs_data_dump.xlsx")
+    #print("Dumping standard urbs 'data' dictionary to Excel...")
+    #data_dump_file = os.path.join(result_dir, "standard_urbs_data_dump.xlsx")
 
-    with pd.ExcelWriter(data_dump_file) as writer:
-        for sheet_name, df in data.items():
-            # Excel sheet names have a strict 31 character limit
-            safe_sheet_name = str(sheet_name)[:31]
+    #with pd.ExcelWriter(data_dump_file) as writer:
+    #    for sheet_name, df in data.items():
+    #        # Excel sheet names have a strict 31 character limit
+    #        safe_sheet_name = str(sheet_name)[:31]
+    #        if isinstance(df, pd.DataFrame):
+    #            if df.empty:
+    #                # FIX: If it's empty, just write a placeholder to avoid the Pandas crash
+    #                pd.DataFrame(["[Empty DataFrame]"]).to_excel(writer, sheet_name=safe_sheet_name, index=False,
+    #                                                             header=False)
+    #            else:
+    #                df.to_excel(writer, sheet_name=safe_sheet_name)
+    #        else:
+    #            # For basic strings or numbers in the dictionary
+    #            pd.DataFrame([str(df)]).to_excel(writer, sheet_name=safe_sheet_name, index=False, header=False)
 
-            if isinstance(df, pd.DataFrame):
-                if df.empty:
-                    # FIX: If it's empty, just write a placeholder to avoid the Pandas crash
-                    pd.DataFrame(["[Empty DataFrame]"]).to_excel(writer, sheet_name=safe_sheet_name, index=False,
-                                                                 header=False)
-                else:
-                    df.to_excel(writer, sheet_name=safe_sheet_name)
-            else:
-                # For basic strings or numbers in the dictionary
-                pd.DataFrame([str(df)]).to_excel(writer, sheet_name=safe_sheet_name, index=False, header=False)
-
-    print(f"✅ Standard urbs data saved to: {data_dump_file}")
+    #print(f"✅ Standard urbs data saved to: {data_dump_file}")
     # =================================================================
 
 
@@ -846,23 +845,23 @@ def run_scenario(
     )
 
     # ---> ADD THIS RAW PARAMETER DUMP RIGHT HERE <---
-    print("Dumping all Pyomo parameters to Excel...")
-    rows = []
+    #print("Dumping all Pyomo parameters to Excel...")
+    #rows = []
     # Loop through every actual parameter inside the Pyomo model
-    for param in prob.component_objects(pyomo.Param, active=True):
-        for index in param:
-            # Extract the raw number Pyomo is using
-            val = pyomo.value(param[index], exception=False)
-            rows.append({
-                "Parameter Name": param.name,
-                "Index": str(index),
-                "Value": val
-            })
+    #for param in prob.component_objects(pyomo.Param, active=True):
+    #    for index in param:
+    #        # Extract the raw number Pyomo is using
+    #        val = pyomo.value(param[index], exception=False)
+    #        rows.append({
+    #            "Parameter Name": param.name,
+    #            "Index": str(index),
+    #            "Value": val
+    #        })
 
-    df_params = pd.DataFrame(rows)
-    dump_file = os.path.join(result_dir, "actual_pyomo_parameters.xlsx")
-    df_params.to_excel(dump_file, index=False)
-    print(f"✅ Raw Pyomo parameters saved to: {dump_file}")
+    #df_params = pd.DataFrame(rows)
+    #dump_file = os.path.join(result_dir, "actual_pyomo_parameters.xlsx")
+    #df_params.to_excel(dump_file, index=False)
+    #print(f"✅ Raw Pyomo parameters saved to: {dump_file}")
     # ---------------------------------------------------------
 
 

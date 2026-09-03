@@ -61,8 +61,8 @@ def consolidate_excel_files(input_folder, output_file, start_year=2024, end_year
                 
     if 'Demand' in all_sheets_data:
         yearly_profile = [
-            # User specifically requested spreading the yearly demand across 12 timesteps (v / 12)
-            (v * 1e-3) / 12 for v in [
+            
+            (v * 1e-3) for v in [
                 207658333.3, 215588018.8, 223517704.2, 231447389.6, 239377075.1,
                 247306760.5, 255236445.9, 260097649.0, 264958852.1, 269820055.3,
                 274681258.3, 279542461.5, 284403664.6, 289264867.8, 294126070.8,

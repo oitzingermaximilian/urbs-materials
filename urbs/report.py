@@ -28,8 +28,6 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         capacity_ext_total,
         grouped_co2,
         combined_balance,
-        decisionvalues_sec,
-        decisionvalue_scrap,
         scrapdf,
         decomdf,
         inst_processes_time,
@@ -57,11 +55,6 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
     # create spreadsheet writer object
     with pd.ExcelWriter(filename) as writer:
         #################################################################################
-        # dynamic feedback loop reports
-        decisionvalues_sec.to_excel(writer, sheet_name="us_BDsec_values")
-        decisionvalue_scrap.to_excel(writer, sheet_name="us_BDscrap_values")
-
-
         combined_balance.to_excel(writer, sheet_name="extension_balance", index=False)
         grouped_co2.to_excel(writer, sheet_name="us_co2", index=False)
         capacity_ext_total.to_excel(writer, sheet_name="extension_only_totalcapacity")

@@ -63,7 +63,7 @@ def apply_material_block_pricing(m, data):
         print(f"✅ Successfully exported {len(df)} parameter rows to {output_filename}")
         return df
 
-    export_block_params_to_excel(m, "final_pyomo_params.xlsx")
+    export_block_params_to_excel(m, "mat_blocks_debug.xlsx")
 
     # ==========================================
     # VARIABLES
