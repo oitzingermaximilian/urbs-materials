@@ -71,44 +71,33 @@ plot_periods = {"all": timesteps[1:]}
 my_colors = {"EU27": (200, 230, 200)}
 for country, color in my_colors.items():
     urbs.COLORS[country] = color
-base_scenarios = [
-    ("scenario_solar_recycling_low", urbs.scenario_solar_recycling_low),
-    # ("scenario_solar_recycling_medium", urbs.scenario_solar_recycling_medium),
-    # ("scenario_solar_recycling_high", urbs.scenario_solar_recycling_high),
-]
-
-# 2. Automatically generate all 21 scenarios (1 prices x 7 quotas)
+# Generate one scenario per CRMA quota. Recycling prices come exclusively
+# from Input_urbsextensionv1.xlsx.
 scenarios = []
-# quotas_to_test = [0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35]
 quotas_to_test = [0.35]
 
-for name, func in base_scenarios:
-    for quota in quotas_to_test:
-        quota_percent = int(quota * 100)
-        scen_name = f"{name}_crma_{quota_percent}"
+for quota in quotas_to_test:
+    quota_percent = int(quota * 100)
+    scen_name = f"scenario_crma_{quota_percent}"
 
-        # Pass scen_name into the wrapper so we can rename the function
-        def make_custom_scenario(base_func=func, q=quota, final_name=scen_name):
-            def custom_scenario(data, data_urbsextensionv1):
-                d, d_ext = base_func(data, data_urbsextensionv1)
-                d_ext["crma_quota"] = q
-                return d, d_ext
+    def make_crma_scenario(q=quota, final_name=scen_name):
+        def crma_scenario(data, data_urbsextensionv1):
+            data_urbsextensionv1["crma_quota"] = q
+            return data, data_urbsextensionv1
 
-            # --- THE MAGIC FIX ---
-            # This tricks URBS into naming the Excel file perfectly!
-            custom_scenario.__name__ = final_name
-            return custom_scenario
+        crma_scenario.__name__ = final_name
+        return crma_scenario
 
-        scenarios.append((scen_name, make_custom_scenario()))
+    scenarios.append((scen_name, make_crma_scenario()))
 
 
-# 3. Your original execution block!
+# Run the configured CRMA quota scenarios.
 def run_perfect_foresight():
     """Original perfect foresight execution"""
     for scenario_name, scenario in scenarios:
         print(f"\n🚀 RUNNING: {scenario_name}")
 
-        # Create a dynamic subfolder so your 21 runs don't overwrite each other
+        # Create a dynamic subfolder so quota runs do not overwrite each other.
         dynamic_result_dir = os.path.join(result_dir, scenario_name)
         os.makedirs(dynamic_result_dir, exist_ok=True)
 

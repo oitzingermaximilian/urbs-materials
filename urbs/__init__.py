@@ -20,7 +20,6 @@ from .pyomoio import get_entity, get_entities, list_entities
 from .report import report
 from .runfunctions import *
 from .saveload import load, save
-from .scenarios import *
 from .identify import identify_mode, identify_expansion
 
 # urbs/__init__.py

@@ -68960,21 +68960,6 @@ c_e_def_specific_storage_cost(2050_EU27_Pump_storage_Elec_Environmental)_:
 +1 storage_costs(2050_EU27_Pump_storage_Elec_Environmental)
 = 0
 
-c_u_block_limit_constraint(2024_WTF_LNG)_:
-+1 e_co_stock_block(1_2024_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2024_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2024_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2024_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2024_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2024_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2024_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2024_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2024_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2024_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2024_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2024_EU27_Gas_Stock_WTF_LNG)
-<= 2930833.333
-
 c_u_block_limit_constraint(2024_pipegas)_:
 +1 e_co_stock_block(1_2024_EU27_Gas_Stock_pipegas)
 +1 e_co_stock_block(2_2024_EU27_Gas_Stock_pipegas)
@@ -69020,19 +69005,19 @@ c_u_block_limit_constraint(2024_NZ_LNG)_:
 +1 e_co_stock_block(12_2024_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2025_WTF_LNG)_:
-+1 e_co_stock_block(1_2025_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2025_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2025_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2025_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2025_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2025_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2025_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2025_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2025_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2025_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2025_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2025_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2024_WTF_LNG)_:
++1 e_co_stock_block(1_2024_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2024_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2024_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2024_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2024_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2024_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2024_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2024_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2024_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2024_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2024_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2024_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2025_pipegas)_:
@@ -69080,19 +69065,19 @@ c_u_block_limit_constraint(2025_NZ_LNG)_:
 +1 e_co_stock_block(12_2025_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2026_WTF_LNG)_:
-+1 e_co_stock_block(1_2026_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2026_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2026_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2026_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2026_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2026_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2026_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2026_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2026_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2026_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2026_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2026_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2025_WTF_LNG)_:
++1 e_co_stock_block(1_2025_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2025_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2025_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2025_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2025_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2025_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2025_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2025_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2025_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2025_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2025_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2025_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2026_pipegas)_:
@@ -69140,19 +69125,19 @@ c_u_block_limit_constraint(2026_NZ_LNG)_:
 +1 e_co_stock_block(12_2026_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2027_WTF_LNG)_:
-+1 e_co_stock_block(1_2027_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2027_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2027_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2027_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2027_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2027_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2027_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2027_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2027_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2027_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2027_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2027_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2026_WTF_LNG)_:
++1 e_co_stock_block(1_2026_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2026_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2026_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2026_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2026_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2026_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2026_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2026_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2026_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2026_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2026_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2026_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2027_pipegas)_:
@@ -69200,19 +69185,19 @@ c_u_block_limit_constraint(2027_NZ_LNG)_:
 +1 e_co_stock_block(12_2027_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2028_WTF_LNG)_:
-+1 e_co_stock_block(1_2028_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2028_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2028_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2028_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2028_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2028_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2028_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2028_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2028_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2028_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2028_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2028_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2027_WTF_LNG)_:
++1 e_co_stock_block(1_2027_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2027_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2027_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2027_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2027_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2027_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2027_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2027_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2027_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2027_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2027_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2027_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2028_pipegas)_:
@@ -69260,19 +69245,19 @@ c_u_block_limit_constraint(2028_NZ_LNG)_:
 +1 e_co_stock_block(12_2028_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2029_WTF_LNG)_:
-+1 e_co_stock_block(1_2029_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2029_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2029_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2029_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2029_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2029_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2029_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2029_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2029_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2029_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2029_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2029_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2028_WTF_LNG)_:
++1 e_co_stock_block(1_2028_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2028_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2028_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2028_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2028_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2028_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2028_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2028_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2028_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2028_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2028_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2028_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2029_pipegas)_:
@@ -69320,19 +69305,19 @@ c_u_block_limit_constraint(2029_NZ_LNG)_:
 +1 e_co_stock_block(12_2029_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2030_WTF_LNG)_:
-+1 e_co_stock_block(1_2030_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2030_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2030_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2030_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2030_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2030_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2030_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2030_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2030_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2030_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2030_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2030_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2029_WTF_LNG)_:
++1 e_co_stock_block(1_2029_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2029_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2029_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2029_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2029_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2029_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2029_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2029_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2029_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2029_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2029_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2029_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2030_pipegas)_:
@@ -69380,19 +69365,19 @@ c_u_block_limit_constraint(2030_NZ_LNG)_:
 +1 e_co_stock_block(12_2030_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2031_WTF_LNG)_:
-+1 e_co_stock_block(1_2031_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2031_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2031_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2031_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2031_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2031_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2031_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2031_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2031_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2031_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2031_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2031_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2030_WTF_LNG)_:
++1 e_co_stock_block(1_2030_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2030_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2030_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2030_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2030_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2030_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2030_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2030_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2030_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2030_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2030_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2030_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2031_pipegas)_:
@@ -69440,19 +69425,19 @@ c_u_block_limit_constraint(2031_NZ_LNG)_:
 +1 e_co_stock_block(12_2031_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2032_WTF_LNG)_:
-+1 e_co_stock_block(1_2032_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2032_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2032_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2032_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2032_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2032_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2032_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2032_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2032_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2032_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2032_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2032_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2031_WTF_LNG)_:
++1 e_co_stock_block(1_2031_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2031_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2031_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2031_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2031_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2031_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2031_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2031_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2031_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2031_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2031_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2031_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2032_pipegas)_:
@@ -69500,19 +69485,19 @@ c_u_block_limit_constraint(2032_NZ_LNG)_:
 +1 e_co_stock_block(12_2032_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2033_WTF_LNG)_:
-+1 e_co_stock_block(1_2033_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2033_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2033_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2033_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2033_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2033_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2033_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2033_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2033_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2033_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2033_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2033_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2032_WTF_LNG)_:
++1 e_co_stock_block(1_2032_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2032_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2032_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2032_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2032_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2032_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2032_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2032_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2032_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2032_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2032_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2032_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2033_pipegas)_:
@@ -69560,19 +69545,19 @@ c_u_block_limit_constraint(2033_NZ_LNG)_:
 +1 e_co_stock_block(12_2033_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2034_WTF_LNG)_:
-+1 e_co_stock_block(1_2034_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2034_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2034_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2034_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2034_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2034_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2034_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2034_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2034_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2034_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2034_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2034_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2033_WTF_LNG)_:
++1 e_co_stock_block(1_2033_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2033_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2033_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2033_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2033_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2033_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2033_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2033_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2033_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2033_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2033_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2033_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2034_pipegas)_:
@@ -69620,19 +69605,19 @@ c_u_block_limit_constraint(2034_NZ_LNG)_:
 +1 e_co_stock_block(12_2034_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2035_WTF_LNG)_:
-+1 e_co_stock_block(1_2035_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2035_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2035_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2035_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2035_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2035_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2035_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2035_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2035_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2035_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2035_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2035_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2034_WTF_LNG)_:
++1 e_co_stock_block(1_2034_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2034_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2034_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2034_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2034_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2034_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2034_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2034_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2034_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2034_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2034_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2034_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2035_pipegas)_:
@@ -69680,19 +69665,19 @@ c_u_block_limit_constraint(2035_NZ_LNG)_:
 +1 e_co_stock_block(12_2035_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2036_WTF_LNG)_:
-+1 e_co_stock_block(1_2036_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2036_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2036_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2036_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2036_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2036_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2036_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2036_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2036_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2036_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2036_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2036_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2035_WTF_LNG)_:
++1 e_co_stock_block(1_2035_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2035_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2035_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2035_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2035_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2035_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2035_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2035_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2035_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2035_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2035_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2035_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2036_pipegas)_:
@@ -69740,19 +69725,19 @@ c_u_block_limit_constraint(2036_NZ_LNG)_:
 +1 e_co_stock_block(12_2036_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2037_WTF_LNG)_:
-+1 e_co_stock_block(1_2037_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2037_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2037_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2037_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2037_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2037_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2037_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2037_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2037_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2037_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2037_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2037_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2036_WTF_LNG)_:
++1 e_co_stock_block(1_2036_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2036_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2036_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2036_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2036_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2036_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2036_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2036_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2036_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2036_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2036_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2036_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2037_pipegas)_:
@@ -69800,19 +69785,19 @@ c_u_block_limit_constraint(2037_NZ_LNG)_:
 +1 e_co_stock_block(12_2037_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2038_WTF_LNG)_:
-+1 e_co_stock_block(1_2038_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2038_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2038_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2038_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2038_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2038_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2038_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2038_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2038_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2038_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2038_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2038_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2037_WTF_LNG)_:
++1 e_co_stock_block(1_2037_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2037_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2037_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2037_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2037_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2037_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2037_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2037_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2037_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2037_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2037_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2037_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2038_pipegas)_:
@@ -69860,19 +69845,19 @@ c_u_block_limit_constraint(2038_NZ_LNG)_:
 +1 e_co_stock_block(12_2038_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2039_WTF_LNG)_:
-+1 e_co_stock_block(1_2039_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2039_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2039_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2039_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2039_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2039_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2039_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2039_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2039_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2039_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2039_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2039_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2038_WTF_LNG)_:
++1 e_co_stock_block(1_2038_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2038_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2038_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2038_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2038_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2038_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2038_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2038_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2038_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2038_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2038_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2038_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2039_pipegas)_:
@@ -69920,19 +69905,19 @@ c_u_block_limit_constraint(2039_NZ_LNG)_:
 +1 e_co_stock_block(12_2039_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2040_WTF_LNG)_:
-+1 e_co_stock_block(1_2040_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2040_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2040_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2040_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2040_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2040_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2040_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2040_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2040_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2040_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2040_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2040_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2039_WTF_LNG)_:
++1 e_co_stock_block(1_2039_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2039_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2039_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2039_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2039_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2039_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2039_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2039_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2039_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2039_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2039_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2039_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2040_pipegas)_:
@@ -69980,19 +69965,19 @@ c_u_block_limit_constraint(2040_NZ_LNG)_:
 +1 e_co_stock_block(12_2040_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2041_WTF_LNG)_:
-+1 e_co_stock_block(1_2041_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2041_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2041_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2041_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2041_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2041_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2041_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2041_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2041_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2041_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2041_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2041_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2040_WTF_LNG)_:
++1 e_co_stock_block(1_2040_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2040_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2040_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2040_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2040_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2040_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2040_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2040_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2040_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2040_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2040_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2040_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2041_pipegas)_:
@@ -70040,19 +70025,19 @@ c_u_block_limit_constraint(2041_NZ_LNG)_:
 +1 e_co_stock_block(12_2041_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2042_WTF_LNG)_:
-+1 e_co_stock_block(1_2042_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2042_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2042_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2042_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2042_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2042_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2042_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2042_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2042_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2042_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2042_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2042_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2041_WTF_LNG)_:
++1 e_co_stock_block(1_2041_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2041_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2041_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2041_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2041_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2041_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2041_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2041_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2041_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2041_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2041_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2041_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2042_pipegas)_:
@@ -70100,19 +70085,19 @@ c_u_block_limit_constraint(2042_NZ_LNG)_:
 +1 e_co_stock_block(12_2042_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2043_WTF_LNG)_:
-+1 e_co_stock_block(1_2043_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2043_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2043_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2043_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2043_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2043_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2043_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2043_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2043_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2043_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2043_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2043_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2042_WTF_LNG)_:
++1 e_co_stock_block(1_2042_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2042_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2042_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2042_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2042_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2042_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2042_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2042_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2042_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2042_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2042_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2042_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2043_pipegas)_:
@@ -70160,19 +70145,19 @@ c_u_block_limit_constraint(2043_NZ_LNG)_:
 +1 e_co_stock_block(12_2043_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2044_WTF_LNG)_:
-+1 e_co_stock_block(1_2044_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2044_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2044_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2044_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2044_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2044_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2044_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2044_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2044_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2044_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2044_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2044_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2043_WTF_LNG)_:
++1 e_co_stock_block(1_2043_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2043_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2043_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2043_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2043_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2043_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2043_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2043_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2043_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2043_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2043_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2043_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2044_pipegas)_:
@@ -70220,19 +70205,19 @@ c_u_block_limit_constraint(2044_NZ_LNG)_:
 +1 e_co_stock_block(12_2044_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2045_WTF_LNG)_:
-+1 e_co_stock_block(1_2045_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2045_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2045_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2045_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2045_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2045_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2045_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2045_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2045_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2045_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2045_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2045_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2044_WTF_LNG)_:
++1 e_co_stock_block(1_2044_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2044_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2044_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2044_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2044_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2044_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2044_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2044_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2044_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2044_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2044_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2044_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2045_pipegas)_:
@@ -70280,19 +70265,19 @@ c_u_block_limit_constraint(2045_NZ_LNG)_:
 +1 e_co_stock_block(12_2045_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2046_WTF_LNG)_:
-+1 e_co_stock_block(1_2046_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2046_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2046_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2046_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2046_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2046_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2046_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2046_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2046_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2046_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2046_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2046_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2045_WTF_LNG)_:
++1 e_co_stock_block(1_2045_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2045_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2045_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2045_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2045_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2045_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2045_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2045_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2045_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2045_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2045_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2045_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2046_pipegas)_:
@@ -70340,19 +70325,19 @@ c_u_block_limit_constraint(2046_NZ_LNG)_:
 +1 e_co_stock_block(12_2046_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2047_WTF_LNG)_:
-+1 e_co_stock_block(1_2047_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2047_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2047_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2047_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2047_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2047_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2047_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2047_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2047_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2047_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2047_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2047_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2046_WTF_LNG)_:
++1 e_co_stock_block(1_2046_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2046_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2046_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2046_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2046_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2046_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2046_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2046_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2046_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2046_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2046_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2046_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2047_pipegas)_:
@@ -70400,19 +70385,19 @@ c_u_block_limit_constraint(2047_NZ_LNG)_:
 +1 e_co_stock_block(12_2047_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2048_WTF_LNG)_:
-+1 e_co_stock_block(1_2048_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2048_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2048_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2048_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2048_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2048_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2048_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2048_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2048_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2048_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2048_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2048_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2047_WTF_LNG)_:
++1 e_co_stock_block(1_2047_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2047_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2047_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2047_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2047_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2047_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2047_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2047_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2047_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2047_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2047_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2047_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2048_pipegas)_:
@@ -70460,19 +70445,19 @@ c_u_block_limit_constraint(2048_NZ_LNG)_:
 +1 e_co_stock_block(12_2048_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2049_WTF_LNG)_:
-+1 e_co_stock_block(1_2049_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2049_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2049_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2049_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2049_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2049_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2049_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2049_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2049_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2049_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2049_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2049_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2048_WTF_LNG)_:
++1 e_co_stock_block(1_2048_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2048_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2048_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2048_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2048_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2048_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2048_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2048_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2048_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2048_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2048_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2048_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2049_pipegas)_:
@@ -70520,19 +70505,19 @@ c_u_block_limit_constraint(2049_NZ_LNG)_:
 +1 e_co_stock_block(12_2049_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
-c_u_block_limit_constraint(2050_WTF_LNG)_:
-+1 e_co_stock_block(1_2050_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(2_2050_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(3_2050_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(4_2050_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(5_2050_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(6_2050_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(7_2050_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(8_2050_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(9_2050_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(10_2050_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(11_2050_EU27_Gas_Stock_WTF_LNG)
-+1 e_co_stock_block(12_2050_EU27_Gas_Stock_WTF_LNG)
+c_u_block_limit_constraint(2049_WTF_LNG)_:
++1 e_co_stock_block(1_2049_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2049_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2049_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2049_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2049_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2049_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2049_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2049_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2049_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2049_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2049_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2049_EU27_Gas_Stock_WTF_LNG)
 <= 2930833.333
 
 c_u_block_limit_constraint(2050_pipegas)_:
@@ -70580,3999 +70565,4014 @@ c_u_block_limit_constraint(2050_NZ_LNG)_:
 +1 e_co_stock_block(12_2050_EU27_Gas_Stock_NZ_LNG)
 <= 270613.61110000004
 
+c_u_block_limit_constraint(2050_WTF_LNG)_:
++1 e_co_stock_block(1_2050_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(2_2050_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(3_2050_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(4_2050_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(5_2050_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(6_2050_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(7_2050_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(8_2050_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(9_2050_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(10_2050_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(11_2050_EU27_Gas_Stock_WTF_LNG)
++1 e_co_stock_block(12_2050_EU27_Gas_Stock_WTF_LNG)
+<= 2930833.333
+
 c_e_link_block_to_original_constraint(1_2024_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2024_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2024_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2024_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2024_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2024_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2024_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2025_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2025_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2025_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2025_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2025_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2025_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2025_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2026_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2026_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2026_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2026_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2026_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2026_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2026_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2027_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2027_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2027_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2027_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2027_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2027_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2027_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2028_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2028_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2028_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2028_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2028_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2028_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2028_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2029_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2029_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2029_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2029_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2029_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2029_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2029_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2030_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2030_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2030_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2030_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2030_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2030_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2030_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2031_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2031_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2031_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2031_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2031_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2031_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2031_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2032_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2032_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2032_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2032_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2032_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2032_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2032_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2033_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2033_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2033_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2033_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2033_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2033_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2033_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2034_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2034_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2034_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2034_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2034_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2034_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2034_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2035_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2035_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2035_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2035_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2035_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2035_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2035_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2036_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2036_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2036_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2036_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2036_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2036_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2036_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2037_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2037_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2037_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2037_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2037_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2037_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2037_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2038_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2038_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2038_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2038_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2038_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2038_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2038_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2039_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2039_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2039_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2039_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2039_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2039_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2039_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2040_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2040_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2040_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2040_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2040_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2040_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2040_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2041_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2041_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2041_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2041_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2041_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2041_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2041_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2042_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2042_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2042_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2042_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2042_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2042_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2042_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2043_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2043_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2043_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2043_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2043_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2043_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2043_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2044_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2044_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2044_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2044_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2044_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2044_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2044_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2045_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2045_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2045_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2045_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2045_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2045_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2045_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2046_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2046_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2046_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2046_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2046_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2046_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2046_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2047_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2047_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2047_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2047_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2047_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2047_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2047_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2048_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2048_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2048_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2048_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2048_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2048_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2048_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2049_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2049_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2049_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2049_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2049_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2049_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2049_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(1_2050_EU27_Gas_Stock)_:
--1 e_co_stock_block(1_2050_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(1_2050_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(1_2050_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(1_2050_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(1_2050_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(1_2050_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2024_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2024_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2024_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2024_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2024_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2024_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2024_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2025_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2025_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2025_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2025_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2025_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2025_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2025_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2026_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2026_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2026_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2026_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2026_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2026_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2026_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2027_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2027_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2027_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2027_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2027_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2027_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2027_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2028_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2028_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2028_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2028_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2028_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2028_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2028_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2029_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2029_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2029_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2029_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2029_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2029_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2029_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2030_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2030_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2030_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2030_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2030_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2030_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2030_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2031_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2031_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2031_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2031_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2031_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2031_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2031_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2032_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2032_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2032_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2032_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2032_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2032_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2032_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2033_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2033_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2033_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2033_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2033_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2033_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2033_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2034_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2034_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2034_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2034_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2034_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2034_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2034_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2035_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2035_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2035_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2035_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2035_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2035_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2035_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2036_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2036_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2036_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2036_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2036_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2036_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2036_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2037_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2037_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2037_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2037_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2037_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2037_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2037_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2038_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2038_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2038_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2038_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2038_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2038_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2038_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2039_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2039_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2039_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2039_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2039_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2039_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2039_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2040_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2040_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2040_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2040_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2040_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2040_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2040_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2041_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2041_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2041_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2041_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2041_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2041_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2041_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2042_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2042_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2042_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2042_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2042_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2042_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2042_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2043_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2043_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2043_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2043_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2043_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2043_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2043_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2044_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2044_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2044_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2044_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2044_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2044_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2044_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2045_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2045_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2045_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2045_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2045_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2045_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2045_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2046_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2046_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2046_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2046_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2046_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2046_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2046_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2047_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2047_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2047_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2047_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2047_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2047_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2047_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2048_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2048_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2048_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2048_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2048_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2048_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2048_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2049_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2049_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2049_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2049_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2049_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2049_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2049_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(2_2050_EU27_Gas_Stock)_:
--1 e_co_stock_block(2_2050_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(2_2050_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(2_2050_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(2_2050_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(2_2050_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(2_2050_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2024_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2024_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2024_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2024_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2024_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2024_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2024_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2025_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2025_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2025_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2025_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2025_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2025_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2025_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2026_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2026_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2026_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2026_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2026_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2026_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2026_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2027_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2027_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2027_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2027_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2027_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2027_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2027_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2028_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2028_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2028_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2028_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2028_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2028_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2028_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2029_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2029_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2029_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2029_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2029_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2029_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2029_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2030_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2030_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2030_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2030_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2030_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2030_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2030_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2031_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2031_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2031_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2031_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2031_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2031_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2031_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2032_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2032_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2032_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2032_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2032_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2032_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2032_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2033_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2033_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2033_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2033_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2033_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2033_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2033_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2034_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2034_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2034_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2034_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2034_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2034_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2034_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2035_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2035_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2035_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2035_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2035_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2035_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2035_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2036_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2036_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2036_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2036_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2036_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2036_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2036_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2037_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2037_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2037_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2037_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2037_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2037_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2037_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2038_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2038_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2038_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2038_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2038_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2038_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2038_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2039_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2039_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2039_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2039_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2039_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2039_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2039_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2040_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2040_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2040_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2040_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2040_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2040_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2040_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2041_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2041_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2041_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2041_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2041_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2041_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2041_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2042_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2042_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2042_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2042_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2042_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2042_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2042_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2043_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2043_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2043_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2043_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2043_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2043_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2043_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2044_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2044_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2044_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2044_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2044_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2044_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2044_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2045_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2045_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2045_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2045_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2045_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2045_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2045_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2046_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2046_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2046_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2046_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2046_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2046_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2046_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2047_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2047_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2047_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2047_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2047_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2047_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2047_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2048_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2048_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2048_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2048_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2048_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2048_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2048_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2049_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2049_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2049_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2049_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2049_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2049_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2049_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(3_2050_EU27_Gas_Stock)_:
--1 e_co_stock_block(3_2050_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(3_2050_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(3_2050_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(3_2050_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(3_2050_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(3_2050_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2024_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2024_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2024_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2024_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2024_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2024_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2024_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2025_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2025_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2025_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2025_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2025_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2025_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2025_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2026_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2026_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2026_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2026_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2026_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2026_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2026_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2027_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2027_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2027_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2027_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2027_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2027_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2027_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2028_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2028_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2028_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2028_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2028_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2028_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2028_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2029_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2029_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2029_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2029_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2029_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2029_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2029_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2030_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2030_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2030_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2030_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2030_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2030_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2030_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2031_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2031_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2031_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2031_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2031_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2031_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2031_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2032_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2032_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2032_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2032_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2032_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2032_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2032_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2033_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2033_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2033_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2033_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2033_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2033_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2033_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2034_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2034_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2034_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2034_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2034_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2034_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2034_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2035_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2035_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2035_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2035_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2035_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2035_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2035_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2036_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2036_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2036_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2036_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2036_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2036_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2036_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2037_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2037_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2037_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2037_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2037_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2037_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2037_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2038_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2038_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2038_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2038_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2038_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2038_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2038_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2039_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2039_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2039_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2039_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2039_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2039_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2039_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2040_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2040_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2040_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2040_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2040_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2040_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2040_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2041_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2041_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2041_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2041_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2041_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2041_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2041_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2042_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2042_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2042_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2042_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2042_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2042_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2042_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2043_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2043_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2043_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2043_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2043_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2043_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2043_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2044_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2044_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2044_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2044_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2044_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2044_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2044_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2045_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2045_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2045_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2045_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2045_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2045_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2045_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2046_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2046_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2046_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2046_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2046_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2046_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2046_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2047_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2047_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2047_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2047_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2047_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2047_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2047_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2048_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2048_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2048_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2048_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2048_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2048_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2048_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2049_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2049_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2049_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2049_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2049_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2049_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2049_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(4_2050_EU27_Gas_Stock)_:
--1 e_co_stock_block(4_2050_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(4_2050_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(4_2050_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(4_2050_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(4_2050_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(4_2050_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2024_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2024_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2024_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2024_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2024_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2024_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2024_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2025_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2025_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2025_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2025_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2025_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2025_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2025_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2026_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2026_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2026_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2026_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2026_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2026_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2026_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2027_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2027_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2027_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2027_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2027_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2027_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2027_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2028_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2028_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2028_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2028_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2028_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2028_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2028_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2029_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2029_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2029_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2029_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2029_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2029_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2029_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2030_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2030_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2030_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2030_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2030_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2030_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2030_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2031_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2031_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2031_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2031_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2031_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2031_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2031_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2032_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2032_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2032_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2032_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2032_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2032_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2032_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2033_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2033_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2033_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2033_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2033_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2033_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2033_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2034_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2034_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2034_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2034_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2034_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2034_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2034_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2035_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2035_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2035_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2035_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2035_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2035_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2035_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2036_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2036_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2036_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2036_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2036_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2036_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2036_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2037_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2037_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2037_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2037_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2037_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2037_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2037_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2038_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2038_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2038_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2038_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2038_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2038_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2038_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2039_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2039_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2039_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2039_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2039_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2039_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2039_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2040_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2040_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2040_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2040_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2040_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2040_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2040_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2041_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2041_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2041_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2041_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2041_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2041_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2041_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2042_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2042_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2042_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2042_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2042_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2042_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2042_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2043_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2043_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2043_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2043_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2043_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2043_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2043_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2044_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2044_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2044_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2044_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2044_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2044_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2044_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2045_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2045_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2045_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2045_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2045_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2045_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2045_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2046_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2046_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2046_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2046_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2046_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2046_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2046_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2047_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2047_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2047_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2047_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2047_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2047_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2047_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2048_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2048_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2048_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2048_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2048_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2048_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2048_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2049_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2049_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2049_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2049_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2049_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2049_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2049_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(5_2050_EU27_Gas_Stock)_:
--1 e_co_stock_block(5_2050_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(5_2050_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(5_2050_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(5_2050_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(5_2050_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(5_2050_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2024_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2024_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2024_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2024_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2024_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2024_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2024_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2025_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2025_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2025_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2025_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2025_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2025_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2025_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2026_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2026_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2026_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2026_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2026_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2026_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2026_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2027_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2027_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2027_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2027_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2027_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2027_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2027_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2028_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2028_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2028_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2028_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2028_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2028_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2028_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2029_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2029_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2029_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2029_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2029_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2029_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2029_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2030_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2030_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2030_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2030_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2030_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2030_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2030_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2031_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2031_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2031_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2031_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2031_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2031_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2031_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2032_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2032_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2032_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2032_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2032_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2032_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2032_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2033_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2033_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2033_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2033_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2033_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2033_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2033_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2034_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2034_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2034_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2034_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2034_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2034_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2034_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2035_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2035_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2035_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2035_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2035_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2035_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2035_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2036_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2036_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2036_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2036_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2036_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2036_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2036_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2037_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2037_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2037_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2037_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2037_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2037_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2037_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2038_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2038_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2038_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2038_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2038_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2038_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2038_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2039_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2039_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2039_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2039_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2039_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2039_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2039_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2040_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2040_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2040_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2040_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2040_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2040_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2040_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2041_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2041_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2041_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2041_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2041_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2041_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2041_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2042_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2042_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2042_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2042_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2042_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2042_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2042_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2043_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2043_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2043_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2043_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2043_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2043_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2043_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2044_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2044_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2044_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2044_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2044_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2044_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2044_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2045_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2045_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2045_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2045_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2045_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2045_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2045_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2046_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2046_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2046_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2046_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2046_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2046_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2046_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2047_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2047_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2047_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2047_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2047_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2047_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2047_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2048_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2048_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2048_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2048_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2048_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2048_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2048_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2049_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2049_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2049_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2049_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2049_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2049_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2049_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(6_2050_EU27_Gas_Stock)_:
--1 e_co_stock_block(6_2050_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(6_2050_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(6_2050_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(6_2050_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(6_2050_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(6_2050_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2024_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2024_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2024_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2024_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2024_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2024_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2024_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2025_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2025_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2025_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2025_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2025_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2025_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2025_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2026_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2026_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2026_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2026_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2026_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2026_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2026_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2027_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2027_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2027_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2027_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2027_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2027_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2027_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2028_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2028_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2028_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2028_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2028_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2028_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2028_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2029_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2029_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2029_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2029_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2029_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2029_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2029_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2030_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2030_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2030_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2030_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2030_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2030_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2030_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2031_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2031_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2031_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2031_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2031_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2031_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2031_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2032_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2032_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2032_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2032_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2032_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2032_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2032_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2033_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2033_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2033_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2033_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2033_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2033_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2033_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2034_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2034_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2034_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2034_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2034_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2034_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2034_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2035_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2035_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2035_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2035_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2035_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2035_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2035_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2036_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2036_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2036_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2036_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2036_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2036_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2036_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2037_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2037_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2037_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2037_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2037_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2037_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2037_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2038_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2038_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2038_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2038_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2038_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2038_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2038_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2039_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2039_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2039_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2039_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2039_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2039_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2039_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2040_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2040_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2040_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2040_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2040_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2040_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2040_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2041_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2041_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2041_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2041_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2041_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2041_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2041_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2042_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2042_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2042_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2042_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2042_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2042_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2042_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2043_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2043_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2043_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2043_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2043_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2043_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2043_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2044_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2044_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2044_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2044_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2044_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2044_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2044_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2045_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2045_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2045_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2045_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2045_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2045_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2045_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2046_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2046_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2046_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2046_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2046_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2046_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2046_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2047_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2047_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2047_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2047_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2047_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2047_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2047_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2048_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2048_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2048_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2048_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2048_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2048_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2048_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2049_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2049_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2049_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2049_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2049_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2049_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2049_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(7_2050_EU27_Gas_Stock)_:
--1 e_co_stock_block(7_2050_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(7_2050_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(7_2050_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(7_2050_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(7_2050_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(7_2050_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2024_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2024_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2024_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2024_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2024_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2024_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2024_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2025_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2025_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2025_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2025_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2025_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2025_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2025_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2026_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2026_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2026_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2026_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2026_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2026_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2026_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2027_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2027_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2027_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2027_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2027_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2027_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2027_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2028_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2028_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2028_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2028_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2028_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2028_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2028_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2029_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2029_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2029_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2029_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2029_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2029_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2029_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2030_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2030_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2030_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2030_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2030_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2030_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2030_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2031_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2031_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2031_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2031_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2031_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2031_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2031_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2032_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2032_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2032_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2032_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2032_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2032_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2032_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2033_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2033_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2033_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2033_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2033_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2033_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2033_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2034_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2034_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2034_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2034_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2034_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2034_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2034_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2035_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2035_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2035_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2035_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2035_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2035_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2035_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2036_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2036_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2036_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2036_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2036_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2036_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2036_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2037_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2037_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2037_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2037_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2037_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2037_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2037_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2038_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2038_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2038_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2038_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2038_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2038_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2038_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2039_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2039_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2039_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2039_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2039_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2039_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2039_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2040_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2040_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2040_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2040_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2040_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2040_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2040_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2041_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2041_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2041_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2041_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2041_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2041_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2041_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2042_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2042_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2042_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2042_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2042_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2042_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2042_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2043_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2043_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2043_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2043_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2043_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2043_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2043_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2044_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2044_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2044_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2044_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2044_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2044_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2044_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2045_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2045_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2045_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2045_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2045_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2045_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2045_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2046_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2046_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2046_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2046_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2046_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2046_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2046_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2047_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2047_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2047_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2047_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2047_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2047_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2047_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2048_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2048_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2048_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2048_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2048_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2048_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2048_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2049_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2049_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2049_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2049_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2049_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2049_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2049_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(8_2050_EU27_Gas_Stock)_:
--1 e_co_stock_block(8_2050_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(8_2050_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(8_2050_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(8_2050_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(8_2050_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(8_2050_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2024_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2024_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2024_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2024_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2024_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2024_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2024_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2025_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2025_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2025_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2025_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2025_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2025_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2025_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2026_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2026_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2026_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2026_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2026_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2026_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2026_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2027_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2027_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2027_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2027_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2027_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2027_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2027_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2028_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2028_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2028_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2028_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2028_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2028_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2028_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2029_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2029_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2029_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2029_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2029_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2029_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2029_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2030_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2030_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2030_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2030_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2030_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2030_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2030_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2031_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2031_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2031_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2031_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2031_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2031_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2031_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2032_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2032_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2032_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2032_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2032_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2032_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2032_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2033_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2033_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2033_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2033_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2033_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2033_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2033_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2034_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2034_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2034_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2034_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2034_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2034_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2034_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2035_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2035_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2035_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2035_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2035_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2035_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2035_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2036_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2036_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2036_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2036_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2036_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2036_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2036_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2037_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2037_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2037_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2037_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2037_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2037_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2037_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2038_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2038_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2038_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2038_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2038_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2038_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2038_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2039_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2039_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2039_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2039_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2039_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2039_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2039_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2040_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2040_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2040_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2040_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2040_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2040_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2040_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2041_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2041_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2041_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2041_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2041_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2041_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2041_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2042_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2042_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2042_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2042_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2042_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2042_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2042_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2043_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2043_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2043_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2043_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2043_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2043_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2043_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2044_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2044_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2044_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2044_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2044_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2044_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2044_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2045_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2045_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2045_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2045_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2045_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2045_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2045_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2046_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2046_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2046_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2046_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2046_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2046_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2046_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2047_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2047_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2047_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2047_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2047_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2047_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2047_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2048_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2048_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2048_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2048_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2048_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2048_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2048_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2049_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2049_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2049_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2049_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2049_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2049_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2049_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(9_2050_EU27_Gas_Stock)_:
--1 e_co_stock_block(9_2050_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(9_2050_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(9_2050_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(9_2050_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(9_2050_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(9_2050_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2024_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2024_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2024_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2024_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2024_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2024_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2024_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2025_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2025_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2025_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2025_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2025_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2025_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2025_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2026_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2026_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2026_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2026_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2026_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2026_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2026_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2027_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2027_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2027_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2027_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2027_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2027_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2027_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2028_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2028_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2028_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2028_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2028_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2028_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2028_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2029_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2029_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2029_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2029_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2029_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2029_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2029_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2030_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2030_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2030_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2030_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2030_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2030_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2030_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2031_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2031_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2031_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2031_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2031_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2031_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2031_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2032_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2032_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2032_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2032_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2032_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2032_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2032_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2033_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2033_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2033_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2033_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2033_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2033_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2033_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2034_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2034_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2034_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2034_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2034_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2034_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2034_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2035_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2035_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2035_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2035_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2035_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2035_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2035_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2036_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2036_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2036_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2036_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2036_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2036_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2036_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2037_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2037_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2037_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2037_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2037_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2037_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2037_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2038_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2038_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2038_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2038_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2038_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2038_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2038_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2039_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2039_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2039_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2039_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2039_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2039_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2039_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2040_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2040_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2040_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2040_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2040_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2040_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2040_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2041_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2041_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2041_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2041_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2041_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2041_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2041_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2042_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2042_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2042_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2042_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2042_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2042_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2042_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2043_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2043_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2043_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2043_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2043_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2043_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2043_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2044_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2044_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2044_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2044_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2044_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2044_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2044_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2045_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2045_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2045_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2045_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2045_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2045_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2045_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2046_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2046_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2046_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2046_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2046_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2046_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2046_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2047_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2047_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2047_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2047_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2047_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2047_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2047_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2048_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2048_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2048_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2048_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2048_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2048_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2048_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2049_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2049_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2049_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2049_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2049_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2049_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2049_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(10_2050_EU27_Gas_Stock)_:
--1 e_co_stock_block(10_2050_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(10_2050_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(10_2050_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(10_2050_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(10_2050_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(10_2050_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2024_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2024_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2024_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2024_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2024_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2024_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2024_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2025_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2025_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2025_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2025_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2025_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2025_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2025_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2026_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2026_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2026_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2026_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2026_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2026_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2026_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2027_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2027_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2027_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2027_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2027_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2027_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2027_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2028_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2028_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2028_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2028_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2028_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2028_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2028_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2029_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2029_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2029_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2029_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2029_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2029_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2029_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2030_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2030_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2030_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2030_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2030_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2030_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2030_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2031_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2031_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2031_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2031_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2031_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2031_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2031_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2032_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2032_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2032_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2032_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2032_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2032_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2032_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2033_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2033_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2033_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2033_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2033_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2033_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2033_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2034_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2034_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2034_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2034_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2034_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2034_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2034_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2035_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2035_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2035_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2035_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2035_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2035_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2035_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2036_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2036_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2036_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2036_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2036_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2036_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2036_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2037_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2037_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2037_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2037_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2037_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2037_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2037_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2038_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2038_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2038_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2038_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2038_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2038_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2038_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2039_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2039_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2039_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2039_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2039_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2039_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2039_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2040_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2040_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2040_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2040_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2040_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2040_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2040_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2041_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2041_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2041_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2041_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2041_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2041_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2041_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2042_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2042_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2042_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2042_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2042_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2042_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2042_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2043_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2043_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2043_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2043_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2043_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2043_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2043_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2044_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2044_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2044_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2044_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2044_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2044_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2044_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2045_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2045_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2045_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2045_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2045_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2045_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2045_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2046_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2046_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2046_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2046_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2046_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2046_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2046_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2047_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2047_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2047_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2047_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2047_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2047_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2047_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2048_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2048_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2048_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2048_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2048_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2048_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2048_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2049_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2049_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2049_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2049_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2049_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2049_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2049_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(11_2050_EU27_Gas_Stock)_:
--1 e_co_stock_block(11_2050_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(11_2050_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(11_2050_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(11_2050_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(11_2050_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(11_2050_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2024_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2024_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2024_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2024_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2024_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2024_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2024_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2025_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2025_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2025_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2025_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2025_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2025_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2025_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2026_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2026_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2026_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2026_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2026_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2026_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2026_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2027_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2027_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2027_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2027_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2027_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2027_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2027_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2028_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2028_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2028_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2028_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2028_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2028_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2028_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2029_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2029_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2029_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2029_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2029_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2029_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2029_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2030_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2030_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2030_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2030_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2030_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2030_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2030_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2031_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2031_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2031_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2031_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2031_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2031_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2031_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2032_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2032_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2032_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2032_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2032_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2032_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2032_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2033_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2033_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2033_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2033_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2033_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2033_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2033_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2034_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2034_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2034_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2034_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2034_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2034_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2034_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2035_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2035_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2035_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2035_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2035_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2035_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2035_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2036_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2036_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2036_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2036_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2036_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2036_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2036_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2037_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2037_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2037_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2037_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2037_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2037_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2037_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2038_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2038_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2038_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2038_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2038_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2038_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2038_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2039_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2039_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2039_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2039_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2039_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2039_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2039_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2040_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2040_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2040_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2040_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2040_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2040_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2040_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2041_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2041_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2041_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2041_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2041_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2041_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2041_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2042_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2042_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2042_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2042_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2042_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2042_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2042_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2043_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2043_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2043_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2043_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2043_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2043_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2043_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2044_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2044_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2044_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2044_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2044_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2044_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2044_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2045_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2045_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2045_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2045_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2045_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2045_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2045_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2046_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2046_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2046_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2046_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2046_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2046_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2046_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2047_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2047_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2047_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2047_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2047_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2047_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2047_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2048_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2048_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2048_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2048_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2048_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2048_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2048_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2049_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2049_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2049_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2049_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2049_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2049_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2049_EU27_Gas_Stock)
 = 0
 
 c_e_link_block_to_original_constraint(12_2050_EU27_Gas_Stock)_:
--1 e_co_stock_block(12_2050_EU27_Gas_Stock_WTF_LNG)
 -1 e_co_stock_block(12_2050_EU27_Gas_Stock_pipegas)
 -1 e_co_stock_block(12_2050_EU27_Gas_Stock_NM_LNG)
 -1 e_co_stock_block(12_2050_EU27_Gas_Stock_NZ_LNG)
+-1 e_co_stock_block(12_2050_EU27_Gas_Stock_WTF_LNG)
 +1 e_co_stock(12_2050_EU27_Gas_Stock)
 = 0
 
 c_e_yearly_cost_constraint(2024)_:
--149.99999999999994 e_co_stock_block(1_2024_EU27_Gas_Stock_WTF_LNG)
 -22.67999999999999 e_co_stock_block(1_2024_EU27_Gas_Stock_pipegas)
 -42.689999999999976 e_co_stock_block(1_2024_EU27_Gas_Stock_NM_LNG)
 -29.189999999999987 e_co_stock_block(1_2024_EU27_Gas_Stock_NZ_LNG)
--149.99999999999994 e_co_stock_block(2_2024_EU27_Gas_Stock_WTF_LNG)
+-149.99999999999994 e_co_stock_block(1_2024_EU27_Gas_Stock_WTF_LNG)
 -22.67999999999999 e_co_stock_block(2_2024_EU27_Gas_Stock_pipegas)
 -42.689999999999976 e_co_stock_block(2_2024_EU27_Gas_Stock_NM_LNG)
 -29.189999999999987 e_co_stock_block(2_2024_EU27_Gas_Stock_NZ_LNG)
--149.99999999999994 e_co_stock_block(3_2024_EU27_Gas_Stock_WTF_LNG)
+-149.99999999999994 e_co_stock_block(2_2024_EU27_Gas_Stock_WTF_LNG)
 -22.67999999999999 e_co_stock_block(3_2024_EU27_Gas_Stock_pipegas)
 -42.689999999999976 e_co_stock_block(3_2024_EU27_Gas_Stock_NM_LNG)
 -29.189999999999987 e_co_stock_block(3_2024_EU27_Gas_Stock_NZ_LNG)
--149.99999999999994 e_co_stock_block(4_2024_EU27_Gas_Stock_WTF_LNG)
+-149.99999999999994 e_co_stock_block(3_2024_EU27_Gas_Stock_WTF_LNG)
 -22.67999999999999 e_co_stock_block(4_2024_EU27_Gas_Stock_pipegas)
 -42.689999999999976 e_co_stock_block(4_2024_EU27_Gas_Stock_NM_LNG)
 -29.189999999999987 e_co_stock_block(4_2024_EU27_Gas_Stock_NZ_LNG)
--149.99999999999994 e_co_stock_block(5_2024_EU27_Gas_Stock_WTF_LNG)
+-149.99999999999994 e_co_stock_block(4_2024_EU27_Gas_Stock_WTF_LNG)
 -22.67999999999999 e_co_stock_block(5_2024_EU27_Gas_Stock_pipegas)
 -42.689999999999976 e_co_stock_block(5_2024_EU27_Gas_Stock_NM_LNG)
 -29.189999999999987 e_co_stock_block(5_2024_EU27_Gas_Stock_NZ_LNG)
--149.99999999999994 e_co_stock_block(6_2024_EU27_Gas_Stock_WTF_LNG)
+-149.99999999999994 e_co_stock_block(5_2024_EU27_Gas_Stock_WTF_LNG)
 -22.67999999999999 e_co_stock_block(6_2024_EU27_Gas_Stock_pipegas)
 -42.689999999999976 e_co_stock_block(6_2024_EU27_Gas_Stock_NM_LNG)
 -29.189999999999987 e_co_stock_block(6_2024_EU27_Gas_Stock_NZ_LNG)
--149.99999999999994 e_co_stock_block(7_2024_EU27_Gas_Stock_WTF_LNG)
+-149.99999999999994 e_co_stock_block(6_2024_EU27_Gas_Stock_WTF_LNG)
 -22.67999999999999 e_co_stock_block(7_2024_EU27_Gas_Stock_pipegas)
 -42.689999999999976 e_co_stock_block(7_2024_EU27_Gas_Stock_NM_LNG)
 -29.189999999999987 e_co_stock_block(7_2024_EU27_Gas_Stock_NZ_LNG)
--149.99999999999994 e_co_stock_block(8_2024_EU27_Gas_Stock_WTF_LNG)
+-149.99999999999994 e_co_stock_block(7_2024_EU27_Gas_Stock_WTF_LNG)
 -22.67999999999999 e_co_stock_block(8_2024_EU27_Gas_Stock_pipegas)
 -42.689999999999976 e_co_stock_block(8_2024_EU27_Gas_Stock_NM_LNG)
 -29.189999999999987 e_co_stock_block(8_2024_EU27_Gas_Stock_NZ_LNG)
--149.99999999999994 e_co_stock_block(9_2024_EU27_Gas_Stock_WTF_LNG)
+-149.99999999999994 e_co_stock_block(8_2024_EU27_Gas_Stock_WTF_LNG)
 -22.67999999999999 e_co_stock_block(9_2024_EU27_Gas_Stock_pipegas)
 -42.689999999999976 e_co_stock_block(9_2024_EU27_Gas_Stock_NM_LNG)
 -29.189999999999987 e_co_stock_block(9_2024_EU27_Gas_Stock_NZ_LNG)
--149.99999999999994 e_co_stock_block(10_2024_EU27_Gas_Stock_WTF_LNG)
+-149.99999999999994 e_co_stock_block(9_2024_EU27_Gas_Stock_WTF_LNG)
 -22.67999999999999 e_co_stock_block(10_2024_EU27_Gas_Stock_pipegas)
 -42.689999999999976 e_co_stock_block(10_2024_EU27_Gas_Stock_NM_LNG)
 -29.189999999999987 e_co_stock_block(10_2024_EU27_Gas_Stock_NZ_LNG)
--149.99999999999994 e_co_stock_block(11_2024_EU27_Gas_Stock_WTF_LNG)
+-149.99999999999994 e_co_stock_block(10_2024_EU27_Gas_Stock_WTF_LNG)
 -22.67999999999999 e_co_stock_block(11_2024_EU27_Gas_Stock_pipegas)
 -42.689999999999976 e_co_stock_block(11_2024_EU27_Gas_Stock_NM_LNG)
 -29.189999999999987 e_co_stock_block(11_2024_EU27_Gas_Stock_NZ_LNG)
--149.99999999999994 e_co_stock_block(12_2024_EU27_Gas_Stock_WTF_LNG)
+-149.99999999999994 e_co_stock_block(11_2024_EU27_Gas_Stock_WTF_LNG)
 -22.67999999999999 e_co_stock_block(12_2024_EU27_Gas_Stock_pipegas)
 -42.689999999999976 e_co_stock_block(12_2024_EU27_Gas_Stock_NM_LNG)
 -29.189999999999987 e_co_stock_block(12_2024_EU27_Gas_Stock_NZ_LNG)
+-149.99999999999994 e_co_stock_block(12_2024_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2024)
 = 0
 
 c_e_yearly_cost_constraint(2025)_:
--145.63106796116497 e_co_stock_block(1_2025_EU27_Gas_Stock_WTF_LNG)
 -21.8883495145631 e_co_stock_block(1_2025_EU27_Gas_Stock_pipegas)
 -41.44660194174755 e_co_stock_block(1_2025_EU27_Gas_Stock_NM_LNG)
 -28.339805825242706 e_co_stock_block(1_2025_EU27_Gas_Stock_NZ_LNG)
--145.63106796116497 e_co_stock_block(2_2025_EU27_Gas_Stock_WTF_LNG)
+-145.63106796116497 e_co_stock_block(1_2025_EU27_Gas_Stock_WTF_LNG)
 -21.8883495145631 e_co_stock_block(2_2025_EU27_Gas_Stock_pipegas)
 -41.44660194174755 e_co_stock_block(2_2025_EU27_Gas_Stock_NM_LNG)
 -28.339805825242706 e_co_stock_block(2_2025_EU27_Gas_Stock_NZ_LNG)
--145.63106796116497 e_co_stock_block(3_2025_EU27_Gas_Stock_WTF_LNG)
+-145.63106796116497 e_co_stock_block(2_2025_EU27_Gas_Stock_WTF_LNG)
 -21.8883495145631 e_co_stock_block(3_2025_EU27_Gas_Stock_pipegas)
 -41.44660194174755 e_co_stock_block(3_2025_EU27_Gas_Stock_NM_LNG)
 -28.339805825242706 e_co_stock_block(3_2025_EU27_Gas_Stock_NZ_LNG)
--145.63106796116497 e_co_stock_block(4_2025_EU27_Gas_Stock_WTF_LNG)
+-145.63106796116497 e_co_stock_block(3_2025_EU27_Gas_Stock_WTF_LNG)
 -21.8883495145631 e_co_stock_block(4_2025_EU27_Gas_Stock_pipegas)
 -41.44660194174755 e_co_stock_block(4_2025_EU27_Gas_Stock_NM_LNG)
 -28.339805825242706 e_co_stock_block(4_2025_EU27_Gas_Stock_NZ_LNG)
--145.63106796116497 e_co_stock_block(5_2025_EU27_Gas_Stock_WTF_LNG)
+-145.63106796116497 e_co_stock_block(4_2025_EU27_Gas_Stock_WTF_LNG)
 -21.8883495145631 e_co_stock_block(5_2025_EU27_Gas_Stock_pipegas)
 -41.44660194174755 e_co_stock_block(5_2025_EU27_Gas_Stock_NM_LNG)
 -28.339805825242706 e_co_stock_block(5_2025_EU27_Gas_Stock_NZ_LNG)
--145.63106796116497 e_co_stock_block(6_2025_EU27_Gas_Stock_WTF_LNG)
+-145.63106796116497 e_co_stock_block(5_2025_EU27_Gas_Stock_WTF_LNG)
 -21.8883495145631 e_co_stock_block(6_2025_EU27_Gas_Stock_pipegas)
 -41.44660194174755 e_co_stock_block(6_2025_EU27_Gas_Stock_NM_LNG)
 -28.339805825242706 e_co_stock_block(6_2025_EU27_Gas_Stock_NZ_LNG)
--145.63106796116497 e_co_stock_block(7_2025_EU27_Gas_Stock_WTF_LNG)
+-145.63106796116497 e_co_stock_block(6_2025_EU27_Gas_Stock_WTF_LNG)
 -21.8883495145631 e_co_stock_block(7_2025_EU27_Gas_Stock_pipegas)
 -41.44660194174755 e_co_stock_block(7_2025_EU27_Gas_Stock_NM_LNG)
 -28.339805825242706 e_co_stock_block(7_2025_EU27_Gas_Stock_NZ_LNG)
--145.63106796116497 e_co_stock_block(8_2025_EU27_Gas_Stock_WTF_LNG)
+-145.63106796116497 e_co_stock_block(7_2025_EU27_Gas_Stock_WTF_LNG)
 -21.8883495145631 e_co_stock_block(8_2025_EU27_Gas_Stock_pipegas)
 -41.44660194174755 e_co_stock_block(8_2025_EU27_Gas_Stock_NM_LNG)
 -28.339805825242706 e_co_stock_block(8_2025_EU27_Gas_Stock_NZ_LNG)
--145.63106796116497 e_co_stock_block(9_2025_EU27_Gas_Stock_WTF_LNG)
+-145.63106796116497 e_co_stock_block(8_2025_EU27_Gas_Stock_WTF_LNG)
 -21.8883495145631 e_co_stock_block(9_2025_EU27_Gas_Stock_pipegas)
 -41.44660194174755 e_co_stock_block(9_2025_EU27_Gas_Stock_NM_LNG)
 -28.339805825242706 e_co_stock_block(9_2025_EU27_Gas_Stock_NZ_LNG)
--145.63106796116497 e_co_stock_block(10_2025_EU27_Gas_Stock_WTF_LNG)
+-145.63106796116497 e_co_stock_block(9_2025_EU27_Gas_Stock_WTF_LNG)
 -21.8883495145631 e_co_stock_block(10_2025_EU27_Gas_Stock_pipegas)
 -41.44660194174755 e_co_stock_block(10_2025_EU27_Gas_Stock_NM_LNG)
 -28.339805825242706 e_co_stock_block(10_2025_EU27_Gas_Stock_NZ_LNG)
--145.63106796116497 e_co_stock_block(11_2025_EU27_Gas_Stock_WTF_LNG)
+-145.63106796116497 e_co_stock_block(10_2025_EU27_Gas_Stock_WTF_LNG)
 -21.8883495145631 e_co_stock_block(11_2025_EU27_Gas_Stock_pipegas)
 -41.44660194174755 e_co_stock_block(11_2025_EU27_Gas_Stock_NM_LNG)
 -28.339805825242706 e_co_stock_block(11_2025_EU27_Gas_Stock_NZ_LNG)
--145.63106796116497 e_co_stock_block(12_2025_EU27_Gas_Stock_WTF_LNG)
+-145.63106796116497 e_co_stock_block(11_2025_EU27_Gas_Stock_WTF_LNG)
 -21.8883495145631 e_co_stock_block(12_2025_EU27_Gas_Stock_pipegas)
 -41.44660194174755 e_co_stock_block(12_2025_EU27_Gas_Stock_NM_LNG)
 -28.339805825242706 e_co_stock_block(12_2025_EU27_Gas_Stock_NZ_LNG)
+-145.63106796116497 e_co_stock_block(12_2025_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2025)
 = 0
 
 c_e_yearly_cost_constraint(2026)_:
--141.38938637006308 e_co_stock_block(1_2026_EU27_Gas_Stock_WTF_LNG)
 -21.123574323687425 e_co_stock_block(1_2026_EU27_Gas_Stock_pipegas)
 -40.23941936091995 e_co_stock_block(1_2026_EU27_Gas_Stock_NM_LNG)
 -27.514374587614277 e_co_stock_block(1_2026_EU27_Gas_Stock_NZ_LNG)
--141.38938637006308 e_co_stock_block(2_2026_EU27_Gas_Stock_WTF_LNG)
+-141.38938637006308 e_co_stock_block(1_2026_EU27_Gas_Stock_WTF_LNG)
 -21.123574323687425 e_co_stock_block(2_2026_EU27_Gas_Stock_pipegas)
 -40.23941936091995 e_co_stock_block(2_2026_EU27_Gas_Stock_NM_LNG)
 -27.514374587614277 e_co_stock_block(2_2026_EU27_Gas_Stock_NZ_LNG)
--141.38938637006308 e_co_stock_block(3_2026_EU27_Gas_Stock_WTF_LNG)
+-141.38938637006308 e_co_stock_block(2_2026_EU27_Gas_Stock_WTF_LNG)
 -21.123574323687425 e_co_stock_block(3_2026_EU27_Gas_Stock_pipegas)
 -40.23941936091995 e_co_stock_block(3_2026_EU27_Gas_Stock_NM_LNG)
 -27.514374587614277 e_co_stock_block(3_2026_EU27_Gas_Stock_NZ_LNG)
--141.38938637006308 e_co_stock_block(4_2026_EU27_Gas_Stock_WTF_LNG)
+-141.38938637006308 e_co_stock_block(3_2026_EU27_Gas_Stock_WTF_LNG)
 -21.123574323687425 e_co_stock_block(4_2026_EU27_Gas_Stock_pipegas)
 -40.23941936091995 e_co_stock_block(4_2026_EU27_Gas_Stock_NM_LNG)
 -27.514374587614277 e_co_stock_block(4_2026_EU27_Gas_Stock_NZ_LNG)
--141.38938637006308 e_co_stock_block(5_2026_EU27_Gas_Stock_WTF_LNG)
+-141.38938637006308 e_co_stock_block(4_2026_EU27_Gas_Stock_WTF_LNG)
 -21.123574323687425 e_co_stock_block(5_2026_EU27_Gas_Stock_pipegas)
 -40.23941936091995 e_co_stock_block(5_2026_EU27_Gas_Stock_NM_LNG)
 -27.514374587614277 e_co_stock_block(5_2026_EU27_Gas_Stock_NZ_LNG)
--141.38938637006308 e_co_stock_block(6_2026_EU27_Gas_Stock_WTF_LNG)
+-141.38938637006308 e_co_stock_block(5_2026_EU27_Gas_Stock_WTF_LNG)
 -21.123574323687425 e_co_stock_block(6_2026_EU27_Gas_Stock_pipegas)
 -40.23941936091995 e_co_stock_block(6_2026_EU27_Gas_Stock_NM_LNG)
 -27.514374587614277 e_co_stock_block(6_2026_EU27_Gas_Stock_NZ_LNG)
--141.38938637006308 e_co_stock_block(7_2026_EU27_Gas_Stock_WTF_LNG)
+-141.38938637006308 e_co_stock_block(6_2026_EU27_Gas_Stock_WTF_LNG)
 -21.123574323687425 e_co_stock_block(7_2026_EU27_Gas_Stock_pipegas)
 -40.23941936091995 e_co_stock_block(7_2026_EU27_Gas_Stock_NM_LNG)
 -27.514374587614277 e_co_stock_block(7_2026_EU27_Gas_Stock_NZ_LNG)
--141.38938637006308 e_co_stock_block(8_2026_EU27_Gas_Stock_WTF_LNG)
+-141.38938637006308 e_co_stock_block(7_2026_EU27_Gas_Stock_WTF_LNG)
 -21.123574323687425 e_co_stock_block(8_2026_EU27_Gas_Stock_pipegas)
 -40.23941936091995 e_co_stock_block(8_2026_EU27_Gas_Stock_NM_LNG)
 -27.514374587614277 e_co_stock_block(8_2026_EU27_Gas_Stock_NZ_LNG)
--141.38938637006308 e_co_stock_block(9_2026_EU27_Gas_Stock_WTF_LNG)
+-141.38938637006308 e_co_stock_block(8_2026_EU27_Gas_Stock_WTF_LNG)
 -21.123574323687425 e_co_stock_block(9_2026_EU27_Gas_Stock_pipegas)
 -40.23941936091995 e_co_stock_block(9_2026_EU27_Gas_Stock_NM_LNG)
 -27.514374587614277 e_co_stock_block(9_2026_EU27_Gas_Stock_NZ_LNG)
--141.38938637006308 e_co_stock_block(10_2026_EU27_Gas_Stock_WTF_LNG)
+-141.38938637006308 e_co_stock_block(9_2026_EU27_Gas_Stock_WTF_LNG)
 -21.123574323687425 e_co_stock_block(10_2026_EU27_Gas_Stock_pipegas)
 -40.23941936091995 e_co_stock_block(10_2026_EU27_Gas_Stock_NM_LNG)
 -27.514374587614277 e_co_stock_block(10_2026_EU27_Gas_Stock_NZ_LNG)
--141.38938637006308 e_co_stock_block(11_2026_EU27_Gas_Stock_WTF_LNG)
+-141.38938637006308 e_co_stock_block(10_2026_EU27_Gas_Stock_WTF_LNG)
 -21.123574323687425 e_co_stock_block(11_2026_EU27_Gas_Stock_pipegas)
 -40.23941936091995 e_co_stock_block(11_2026_EU27_Gas_Stock_NM_LNG)
 -27.514374587614277 e_co_stock_block(11_2026_EU27_Gas_Stock_NZ_LNG)
--141.38938637006308 e_co_stock_block(12_2026_EU27_Gas_Stock_WTF_LNG)
+-141.38938637006308 e_co_stock_block(11_2026_EU27_Gas_Stock_WTF_LNG)
 -21.123574323687425 e_co_stock_block(12_2026_EU27_Gas_Stock_pipegas)
 -40.23941936091995 e_co_stock_block(12_2026_EU27_Gas_Stock_NM_LNG)
 -27.514374587614277 e_co_stock_block(12_2026_EU27_Gas_Stock_NZ_LNG)
+-141.38938637006308 e_co_stock_block(12_2026_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2026)
 = 0
 
 c_e_yearly_cost_constraint(2027)_:
--137.27124890297387 e_co_stock_block(1_2027_EU27_Gas_Stock_WTF_LNG)
 -20.38478046209162 e_co_stock_block(1_2027_EU27_Gas_Stock_pipegas)
 -39.06739743778636 e_co_stock_block(1_2027_EU27_Gas_Stock_NM_LNG)
 -26.712985036518717 e_co_stock_block(1_2027_EU27_Gas_Stock_NZ_LNG)
--137.27124890297387 e_co_stock_block(2_2027_EU27_Gas_Stock_WTF_LNG)
+-137.27124890297387 e_co_stock_block(1_2027_EU27_Gas_Stock_WTF_LNG)
 -20.38478046209162 e_co_stock_block(2_2027_EU27_Gas_Stock_pipegas)
 -39.06739743778636 e_co_stock_block(2_2027_EU27_Gas_Stock_NM_LNG)
 -26.712985036518717 e_co_stock_block(2_2027_EU27_Gas_Stock_NZ_LNG)
--137.27124890297387 e_co_stock_block(3_2027_EU27_Gas_Stock_WTF_LNG)
+-137.27124890297387 e_co_stock_block(2_2027_EU27_Gas_Stock_WTF_LNG)
 -20.38478046209162 e_co_stock_block(3_2027_EU27_Gas_Stock_pipegas)
 -39.06739743778636 e_co_stock_block(3_2027_EU27_Gas_Stock_NM_LNG)
 -26.712985036518717 e_co_stock_block(3_2027_EU27_Gas_Stock_NZ_LNG)
--137.27124890297387 e_co_stock_block(4_2027_EU27_Gas_Stock_WTF_LNG)
+-137.27124890297387 e_co_stock_block(3_2027_EU27_Gas_Stock_WTF_LNG)
 -20.38478046209162 e_co_stock_block(4_2027_EU27_Gas_Stock_pipegas)
 -39.06739743778636 e_co_stock_block(4_2027_EU27_Gas_Stock_NM_LNG)
 -26.712985036518717 e_co_stock_block(4_2027_EU27_Gas_Stock_NZ_LNG)
--137.27124890297387 e_co_stock_block(5_2027_EU27_Gas_Stock_WTF_LNG)
+-137.27124890297387 e_co_stock_block(4_2027_EU27_Gas_Stock_WTF_LNG)
 -20.38478046209162 e_co_stock_block(5_2027_EU27_Gas_Stock_pipegas)
 -39.06739743778636 e_co_stock_block(5_2027_EU27_Gas_Stock_NM_LNG)
 -26.712985036518717 e_co_stock_block(5_2027_EU27_Gas_Stock_NZ_LNG)
--137.27124890297387 e_co_stock_block(6_2027_EU27_Gas_Stock_WTF_LNG)
+-137.27124890297387 e_co_stock_block(5_2027_EU27_Gas_Stock_WTF_LNG)
 -20.38478046209162 e_co_stock_block(6_2027_EU27_Gas_Stock_pipegas)
 -39.06739743778636 e_co_stock_block(6_2027_EU27_Gas_Stock_NM_LNG)
 -26.712985036518717 e_co_stock_block(6_2027_EU27_Gas_Stock_NZ_LNG)
--137.27124890297387 e_co_stock_block(7_2027_EU27_Gas_Stock_WTF_LNG)
+-137.27124890297387 e_co_stock_block(6_2027_EU27_Gas_Stock_WTF_LNG)
 -20.38478046209162 e_co_stock_block(7_2027_EU27_Gas_Stock_pipegas)
 -39.06739743778636 e_co_stock_block(7_2027_EU27_Gas_Stock_NM_LNG)
 -26.712985036518717 e_co_stock_block(7_2027_EU27_Gas_Stock_NZ_LNG)
--137.27124890297387 e_co_stock_block(8_2027_EU27_Gas_Stock_WTF_LNG)
+-137.27124890297387 e_co_stock_block(7_2027_EU27_Gas_Stock_WTF_LNG)
 -20.38478046209162 e_co_stock_block(8_2027_EU27_Gas_Stock_pipegas)
 -39.06739743778636 e_co_stock_block(8_2027_EU27_Gas_Stock_NM_LNG)
 -26.712985036518717 e_co_stock_block(8_2027_EU27_Gas_Stock_NZ_LNG)
--137.27124890297387 e_co_stock_block(9_2027_EU27_Gas_Stock_WTF_LNG)
+-137.27124890297387 e_co_stock_block(8_2027_EU27_Gas_Stock_WTF_LNG)
 -20.38478046209162 e_co_stock_block(9_2027_EU27_Gas_Stock_pipegas)
 -39.06739743778636 e_co_stock_block(9_2027_EU27_Gas_Stock_NM_LNG)
 -26.712985036518717 e_co_stock_block(9_2027_EU27_Gas_Stock_NZ_LNG)
--137.27124890297387 e_co_stock_block(10_2027_EU27_Gas_Stock_WTF_LNG)
+-137.27124890297387 e_co_stock_block(9_2027_EU27_Gas_Stock_WTF_LNG)
 -20.38478046209162 e_co_stock_block(10_2027_EU27_Gas_Stock_pipegas)
 -39.06739743778636 e_co_stock_block(10_2027_EU27_Gas_Stock_NM_LNG)
 -26.712985036518717 e_co_stock_block(10_2027_EU27_Gas_Stock_NZ_LNG)
--137.27124890297387 e_co_stock_block(11_2027_EU27_Gas_Stock_WTF_LNG)
+-137.27124890297387 e_co_stock_block(10_2027_EU27_Gas_Stock_WTF_LNG)
 -20.38478046209162 e_co_stock_block(11_2027_EU27_Gas_Stock_pipegas)
 -39.06739743778636 e_co_stock_block(11_2027_EU27_Gas_Stock_NM_LNG)
 -26.712985036518717 e_co_stock_block(11_2027_EU27_Gas_Stock_NZ_LNG)
--137.27124890297387 e_co_stock_block(12_2027_EU27_Gas_Stock_WTF_LNG)
+-137.27124890297387 e_co_stock_block(11_2027_EU27_Gas_Stock_WTF_LNG)
 -20.38478046209162 e_co_stock_block(12_2027_EU27_Gas_Stock_pipegas)
 -39.06739743778636 e_co_stock_block(12_2027_EU27_Gas_Stock_NM_LNG)
 -26.712985036518717 e_co_stock_block(12_2027_EU27_Gas_Stock_NZ_LNG)
+-137.27124890297387 e_co_stock_block(12_2027_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2027)
 = 0
 
 c_e_yearly_cost_constraint(2028)_:
--133.27305718735326 e_co_stock_block(1_2028_EU27_Gas_Stock_WTF_LNG)
 -19.67110324085334 e_co_stock_block(1_2028_EU27_Gas_Stock_pipegas)
 -37.92951207552074 e_co_stock_block(1_2028_EU27_Gas_Stock_NM_LNG)
 -25.934936928658946 e_co_stock_block(1_2028_EU27_Gas_Stock_NZ_LNG)
--133.27305718735326 e_co_stock_block(2_2028_EU27_Gas_Stock_WTF_LNG)
+-133.27305718735326 e_co_stock_block(1_2028_EU27_Gas_Stock_WTF_LNG)
 -19.67110324085334 e_co_stock_block(2_2028_EU27_Gas_Stock_pipegas)
 -37.92951207552074 e_co_stock_block(2_2028_EU27_Gas_Stock_NM_LNG)
 -25.934936928658946 e_co_stock_block(2_2028_EU27_Gas_Stock_NZ_LNG)
--133.27305718735326 e_co_stock_block(3_2028_EU27_Gas_Stock_WTF_LNG)
+-133.27305718735326 e_co_stock_block(2_2028_EU27_Gas_Stock_WTF_LNG)
 -19.67110324085334 e_co_stock_block(3_2028_EU27_Gas_Stock_pipegas)
 -37.92951207552074 e_co_stock_block(3_2028_EU27_Gas_Stock_NM_LNG)
 -25.934936928658946 e_co_stock_block(3_2028_EU27_Gas_Stock_NZ_LNG)
--133.27305718735326 e_co_stock_block(4_2028_EU27_Gas_Stock_WTF_LNG)
+-133.27305718735326 e_co_stock_block(3_2028_EU27_Gas_Stock_WTF_LNG)
 -19.67110324085334 e_co_stock_block(4_2028_EU27_Gas_Stock_pipegas)
 -37.92951207552074 e_co_stock_block(4_2028_EU27_Gas_Stock_NM_LNG)
 -25.934936928658946 e_co_stock_block(4_2028_EU27_Gas_Stock_NZ_LNG)
--133.27305718735326 e_co_stock_block(5_2028_EU27_Gas_Stock_WTF_LNG)
+-133.27305718735326 e_co_stock_block(4_2028_EU27_Gas_Stock_WTF_LNG)
 -19.67110324085334 e_co_stock_block(5_2028_EU27_Gas_Stock_pipegas)
 -37.92951207552074 e_co_stock_block(5_2028_EU27_Gas_Stock_NM_LNG)
 -25.934936928658946 e_co_stock_block(5_2028_EU27_Gas_Stock_NZ_LNG)
--133.27305718735326 e_co_stock_block(6_2028_EU27_Gas_Stock_WTF_LNG)
+-133.27305718735326 e_co_stock_block(5_2028_EU27_Gas_Stock_WTF_LNG)
 -19.67110324085334 e_co_stock_block(6_2028_EU27_Gas_Stock_pipegas)
 -37.92951207552074 e_co_stock_block(6_2028_EU27_Gas_Stock_NM_LNG)
 -25.934936928658946 e_co_stock_block(6_2028_EU27_Gas_Stock_NZ_LNG)
--133.27305718735326 e_co_stock_block(7_2028_EU27_Gas_Stock_WTF_LNG)
+-133.27305718735326 e_co_stock_block(6_2028_EU27_Gas_Stock_WTF_LNG)
 -19.67110324085334 e_co_stock_block(7_2028_EU27_Gas_Stock_pipegas)
 -37.92951207552074 e_co_stock_block(7_2028_EU27_Gas_Stock_NM_LNG)
 -25.934936928658946 e_co_stock_block(7_2028_EU27_Gas_Stock_NZ_LNG)
--133.27305718735326 e_co_stock_block(8_2028_EU27_Gas_Stock_WTF_LNG)
+-133.27305718735326 e_co_stock_block(7_2028_EU27_Gas_Stock_WTF_LNG)
 -19.67110324085334 e_co_stock_block(8_2028_EU27_Gas_Stock_pipegas)
 -37.92951207552074 e_co_stock_block(8_2028_EU27_Gas_Stock_NM_LNG)
 -25.934936928658946 e_co_stock_block(8_2028_EU27_Gas_Stock_NZ_LNG)
--133.27305718735326 e_co_stock_block(9_2028_EU27_Gas_Stock_WTF_LNG)
+-133.27305718735326 e_co_stock_block(8_2028_EU27_Gas_Stock_WTF_LNG)
 -19.67110324085334 e_co_stock_block(9_2028_EU27_Gas_Stock_pipegas)
 -37.92951207552074 e_co_stock_block(9_2028_EU27_Gas_Stock_NM_LNG)
 -25.934936928658946 e_co_stock_block(9_2028_EU27_Gas_Stock_NZ_LNG)
--133.27305718735326 e_co_stock_block(10_2028_EU27_Gas_Stock_WTF_LNG)
+-133.27305718735326 e_co_stock_block(9_2028_EU27_Gas_Stock_WTF_LNG)
 -19.67110324085334 e_co_stock_block(10_2028_EU27_Gas_Stock_pipegas)
 -37.92951207552074 e_co_stock_block(10_2028_EU27_Gas_Stock_NM_LNG)
 -25.934936928658946 e_co_stock_block(10_2028_EU27_Gas_Stock_NZ_LNG)
--133.27305718735326 e_co_stock_block(11_2028_EU27_Gas_Stock_WTF_LNG)
+-133.27305718735326 e_co_stock_block(10_2028_EU27_Gas_Stock_WTF_LNG)
 -19.67110324085334 e_co_stock_block(11_2028_EU27_Gas_Stock_pipegas)
 -37.92951207552074 e_co_stock_block(11_2028_EU27_Gas_Stock_NM_LNG)
 -25.934936928658946 e_co_stock_block(11_2028_EU27_Gas_Stock_NZ_LNG)
--133.27305718735326 e_co_stock_block(12_2028_EU27_Gas_Stock_WTF_LNG)
+-133.27305718735326 e_co_stock_block(11_2028_EU27_Gas_Stock_WTF_LNG)
 -19.67110324085334 e_co_stock_block(12_2028_EU27_Gas_Stock_pipegas)
 -37.92951207552074 e_co_stock_block(12_2028_EU27_Gas_Stock_NM_LNG)
 -25.934936928658946 e_co_stock_block(12_2028_EU27_Gas_Stock_NZ_LNG)
+-133.27305718735326 e_co_stock_block(12_2028_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2028)
 = 0
 
 c_e_yearly_cost_constraint(2029)_:
--129.3913176576245 e_co_stock_block(1_2029_EU27_Gas_Stock_WTF_LNG)
 -18.981706300373517 e_co_stock_block(1_2029_EU27_Gas_Stock_pipegas)
 -36.82476900535993 e_co_stock_block(1_2029_EU27_Gas_Stock_NM_LNG)
 -25.179550416173733 e_co_stock_block(1_2029_EU27_Gas_Stock_NZ_LNG)
--129.3913176576245 e_co_stock_block(2_2029_EU27_Gas_Stock_WTF_LNG)
+-129.3913176576245 e_co_stock_block(1_2029_EU27_Gas_Stock_WTF_LNG)
 -18.981706300373517 e_co_stock_block(2_2029_EU27_Gas_Stock_pipegas)
 -36.82476900535993 e_co_stock_block(2_2029_EU27_Gas_Stock_NM_LNG)
 -25.179550416173733 e_co_stock_block(2_2029_EU27_Gas_Stock_NZ_LNG)
--129.3913176576245 e_co_stock_block(3_2029_EU27_Gas_Stock_WTF_LNG)
+-129.3913176576245 e_co_stock_block(2_2029_EU27_Gas_Stock_WTF_LNG)
 -18.981706300373517 e_co_stock_block(3_2029_EU27_Gas_Stock_pipegas)
 -36.82476900535993 e_co_stock_block(3_2029_EU27_Gas_Stock_NM_LNG)
 -25.179550416173733 e_co_stock_block(3_2029_EU27_Gas_Stock_NZ_LNG)
--129.3913176576245 e_co_stock_block(4_2029_EU27_Gas_Stock_WTF_LNG)
+-129.3913176576245 e_co_stock_block(3_2029_EU27_Gas_Stock_WTF_LNG)
 -18.981706300373517 e_co_stock_block(4_2029_EU27_Gas_Stock_pipegas)
 -36.82476900535993 e_co_stock_block(4_2029_EU27_Gas_Stock_NM_LNG)
 -25.179550416173733 e_co_stock_block(4_2029_EU27_Gas_Stock_NZ_LNG)
--129.3913176576245 e_co_stock_block(5_2029_EU27_Gas_Stock_WTF_LNG)
+-129.3913176576245 e_co_stock_block(4_2029_EU27_Gas_Stock_WTF_LNG)
 -18.981706300373517 e_co_stock_block(5_2029_EU27_Gas_Stock_pipegas)
 -36.82476900535993 e_co_stock_block(5_2029_EU27_Gas_Stock_NM_LNG)
 -25.179550416173733 e_co_stock_block(5_2029_EU27_Gas_Stock_NZ_LNG)
--129.3913176576245 e_co_stock_block(6_2029_EU27_Gas_Stock_WTF_LNG)
+-129.3913176576245 e_co_stock_block(5_2029_EU27_Gas_Stock_WTF_LNG)
 -18.981706300373517 e_co_stock_block(6_2029_EU27_Gas_Stock_pipegas)
 -36.82476900535993 e_co_stock_block(6_2029_EU27_Gas_Stock_NM_LNG)
 -25.179550416173733 e_co_stock_block(6_2029_EU27_Gas_Stock_NZ_LNG)
--129.3913176576245 e_co_stock_block(7_2029_EU27_Gas_Stock_WTF_LNG)
+-129.3913176576245 e_co_stock_block(6_2029_EU27_Gas_Stock_WTF_LNG)
 -18.981706300373517 e_co_stock_block(7_2029_EU27_Gas_Stock_pipegas)
 -36.82476900535993 e_co_stock_block(7_2029_EU27_Gas_Stock_NM_LNG)
 -25.179550416173733 e_co_stock_block(7_2029_EU27_Gas_Stock_NZ_LNG)
--129.3913176576245 e_co_stock_block(8_2029_EU27_Gas_Stock_WTF_LNG)
+-129.3913176576245 e_co_stock_block(7_2029_EU27_Gas_Stock_WTF_LNG)
 -18.981706300373517 e_co_stock_block(8_2029_EU27_Gas_Stock_pipegas)
 -36.82476900535993 e_co_stock_block(8_2029_EU27_Gas_Stock_NM_LNG)
 -25.179550416173733 e_co_stock_block(8_2029_EU27_Gas_Stock_NZ_LNG)
--129.3913176576245 e_co_stock_block(9_2029_EU27_Gas_Stock_WTF_LNG)
+-129.3913176576245 e_co_stock_block(8_2029_EU27_Gas_Stock_WTF_LNG)
 -18.981706300373517 e_co_stock_block(9_2029_EU27_Gas_Stock_pipegas)
 -36.82476900535993 e_co_stock_block(9_2029_EU27_Gas_Stock_NM_LNG)
 -25.179550416173733 e_co_stock_block(9_2029_EU27_Gas_Stock_NZ_LNG)
--129.3913176576245 e_co_stock_block(10_2029_EU27_Gas_Stock_WTF_LNG)
+-129.3913176576245 e_co_stock_block(9_2029_EU27_Gas_Stock_WTF_LNG)
 -18.981706300373517 e_co_stock_block(10_2029_EU27_Gas_Stock_pipegas)
 -36.82476900535993 e_co_stock_block(10_2029_EU27_Gas_Stock_NM_LNG)
 -25.179550416173733 e_co_stock_block(10_2029_EU27_Gas_Stock_NZ_LNG)
--129.3913176576245 e_co_stock_block(11_2029_EU27_Gas_Stock_WTF_LNG)
+-129.3913176576245 e_co_stock_block(10_2029_EU27_Gas_Stock_WTF_LNG)
 -18.981706300373517 e_co_stock_block(11_2029_EU27_Gas_Stock_pipegas)
 -36.82476900535993 e_co_stock_block(11_2029_EU27_Gas_Stock_NM_LNG)
 -25.179550416173733 e_co_stock_block(11_2029_EU27_Gas_Stock_NZ_LNG)
--129.3913176576245 e_co_stock_block(12_2029_EU27_Gas_Stock_WTF_LNG)
+-129.3913176576245 e_co_stock_block(11_2029_EU27_Gas_Stock_WTF_LNG)
 -18.981706300373517 e_co_stock_block(12_2029_EU27_Gas_Stock_pipegas)
 -36.82476900535993 e_co_stock_block(12_2029_EU27_Gas_Stock_NM_LNG)
 -25.179550416173733 e_co_stock_block(12_2029_EU27_Gas_Stock_NZ_LNG)
+-129.3913176576245 e_co_stock_block(12_2029_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2029)
 = 0
 
 c_e_yearly_cost_constraint(2030)_:
--125.62263850254809 e_co_stock_block(1_2030_EU27_Gas_Stock_WTF_LNG)
 -18.31578069367151 e_co_stock_block(1_2030_EU27_Gas_Stock_pipegas)
 -35.75220291782518 e_co_stock_block(1_2030_EU27_Gas_Stock_NM_LNG)
 -24.446165452595856 e_co_stock_block(1_2030_EU27_Gas_Stock_NZ_LNG)
--125.62263850254809 e_co_stock_block(2_2030_EU27_Gas_Stock_WTF_LNG)
+-125.62263850254809 e_co_stock_block(1_2030_EU27_Gas_Stock_WTF_LNG)
 -18.31578069367151 e_co_stock_block(2_2030_EU27_Gas_Stock_pipegas)
 -35.75220291782518 e_co_stock_block(2_2030_EU27_Gas_Stock_NM_LNG)
 -24.446165452595856 e_co_stock_block(2_2030_EU27_Gas_Stock_NZ_LNG)
--125.62263850254809 e_co_stock_block(3_2030_EU27_Gas_Stock_WTF_LNG)
+-125.62263850254809 e_co_stock_block(2_2030_EU27_Gas_Stock_WTF_LNG)
 -18.31578069367151 e_co_stock_block(3_2030_EU27_Gas_Stock_pipegas)
 -35.75220291782518 e_co_stock_block(3_2030_EU27_Gas_Stock_NM_LNG)
 -24.446165452595856 e_co_stock_block(3_2030_EU27_Gas_Stock_NZ_LNG)
--125.62263850254809 e_co_stock_block(4_2030_EU27_Gas_Stock_WTF_LNG)
+-125.62263850254809 e_co_stock_block(3_2030_EU27_Gas_Stock_WTF_LNG)
 -18.31578069367151 e_co_stock_block(4_2030_EU27_Gas_Stock_pipegas)
 -35.75220291782518 e_co_stock_block(4_2030_EU27_Gas_Stock_NM_LNG)
 -24.446165452595856 e_co_stock_block(4_2030_EU27_Gas_Stock_NZ_LNG)
--125.62263850254809 e_co_stock_block(5_2030_EU27_Gas_Stock_WTF_LNG)
+-125.62263850254809 e_co_stock_block(4_2030_EU27_Gas_Stock_WTF_LNG)
 -18.31578069367151 e_co_stock_block(5_2030_EU27_Gas_Stock_pipegas)
 -35.75220291782518 e_co_stock_block(5_2030_EU27_Gas_Stock_NM_LNG)
 -24.446165452595856 e_co_stock_block(5_2030_EU27_Gas_Stock_NZ_LNG)
--125.62263850254809 e_co_stock_block(6_2030_EU27_Gas_Stock_WTF_LNG)
+-125.62263850254809 e_co_stock_block(5_2030_EU27_Gas_Stock_WTF_LNG)
 -18.31578069367151 e_co_stock_block(6_2030_EU27_Gas_Stock_pipegas)
 -35.75220291782518 e_co_stock_block(6_2030_EU27_Gas_Stock_NM_LNG)
 -24.446165452595856 e_co_stock_block(6_2030_EU27_Gas_Stock_NZ_LNG)
--125.62263850254809 e_co_stock_block(7_2030_EU27_Gas_Stock_WTF_LNG)
+-125.62263850254809 e_co_stock_block(6_2030_EU27_Gas_Stock_WTF_LNG)
 -18.31578069367151 e_co_stock_block(7_2030_EU27_Gas_Stock_pipegas)
 -35.75220291782518 e_co_stock_block(7_2030_EU27_Gas_Stock_NM_LNG)
 -24.446165452595856 e_co_stock_block(7_2030_EU27_Gas_Stock_NZ_LNG)
--125.62263850254809 e_co_stock_block(8_2030_EU27_Gas_Stock_WTF_LNG)
+-125.62263850254809 e_co_stock_block(7_2030_EU27_Gas_Stock_WTF_LNG)
 -18.31578069367151 e_co_stock_block(8_2030_EU27_Gas_Stock_pipegas)
 -35.75220291782518 e_co_stock_block(8_2030_EU27_Gas_Stock_NM_LNG)
 -24.446165452595856 e_co_stock_block(8_2030_EU27_Gas_Stock_NZ_LNG)
--125.62263850254809 e_co_stock_block(9_2030_EU27_Gas_Stock_WTF_LNG)
+-125.62263850254809 e_co_stock_block(8_2030_EU27_Gas_Stock_WTF_LNG)
 -18.31578069367151 e_co_stock_block(9_2030_EU27_Gas_Stock_pipegas)
 -35.75220291782518 e_co_stock_block(9_2030_EU27_Gas_Stock_NM_LNG)
 -24.446165452595856 e_co_stock_block(9_2030_EU27_Gas_Stock_NZ_LNG)
--125.62263850254809 e_co_stock_block(10_2030_EU27_Gas_Stock_WTF_LNG)
+-125.62263850254809 e_co_stock_block(9_2030_EU27_Gas_Stock_WTF_LNG)
 -18.31578069367151 e_co_stock_block(10_2030_EU27_Gas_Stock_pipegas)
 -35.75220291782518 e_co_stock_block(10_2030_EU27_Gas_Stock_NM_LNG)
 -24.446165452595856 e_co_stock_block(10_2030_EU27_Gas_Stock_NZ_LNG)
--125.62263850254809 e_co_stock_block(11_2030_EU27_Gas_Stock_WTF_LNG)
+-125.62263850254809 e_co_stock_block(10_2030_EU27_Gas_Stock_WTF_LNG)
 -18.31578069367151 e_co_stock_block(11_2030_EU27_Gas_Stock_pipegas)
 -35.75220291782518 e_co_stock_block(11_2030_EU27_Gas_Stock_NM_LNG)
 -24.446165452595856 e_co_stock_block(11_2030_EU27_Gas_Stock_NZ_LNG)
--125.62263850254809 e_co_stock_block(12_2030_EU27_Gas_Stock_WTF_LNG)
+-125.62263850254809 e_co_stock_block(11_2030_EU27_Gas_Stock_WTF_LNG)
 -18.31578069367151 e_co_stock_block(12_2030_EU27_Gas_Stock_pipegas)
 -35.75220291782518 e_co_stock_block(12_2030_EU27_Gas_Stock_NM_LNG)
 -24.446165452595856 e_co_stock_block(12_2030_EU27_Gas_Stock_NZ_LNG)
+-125.62263850254809 e_co_stock_block(12_2030_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2030)
 = 0
 
 c_e_yearly_cost_constraint(2031)_:
--121.96372670150298 e_co_stock_block(1_2031_EU27_Gas_Stock_WTF_LNG)
 -17.672543999047782 e_co_stock_block(1_2031_EU27_Gas_Stock_pipegas)
 -34.71087661924775 e_co_stock_block(1_2031_EU27_Gas_Stock_NM_LNG)
 -23.73414121611248 e_co_stock_block(1_2031_EU27_Gas_Stock_NZ_LNG)
--121.96372670150298 e_co_stock_block(2_2031_EU27_Gas_Stock_WTF_LNG)
+-121.96372670150298 e_co_stock_block(1_2031_EU27_Gas_Stock_WTF_LNG)
 -17.672543999047782 e_co_stock_block(2_2031_EU27_Gas_Stock_pipegas)
 -34.71087661924775 e_co_stock_block(2_2031_EU27_Gas_Stock_NM_LNG)
 -23.73414121611248 e_co_stock_block(2_2031_EU27_Gas_Stock_NZ_LNG)
--121.96372670150298 e_co_stock_block(3_2031_EU27_Gas_Stock_WTF_LNG)
+-121.96372670150298 e_co_stock_block(2_2031_EU27_Gas_Stock_WTF_LNG)
 -17.672543999047782 e_co_stock_block(3_2031_EU27_Gas_Stock_pipegas)
 -34.71087661924775 e_co_stock_block(3_2031_EU27_Gas_Stock_NM_LNG)
 -23.73414121611248 e_co_stock_block(3_2031_EU27_Gas_Stock_NZ_LNG)
--121.96372670150298 e_co_stock_block(4_2031_EU27_Gas_Stock_WTF_LNG)
+-121.96372670150298 e_co_stock_block(3_2031_EU27_Gas_Stock_WTF_LNG)
 -17.672543999047782 e_co_stock_block(4_2031_EU27_Gas_Stock_pipegas)
 -34.71087661924775 e_co_stock_block(4_2031_EU27_Gas_Stock_NM_LNG)
 -23.73414121611248 e_co_stock_block(4_2031_EU27_Gas_Stock_NZ_LNG)
--121.96372670150298 e_co_stock_block(5_2031_EU27_Gas_Stock_WTF_LNG)
+-121.96372670150298 e_co_stock_block(4_2031_EU27_Gas_Stock_WTF_LNG)
 -17.672543999047782 e_co_stock_block(5_2031_EU27_Gas_Stock_pipegas)
 -34.71087661924775 e_co_stock_block(5_2031_EU27_Gas_Stock_NM_LNG)
 -23.73414121611248 e_co_stock_block(5_2031_EU27_Gas_Stock_NZ_LNG)
--121.96372670150298 e_co_stock_block(6_2031_EU27_Gas_Stock_WTF_LNG)
+-121.96372670150298 e_co_stock_block(5_2031_EU27_Gas_Stock_WTF_LNG)
 -17.672543999047782 e_co_stock_block(6_2031_EU27_Gas_Stock_pipegas)
 -34.71087661924775 e_co_stock_block(6_2031_EU27_Gas_Stock_NM_LNG)
 -23.73414121611248 e_co_stock_block(6_2031_EU27_Gas_Stock_NZ_LNG)
--121.96372670150298 e_co_stock_block(7_2031_EU27_Gas_Stock_WTF_LNG)
+-121.96372670150298 e_co_stock_block(6_2031_EU27_Gas_Stock_WTF_LNG)
 -17.672543999047782 e_co_stock_block(7_2031_EU27_Gas_Stock_pipegas)
 -34.71087661924775 e_co_stock_block(7_2031_EU27_Gas_Stock_NM_LNG)
 -23.73414121611248 e_co_stock_block(7_2031_EU27_Gas_Stock_NZ_LNG)
--121.96372670150298 e_co_stock_block(8_2031_EU27_Gas_Stock_WTF_LNG)
+-121.96372670150298 e_co_stock_block(7_2031_EU27_Gas_Stock_WTF_LNG)
 -17.672543999047782 e_co_stock_block(8_2031_EU27_Gas_Stock_pipegas)
 -34.71087661924775 e_co_stock_block(8_2031_EU27_Gas_Stock_NM_LNG)
 -23.73414121611248 e_co_stock_block(8_2031_EU27_Gas_Stock_NZ_LNG)
--121.96372670150298 e_co_stock_block(9_2031_EU27_Gas_Stock_WTF_LNG)
+-121.96372670150298 e_co_stock_block(8_2031_EU27_Gas_Stock_WTF_LNG)
 -17.672543999047782 e_co_stock_block(9_2031_EU27_Gas_Stock_pipegas)
 -34.71087661924775 e_co_stock_block(9_2031_EU27_Gas_Stock_NM_LNG)
 -23.73414121611248 e_co_stock_block(9_2031_EU27_Gas_Stock_NZ_LNG)
--121.96372670150298 e_co_stock_block(10_2031_EU27_Gas_Stock_WTF_LNG)
+-121.96372670150298 e_co_stock_block(9_2031_EU27_Gas_Stock_WTF_LNG)
 -17.672543999047782 e_co_stock_block(10_2031_EU27_Gas_Stock_pipegas)
 -34.71087661924775 e_co_stock_block(10_2031_EU27_Gas_Stock_NM_LNG)
 -23.73414121611248 e_co_stock_block(10_2031_EU27_Gas_Stock_NZ_LNG)
--121.96372670150298 e_co_stock_block(11_2031_EU27_Gas_Stock_WTF_LNG)
+-121.96372670150298 e_co_stock_block(10_2031_EU27_Gas_Stock_WTF_LNG)
 -17.672543999047782 e_co_stock_block(11_2031_EU27_Gas_Stock_pipegas)
 -34.71087661924775 e_co_stock_block(11_2031_EU27_Gas_Stock_NM_LNG)
 -23.73414121611248 e_co_stock_block(11_2031_EU27_Gas_Stock_NZ_LNG)
--121.96372670150298 e_co_stock_block(12_2031_EU27_Gas_Stock_WTF_LNG)
+-121.96372670150298 e_co_stock_block(11_2031_EU27_Gas_Stock_WTF_LNG)
 -17.672543999047782 e_co_stock_block(12_2031_EU27_Gas_Stock_pipegas)
 -34.71087661924775 e_co_stock_block(12_2031_EU27_Gas_Stock_NM_LNG)
 -23.73414121611248 e_co_stock_block(12_2031_EU27_Gas_Stock_NZ_LNG)
+-121.96372670150298 e_co_stock_block(12_2031_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2031)
 = 0
 
 c_e_yearly_cost_constraint(2032)_:
--118.41138514709027 e_co_stock_block(1_2032_EU27_Gas_Stock_WTF_LNG)
 -17.051239461181 e_co_stock_block(1_2032_EU27_Gas_Stock_pipegas)
 -33.69988021286189 e_co_stock_block(1_2032_EU27_Gas_Stock_NM_LNG)
 -23.04285554962377 e_co_stock_block(1_2032_EU27_Gas_Stock_NZ_LNG)
--118.41138514709027 e_co_stock_block(2_2032_EU27_Gas_Stock_WTF_LNG)
+-118.41138514709027 e_co_stock_block(1_2032_EU27_Gas_Stock_WTF_LNG)
 -17.051239461181 e_co_stock_block(2_2032_EU27_Gas_Stock_pipegas)
 -33.69988021286189 e_co_stock_block(2_2032_EU27_Gas_Stock_NM_LNG)
 -23.04285554962377 e_co_stock_block(2_2032_EU27_Gas_Stock_NZ_LNG)
--118.41138514709027 e_co_stock_block(3_2032_EU27_Gas_Stock_WTF_LNG)
+-118.41138514709027 e_co_stock_block(2_2032_EU27_Gas_Stock_WTF_LNG)
 -17.051239461181 e_co_stock_block(3_2032_EU27_Gas_Stock_pipegas)
 -33.69988021286189 e_co_stock_block(3_2032_EU27_Gas_Stock_NM_LNG)
 -23.04285554962377 e_co_stock_block(3_2032_EU27_Gas_Stock_NZ_LNG)
--118.41138514709027 e_co_stock_block(4_2032_EU27_Gas_Stock_WTF_LNG)
+-118.41138514709027 e_co_stock_block(3_2032_EU27_Gas_Stock_WTF_LNG)
 -17.051239461181 e_co_stock_block(4_2032_EU27_Gas_Stock_pipegas)
 -33.69988021286189 e_co_stock_block(4_2032_EU27_Gas_Stock_NM_LNG)
 -23.04285554962377 e_co_stock_block(4_2032_EU27_Gas_Stock_NZ_LNG)
--118.41138514709027 e_co_stock_block(5_2032_EU27_Gas_Stock_WTF_LNG)
+-118.41138514709027 e_co_stock_block(4_2032_EU27_Gas_Stock_WTF_LNG)
 -17.051239461181 e_co_stock_block(5_2032_EU27_Gas_Stock_pipegas)
 -33.69988021286189 e_co_stock_block(5_2032_EU27_Gas_Stock_NM_LNG)
 -23.04285554962377 e_co_stock_block(5_2032_EU27_Gas_Stock_NZ_LNG)
--118.41138514709027 e_co_stock_block(6_2032_EU27_Gas_Stock_WTF_LNG)
+-118.41138514709027 e_co_stock_block(5_2032_EU27_Gas_Stock_WTF_LNG)
 -17.051239461181 e_co_stock_block(6_2032_EU27_Gas_Stock_pipegas)
 -33.69988021286189 e_co_stock_block(6_2032_EU27_Gas_Stock_NM_LNG)
 -23.04285554962377 e_co_stock_block(6_2032_EU27_Gas_Stock_NZ_LNG)
--118.41138514709027 e_co_stock_block(7_2032_EU27_Gas_Stock_WTF_LNG)
+-118.41138514709027 e_co_stock_block(6_2032_EU27_Gas_Stock_WTF_LNG)
 -17.051239461181 e_co_stock_block(7_2032_EU27_Gas_Stock_pipegas)
 -33.69988021286189 e_co_stock_block(7_2032_EU27_Gas_Stock_NM_LNG)
 -23.04285554962377 e_co_stock_block(7_2032_EU27_Gas_Stock_NZ_LNG)
--118.41138514709027 e_co_stock_block(8_2032_EU27_Gas_Stock_WTF_LNG)
+-118.41138514709027 e_co_stock_block(7_2032_EU27_Gas_Stock_WTF_LNG)
 -17.051239461181 e_co_stock_block(8_2032_EU27_Gas_Stock_pipegas)
 -33.69988021286189 e_co_stock_block(8_2032_EU27_Gas_Stock_NM_LNG)
 -23.04285554962377 e_co_stock_block(8_2032_EU27_Gas_Stock_NZ_LNG)
--118.41138514709027 e_co_stock_block(9_2032_EU27_Gas_Stock_WTF_LNG)
+-118.41138514709027 e_co_stock_block(8_2032_EU27_Gas_Stock_WTF_LNG)
 -17.051239461181 e_co_stock_block(9_2032_EU27_Gas_Stock_pipegas)
 -33.69988021286189 e_co_stock_block(9_2032_EU27_Gas_Stock_NM_LNG)
 -23.04285554962377 e_co_stock_block(9_2032_EU27_Gas_Stock_NZ_LNG)
--118.41138514709027 e_co_stock_block(10_2032_EU27_Gas_Stock_WTF_LNG)
+-118.41138514709027 e_co_stock_block(9_2032_EU27_Gas_Stock_WTF_LNG)
 -17.051239461181 e_co_stock_block(10_2032_EU27_Gas_Stock_pipegas)
 -33.69988021286189 e_co_stock_block(10_2032_EU27_Gas_Stock_NM_LNG)
 -23.04285554962377 e_co_stock_block(10_2032_EU27_Gas_Stock_NZ_LNG)
--118.41138514709027 e_co_stock_block(11_2032_EU27_Gas_Stock_WTF_LNG)
+-118.41138514709027 e_co_stock_block(10_2032_EU27_Gas_Stock_WTF_LNG)
 -17.051239461181 e_co_stock_block(11_2032_EU27_Gas_Stock_pipegas)
 -33.69988021286189 e_co_stock_block(11_2032_EU27_Gas_Stock_NM_LNG)
 -23.04285554962377 e_co_stock_block(11_2032_EU27_Gas_Stock_NZ_LNG)
--118.41138514709027 e_co_stock_block(12_2032_EU27_Gas_Stock_WTF_LNG)
+-118.41138514709027 e_co_stock_block(11_2032_EU27_Gas_Stock_WTF_LNG)
 -17.051239461181 e_co_stock_block(12_2032_EU27_Gas_Stock_pipegas)
 -33.69988021286189 e_co_stock_block(12_2032_EU27_Gas_Stock_NM_LNG)
 -23.04285554962377 e_co_stock_block(12_2032_EU27_Gas_Stock_NZ_LNG)
+-118.41138514709027 e_co_stock_block(12_2032_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2032)
 = 0
 
 c_e_yearly_cost_constraint(2033)_:
--114.96250985154396 e_co_stock_block(1_2033_EU27_Gas_Stock_WTF_LNG)
 -16.45113515975594 e_co_stock_block(1_2033_EU27_Gas_Stock_pipegas)
 -32.71833030374941 e_co_stock_block(1_2033_EU27_Gas_Stock_NM_LNG)
 -22.371704417110454 e_co_stock_block(1_2033_EU27_Gas_Stock_NZ_LNG)
--114.96250985154396 e_co_stock_block(2_2033_EU27_Gas_Stock_WTF_LNG)
+-114.96250985154396 e_co_stock_block(1_2033_EU27_Gas_Stock_WTF_LNG)
 -16.45113515975594 e_co_stock_block(2_2033_EU27_Gas_Stock_pipegas)
 -32.71833030374941 e_co_stock_block(2_2033_EU27_Gas_Stock_NM_LNG)
 -22.371704417110454 e_co_stock_block(2_2033_EU27_Gas_Stock_NZ_LNG)
--114.96250985154396 e_co_stock_block(3_2033_EU27_Gas_Stock_WTF_LNG)
+-114.96250985154396 e_co_stock_block(2_2033_EU27_Gas_Stock_WTF_LNG)
 -16.45113515975594 e_co_stock_block(3_2033_EU27_Gas_Stock_pipegas)
 -32.71833030374941 e_co_stock_block(3_2033_EU27_Gas_Stock_NM_LNG)
 -22.371704417110454 e_co_stock_block(3_2033_EU27_Gas_Stock_NZ_LNG)
--114.96250985154396 e_co_stock_block(4_2033_EU27_Gas_Stock_WTF_LNG)
+-114.96250985154396 e_co_stock_block(3_2033_EU27_Gas_Stock_WTF_LNG)
 -16.45113515975594 e_co_stock_block(4_2033_EU27_Gas_Stock_pipegas)
 -32.71833030374941 e_co_stock_block(4_2033_EU27_Gas_Stock_NM_LNG)
 -22.371704417110454 e_co_stock_block(4_2033_EU27_Gas_Stock_NZ_LNG)
--114.96250985154396 e_co_stock_block(5_2033_EU27_Gas_Stock_WTF_LNG)
+-114.96250985154396 e_co_stock_block(4_2033_EU27_Gas_Stock_WTF_LNG)
 -16.45113515975594 e_co_stock_block(5_2033_EU27_Gas_Stock_pipegas)
 -32.71833030374941 e_co_stock_block(5_2033_EU27_Gas_Stock_NM_LNG)
 -22.371704417110454 e_co_stock_block(5_2033_EU27_Gas_Stock_NZ_LNG)
--114.96250985154396 e_co_stock_block(6_2033_EU27_Gas_Stock_WTF_LNG)
+-114.96250985154396 e_co_stock_block(5_2033_EU27_Gas_Stock_WTF_LNG)
 -16.45113515975594 e_co_stock_block(6_2033_EU27_Gas_Stock_pipegas)
 -32.71833030374941 e_co_stock_block(6_2033_EU27_Gas_Stock_NM_LNG)
 -22.371704417110454 e_co_stock_block(6_2033_EU27_Gas_Stock_NZ_LNG)
--114.96250985154396 e_co_stock_block(7_2033_EU27_Gas_Stock_WTF_LNG)
+-114.96250985154396 e_co_stock_block(6_2033_EU27_Gas_Stock_WTF_LNG)
 -16.45113515975594 e_co_stock_block(7_2033_EU27_Gas_Stock_pipegas)
 -32.71833030374941 e_co_stock_block(7_2033_EU27_Gas_Stock_NM_LNG)
 -22.371704417110454 e_co_stock_block(7_2033_EU27_Gas_Stock_NZ_LNG)
--114.96250985154396 e_co_stock_block(8_2033_EU27_Gas_Stock_WTF_LNG)
+-114.96250985154396 e_co_stock_block(7_2033_EU27_Gas_Stock_WTF_LNG)
 -16.45113515975594 e_co_stock_block(8_2033_EU27_Gas_Stock_pipegas)
 -32.71833030374941 e_co_stock_block(8_2033_EU27_Gas_Stock_NM_LNG)
 -22.371704417110454 e_co_stock_block(8_2033_EU27_Gas_Stock_NZ_LNG)
--114.96250985154396 e_co_stock_block(9_2033_EU27_Gas_Stock_WTF_LNG)
+-114.96250985154396 e_co_stock_block(8_2033_EU27_Gas_Stock_WTF_LNG)
 -16.45113515975594 e_co_stock_block(9_2033_EU27_Gas_Stock_pipegas)
 -32.71833030374941 e_co_stock_block(9_2033_EU27_Gas_Stock_NM_LNG)
 -22.371704417110454 e_co_stock_block(9_2033_EU27_Gas_Stock_NZ_LNG)
--114.96250985154396 e_co_stock_block(10_2033_EU27_Gas_Stock_WTF_LNG)
+-114.96250985154396 e_co_stock_block(9_2033_EU27_Gas_Stock_WTF_LNG)
 -16.45113515975594 e_co_stock_block(10_2033_EU27_Gas_Stock_pipegas)
 -32.71833030374941 e_co_stock_block(10_2033_EU27_Gas_Stock_NM_LNG)
 -22.371704417110454 e_co_stock_block(10_2033_EU27_Gas_Stock_NZ_LNG)
--114.96250985154396 e_co_stock_block(11_2033_EU27_Gas_Stock_WTF_LNG)
+-114.96250985154396 e_co_stock_block(10_2033_EU27_Gas_Stock_WTF_LNG)
 -16.45113515975594 e_co_stock_block(11_2033_EU27_Gas_Stock_pipegas)
 -32.71833030374941 e_co_stock_block(11_2033_EU27_Gas_Stock_NM_LNG)
 -22.371704417110454 e_co_stock_block(11_2033_EU27_Gas_Stock_NZ_LNG)
--114.96250985154396 e_co_stock_block(12_2033_EU27_Gas_Stock_WTF_LNG)
+-114.96250985154396 e_co_stock_block(11_2033_EU27_Gas_Stock_WTF_LNG)
 -16.45113515975594 e_co_stock_block(12_2033_EU27_Gas_Stock_pipegas)
 -32.71833030374941 e_co_stock_block(12_2033_EU27_Gas_Stock_NM_LNG)
 -22.371704417110454 e_co_stock_block(12_2033_EU27_Gas_Stock_NZ_LNG)
+-114.96250985154396 e_co_stock_block(12_2033_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2033)
 = 0
 
 c_e_yearly_cost_constraint(2034)_:
--111.61408723450869 e_co_stock_block(1_2034_EU27_Gas_Stock_WTF_LNG)
 -15.871523204747135 e_co_stock_block(1_2034_EU27_Gas_Stock_pipegas)
 -31.76536922694117 e_co_stock_block(1_2034_EU27_Gas_Stock_NM_LNG)
 -21.72010137583539 e_co_stock_block(1_2034_EU27_Gas_Stock_NZ_LNG)
--111.61408723450869 e_co_stock_block(2_2034_EU27_Gas_Stock_WTF_LNG)
+-111.61408723450869 e_co_stock_block(1_2034_EU27_Gas_Stock_WTF_LNG)
 -15.871523204747135 e_co_stock_block(2_2034_EU27_Gas_Stock_pipegas)
 -31.76536922694117 e_co_stock_block(2_2034_EU27_Gas_Stock_NM_LNG)
 -21.72010137583539 e_co_stock_block(2_2034_EU27_Gas_Stock_NZ_LNG)
--111.61408723450869 e_co_stock_block(3_2034_EU27_Gas_Stock_WTF_LNG)
+-111.61408723450869 e_co_stock_block(2_2034_EU27_Gas_Stock_WTF_LNG)
 -15.871523204747135 e_co_stock_block(3_2034_EU27_Gas_Stock_pipegas)
 -31.76536922694117 e_co_stock_block(3_2034_EU27_Gas_Stock_NM_LNG)
 -21.72010137583539 e_co_stock_block(3_2034_EU27_Gas_Stock_NZ_LNG)
--111.61408723450869 e_co_stock_block(4_2034_EU27_Gas_Stock_WTF_LNG)
+-111.61408723450869 e_co_stock_block(3_2034_EU27_Gas_Stock_WTF_LNG)
 -15.871523204747135 e_co_stock_block(4_2034_EU27_Gas_Stock_pipegas)
 -31.76536922694117 e_co_stock_block(4_2034_EU27_Gas_Stock_NM_LNG)
 -21.72010137583539 e_co_stock_block(4_2034_EU27_Gas_Stock_NZ_LNG)
--111.61408723450869 e_co_stock_block(5_2034_EU27_Gas_Stock_WTF_LNG)
+-111.61408723450869 e_co_stock_block(4_2034_EU27_Gas_Stock_WTF_LNG)
 -15.871523204747135 e_co_stock_block(5_2034_EU27_Gas_Stock_pipegas)
 -31.76536922694117 e_co_stock_block(5_2034_EU27_Gas_Stock_NM_LNG)
 -21.72010137583539 e_co_stock_block(5_2034_EU27_Gas_Stock_NZ_LNG)
--111.61408723450869 e_co_stock_block(6_2034_EU27_Gas_Stock_WTF_LNG)
+-111.61408723450869 e_co_stock_block(5_2034_EU27_Gas_Stock_WTF_LNG)
 -15.871523204747135 e_co_stock_block(6_2034_EU27_Gas_Stock_pipegas)
 -31.76536922694117 e_co_stock_block(6_2034_EU27_Gas_Stock_NM_LNG)
 -21.72010137583539 e_co_stock_block(6_2034_EU27_Gas_Stock_NZ_LNG)
--111.61408723450869 e_co_stock_block(7_2034_EU27_Gas_Stock_WTF_LNG)
+-111.61408723450869 e_co_stock_block(6_2034_EU27_Gas_Stock_WTF_LNG)
 -15.871523204747135 e_co_stock_block(7_2034_EU27_Gas_Stock_pipegas)
 -31.76536922694117 e_co_stock_block(7_2034_EU27_Gas_Stock_NM_LNG)
 -21.72010137583539 e_co_stock_block(7_2034_EU27_Gas_Stock_NZ_LNG)
--111.61408723450869 e_co_stock_block(8_2034_EU27_Gas_Stock_WTF_LNG)
+-111.61408723450869 e_co_stock_block(7_2034_EU27_Gas_Stock_WTF_LNG)
 -15.871523204747135 e_co_stock_block(8_2034_EU27_Gas_Stock_pipegas)
 -31.76536922694117 e_co_stock_block(8_2034_EU27_Gas_Stock_NM_LNG)
 -21.72010137583539 e_co_stock_block(8_2034_EU27_Gas_Stock_NZ_LNG)
--111.61408723450869 e_co_stock_block(9_2034_EU27_Gas_Stock_WTF_LNG)
+-111.61408723450869 e_co_stock_block(8_2034_EU27_Gas_Stock_WTF_LNG)
 -15.871523204747135 e_co_stock_block(9_2034_EU27_Gas_Stock_pipegas)
 -31.76536922694117 e_co_stock_block(9_2034_EU27_Gas_Stock_NM_LNG)
 -21.72010137583539 e_co_stock_block(9_2034_EU27_Gas_Stock_NZ_LNG)
--111.61408723450869 e_co_stock_block(10_2034_EU27_Gas_Stock_WTF_LNG)
+-111.61408723450869 e_co_stock_block(9_2034_EU27_Gas_Stock_WTF_LNG)
 -15.871523204747135 e_co_stock_block(10_2034_EU27_Gas_Stock_pipegas)
 -31.76536922694117 e_co_stock_block(10_2034_EU27_Gas_Stock_NM_LNG)
 -21.72010137583539 e_co_stock_block(10_2034_EU27_Gas_Stock_NZ_LNG)
--111.61408723450869 e_co_stock_block(11_2034_EU27_Gas_Stock_WTF_LNG)
+-111.61408723450869 e_co_stock_block(10_2034_EU27_Gas_Stock_WTF_LNG)
 -15.871523204747135 e_co_stock_block(11_2034_EU27_Gas_Stock_pipegas)
 -31.76536922694117 e_co_stock_block(11_2034_EU27_Gas_Stock_NM_LNG)
 -21.72010137583539 e_co_stock_block(11_2034_EU27_Gas_Stock_NZ_LNG)
--111.61408723450869 e_co_stock_block(12_2034_EU27_Gas_Stock_WTF_LNG)
+-111.61408723450869 e_co_stock_block(11_2034_EU27_Gas_Stock_WTF_LNG)
 -15.871523204747135 e_co_stock_block(12_2034_EU27_Gas_Stock_pipegas)
 -31.76536922694117 e_co_stock_block(12_2034_EU27_Gas_Stock_NM_LNG)
 -21.72010137583539 e_co_stock_block(12_2034_EU27_Gas_Stock_NZ_LNG)
+-111.61408723450869 e_co_stock_block(12_2034_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2034)
 = 0
 
 c_e_yearly_cost_constraint(2035)_:
--108.36319148981427 e_co_stock_block(1_2035_EU27_Gas_Stock_WTF_LNG)
 -15.311718957510756 e_co_stock_block(1_2035_EU27_Gas_Stock_pipegas)
 -30.840164298001138 e_co_stock_block(1_2035_EU27_Gas_Stock_NM_LNG)
 -21.087477063917856 e_co_stock_block(1_2035_EU27_Gas_Stock_NZ_LNG)
--108.36319148981427 e_co_stock_block(2_2035_EU27_Gas_Stock_WTF_LNG)
+-108.36319148981427 e_co_stock_block(1_2035_EU27_Gas_Stock_WTF_LNG)
 -15.311718957510756 e_co_stock_block(2_2035_EU27_Gas_Stock_pipegas)
 -30.840164298001138 e_co_stock_block(2_2035_EU27_Gas_Stock_NM_LNG)
 -21.087477063917856 e_co_stock_block(2_2035_EU27_Gas_Stock_NZ_LNG)
--108.36319148981427 e_co_stock_block(3_2035_EU27_Gas_Stock_WTF_LNG)
+-108.36319148981427 e_co_stock_block(2_2035_EU27_Gas_Stock_WTF_LNG)
 -15.311718957510756 e_co_stock_block(3_2035_EU27_Gas_Stock_pipegas)
 -30.840164298001138 e_co_stock_block(3_2035_EU27_Gas_Stock_NM_LNG)
 -21.087477063917856 e_co_stock_block(3_2035_EU27_Gas_Stock_NZ_LNG)
--108.36319148981427 e_co_stock_block(4_2035_EU27_Gas_Stock_WTF_LNG)
+-108.36319148981427 e_co_stock_block(3_2035_EU27_Gas_Stock_WTF_LNG)
 -15.311718957510756 e_co_stock_block(4_2035_EU27_Gas_Stock_pipegas)
 -30.840164298001138 e_co_stock_block(4_2035_EU27_Gas_Stock_NM_LNG)
 -21.087477063917856 e_co_stock_block(4_2035_EU27_Gas_Stock_NZ_LNG)
--108.36319148981427 e_co_stock_block(5_2035_EU27_Gas_Stock_WTF_LNG)
+-108.36319148981427 e_co_stock_block(4_2035_EU27_Gas_Stock_WTF_LNG)
 -15.311718957510756 e_co_stock_block(5_2035_EU27_Gas_Stock_pipegas)
 -30.840164298001138 e_co_stock_block(5_2035_EU27_Gas_Stock_NM_LNG)
 -21.087477063917856 e_co_stock_block(5_2035_EU27_Gas_Stock_NZ_LNG)
--108.36319148981427 e_co_stock_block(6_2035_EU27_Gas_Stock_WTF_LNG)
+-108.36319148981427 e_co_stock_block(5_2035_EU27_Gas_Stock_WTF_LNG)
 -15.311718957510756 e_co_stock_block(6_2035_EU27_Gas_Stock_pipegas)
 -30.840164298001138 e_co_stock_block(6_2035_EU27_Gas_Stock_NM_LNG)
 -21.087477063917856 e_co_stock_block(6_2035_EU27_Gas_Stock_NZ_LNG)
--108.36319148981427 e_co_stock_block(7_2035_EU27_Gas_Stock_WTF_LNG)
+-108.36319148981427 e_co_stock_block(6_2035_EU27_Gas_Stock_WTF_LNG)
 -15.311718957510756 e_co_stock_block(7_2035_EU27_Gas_Stock_pipegas)
 -30.840164298001138 e_co_stock_block(7_2035_EU27_Gas_Stock_NM_LNG)
 -21.087477063917856 e_co_stock_block(7_2035_EU27_Gas_Stock_NZ_LNG)
--108.36319148981427 e_co_stock_block(8_2035_EU27_Gas_Stock_WTF_LNG)
+-108.36319148981427 e_co_stock_block(7_2035_EU27_Gas_Stock_WTF_LNG)
 -15.311718957510756 e_co_stock_block(8_2035_EU27_Gas_Stock_pipegas)
 -30.840164298001138 e_co_stock_block(8_2035_EU27_Gas_Stock_NM_LNG)
 -21.087477063917856 e_co_stock_block(8_2035_EU27_Gas_Stock_NZ_LNG)
--108.36319148981427 e_co_stock_block(9_2035_EU27_Gas_Stock_WTF_LNG)
+-108.36319148981427 e_co_stock_block(8_2035_EU27_Gas_Stock_WTF_LNG)
 -15.311718957510756 e_co_stock_block(9_2035_EU27_Gas_Stock_pipegas)
 -30.840164298001138 e_co_stock_block(9_2035_EU27_Gas_Stock_NM_LNG)
 -21.087477063917856 e_co_stock_block(9_2035_EU27_Gas_Stock_NZ_LNG)
--108.36319148981427 e_co_stock_block(10_2035_EU27_Gas_Stock_WTF_LNG)
+-108.36319148981427 e_co_stock_block(9_2035_EU27_Gas_Stock_WTF_LNG)
 -15.311718957510756 e_co_stock_block(10_2035_EU27_Gas_Stock_pipegas)
 -30.840164298001138 e_co_stock_block(10_2035_EU27_Gas_Stock_NM_LNG)
 -21.087477063917856 e_co_stock_block(10_2035_EU27_Gas_Stock_NZ_LNG)
--108.36319148981427 e_co_stock_block(11_2035_EU27_Gas_Stock_WTF_LNG)
+-108.36319148981427 e_co_stock_block(10_2035_EU27_Gas_Stock_WTF_LNG)
 -15.311718957510756 e_co_stock_block(11_2035_EU27_Gas_Stock_pipegas)
 -30.840164298001138 e_co_stock_block(11_2035_EU27_Gas_Stock_NM_LNG)
 -21.087477063917856 e_co_stock_block(11_2035_EU27_Gas_Stock_NZ_LNG)
--108.36319148981427 e_co_stock_block(12_2035_EU27_Gas_Stock_WTF_LNG)
+-108.36319148981427 e_co_stock_block(11_2035_EU27_Gas_Stock_WTF_LNG)
 -15.311718957510756 e_co_stock_block(12_2035_EU27_Gas_Stock_pipegas)
 -30.840164298001138 e_co_stock_block(12_2035_EU27_Gas_Stock_NM_LNG)
 -21.087477063917856 e_co_stock_block(12_2035_EU27_Gas_Stock_NZ_LNG)
+-108.36319148981427 e_co_stock_block(12_2035_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2035)
 = 0
 
 c_e_yearly_cost_constraint(2036)_:
--105.20698202894587 e_co_stock_block(1_2036_EU27_Gas_Stock_WTF_LNG)
 -14.771060276864 e_co_stock_block(1_2036_EU27_Gas_Stock_pipegas)
 -29.941907085437993 e_co_stock_block(1_2036_EU27_Gas_Stock_NM_LNG)
 -20.473278702832868 e_co_stock_block(1_2036_EU27_Gas_Stock_NZ_LNG)
--105.20698202894587 e_co_stock_block(2_2036_EU27_Gas_Stock_WTF_LNG)
+-105.20698202894587 e_co_stock_block(1_2036_EU27_Gas_Stock_WTF_LNG)
 -14.771060276864 e_co_stock_block(2_2036_EU27_Gas_Stock_pipegas)
 -29.941907085437993 e_co_stock_block(2_2036_EU27_Gas_Stock_NM_LNG)
 -20.473278702832868 e_co_stock_block(2_2036_EU27_Gas_Stock_NZ_LNG)
--105.20698202894587 e_co_stock_block(3_2036_EU27_Gas_Stock_WTF_LNG)
+-105.20698202894587 e_co_stock_block(2_2036_EU27_Gas_Stock_WTF_LNG)
 -14.771060276864 e_co_stock_block(3_2036_EU27_Gas_Stock_pipegas)
 -29.941907085437993 e_co_stock_block(3_2036_EU27_Gas_Stock_NM_LNG)
 -20.473278702832868 e_co_stock_block(3_2036_EU27_Gas_Stock_NZ_LNG)
--105.20698202894587 e_co_stock_block(4_2036_EU27_Gas_Stock_WTF_LNG)
+-105.20698202894587 e_co_stock_block(3_2036_EU27_Gas_Stock_WTF_LNG)
 -14.771060276864 e_co_stock_block(4_2036_EU27_Gas_Stock_pipegas)
 -29.941907085437993 e_co_stock_block(4_2036_EU27_Gas_Stock_NM_LNG)
 -20.473278702832868 e_co_stock_block(4_2036_EU27_Gas_Stock_NZ_LNG)
--105.20698202894587 e_co_stock_block(5_2036_EU27_Gas_Stock_WTF_LNG)
+-105.20698202894587 e_co_stock_block(4_2036_EU27_Gas_Stock_WTF_LNG)
 -14.771060276864 e_co_stock_block(5_2036_EU27_Gas_Stock_pipegas)
 -29.941907085437993 e_co_stock_block(5_2036_EU27_Gas_Stock_NM_LNG)
 -20.473278702832868 e_co_stock_block(5_2036_EU27_Gas_Stock_NZ_LNG)
--105.20698202894587 e_co_stock_block(6_2036_EU27_Gas_Stock_WTF_LNG)
+-105.20698202894587 e_co_stock_block(5_2036_EU27_Gas_Stock_WTF_LNG)
 -14.771060276864 e_co_stock_block(6_2036_EU27_Gas_Stock_pipegas)
 -29.941907085437993 e_co_stock_block(6_2036_EU27_Gas_Stock_NM_LNG)
 -20.473278702832868 e_co_stock_block(6_2036_EU27_Gas_Stock_NZ_LNG)
--105.20698202894587 e_co_stock_block(7_2036_EU27_Gas_Stock_WTF_LNG)
+-105.20698202894587 e_co_stock_block(6_2036_EU27_Gas_Stock_WTF_LNG)
 -14.771060276864 e_co_stock_block(7_2036_EU27_Gas_Stock_pipegas)
 -29.941907085437993 e_co_stock_block(7_2036_EU27_Gas_Stock_NM_LNG)
 -20.473278702832868 e_co_stock_block(7_2036_EU27_Gas_Stock_NZ_LNG)
--105.20698202894587 e_co_stock_block(8_2036_EU27_Gas_Stock_WTF_LNG)
+-105.20698202894587 e_co_stock_block(7_2036_EU27_Gas_Stock_WTF_LNG)
 -14.771060276864 e_co_stock_block(8_2036_EU27_Gas_Stock_pipegas)
 -29.941907085437993 e_co_stock_block(8_2036_EU27_Gas_Stock_NM_LNG)
 -20.473278702832868 e_co_stock_block(8_2036_EU27_Gas_Stock_NZ_LNG)
--105.20698202894587 e_co_stock_block(9_2036_EU27_Gas_Stock_WTF_LNG)
+-105.20698202894587 e_co_stock_block(8_2036_EU27_Gas_Stock_WTF_LNG)
 -14.771060276864 e_co_stock_block(9_2036_EU27_Gas_Stock_pipegas)
 -29.941907085437993 e_co_stock_block(9_2036_EU27_Gas_Stock_NM_LNG)
 -20.473278702832868 e_co_stock_block(9_2036_EU27_Gas_Stock_NZ_LNG)
--105.20698202894587 e_co_stock_block(10_2036_EU27_Gas_Stock_WTF_LNG)
+-105.20698202894587 e_co_stock_block(9_2036_EU27_Gas_Stock_WTF_LNG)
 -14.771060276864 e_co_stock_block(10_2036_EU27_Gas_Stock_pipegas)
 -29.941907085437993 e_co_stock_block(10_2036_EU27_Gas_Stock_NM_LNG)
 -20.473278702832868 e_co_stock_block(10_2036_EU27_Gas_Stock_NZ_LNG)
--105.20698202894587 e_co_stock_block(11_2036_EU27_Gas_Stock_WTF_LNG)
+-105.20698202894587 e_co_stock_block(10_2036_EU27_Gas_Stock_WTF_LNG)
 -14.771060276864 e_co_stock_block(11_2036_EU27_Gas_Stock_pipegas)
 -29.941907085437993 e_co_stock_block(11_2036_EU27_Gas_Stock_NM_LNG)
 -20.473278702832868 e_co_stock_block(11_2036_EU27_Gas_Stock_NZ_LNG)
--105.20698202894587 e_co_stock_block(12_2036_EU27_Gas_Stock_WTF_LNG)
+-105.20698202894587 e_co_stock_block(11_2036_EU27_Gas_Stock_WTF_LNG)
 -14.771060276864 e_co_stock_block(12_2036_EU27_Gas_Stock_pipegas)
 -29.941907085437993 e_co_stock_block(12_2036_EU27_Gas_Stock_NM_LNG)
 -20.473278702832868 e_co_stock_block(12_2036_EU27_Gas_Stock_NZ_LNG)
+-105.20698202894587 e_co_stock_block(12_2036_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2036)
 = 0
 
 c_e_yearly_cost_constraint(2037)_:
--102.14270099897657 e_co_stock_block(1_2037_EU27_Gas_Stock_WTF_LNG)
 -14.248906789357232 e_co_stock_block(1_2037_EU27_Gas_Stock_pipegas)
 -29.06981270430873 e_co_stock_block(1_2037_EU27_Gas_Stock_NM_LNG)
 -19.876969614400842 e_co_stock_block(1_2037_EU27_Gas_Stock_NZ_LNG)
--102.14270099897657 e_co_stock_block(2_2037_EU27_Gas_Stock_WTF_LNG)
+-102.14270099897657 e_co_stock_block(1_2037_EU27_Gas_Stock_WTF_LNG)
 -14.248906789357232 e_co_stock_block(2_2037_EU27_Gas_Stock_pipegas)
 -29.06981270430873 e_co_stock_block(2_2037_EU27_Gas_Stock_NM_LNG)
 -19.876969614400842 e_co_stock_block(2_2037_EU27_Gas_Stock_NZ_LNG)
--102.14270099897657 e_co_stock_block(3_2037_EU27_Gas_Stock_WTF_LNG)
+-102.14270099897657 e_co_stock_block(2_2037_EU27_Gas_Stock_WTF_LNG)
 -14.248906789357232 e_co_stock_block(3_2037_EU27_Gas_Stock_pipegas)
 -29.06981270430873 e_co_stock_block(3_2037_EU27_Gas_Stock_NM_LNG)
 -19.876969614400842 e_co_stock_block(3_2037_EU27_Gas_Stock_NZ_LNG)
--102.14270099897657 e_co_stock_block(4_2037_EU27_Gas_Stock_WTF_LNG)
+-102.14270099897657 e_co_stock_block(3_2037_EU27_Gas_Stock_WTF_LNG)
 -14.248906789357232 e_co_stock_block(4_2037_EU27_Gas_Stock_pipegas)
 -29.06981270430873 e_co_stock_block(4_2037_EU27_Gas_Stock_NM_LNG)
 -19.876969614400842 e_co_stock_block(4_2037_EU27_Gas_Stock_NZ_LNG)
--102.14270099897657 e_co_stock_block(5_2037_EU27_Gas_Stock_WTF_LNG)
+-102.14270099897657 e_co_stock_block(4_2037_EU27_Gas_Stock_WTF_LNG)
 -14.248906789357232 e_co_stock_block(5_2037_EU27_Gas_Stock_pipegas)
 -29.06981270430873 e_co_stock_block(5_2037_EU27_Gas_Stock_NM_LNG)
 -19.876969614400842 e_co_stock_block(5_2037_EU27_Gas_Stock_NZ_LNG)
--102.14270099897657 e_co_stock_block(6_2037_EU27_Gas_Stock_WTF_LNG)
+-102.14270099897657 e_co_stock_block(5_2037_EU27_Gas_Stock_WTF_LNG)
 -14.248906789357232 e_co_stock_block(6_2037_EU27_Gas_Stock_pipegas)
 -29.06981270430873 e_co_stock_block(6_2037_EU27_Gas_Stock_NM_LNG)
 -19.876969614400842 e_co_stock_block(6_2037_EU27_Gas_Stock_NZ_LNG)
--102.14270099897657 e_co_stock_block(7_2037_EU27_Gas_Stock_WTF_LNG)
+-102.14270099897657 e_co_stock_block(6_2037_EU27_Gas_Stock_WTF_LNG)
 -14.248906789357232 e_co_stock_block(7_2037_EU27_Gas_Stock_pipegas)
 -29.06981270430873 e_co_stock_block(7_2037_EU27_Gas_Stock_NM_LNG)
 -19.876969614400842 e_co_stock_block(7_2037_EU27_Gas_Stock_NZ_LNG)
--102.14270099897657 e_co_stock_block(8_2037_EU27_Gas_Stock_WTF_LNG)
+-102.14270099897657 e_co_stock_block(7_2037_EU27_Gas_Stock_WTF_LNG)
 -14.248906789357232 e_co_stock_block(8_2037_EU27_Gas_Stock_pipegas)
 -29.06981270430873 e_co_stock_block(8_2037_EU27_Gas_Stock_NM_LNG)
 -19.876969614400842 e_co_stock_block(8_2037_EU27_Gas_Stock_NZ_LNG)
--102.14270099897657 e_co_stock_block(9_2037_EU27_Gas_Stock_WTF_LNG)
+-102.14270099897657 e_co_stock_block(8_2037_EU27_Gas_Stock_WTF_LNG)
 -14.248906789357232 e_co_stock_block(9_2037_EU27_Gas_Stock_pipegas)
 -29.06981270430873 e_co_stock_block(9_2037_EU27_Gas_Stock_NM_LNG)
 -19.876969614400842 e_co_stock_block(9_2037_EU27_Gas_Stock_NZ_LNG)
--102.14270099897657 e_co_stock_block(10_2037_EU27_Gas_Stock_WTF_LNG)
+-102.14270099897657 e_co_stock_block(9_2037_EU27_Gas_Stock_WTF_LNG)
 -14.248906789357232 e_co_stock_block(10_2037_EU27_Gas_Stock_pipegas)
 -29.06981270430873 e_co_stock_block(10_2037_EU27_Gas_Stock_NM_LNG)
 -19.876969614400842 e_co_stock_block(10_2037_EU27_Gas_Stock_NZ_LNG)
--102.14270099897657 e_co_stock_block(11_2037_EU27_Gas_Stock_WTF_LNG)
+-102.14270099897657 e_co_stock_block(10_2037_EU27_Gas_Stock_WTF_LNG)
 -14.248906789357232 e_co_stock_block(11_2037_EU27_Gas_Stock_pipegas)
 -29.06981270430873 e_co_stock_block(11_2037_EU27_Gas_Stock_NM_LNG)
 -19.876969614400842 e_co_stock_block(11_2037_EU27_Gas_Stock_NZ_LNG)
--102.14270099897657 e_co_stock_block(12_2037_EU27_Gas_Stock_WTF_LNG)
+-102.14270099897657 e_co_stock_block(11_2037_EU27_Gas_Stock_WTF_LNG)
 -14.248906789357232 e_co_stock_block(12_2037_EU27_Gas_Stock_pipegas)
 -29.06981270430873 e_co_stock_block(12_2037_EU27_Gas_Stock_NM_LNG)
 -19.876969614400842 e_co_stock_block(12_2037_EU27_Gas_Stock_NZ_LNG)
+-102.14270099897657 e_co_stock_block(12_2037_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2037)
 = 0
 
 c_e_yearly_cost_constraint(2038)_:
--99.16767087279278 e_co_stock_block(1_2038_EU27_Gas_Stock_WTF_LNG)
 -13.74463918296908 e_co_stock_block(1_2038_EU27_Gas_Stock_pipegas)
 -28.223119130396825 e_co_stock_block(1_2038_EU27_Gas_Stock_NM_LNG)
 -19.298028751845475 e_co_stock_block(1_2038_EU27_Gas_Stock_NZ_LNG)
--99.16767087279278 e_co_stock_block(2_2038_EU27_Gas_Stock_WTF_LNG)
+-99.16767087279278 e_co_stock_block(1_2038_EU27_Gas_Stock_WTF_LNG)
 -13.74463918296908 e_co_stock_block(2_2038_EU27_Gas_Stock_pipegas)
 -28.223119130396825 e_co_stock_block(2_2038_EU27_Gas_Stock_NM_LNG)
 -19.298028751845475 e_co_stock_block(2_2038_EU27_Gas_Stock_NZ_LNG)
--99.16767087279278 e_co_stock_block(3_2038_EU27_Gas_Stock_WTF_LNG)
+-99.16767087279278 e_co_stock_block(2_2038_EU27_Gas_Stock_WTF_LNG)
 -13.74463918296908 e_co_stock_block(3_2038_EU27_Gas_Stock_pipegas)
 -28.223119130396825 e_co_stock_block(3_2038_EU27_Gas_Stock_NM_LNG)
 -19.298028751845475 e_co_stock_block(3_2038_EU27_Gas_Stock_NZ_LNG)
--99.16767087279278 e_co_stock_block(4_2038_EU27_Gas_Stock_WTF_LNG)
+-99.16767087279278 e_co_stock_block(3_2038_EU27_Gas_Stock_WTF_LNG)
 -13.74463918296908 e_co_stock_block(4_2038_EU27_Gas_Stock_pipegas)
 -28.223119130396825 e_co_stock_block(4_2038_EU27_Gas_Stock_NM_LNG)
 -19.298028751845475 e_co_stock_block(4_2038_EU27_Gas_Stock_NZ_LNG)
--99.16767087279278 e_co_stock_block(5_2038_EU27_Gas_Stock_WTF_LNG)
+-99.16767087279278 e_co_stock_block(4_2038_EU27_Gas_Stock_WTF_LNG)
 -13.74463918296908 e_co_stock_block(5_2038_EU27_Gas_Stock_pipegas)
 -28.223119130396825 e_co_stock_block(5_2038_EU27_Gas_Stock_NM_LNG)
 -19.298028751845475 e_co_stock_block(5_2038_EU27_Gas_Stock_NZ_LNG)
--99.16767087279278 e_co_stock_block(6_2038_EU27_Gas_Stock_WTF_LNG)
+-99.16767087279278 e_co_stock_block(5_2038_EU27_Gas_Stock_WTF_LNG)
 -13.74463918296908 e_co_stock_block(6_2038_EU27_Gas_Stock_pipegas)
 -28.223119130396825 e_co_stock_block(6_2038_EU27_Gas_Stock_NM_LNG)
 -19.298028751845475 e_co_stock_block(6_2038_EU27_Gas_Stock_NZ_LNG)
--99.16767087279278 e_co_stock_block(7_2038_EU27_Gas_Stock_WTF_LNG)
+-99.16767087279278 e_co_stock_block(6_2038_EU27_Gas_Stock_WTF_LNG)
 -13.74463918296908 e_co_stock_block(7_2038_EU27_Gas_Stock_pipegas)
 -28.223119130396825 e_co_stock_block(7_2038_EU27_Gas_Stock_NM_LNG)
 -19.298028751845475 e_co_stock_block(7_2038_EU27_Gas_Stock_NZ_LNG)
--99.16767087279278 e_co_stock_block(8_2038_EU27_Gas_Stock_WTF_LNG)
+-99.16767087279278 e_co_stock_block(7_2038_EU27_Gas_Stock_WTF_LNG)
 -13.74463918296908 e_co_stock_block(8_2038_EU27_Gas_Stock_pipegas)
 -28.223119130396825 e_co_stock_block(8_2038_EU27_Gas_Stock_NM_LNG)
 -19.298028751845475 e_co_stock_block(8_2038_EU27_Gas_Stock_NZ_LNG)
--99.16767087279278 e_co_stock_block(9_2038_EU27_Gas_Stock_WTF_LNG)
+-99.16767087279278 e_co_stock_block(8_2038_EU27_Gas_Stock_WTF_LNG)
 -13.74463918296908 e_co_stock_block(9_2038_EU27_Gas_Stock_pipegas)
 -28.223119130396825 e_co_stock_block(9_2038_EU27_Gas_Stock_NM_LNG)
 -19.298028751845475 e_co_stock_block(9_2038_EU27_Gas_Stock_NZ_LNG)
--99.16767087279278 e_co_stock_block(10_2038_EU27_Gas_Stock_WTF_LNG)
+-99.16767087279278 e_co_stock_block(9_2038_EU27_Gas_Stock_WTF_LNG)
 -13.74463918296908 e_co_stock_block(10_2038_EU27_Gas_Stock_pipegas)
 -28.223119130396825 e_co_stock_block(10_2038_EU27_Gas_Stock_NM_LNG)
 -19.298028751845475 e_co_stock_block(10_2038_EU27_Gas_Stock_NZ_LNG)
--99.16767087279278 e_co_stock_block(11_2038_EU27_Gas_Stock_WTF_LNG)
+-99.16767087279278 e_co_stock_block(10_2038_EU27_Gas_Stock_WTF_LNG)
 -13.74463918296908 e_co_stock_block(11_2038_EU27_Gas_Stock_pipegas)
 -28.223119130396825 e_co_stock_block(11_2038_EU27_Gas_Stock_NM_LNG)
 -19.298028751845475 e_co_stock_block(11_2038_EU27_Gas_Stock_NZ_LNG)
--99.16767087279278 e_co_stock_block(12_2038_EU27_Gas_Stock_WTF_LNG)
+-99.16767087279278 e_co_stock_block(11_2038_EU27_Gas_Stock_WTF_LNG)
 -13.74463918296908 e_co_stock_block(12_2038_EU27_Gas_Stock_pipegas)
 -28.223119130396825 e_co_stock_block(12_2038_EU27_Gas_Stock_NM_LNG)
 -19.298028751845475 e_co_stock_block(12_2038_EU27_Gas_Stock_NZ_LNG)
+-99.16767087279278 e_co_stock_block(12_2038_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2038)
 = 0
 
 c_e_yearly_cost_constraint(2039)_:
--96.27929210950757 e_co_stock_block(1_2039_EU27_Gas_Stock_WTF_LNG)
 -13.257658523479192 e_co_stock_block(1_2039_EU27_Gas_Stock_pipegas)
 -27.401086534365852 e_co_stock_block(1_2039_EU27_Gas_Stock_NM_LNG)
 -18.73595024451017 e_co_stock_block(1_2039_EU27_Gas_Stock_NZ_LNG)
--96.27929210950757 e_co_stock_block(2_2039_EU27_Gas_Stock_WTF_LNG)
+-96.27929210950757 e_co_stock_block(1_2039_EU27_Gas_Stock_WTF_LNG)
 -13.257658523479192 e_co_stock_block(2_2039_EU27_Gas_Stock_pipegas)
 -27.401086534365852 e_co_stock_block(2_2039_EU27_Gas_Stock_NM_LNG)
 -18.73595024451017 e_co_stock_block(2_2039_EU27_Gas_Stock_NZ_LNG)
--96.27929210950757 e_co_stock_block(3_2039_EU27_Gas_Stock_WTF_LNG)
+-96.27929210950757 e_co_stock_block(2_2039_EU27_Gas_Stock_WTF_LNG)
 -13.257658523479192 e_co_stock_block(3_2039_EU27_Gas_Stock_pipegas)
 -27.401086534365852 e_co_stock_block(3_2039_EU27_Gas_Stock_NM_LNG)
 -18.73595024451017 e_co_stock_block(3_2039_EU27_Gas_Stock_NZ_LNG)
--96.27929210950757 e_co_stock_block(4_2039_EU27_Gas_Stock_WTF_LNG)
+-96.27929210950757 e_co_stock_block(3_2039_EU27_Gas_Stock_WTF_LNG)
 -13.257658523479192 e_co_stock_block(4_2039_EU27_Gas_Stock_pipegas)
 -27.401086534365852 e_co_stock_block(4_2039_EU27_Gas_Stock_NM_LNG)
 -18.73595024451017 e_co_stock_block(4_2039_EU27_Gas_Stock_NZ_LNG)
--96.27929210950757 e_co_stock_block(5_2039_EU27_Gas_Stock_WTF_LNG)
+-96.27929210950757 e_co_stock_block(4_2039_EU27_Gas_Stock_WTF_LNG)
 -13.257658523479192 e_co_stock_block(5_2039_EU27_Gas_Stock_pipegas)
 -27.401086534365852 e_co_stock_block(5_2039_EU27_Gas_Stock_NM_LNG)
 -18.73595024451017 e_co_stock_block(5_2039_EU27_Gas_Stock_NZ_LNG)
--96.27929210950757 e_co_stock_block(6_2039_EU27_Gas_Stock_WTF_LNG)
+-96.27929210950757 e_co_stock_block(5_2039_EU27_Gas_Stock_WTF_LNG)
 -13.257658523479192 e_co_stock_block(6_2039_EU27_Gas_Stock_pipegas)
 -27.401086534365852 e_co_stock_block(6_2039_EU27_Gas_Stock_NM_LNG)
 -18.73595024451017 e_co_stock_block(6_2039_EU27_Gas_Stock_NZ_LNG)
--96.27929210950757 e_co_stock_block(7_2039_EU27_Gas_Stock_WTF_LNG)
+-96.27929210950757 e_co_stock_block(6_2039_EU27_Gas_Stock_WTF_LNG)
 -13.257658523479192 e_co_stock_block(7_2039_EU27_Gas_Stock_pipegas)
 -27.401086534365852 e_co_stock_block(7_2039_EU27_Gas_Stock_NM_LNG)
 -18.73595024451017 e_co_stock_block(7_2039_EU27_Gas_Stock_NZ_LNG)
--96.27929210950757 e_co_stock_block(8_2039_EU27_Gas_Stock_WTF_LNG)
+-96.27929210950757 e_co_stock_block(7_2039_EU27_Gas_Stock_WTF_LNG)
 -13.257658523479192 e_co_stock_block(8_2039_EU27_Gas_Stock_pipegas)
 -27.401086534365852 e_co_stock_block(8_2039_EU27_Gas_Stock_NM_LNG)
 -18.73595024451017 e_co_stock_block(8_2039_EU27_Gas_Stock_NZ_LNG)
--96.27929210950757 e_co_stock_block(9_2039_EU27_Gas_Stock_WTF_LNG)
+-96.27929210950757 e_co_stock_block(8_2039_EU27_Gas_Stock_WTF_LNG)
 -13.257658523479192 e_co_stock_block(9_2039_EU27_Gas_Stock_pipegas)
 -27.401086534365852 e_co_stock_block(9_2039_EU27_Gas_Stock_NM_LNG)
 -18.73595024451017 e_co_stock_block(9_2039_EU27_Gas_Stock_NZ_LNG)
--96.27929210950757 e_co_stock_block(10_2039_EU27_Gas_Stock_WTF_LNG)
+-96.27929210950757 e_co_stock_block(9_2039_EU27_Gas_Stock_WTF_LNG)
 -13.257658523479192 e_co_stock_block(10_2039_EU27_Gas_Stock_pipegas)
 -27.401086534365852 e_co_stock_block(10_2039_EU27_Gas_Stock_NM_LNG)
 -18.73595024451017 e_co_stock_block(10_2039_EU27_Gas_Stock_NZ_LNG)
--96.27929210950757 e_co_stock_block(11_2039_EU27_Gas_Stock_WTF_LNG)
+-96.27929210950757 e_co_stock_block(10_2039_EU27_Gas_Stock_WTF_LNG)
 -13.257658523479192 e_co_stock_block(11_2039_EU27_Gas_Stock_pipegas)
 -27.401086534365852 e_co_stock_block(11_2039_EU27_Gas_Stock_NM_LNG)
 -18.73595024451017 e_co_stock_block(11_2039_EU27_Gas_Stock_NZ_LNG)
--96.27929210950757 e_co_stock_block(12_2039_EU27_Gas_Stock_WTF_LNG)
+-96.27929210950757 e_co_stock_block(11_2039_EU27_Gas_Stock_WTF_LNG)
 -13.257658523479192 e_co_stock_block(12_2039_EU27_Gas_Stock_pipegas)
 -27.401086534365852 e_co_stock_block(12_2039_EU27_Gas_Stock_NM_LNG)
 -18.73595024451017 e_co_stock_block(12_2039_EU27_Gas_Stock_NZ_LNG)
+-96.27929210950757 e_co_stock_block(12_2039_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2039)
 = 0
 
 c_e_yearly_cost_constraint(2040)_:
--93.47504088301706 e_co_stock_block(1_2040_EU27_Gas_Stock_WTF_LNG)
 -12.787385592796733 e_co_stock_block(1_2040_EU27_Gas_Stock_pipegas)
 -26.602996635306653 e_co_stock_block(1_2040_EU27_Gas_Stock_NM_LNG)
 -18.19024295583512 e_co_stock_block(1_2040_EU27_Gas_Stock_NZ_LNG)
--93.47504088301706 e_co_stock_block(2_2040_EU27_Gas_Stock_WTF_LNG)
+-93.47504088301706 e_co_stock_block(1_2040_EU27_Gas_Stock_WTF_LNG)
 -12.787385592796733 e_co_stock_block(2_2040_EU27_Gas_Stock_pipegas)
 -26.602996635306653 e_co_stock_block(2_2040_EU27_Gas_Stock_NM_LNG)
 -18.19024295583512 e_co_stock_block(2_2040_EU27_Gas_Stock_NZ_LNG)
--93.47504088301706 e_co_stock_block(3_2040_EU27_Gas_Stock_WTF_LNG)
+-93.47504088301706 e_co_stock_block(2_2040_EU27_Gas_Stock_WTF_LNG)
 -12.787385592796733 e_co_stock_block(3_2040_EU27_Gas_Stock_pipegas)
 -26.602996635306653 e_co_stock_block(3_2040_EU27_Gas_Stock_NM_LNG)
 -18.19024295583512 e_co_stock_block(3_2040_EU27_Gas_Stock_NZ_LNG)
--93.47504088301706 e_co_stock_block(4_2040_EU27_Gas_Stock_WTF_LNG)
+-93.47504088301706 e_co_stock_block(3_2040_EU27_Gas_Stock_WTF_LNG)
 -12.787385592796733 e_co_stock_block(4_2040_EU27_Gas_Stock_pipegas)
 -26.602996635306653 e_co_stock_block(4_2040_EU27_Gas_Stock_NM_LNG)
 -18.19024295583512 e_co_stock_block(4_2040_EU27_Gas_Stock_NZ_LNG)
--93.47504088301706 e_co_stock_block(5_2040_EU27_Gas_Stock_WTF_LNG)
+-93.47504088301706 e_co_stock_block(4_2040_EU27_Gas_Stock_WTF_LNG)
 -12.787385592796733 e_co_stock_block(5_2040_EU27_Gas_Stock_pipegas)
 -26.602996635306653 e_co_stock_block(5_2040_EU27_Gas_Stock_NM_LNG)
 -18.19024295583512 e_co_stock_block(5_2040_EU27_Gas_Stock_NZ_LNG)
--93.47504088301706 e_co_stock_block(6_2040_EU27_Gas_Stock_WTF_LNG)
+-93.47504088301706 e_co_stock_block(5_2040_EU27_Gas_Stock_WTF_LNG)
 -12.787385592796733 e_co_stock_block(6_2040_EU27_Gas_Stock_pipegas)
 -26.602996635306653 e_co_stock_block(6_2040_EU27_Gas_Stock_NM_LNG)
 -18.19024295583512 e_co_stock_block(6_2040_EU27_Gas_Stock_NZ_LNG)
--93.47504088301706 e_co_stock_block(7_2040_EU27_Gas_Stock_WTF_LNG)
+-93.47504088301706 e_co_stock_block(6_2040_EU27_Gas_Stock_WTF_LNG)
 -12.787385592796733 e_co_stock_block(7_2040_EU27_Gas_Stock_pipegas)
 -26.602996635306653 e_co_stock_block(7_2040_EU27_Gas_Stock_NM_LNG)
 -18.19024295583512 e_co_stock_block(7_2040_EU27_Gas_Stock_NZ_LNG)
--93.47504088301706 e_co_stock_block(8_2040_EU27_Gas_Stock_WTF_LNG)
+-93.47504088301706 e_co_stock_block(7_2040_EU27_Gas_Stock_WTF_LNG)
 -12.787385592796733 e_co_stock_block(8_2040_EU27_Gas_Stock_pipegas)
 -26.602996635306653 e_co_stock_block(8_2040_EU27_Gas_Stock_NM_LNG)
 -18.19024295583512 e_co_stock_block(8_2040_EU27_Gas_Stock_NZ_LNG)
--93.47504088301706 e_co_stock_block(9_2040_EU27_Gas_Stock_WTF_LNG)
+-93.47504088301706 e_co_stock_block(8_2040_EU27_Gas_Stock_WTF_LNG)
 -12.787385592796733 e_co_stock_block(9_2040_EU27_Gas_Stock_pipegas)
 -26.602996635306653 e_co_stock_block(9_2040_EU27_Gas_Stock_NM_LNG)
 -18.19024295583512 e_co_stock_block(9_2040_EU27_Gas_Stock_NZ_LNG)
--93.47504088301706 e_co_stock_block(10_2040_EU27_Gas_Stock_WTF_LNG)
+-93.47504088301706 e_co_stock_block(9_2040_EU27_Gas_Stock_WTF_LNG)
 -12.787385592796733 e_co_stock_block(10_2040_EU27_Gas_Stock_pipegas)
 -26.602996635306653 e_co_stock_block(10_2040_EU27_Gas_Stock_NM_LNG)
 -18.19024295583512 e_co_stock_block(10_2040_EU27_Gas_Stock_NZ_LNG)
--93.47504088301706 e_co_stock_block(11_2040_EU27_Gas_Stock_WTF_LNG)
+-93.47504088301706 e_co_stock_block(10_2040_EU27_Gas_Stock_WTF_LNG)
 -12.787385592796733 e_co_stock_block(11_2040_EU27_Gas_Stock_pipegas)
 -26.602996635306653 e_co_stock_block(11_2040_EU27_Gas_Stock_NM_LNG)
 -18.19024295583512 e_co_stock_block(11_2040_EU27_Gas_Stock_NZ_LNG)
--93.47504088301706 e_co_stock_block(12_2040_EU27_Gas_Stock_WTF_LNG)
+-93.47504088301706 e_co_stock_block(11_2040_EU27_Gas_Stock_WTF_LNG)
 -12.787385592796733 e_co_stock_block(12_2040_EU27_Gas_Stock_pipegas)
 -26.602996635306653 e_co_stock_block(12_2040_EU27_Gas_Stock_NM_LNG)
 -18.19024295583512 e_co_stock_block(12_2040_EU27_Gas_Stock_NZ_LNG)
+-93.47504088301706 e_co_stock_block(12_2040_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2040)
 = 0
 
 c_e_yearly_cost_constraint(2041)_:
--90.75246687671559 e_co_stock_block(1_2041_EU27_Gas_Stock_WTF_LNG)
 -12.414937468734692 e_co_stock_block(1_2041_EU27_Gas_Stock_pipegas)
 -25.82815207311325 e_co_stock_block(1_2041_EU27_Gas_Stock_NM_LNG)
 -17.660430054208852 e_co_stock_block(1_2041_EU27_Gas_Stock_NZ_LNG)
--90.75246687671559 e_co_stock_block(2_2041_EU27_Gas_Stock_WTF_LNG)
+-90.75246687671559 e_co_stock_block(1_2041_EU27_Gas_Stock_WTF_LNG)
 -12.414937468734692 e_co_stock_block(2_2041_EU27_Gas_Stock_pipegas)
 -25.82815207311325 e_co_stock_block(2_2041_EU27_Gas_Stock_NM_LNG)
 -17.660430054208852 e_co_stock_block(2_2041_EU27_Gas_Stock_NZ_LNG)
--90.75246687671559 e_co_stock_block(3_2041_EU27_Gas_Stock_WTF_LNG)
+-90.75246687671559 e_co_stock_block(2_2041_EU27_Gas_Stock_WTF_LNG)
 -12.414937468734692 e_co_stock_block(3_2041_EU27_Gas_Stock_pipegas)
 -25.82815207311325 e_co_stock_block(3_2041_EU27_Gas_Stock_NM_LNG)
 -17.660430054208852 e_co_stock_block(3_2041_EU27_Gas_Stock_NZ_LNG)
--90.75246687671559 e_co_stock_block(4_2041_EU27_Gas_Stock_WTF_LNG)
+-90.75246687671559 e_co_stock_block(3_2041_EU27_Gas_Stock_WTF_LNG)
 -12.414937468734692 e_co_stock_block(4_2041_EU27_Gas_Stock_pipegas)
 -25.82815207311325 e_co_stock_block(4_2041_EU27_Gas_Stock_NM_LNG)
 -17.660430054208852 e_co_stock_block(4_2041_EU27_Gas_Stock_NZ_LNG)
--90.75246687671559 e_co_stock_block(5_2041_EU27_Gas_Stock_WTF_LNG)
+-90.75246687671559 e_co_stock_block(4_2041_EU27_Gas_Stock_WTF_LNG)
 -12.414937468734692 e_co_stock_block(5_2041_EU27_Gas_Stock_pipegas)
 -25.82815207311325 e_co_stock_block(5_2041_EU27_Gas_Stock_NM_LNG)
 -17.660430054208852 e_co_stock_block(5_2041_EU27_Gas_Stock_NZ_LNG)
--90.75246687671559 e_co_stock_block(6_2041_EU27_Gas_Stock_WTF_LNG)
+-90.75246687671559 e_co_stock_block(5_2041_EU27_Gas_Stock_WTF_LNG)
 -12.414937468734692 e_co_stock_block(6_2041_EU27_Gas_Stock_pipegas)
 -25.82815207311325 e_co_stock_block(6_2041_EU27_Gas_Stock_NM_LNG)
 -17.660430054208852 e_co_stock_block(6_2041_EU27_Gas_Stock_NZ_LNG)
--90.75246687671559 e_co_stock_block(7_2041_EU27_Gas_Stock_WTF_LNG)
+-90.75246687671559 e_co_stock_block(6_2041_EU27_Gas_Stock_WTF_LNG)
 -12.414937468734692 e_co_stock_block(7_2041_EU27_Gas_Stock_pipegas)
 -25.82815207311325 e_co_stock_block(7_2041_EU27_Gas_Stock_NM_LNG)
 -17.660430054208852 e_co_stock_block(7_2041_EU27_Gas_Stock_NZ_LNG)
--90.75246687671559 e_co_stock_block(8_2041_EU27_Gas_Stock_WTF_LNG)
+-90.75246687671559 e_co_stock_block(7_2041_EU27_Gas_Stock_WTF_LNG)
 -12.414937468734692 e_co_stock_block(8_2041_EU27_Gas_Stock_pipegas)
 -25.82815207311325 e_co_stock_block(8_2041_EU27_Gas_Stock_NM_LNG)
 -17.660430054208852 e_co_stock_block(8_2041_EU27_Gas_Stock_NZ_LNG)
--90.75246687671559 e_co_stock_block(9_2041_EU27_Gas_Stock_WTF_LNG)
+-90.75246687671559 e_co_stock_block(8_2041_EU27_Gas_Stock_WTF_LNG)
 -12.414937468734692 e_co_stock_block(9_2041_EU27_Gas_Stock_pipegas)
 -25.82815207311325 e_co_stock_block(9_2041_EU27_Gas_Stock_NM_LNG)
 -17.660430054208852 e_co_stock_block(9_2041_EU27_Gas_Stock_NZ_LNG)
--90.75246687671559 e_co_stock_block(10_2041_EU27_Gas_Stock_WTF_LNG)
+-90.75246687671559 e_co_stock_block(9_2041_EU27_Gas_Stock_WTF_LNG)
 -12.414937468734692 e_co_stock_block(10_2041_EU27_Gas_Stock_pipegas)
 -25.82815207311325 e_co_stock_block(10_2041_EU27_Gas_Stock_NM_LNG)
 -17.660430054208852 e_co_stock_block(10_2041_EU27_Gas_Stock_NZ_LNG)
--90.75246687671559 e_co_stock_block(11_2041_EU27_Gas_Stock_WTF_LNG)
+-90.75246687671559 e_co_stock_block(10_2041_EU27_Gas_Stock_WTF_LNG)
 -12.414937468734692 e_co_stock_block(11_2041_EU27_Gas_Stock_pipegas)
 -25.82815207311325 e_co_stock_block(11_2041_EU27_Gas_Stock_NM_LNG)
 -17.660430054208852 e_co_stock_block(11_2041_EU27_Gas_Stock_NZ_LNG)
--90.75246687671559 e_co_stock_block(12_2041_EU27_Gas_Stock_WTF_LNG)
+-90.75246687671559 e_co_stock_block(11_2041_EU27_Gas_Stock_WTF_LNG)
 -12.414937468734692 e_co_stock_block(12_2041_EU27_Gas_Stock_pipegas)
 -25.82815207311325 e_co_stock_block(12_2041_EU27_Gas_Stock_NM_LNG)
 -17.660430054208852 e_co_stock_block(12_2041_EU27_Gas_Stock_NZ_LNG)
+-90.75246687671559 e_co_stock_block(12_2041_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2041)
 = 0
 
 c_e_yearly_cost_constraint(2042)_:
--88.1091911424423 e_co_stock_block(1_2042_EU27_Gas_Stock_WTF_LNG)
 -12.053337348286107 e_co_stock_block(1_2042_EU27_Gas_Stock_pipegas)
 -25.07587579913908 e_co_stock_block(1_2042_EU27_Gas_Stock_NM_LNG)
 -17.14604859631927 e_co_stock_block(1_2042_EU27_Gas_Stock_NZ_LNG)
--88.1091911424423 e_co_stock_block(2_2042_EU27_Gas_Stock_WTF_LNG)
+-88.1091911424423 e_co_stock_block(1_2042_EU27_Gas_Stock_WTF_LNG)
 -12.053337348286107 e_co_stock_block(2_2042_EU27_Gas_Stock_pipegas)
 -25.07587579913908 e_co_stock_block(2_2042_EU27_Gas_Stock_NM_LNG)
 -17.14604859631927 e_co_stock_block(2_2042_EU27_Gas_Stock_NZ_LNG)
--88.1091911424423 e_co_stock_block(3_2042_EU27_Gas_Stock_WTF_LNG)
+-88.1091911424423 e_co_stock_block(2_2042_EU27_Gas_Stock_WTF_LNG)
 -12.053337348286107 e_co_stock_block(3_2042_EU27_Gas_Stock_pipegas)
 -25.07587579913908 e_co_stock_block(3_2042_EU27_Gas_Stock_NM_LNG)
 -17.14604859631927 e_co_stock_block(3_2042_EU27_Gas_Stock_NZ_LNG)
--88.1091911424423 e_co_stock_block(4_2042_EU27_Gas_Stock_WTF_LNG)
+-88.1091911424423 e_co_stock_block(3_2042_EU27_Gas_Stock_WTF_LNG)
 -12.053337348286107 e_co_stock_block(4_2042_EU27_Gas_Stock_pipegas)
 -25.07587579913908 e_co_stock_block(4_2042_EU27_Gas_Stock_NM_LNG)
 -17.14604859631927 e_co_stock_block(4_2042_EU27_Gas_Stock_NZ_LNG)
--88.1091911424423 e_co_stock_block(5_2042_EU27_Gas_Stock_WTF_LNG)
+-88.1091911424423 e_co_stock_block(4_2042_EU27_Gas_Stock_WTF_LNG)
 -12.053337348286107 e_co_stock_block(5_2042_EU27_Gas_Stock_pipegas)
 -25.07587579913908 e_co_stock_block(5_2042_EU27_Gas_Stock_NM_LNG)
 -17.14604859631927 e_co_stock_block(5_2042_EU27_Gas_Stock_NZ_LNG)
--88.1091911424423 e_co_stock_block(6_2042_EU27_Gas_Stock_WTF_LNG)
+-88.1091911424423 e_co_stock_block(5_2042_EU27_Gas_Stock_WTF_LNG)
 -12.053337348286107 e_co_stock_block(6_2042_EU27_Gas_Stock_pipegas)
 -25.07587579913908 e_co_stock_block(6_2042_EU27_Gas_Stock_NM_LNG)
 -17.14604859631927 e_co_stock_block(6_2042_EU27_Gas_Stock_NZ_LNG)
--88.1091911424423 e_co_stock_block(7_2042_EU27_Gas_Stock_WTF_LNG)
+-88.1091911424423 e_co_stock_block(6_2042_EU27_Gas_Stock_WTF_LNG)
 -12.053337348286107 e_co_stock_block(7_2042_EU27_Gas_Stock_pipegas)
 -25.07587579913908 e_co_stock_block(7_2042_EU27_Gas_Stock_NM_LNG)
 -17.14604859631927 e_co_stock_block(7_2042_EU27_Gas_Stock_NZ_LNG)
--88.1091911424423 e_co_stock_block(8_2042_EU27_Gas_Stock_WTF_LNG)
+-88.1091911424423 e_co_stock_block(7_2042_EU27_Gas_Stock_WTF_LNG)
 -12.053337348286107 e_co_stock_block(8_2042_EU27_Gas_Stock_pipegas)
 -25.07587579913908 e_co_stock_block(8_2042_EU27_Gas_Stock_NM_LNG)
 -17.14604859631927 e_co_stock_block(8_2042_EU27_Gas_Stock_NZ_LNG)
--88.1091911424423 e_co_stock_block(9_2042_EU27_Gas_Stock_WTF_LNG)
+-88.1091911424423 e_co_stock_block(8_2042_EU27_Gas_Stock_WTF_LNG)
 -12.053337348286107 e_co_stock_block(9_2042_EU27_Gas_Stock_pipegas)
 -25.07587579913908 e_co_stock_block(9_2042_EU27_Gas_Stock_NM_LNG)
 -17.14604859631927 e_co_stock_block(9_2042_EU27_Gas_Stock_NZ_LNG)
--88.1091911424423 e_co_stock_block(10_2042_EU27_Gas_Stock_WTF_LNG)
+-88.1091911424423 e_co_stock_block(9_2042_EU27_Gas_Stock_WTF_LNG)
 -12.053337348286107 e_co_stock_block(10_2042_EU27_Gas_Stock_pipegas)
 -25.07587579913908 e_co_stock_block(10_2042_EU27_Gas_Stock_NM_LNG)
 -17.14604859631927 e_co_stock_block(10_2042_EU27_Gas_Stock_NZ_LNG)
--88.1091911424423 e_co_stock_block(11_2042_EU27_Gas_Stock_WTF_LNG)
+-88.1091911424423 e_co_stock_block(10_2042_EU27_Gas_Stock_WTF_LNG)
 -12.053337348286107 e_co_stock_block(11_2042_EU27_Gas_Stock_pipegas)
 -25.07587579913908 e_co_stock_block(11_2042_EU27_Gas_Stock_NM_LNG)
 -17.14604859631927 e_co_stock_block(11_2042_EU27_Gas_Stock_NZ_LNG)
--88.1091911424423 e_co_stock_block(12_2042_EU27_Gas_Stock_WTF_LNG)
+-88.1091911424423 e_co_stock_block(11_2042_EU27_Gas_Stock_WTF_LNG)
 -12.053337348286107 e_co_stock_block(12_2042_EU27_Gas_Stock_pipegas)
 -25.07587579913908 e_co_stock_block(12_2042_EU27_Gas_Stock_NM_LNG)
 -17.14604859631927 e_co_stock_block(12_2042_EU27_Gas_Stock_NZ_LNG)
+-88.1091911424423 e_co_stock_block(12_2042_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2042)
 = 0
 
 c_e_yearly_cost_constraint(2043)_:
--85.54290402178864 e_co_stock_block(1_2043_EU27_Gas_Stock_WTF_LNG)
 -11.702269270180686 e_co_stock_block(1_2043_EU27_Gas_Stock_pipegas)
 -24.345510484601046 e_co_stock_block(1_2043_EU27_Gas_Stock_NM_LNG)
 -16.64664912264007 e_co_stock_block(1_2043_EU27_Gas_Stock_NZ_LNG)
--85.54290402178864 e_co_stock_block(2_2043_EU27_Gas_Stock_WTF_LNG)
+-85.54290402178864 e_co_stock_block(1_2043_EU27_Gas_Stock_WTF_LNG)
 -11.702269270180686 e_co_stock_block(2_2043_EU27_Gas_Stock_pipegas)
 -24.345510484601046 e_co_stock_block(2_2043_EU27_Gas_Stock_NM_LNG)
 -16.64664912264007 e_co_stock_block(2_2043_EU27_Gas_Stock_NZ_LNG)
--85.54290402178864 e_co_stock_block(3_2043_EU27_Gas_Stock_WTF_LNG)
+-85.54290402178864 e_co_stock_block(2_2043_EU27_Gas_Stock_WTF_LNG)
 -11.702269270180686 e_co_stock_block(3_2043_EU27_Gas_Stock_pipegas)
 -24.345510484601046 e_co_stock_block(3_2043_EU27_Gas_Stock_NM_LNG)
 -16.64664912264007 e_co_stock_block(3_2043_EU27_Gas_Stock_NZ_LNG)
--85.54290402178864 e_co_stock_block(4_2043_EU27_Gas_Stock_WTF_LNG)
+-85.54290402178864 e_co_stock_block(3_2043_EU27_Gas_Stock_WTF_LNG)
 -11.702269270180686 e_co_stock_block(4_2043_EU27_Gas_Stock_pipegas)
 -24.345510484601046 e_co_stock_block(4_2043_EU27_Gas_Stock_NM_LNG)
 -16.64664912264007 e_co_stock_block(4_2043_EU27_Gas_Stock_NZ_LNG)
--85.54290402178864 e_co_stock_block(5_2043_EU27_Gas_Stock_WTF_LNG)
+-85.54290402178864 e_co_stock_block(4_2043_EU27_Gas_Stock_WTF_LNG)
 -11.702269270180686 e_co_stock_block(5_2043_EU27_Gas_Stock_pipegas)
 -24.345510484601046 e_co_stock_block(5_2043_EU27_Gas_Stock_NM_LNG)
 -16.64664912264007 e_co_stock_block(5_2043_EU27_Gas_Stock_NZ_LNG)
--85.54290402178864 e_co_stock_block(6_2043_EU27_Gas_Stock_WTF_LNG)
+-85.54290402178864 e_co_stock_block(5_2043_EU27_Gas_Stock_WTF_LNG)
 -11.702269270180686 e_co_stock_block(6_2043_EU27_Gas_Stock_pipegas)
 -24.345510484601046 e_co_stock_block(6_2043_EU27_Gas_Stock_NM_LNG)
 -16.64664912264007 e_co_stock_block(6_2043_EU27_Gas_Stock_NZ_LNG)
--85.54290402178864 e_co_stock_block(7_2043_EU27_Gas_Stock_WTF_LNG)
+-85.54290402178864 e_co_stock_block(6_2043_EU27_Gas_Stock_WTF_LNG)
 -11.702269270180686 e_co_stock_block(7_2043_EU27_Gas_Stock_pipegas)
 -24.345510484601046 e_co_stock_block(7_2043_EU27_Gas_Stock_NM_LNG)
 -16.64664912264007 e_co_stock_block(7_2043_EU27_Gas_Stock_NZ_LNG)
--85.54290402178864 e_co_stock_block(8_2043_EU27_Gas_Stock_WTF_LNG)
+-85.54290402178864 e_co_stock_block(7_2043_EU27_Gas_Stock_WTF_LNG)
 -11.702269270180686 e_co_stock_block(8_2043_EU27_Gas_Stock_pipegas)
 -24.345510484601046 e_co_stock_block(8_2043_EU27_Gas_Stock_NM_LNG)
 -16.64664912264007 e_co_stock_block(8_2043_EU27_Gas_Stock_NZ_LNG)
--85.54290402178864 e_co_stock_block(9_2043_EU27_Gas_Stock_WTF_LNG)
+-85.54290402178864 e_co_stock_block(8_2043_EU27_Gas_Stock_WTF_LNG)
 -11.702269270180686 e_co_stock_block(9_2043_EU27_Gas_Stock_pipegas)
 -24.345510484601046 e_co_stock_block(9_2043_EU27_Gas_Stock_NM_LNG)
 -16.64664912264007 e_co_stock_block(9_2043_EU27_Gas_Stock_NZ_LNG)
--85.54290402178864 e_co_stock_block(10_2043_EU27_Gas_Stock_WTF_LNG)
+-85.54290402178864 e_co_stock_block(9_2043_EU27_Gas_Stock_WTF_LNG)
 -11.702269270180686 e_co_stock_block(10_2043_EU27_Gas_Stock_pipegas)
 -24.345510484601046 e_co_stock_block(10_2043_EU27_Gas_Stock_NM_LNG)
 -16.64664912264007 e_co_stock_block(10_2043_EU27_Gas_Stock_NZ_LNG)
--85.54290402178864 e_co_stock_block(11_2043_EU27_Gas_Stock_WTF_LNG)
+-85.54290402178864 e_co_stock_block(10_2043_EU27_Gas_Stock_WTF_LNG)
 -11.702269270180686 e_co_stock_block(11_2043_EU27_Gas_Stock_pipegas)
 -24.345510484601046 e_co_stock_block(11_2043_EU27_Gas_Stock_NM_LNG)
 -16.64664912264007 e_co_stock_block(11_2043_EU27_Gas_Stock_NZ_LNG)
--85.54290402178864 e_co_stock_block(12_2043_EU27_Gas_Stock_WTF_LNG)
+-85.54290402178864 e_co_stock_block(11_2043_EU27_Gas_Stock_WTF_LNG)
 -11.702269270180686 e_co_stock_block(12_2043_EU27_Gas_Stock_pipegas)
 -24.345510484601046 e_co_stock_block(12_2043_EU27_Gas_Stock_NM_LNG)
 -16.64664912264007 e_co_stock_block(12_2043_EU27_Gas_Stock_NZ_LNG)
+-85.54290402178864 e_co_stock_block(12_2043_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2043)
 = 0
 
 c_e_yearly_cost_constraint(2044)_:
--83.05136312795014 e_co_stock_block(1_2044_EU27_Gas_Stock_WTF_LNG)
 -11.36142647590358 e_co_stock_block(1_2044_EU27_Gas_Stock_pipegas)
 -23.63641794621461 e_co_stock_block(1_2044_EU27_Gas_Stock_NM_LNG)
 -16.161795264699098 e_co_stock_block(1_2044_EU27_Gas_Stock_NZ_LNG)
--83.05136312795014 e_co_stock_block(2_2044_EU27_Gas_Stock_WTF_LNG)
+-83.05136312795014 e_co_stock_block(1_2044_EU27_Gas_Stock_WTF_LNG)
 -11.36142647590358 e_co_stock_block(2_2044_EU27_Gas_Stock_pipegas)
 -23.63641794621461 e_co_stock_block(2_2044_EU27_Gas_Stock_NM_LNG)
 -16.161795264699098 e_co_stock_block(2_2044_EU27_Gas_Stock_NZ_LNG)
--83.05136312795014 e_co_stock_block(3_2044_EU27_Gas_Stock_WTF_LNG)
+-83.05136312795014 e_co_stock_block(2_2044_EU27_Gas_Stock_WTF_LNG)
 -11.36142647590358 e_co_stock_block(3_2044_EU27_Gas_Stock_pipegas)
 -23.63641794621461 e_co_stock_block(3_2044_EU27_Gas_Stock_NM_LNG)
 -16.161795264699098 e_co_stock_block(3_2044_EU27_Gas_Stock_NZ_LNG)
--83.05136312795014 e_co_stock_block(4_2044_EU27_Gas_Stock_WTF_LNG)
+-83.05136312795014 e_co_stock_block(3_2044_EU27_Gas_Stock_WTF_LNG)
 -11.36142647590358 e_co_stock_block(4_2044_EU27_Gas_Stock_pipegas)
 -23.63641794621461 e_co_stock_block(4_2044_EU27_Gas_Stock_NM_LNG)
 -16.161795264699098 e_co_stock_block(4_2044_EU27_Gas_Stock_NZ_LNG)
--83.05136312795014 e_co_stock_block(5_2044_EU27_Gas_Stock_WTF_LNG)
+-83.05136312795014 e_co_stock_block(4_2044_EU27_Gas_Stock_WTF_LNG)
 -11.36142647590358 e_co_stock_block(5_2044_EU27_Gas_Stock_pipegas)
 -23.63641794621461 e_co_stock_block(5_2044_EU27_Gas_Stock_NM_LNG)
 -16.161795264699098 e_co_stock_block(5_2044_EU27_Gas_Stock_NZ_LNG)
--83.05136312795014 e_co_stock_block(6_2044_EU27_Gas_Stock_WTF_LNG)
+-83.05136312795014 e_co_stock_block(5_2044_EU27_Gas_Stock_WTF_LNG)
 -11.36142647590358 e_co_stock_block(6_2044_EU27_Gas_Stock_pipegas)
 -23.63641794621461 e_co_stock_block(6_2044_EU27_Gas_Stock_NM_LNG)
 -16.161795264699098 e_co_stock_block(6_2044_EU27_Gas_Stock_NZ_LNG)
--83.05136312795014 e_co_stock_block(7_2044_EU27_Gas_Stock_WTF_LNG)
+-83.05136312795014 e_co_stock_block(6_2044_EU27_Gas_Stock_WTF_LNG)
 -11.36142647590358 e_co_stock_block(7_2044_EU27_Gas_Stock_pipegas)
 -23.63641794621461 e_co_stock_block(7_2044_EU27_Gas_Stock_NM_LNG)
 -16.161795264699098 e_co_stock_block(7_2044_EU27_Gas_Stock_NZ_LNG)
--83.05136312795014 e_co_stock_block(8_2044_EU27_Gas_Stock_WTF_LNG)
+-83.05136312795014 e_co_stock_block(7_2044_EU27_Gas_Stock_WTF_LNG)
 -11.36142647590358 e_co_stock_block(8_2044_EU27_Gas_Stock_pipegas)
 -23.63641794621461 e_co_stock_block(8_2044_EU27_Gas_Stock_NM_LNG)
 -16.161795264699098 e_co_stock_block(8_2044_EU27_Gas_Stock_NZ_LNG)
--83.05136312795014 e_co_stock_block(9_2044_EU27_Gas_Stock_WTF_LNG)
+-83.05136312795014 e_co_stock_block(8_2044_EU27_Gas_Stock_WTF_LNG)
 -11.36142647590358 e_co_stock_block(9_2044_EU27_Gas_Stock_pipegas)
 -23.63641794621461 e_co_stock_block(9_2044_EU27_Gas_Stock_NM_LNG)
 -16.161795264699098 e_co_stock_block(9_2044_EU27_Gas_Stock_NZ_LNG)
--83.05136312795014 e_co_stock_block(10_2044_EU27_Gas_Stock_WTF_LNG)
+-83.05136312795014 e_co_stock_block(9_2044_EU27_Gas_Stock_WTF_LNG)
 -11.36142647590358 e_co_stock_block(10_2044_EU27_Gas_Stock_pipegas)
 -23.63641794621461 e_co_stock_block(10_2044_EU27_Gas_Stock_NM_LNG)
 -16.161795264699098 e_co_stock_block(10_2044_EU27_Gas_Stock_NZ_LNG)
--83.05136312795014 e_co_stock_block(11_2044_EU27_Gas_Stock_WTF_LNG)
+-83.05136312795014 e_co_stock_block(10_2044_EU27_Gas_Stock_WTF_LNG)
 -11.36142647590358 e_co_stock_block(11_2044_EU27_Gas_Stock_pipegas)
 -23.63641794621461 e_co_stock_block(11_2044_EU27_Gas_Stock_NM_LNG)
 -16.161795264699098 e_co_stock_block(11_2044_EU27_Gas_Stock_NZ_LNG)
--83.05136312795014 e_co_stock_block(12_2044_EU27_Gas_Stock_WTF_LNG)
+-83.05136312795014 e_co_stock_block(11_2044_EU27_Gas_Stock_WTF_LNG)
 -11.36142647590358 e_co_stock_block(12_2044_EU27_Gas_Stock_pipegas)
 -23.63641794621461 e_co_stock_block(12_2044_EU27_Gas_Stock_NM_LNG)
 -16.161795264699098 e_co_stock_block(12_2044_EU27_Gas_Stock_NZ_LNG)
+-83.05136312795014 e_co_stock_block(12_2044_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2044)
 = 0
 
 c_e_yearly_cost_constraint(2045)_:
--80.63239138635936 e_co_stock_block(1_2045_EU27_Gas_Stock_WTF_LNG)
 -11.03051114165396 e_co_stock_block(1_2045_EU27_Gas_Stock_pipegas)
 -22.947978588557874 e_co_stock_block(1_2045_EU27_Gas_Stock_NM_LNG)
 -15.691063363785533 e_co_stock_block(1_2045_EU27_Gas_Stock_NZ_LNG)
--80.63239138635936 e_co_stock_block(2_2045_EU27_Gas_Stock_WTF_LNG)
+-80.63239138635936 e_co_stock_block(1_2045_EU27_Gas_Stock_WTF_LNG)
 -11.03051114165396 e_co_stock_block(2_2045_EU27_Gas_Stock_pipegas)
 -22.947978588557874 e_co_stock_block(2_2045_EU27_Gas_Stock_NM_LNG)
 -15.691063363785533 e_co_stock_block(2_2045_EU27_Gas_Stock_NZ_LNG)
--80.63239138635936 e_co_stock_block(3_2045_EU27_Gas_Stock_WTF_LNG)
+-80.63239138635936 e_co_stock_block(2_2045_EU27_Gas_Stock_WTF_LNG)
 -11.03051114165396 e_co_stock_block(3_2045_EU27_Gas_Stock_pipegas)
 -22.947978588557874 e_co_stock_block(3_2045_EU27_Gas_Stock_NM_LNG)
 -15.691063363785533 e_co_stock_block(3_2045_EU27_Gas_Stock_NZ_LNG)
--80.63239138635936 e_co_stock_block(4_2045_EU27_Gas_Stock_WTF_LNG)
+-80.63239138635936 e_co_stock_block(3_2045_EU27_Gas_Stock_WTF_LNG)
 -11.03051114165396 e_co_stock_block(4_2045_EU27_Gas_Stock_pipegas)
 -22.947978588557874 e_co_stock_block(4_2045_EU27_Gas_Stock_NM_LNG)
 -15.691063363785533 e_co_stock_block(4_2045_EU27_Gas_Stock_NZ_LNG)
--80.63239138635936 e_co_stock_block(5_2045_EU27_Gas_Stock_WTF_LNG)
+-80.63239138635936 e_co_stock_block(4_2045_EU27_Gas_Stock_WTF_LNG)
 -11.03051114165396 e_co_stock_block(5_2045_EU27_Gas_Stock_pipegas)
 -22.947978588557874 e_co_stock_block(5_2045_EU27_Gas_Stock_NM_LNG)
 -15.691063363785533 e_co_stock_block(5_2045_EU27_Gas_Stock_NZ_LNG)
--80.63239138635936 e_co_stock_block(6_2045_EU27_Gas_Stock_WTF_LNG)
+-80.63239138635936 e_co_stock_block(5_2045_EU27_Gas_Stock_WTF_LNG)
 -11.03051114165396 e_co_stock_block(6_2045_EU27_Gas_Stock_pipegas)
 -22.947978588557874 e_co_stock_block(6_2045_EU27_Gas_Stock_NM_LNG)
 -15.691063363785533 e_co_stock_block(6_2045_EU27_Gas_Stock_NZ_LNG)
--80.63239138635936 e_co_stock_block(7_2045_EU27_Gas_Stock_WTF_LNG)
+-80.63239138635936 e_co_stock_block(6_2045_EU27_Gas_Stock_WTF_LNG)
 -11.03051114165396 e_co_stock_block(7_2045_EU27_Gas_Stock_pipegas)
 -22.947978588557874 e_co_stock_block(7_2045_EU27_Gas_Stock_NM_LNG)
 -15.691063363785533 e_co_stock_block(7_2045_EU27_Gas_Stock_NZ_LNG)
--80.63239138635936 e_co_stock_block(8_2045_EU27_Gas_Stock_WTF_LNG)
+-80.63239138635936 e_co_stock_block(7_2045_EU27_Gas_Stock_WTF_LNG)
 -11.03051114165396 e_co_stock_block(8_2045_EU27_Gas_Stock_pipegas)
 -22.947978588557874 e_co_stock_block(8_2045_EU27_Gas_Stock_NM_LNG)
 -15.691063363785533 e_co_stock_block(8_2045_EU27_Gas_Stock_NZ_LNG)
--80.63239138635936 e_co_stock_block(9_2045_EU27_Gas_Stock_WTF_LNG)
+-80.63239138635936 e_co_stock_block(8_2045_EU27_Gas_Stock_WTF_LNG)
 -11.03051114165396 e_co_stock_block(9_2045_EU27_Gas_Stock_pipegas)
 -22.947978588557874 e_co_stock_block(9_2045_EU27_Gas_Stock_NM_LNG)
 -15.691063363785533 e_co_stock_block(9_2045_EU27_Gas_Stock_NZ_LNG)
--80.63239138635936 e_co_stock_block(10_2045_EU27_Gas_Stock_WTF_LNG)
+-80.63239138635936 e_co_stock_block(9_2045_EU27_Gas_Stock_WTF_LNG)
 -11.03051114165396 e_co_stock_block(10_2045_EU27_Gas_Stock_pipegas)
 -22.947978588557874 e_co_stock_block(10_2045_EU27_Gas_Stock_NM_LNG)
 -15.691063363785533 e_co_stock_block(10_2045_EU27_Gas_Stock_NZ_LNG)
--80.63239138635936 e_co_stock_block(11_2045_EU27_Gas_Stock_WTF_LNG)
+-80.63239138635936 e_co_stock_block(10_2045_EU27_Gas_Stock_WTF_LNG)
 -11.03051114165396 e_co_stock_block(11_2045_EU27_Gas_Stock_pipegas)
 -22.947978588557874 e_co_stock_block(11_2045_EU27_Gas_Stock_NM_LNG)
 -15.691063363785533 e_co_stock_block(11_2045_EU27_Gas_Stock_NZ_LNG)
--80.63239138635936 e_co_stock_block(12_2045_EU27_Gas_Stock_WTF_LNG)
+-80.63239138635936 e_co_stock_block(11_2045_EU27_Gas_Stock_WTF_LNG)
 -11.03051114165396 e_co_stock_block(12_2045_EU27_Gas_Stock_pipegas)
 -22.947978588557874 e_co_stock_block(12_2045_EU27_Gas_Stock_NM_LNG)
 -15.691063363785533 e_co_stock_block(12_2045_EU27_Gas_Stock_NZ_LNG)
+-80.63239138635936 e_co_stock_block(12_2045_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2045)
 = 0
 
 c_e_yearly_cost_constraint(2046)_:
--78.28387513238773 e_co_stock_block(1_2046_EU27_Gas_Stock_WTF_LNG)
 -10.709234118110642 e_co_stock_block(1_2046_EU27_Gas_Stock_pipegas)
 -22.279590862677548 e_co_stock_block(1_2046_EU27_Gas_Stock_NM_LNG)
 -15.234042100762654 e_co_stock_block(1_2046_EU27_Gas_Stock_NZ_LNG)
--78.28387513238773 e_co_stock_block(2_2046_EU27_Gas_Stock_WTF_LNG)
+-78.28387513238773 e_co_stock_block(1_2046_EU27_Gas_Stock_WTF_LNG)
 -10.709234118110642 e_co_stock_block(2_2046_EU27_Gas_Stock_pipegas)
 -22.279590862677548 e_co_stock_block(2_2046_EU27_Gas_Stock_NM_LNG)
 -15.234042100762654 e_co_stock_block(2_2046_EU27_Gas_Stock_NZ_LNG)
--78.28387513238773 e_co_stock_block(3_2046_EU27_Gas_Stock_WTF_LNG)
+-78.28387513238773 e_co_stock_block(2_2046_EU27_Gas_Stock_WTF_LNG)
 -10.709234118110642 e_co_stock_block(3_2046_EU27_Gas_Stock_pipegas)
 -22.279590862677548 e_co_stock_block(3_2046_EU27_Gas_Stock_NM_LNG)
 -15.234042100762654 e_co_stock_block(3_2046_EU27_Gas_Stock_NZ_LNG)
--78.28387513238773 e_co_stock_block(4_2046_EU27_Gas_Stock_WTF_LNG)
+-78.28387513238773 e_co_stock_block(3_2046_EU27_Gas_Stock_WTF_LNG)
 -10.709234118110642 e_co_stock_block(4_2046_EU27_Gas_Stock_pipegas)
 -22.279590862677548 e_co_stock_block(4_2046_EU27_Gas_Stock_NM_LNG)
 -15.234042100762654 e_co_stock_block(4_2046_EU27_Gas_Stock_NZ_LNG)
--78.28387513238773 e_co_stock_block(5_2046_EU27_Gas_Stock_WTF_LNG)
+-78.28387513238773 e_co_stock_block(4_2046_EU27_Gas_Stock_WTF_LNG)
 -10.709234118110642 e_co_stock_block(5_2046_EU27_Gas_Stock_pipegas)
 -22.279590862677548 e_co_stock_block(5_2046_EU27_Gas_Stock_NM_LNG)
 -15.234042100762654 e_co_stock_block(5_2046_EU27_Gas_Stock_NZ_LNG)
--78.28387513238773 e_co_stock_block(6_2046_EU27_Gas_Stock_WTF_LNG)
+-78.28387513238773 e_co_stock_block(5_2046_EU27_Gas_Stock_WTF_LNG)
 -10.709234118110642 e_co_stock_block(6_2046_EU27_Gas_Stock_pipegas)
 -22.279590862677548 e_co_stock_block(6_2046_EU27_Gas_Stock_NM_LNG)
 -15.234042100762654 e_co_stock_block(6_2046_EU27_Gas_Stock_NZ_LNG)
--78.28387513238773 e_co_stock_block(7_2046_EU27_Gas_Stock_WTF_LNG)
+-78.28387513238773 e_co_stock_block(6_2046_EU27_Gas_Stock_WTF_LNG)
 -10.709234118110642 e_co_stock_block(7_2046_EU27_Gas_Stock_pipegas)
 -22.279590862677548 e_co_stock_block(7_2046_EU27_Gas_Stock_NM_LNG)
 -15.234042100762654 e_co_stock_block(7_2046_EU27_Gas_Stock_NZ_LNG)
--78.28387513238773 e_co_stock_block(8_2046_EU27_Gas_Stock_WTF_LNG)
+-78.28387513238773 e_co_stock_block(7_2046_EU27_Gas_Stock_WTF_LNG)
 -10.709234118110642 e_co_stock_block(8_2046_EU27_Gas_Stock_pipegas)
 -22.279590862677548 e_co_stock_block(8_2046_EU27_Gas_Stock_NM_LNG)
 -15.234042100762654 e_co_stock_block(8_2046_EU27_Gas_Stock_NZ_LNG)
--78.28387513238773 e_co_stock_block(9_2046_EU27_Gas_Stock_WTF_LNG)
+-78.28387513238773 e_co_stock_block(8_2046_EU27_Gas_Stock_WTF_LNG)
 -10.709234118110642 e_co_stock_block(9_2046_EU27_Gas_Stock_pipegas)
 -22.279590862677548 e_co_stock_block(9_2046_EU27_Gas_Stock_NM_LNG)
 -15.234042100762654 e_co_stock_block(9_2046_EU27_Gas_Stock_NZ_LNG)
--78.28387513238773 e_co_stock_block(10_2046_EU27_Gas_Stock_WTF_LNG)
+-78.28387513238773 e_co_stock_block(9_2046_EU27_Gas_Stock_WTF_LNG)
 -10.709234118110642 e_co_stock_block(10_2046_EU27_Gas_Stock_pipegas)
 -22.279590862677548 e_co_stock_block(10_2046_EU27_Gas_Stock_NM_LNG)
 -15.234042100762654 e_co_stock_block(10_2046_EU27_Gas_Stock_NZ_LNG)
--78.28387513238773 e_co_stock_block(11_2046_EU27_Gas_Stock_WTF_LNG)
+-78.28387513238773 e_co_stock_block(10_2046_EU27_Gas_Stock_WTF_LNG)
 -10.709234118110642 e_co_stock_block(11_2046_EU27_Gas_Stock_pipegas)
 -22.279590862677548 e_co_stock_block(11_2046_EU27_Gas_Stock_NM_LNG)
 -15.234042100762654 e_co_stock_block(11_2046_EU27_Gas_Stock_NZ_LNG)
--78.28387513238773 e_co_stock_block(12_2046_EU27_Gas_Stock_WTF_LNG)
+-78.28387513238773 e_co_stock_block(11_2046_EU27_Gas_Stock_WTF_LNG)
 -10.709234118110642 e_co_stock_block(12_2046_EU27_Gas_Stock_pipegas)
 -22.279590862677548 e_co_stock_block(12_2046_EU27_Gas_Stock_NM_LNG)
 -15.234042100762654 e_co_stock_block(12_2046_EU27_Gas_Stock_NZ_LNG)
+-78.28387513238773 e_co_stock_block(12_2046_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2046)
 = 0
 
 c_e_yearly_cost_constraint(2047)_:
--76.0037622644541 e_co_stock_block(1_2047_EU27_Gas_Stock_WTF_LNG)
 -10.39731467777732 e_co_stock_block(1_2047_EU27_Gas_Stock_pipegas)
 -21.630670740463636 e_co_stock_block(1_2047_EU27_Gas_Stock_NM_LNG)
 -14.79033213666277 e_co_stock_block(1_2047_EU27_Gas_Stock_NZ_LNG)
--76.0037622644541 e_co_stock_block(2_2047_EU27_Gas_Stock_WTF_LNG)
+-76.0037622644541 e_co_stock_block(1_2047_EU27_Gas_Stock_WTF_LNG)
 -10.39731467777732 e_co_stock_block(2_2047_EU27_Gas_Stock_pipegas)
 -21.630670740463636 e_co_stock_block(2_2047_EU27_Gas_Stock_NM_LNG)
 -14.79033213666277 e_co_stock_block(2_2047_EU27_Gas_Stock_NZ_LNG)
--76.0037622644541 e_co_stock_block(3_2047_EU27_Gas_Stock_WTF_LNG)
+-76.0037622644541 e_co_stock_block(2_2047_EU27_Gas_Stock_WTF_LNG)
 -10.39731467777732 e_co_stock_block(3_2047_EU27_Gas_Stock_pipegas)
 -21.630670740463636 e_co_stock_block(3_2047_EU27_Gas_Stock_NM_LNG)
 -14.79033213666277 e_co_stock_block(3_2047_EU27_Gas_Stock_NZ_LNG)
--76.0037622644541 e_co_stock_block(4_2047_EU27_Gas_Stock_WTF_LNG)
+-76.0037622644541 e_co_stock_block(3_2047_EU27_Gas_Stock_WTF_LNG)
 -10.39731467777732 e_co_stock_block(4_2047_EU27_Gas_Stock_pipegas)
 -21.630670740463636 e_co_stock_block(4_2047_EU27_Gas_Stock_NM_LNG)
 -14.79033213666277 e_co_stock_block(4_2047_EU27_Gas_Stock_NZ_LNG)
--76.0037622644541 e_co_stock_block(5_2047_EU27_Gas_Stock_WTF_LNG)
+-76.0037622644541 e_co_stock_block(4_2047_EU27_Gas_Stock_WTF_LNG)
 -10.39731467777732 e_co_stock_block(5_2047_EU27_Gas_Stock_pipegas)
 -21.630670740463636 e_co_stock_block(5_2047_EU27_Gas_Stock_NM_LNG)
 -14.79033213666277 e_co_stock_block(5_2047_EU27_Gas_Stock_NZ_LNG)
--76.0037622644541 e_co_stock_block(6_2047_EU27_Gas_Stock_WTF_LNG)
+-76.0037622644541 e_co_stock_block(5_2047_EU27_Gas_Stock_WTF_LNG)
 -10.39731467777732 e_co_stock_block(6_2047_EU27_Gas_Stock_pipegas)
 -21.630670740463636 e_co_stock_block(6_2047_EU27_Gas_Stock_NM_LNG)
 -14.79033213666277 e_co_stock_block(6_2047_EU27_Gas_Stock_NZ_LNG)
--76.0037622644541 e_co_stock_block(7_2047_EU27_Gas_Stock_WTF_LNG)
+-76.0037622644541 e_co_stock_block(6_2047_EU27_Gas_Stock_WTF_LNG)
 -10.39731467777732 e_co_stock_block(7_2047_EU27_Gas_Stock_pipegas)
 -21.630670740463636 e_co_stock_block(7_2047_EU27_Gas_Stock_NM_LNG)
 -14.79033213666277 e_co_stock_block(7_2047_EU27_Gas_Stock_NZ_LNG)
--76.0037622644541 e_co_stock_block(8_2047_EU27_Gas_Stock_WTF_LNG)
+-76.0037622644541 e_co_stock_block(7_2047_EU27_Gas_Stock_WTF_LNG)
 -10.39731467777732 e_co_stock_block(8_2047_EU27_Gas_Stock_pipegas)
 -21.630670740463636 e_co_stock_block(8_2047_EU27_Gas_Stock_NM_LNG)
 -14.79033213666277 e_co_stock_block(8_2047_EU27_Gas_Stock_NZ_LNG)
--76.0037622644541 e_co_stock_block(9_2047_EU27_Gas_Stock_WTF_LNG)
+-76.0037622644541 e_co_stock_block(8_2047_EU27_Gas_Stock_WTF_LNG)
 -10.39731467777732 e_co_stock_block(9_2047_EU27_Gas_Stock_pipegas)
 -21.630670740463636 e_co_stock_block(9_2047_EU27_Gas_Stock_NM_LNG)
 -14.79033213666277 e_co_stock_block(9_2047_EU27_Gas_Stock_NZ_LNG)
--76.0037622644541 e_co_stock_block(10_2047_EU27_Gas_Stock_WTF_LNG)
+-76.0037622644541 e_co_stock_block(9_2047_EU27_Gas_Stock_WTF_LNG)
 -10.39731467777732 e_co_stock_block(10_2047_EU27_Gas_Stock_pipegas)
 -21.630670740463636 e_co_stock_block(10_2047_EU27_Gas_Stock_NM_LNG)
 -14.79033213666277 e_co_stock_block(10_2047_EU27_Gas_Stock_NZ_LNG)
--76.0037622644541 e_co_stock_block(11_2047_EU27_Gas_Stock_WTF_LNG)
+-76.0037622644541 e_co_stock_block(10_2047_EU27_Gas_Stock_WTF_LNG)
 -10.39731467777732 e_co_stock_block(11_2047_EU27_Gas_Stock_pipegas)
 -21.630670740463636 e_co_stock_block(11_2047_EU27_Gas_Stock_NM_LNG)
 -14.79033213666277 e_co_stock_block(11_2047_EU27_Gas_Stock_NZ_LNG)
--76.0037622644541 e_co_stock_block(12_2047_EU27_Gas_Stock_WTF_LNG)
+-76.0037622644541 e_co_stock_block(11_2047_EU27_Gas_Stock_WTF_LNG)
 -10.39731467777732 e_co_stock_block(12_2047_EU27_Gas_Stock_pipegas)
 -21.630670740463636 e_co_stock_block(12_2047_EU27_Gas_Stock_NM_LNG)
 -14.79033213666277 e_co_stock_block(12_2047_EU27_Gas_Stock_NZ_LNG)
+-76.0037622644541 e_co_stock_block(12_2047_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2047)
 = 0
 
 c_e_yearly_cost_constraint(2048)_:
--73.7900604509263 e_co_stock_block(1_2048_EU27_Gas_Stock_WTF_LNG)
 -10.094480269686718 e_co_stock_block(1_2048_EU27_Gas_Stock_pipegas)
 -21.000651204333625 e_co_stock_block(1_2048_EU27_Gas_Stock_NM_LNG)
 -14.35954576375026 e_co_stock_block(1_2048_EU27_Gas_Stock_NZ_LNG)
--73.7900604509263 e_co_stock_block(2_2048_EU27_Gas_Stock_WTF_LNG)
+-73.7900604509263 e_co_stock_block(1_2048_EU27_Gas_Stock_WTF_LNG)
 -10.094480269686718 e_co_stock_block(2_2048_EU27_Gas_Stock_pipegas)
 -21.000651204333625 e_co_stock_block(2_2048_EU27_Gas_Stock_NM_LNG)
 -14.35954576375026 e_co_stock_block(2_2048_EU27_Gas_Stock_NZ_LNG)
--73.7900604509263 e_co_stock_block(3_2048_EU27_Gas_Stock_WTF_LNG)
+-73.7900604509263 e_co_stock_block(2_2048_EU27_Gas_Stock_WTF_LNG)
 -10.094480269686718 e_co_stock_block(3_2048_EU27_Gas_Stock_pipegas)
 -21.000651204333625 e_co_stock_block(3_2048_EU27_Gas_Stock_NM_LNG)
 -14.35954576375026 e_co_stock_block(3_2048_EU27_Gas_Stock_NZ_LNG)
--73.7900604509263 e_co_stock_block(4_2048_EU27_Gas_Stock_WTF_LNG)
+-73.7900604509263 e_co_stock_block(3_2048_EU27_Gas_Stock_WTF_LNG)
 -10.094480269686718 e_co_stock_block(4_2048_EU27_Gas_Stock_pipegas)
 -21.000651204333625 e_co_stock_block(4_2048_EU27_Gas_Stock_NM_LNG)
 -14.35954576375026 e_co_stock_block(4_2048_EU27_Gas_Stock_NZ_LNG)
--73.7900604509263 e_co_stock_block(5_2048_EU27_Gas_Stock_WTF_LNG)
+-73.7900604509263 e_co_stock_block(4_2048_EU27_Gas_Stock_WTF_LNG)
 -10.094480269686718 e_co_stock_block(5_2048_EU27_Gas_Stock_pipegas)
 -21.000651204333625 e_co_stock_block(5_2048_EU27_Gas_Stock_NM_LNG)
 -14.35954576375026 e_co_stock_block(5_2048_EU27_Gas_Stock_NZ_LNG)
--73.7900604509263 e_co_stock_block(6_2048_EU27_Gas_Stock_WTF_LNG)
+-73.7900604509263 e_co_stock_block(5_2048_EU27_Gas_Stock_WTF_LNG)
 -10.094480269686718 e_co_stock_block(6_2048_EU27_Gas_Stock_pipegas)
 -21.000651204333625 e_co_stock_block(6_2048_EU27_Gas_Stock_NM_LNG)
 -14.35954576375026 e_co_stock_block(6_2048_EU27_Gas_Stock_NZ_LNG)
--73.7900604509263 e_co_stock_block(7_2048_EU27_Gas_Stock_WTF_LNG)
+-73.7900604509263 e_co_stock_block(6_2048_EU27_Gas_Stock_WTF_LNG)
 -10.094480269686718 e_co_stock_block(7_2048_EU27_Gas_Stock_pipegas)
 -21.000651204333625 e_co_stock_block(7_2048_EU27_Gas_Stock_NM_LNG)
 -14.35954576375026 e_co_stock_block(7_2048_EU27_Gas_Stock_NZ_LNG)
--73.7900604509263 e_co_stock_block(8_2048_EU27_Gas_Stock_WTF_LNG)
+-73.7900604509263 e_co_stock_block(7_2048_EU27_Gas_Stock_WTF_LNG)
 -10.094480269686718 e_co_stock_block(8_2048_EU27_Gas_Stock_pipegas)
 -21.000651204333625 e_co_stock_block(8_2048_EU27_Gas_Stock_NM_LNG)
 -14.35954576375026 e_co_stock_block(8_2048_EU27_Gas_Stock_NZ_LNG)
--73.7900604509263 e_co_stock_block(9_2048_EU27_Gas_Stock_WTF_LNG)
+-73.7900604509263 e_co_stock_block(8_2048_EU27_Gas_Stock_WTF_LNG)
 -10.094480269686718 e_co_stock_block(9_2048_EU27_Gas_Stock_pipegas)
 -21.000651204333625 e_co_stock_block(9_2048_EU27_Gas_Stock_NM_LNG)
 -14.35954576375026 e_co_stock_block(9_2048_EU27_Gas_Stock_NZ_LNG)
--73.7900604509263 e_co_stock_block(10_2048_EU27_Gas_Stock_WTF_LNG)
+-73.7900604509263 e_co_stock_block(9_2048_EU27_Gas_Stock_WTF_LNG)
 -10.094480269686718 e_co_stock_block(10_2048_EU27_Gas_Stock_pipegas)
 -21.000651204333625 e_co_stock_block(10_2048_EU27_Gas_Stock_NM_LNG)
 -14.35954576375026 e_co_stock_block(10_2048_EU27_Gas_Stock_NZ_LNG)
--73.7900604509263 e_co_stock_block(11_2048_EU27_Gas_Stock_WTF_LNG)
+-73.7900604509263 e_co_stock_block(10_2048_EU27_Gas_Stock_WTF_LNG)
 -10.094480269686718 e_co_stock_block(11_2048_EU27_Gas_Stock_pipegas)
 -21.000651204333625 e_co_stock_block(11_2048_EU27_Gas_Stock_NM_LNG)
 -14.35954576375026 e_co_stock_block(11_2048_EU27_Gas_Stock_NZ_LNG)
--73.7900604509263 e_co_stock_block(12_2048_EU27_Gas_Stock_WTF_LNG)
+-73.7900604509263 e_co_stock_block(11_2048_EU27_Gas_Stock_WTF_LNG)
 -10.094480269686718 e_co_stock_block(12_2048_EU27_Gas_Stock_pipegas)
 -21.000651204333625 e_co_stock_block(12_2048_EU27_Gas_Stock_NM_LNG)
 -14.35954576375026 e_co_stock_block(12_2048_EU27_Gas_Stock_NZ_LNG)
+-73.7900604509263 e_co_stock_block(12_2048_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2048)
 = 0
 
 c_e_yearly_cost_constraint(2049)_:
--71.64083538924883 e_co_stock_block(1_2049_EU27_Gas_Stock_WTF_LNG)
 -9.800466281249241 e_co_stock_block(1_2049_EU27_Gas_Stock_pipegas)
 -20.388981751780218 e_co_stock_block(1_2049_EU27_Gas_Stock_NM_LNG)
 -13.941306566747825 e_co_stock_block(1_2049_EU27_Gas_Stock_NZ_LNG)
--71.64083538924883 e_co_stock_block(2_2049_EU27_Gas_Stock_WTF_LNG)
+-71.64083538924883 e_co_stock_block(1_2049_EU27_Gas_Stock_WTF_LNG)
 -9.800466281249241 e_co_stock_block(2_2049_EU27_Gas_Stock_pipegas)
 -20.388981751780218 e_co_stock_block(2_2049_EU27_Gas_Stock_NM_LNG)
 -13.941306566747825 e_co_stock_block(2_2049_EU27_Gas_Stock_NZ_LNG)
--71.64083538924883 e_co_stock_block(3_2049_EU27_Gas_Stock_WTF_LNG)
+-71.64083538924883 e_co_stock_block(2_2049_EU27_Gas_Stock_WTF_LNG)
 -9.800466281249241 e_co_stock_block(3_2049_EU27_Gas_Stock_pipegas)
 -20.388981751780218 e_co_stock_block(3_2049_EU27_Gas_Stock_NM_LNG)
 -13.941306566747825 e_co_stock_block(3_2049_EU27_Gas_Stock_NZ_LNG)
--71.64083538924883 e_co_stock_block(4_2049_EU27_Gas_Stock_WTF_LNG)
+-71.64083538924883 e_co_stock_block(3_2049_EU27_Gas_Stock_WTF_LNG)
 -9.800466281249241 e_co_stock_block(4_2049_EU27_Gas_Stock_pipegas)
 -20.388981751780218 e_co_stock_block(4_2049_EU27_Gas_Stock_NM_LNG)
 -13.941306566747825 e_co_stock_block(4_2049_EU27_Gas_Stock_NZ_LNG)
--71.64083538924883 e_co_stock_block(5_2049_EU27_Gas_Stock_WTF_LNG)
+-71.64083538924883 e_co_stock_block(4_2049_EU27_Gas_Stock_WTF_LNG)
 -9.800466281249241 e_co_stock_block(5_2049_EU27_Gas_Stock_pipegas)
 -20.388981751780218 e_co_stock_block(5_2049_EU27_Gas_Stock_NM_LNG)
 -13.941306566747825 e_co_stock_block(5_2049_EU27_Gas_Stock_NZ_LNG)
--71.64083538924883 e_co_stock_block(6_2049_EU27_Gas_Stock_WTF_LNG)
+-71.64083538924883 e_co_stock_block(5_2049_EU27_Gas_Stock_WTF_LNG)
 -9.800466281249241 e_co_stock_block(6_2049_EU27_Gas_Stock_pipegas)
 -20.388981751780218 e_co_stock_block(6_2049_EU27_Gas_Stock_NM_LNG)
 -13.941306566747825 e_co_stock_block(6_2049_EU27_Gas_Stock_NZ_LNG)
--71.64083538924883 e_co_stock_block(7_2049_EU27_Gas_Stock_WTF_LNG)
+-71.64083538924883 e_co_stock_block(6_2049_EU27_Gas_Stock_WTF_LNG)
 -9.800466281249241 e_co_stock_block(7_2049_EU27_Gas_Stock_pipegas)
 -20.388981751780218 e_co_stock_block(7_2049_EU27_Gas_Stock_NM_LNG)
 -13.941306566747825 e_co_stock_block(7_2049_EU27_Gas_Stock_NZ_LNG)
--71.64083538924883 e_co_stock_block(8_2049_EU27_Gas_Stock_WTF_LNG)
+-71.64083538924883 e_co_stock_block(7_2049_EU27_Gas_Stock_WTF_LNG)
 -9.800466281249241 e_co_stock_block(8_2049_EU27_Gas_Stock_pipegas)
 -20.388981751780218 e_co_stock_block(8_2049_EU27_Gas_Stock_NM_LNG)
 -13.941306566747825 e_co_stock_block(8_2049_EU27_Gas_Stock_NZ_LNG)
--71.64083538924883 e_co_stock_block(9_2049_EU27_Gas_Stock_WTF_LNG)
+-71.64083538924883 e_co_stock_block(8_2049_EU27_Gas_Stock_WTF_LNG)
 -9.800466281249241 e_co_stock_block(9_2049_EU27_Gas_Stock_pipegas)
 -20.388981751780218 e_co_stock_block(9_2049_EU27_Gas_Stock_NM_LNG)
 -13.941306566747825 e_co_stock_block(9_2049_EU27_Gas_Stock_NZ_LNG)
--71.64083538924883 e_co_stock_block(10_2049_EU27_Gas_Stock_WTF_LNG)
+-71.64083538924883 e_co_stock_block(9_2049_EU27_Gas_Stock_WTF_LNG)
 -9.800466281249241 e_co_stock_block(10_2049_EU27_Gas_Stock_pipegas)
 -20.388981751780218 e_co_stock_block(10_2049_EU27_Gas_Stock_NM_LNG)
 -13.941306566747825 e_co_stock_block(10_2049_EU27_Gas_Stock_NZ_LNG)
--71.64083538924883 e_co_stock_block(11_2049_EU27_Gas_Stock_WTF_LNG)
+-71.64083538924883 e_co_stock_block(10_2049_EU27_Gas_Stock_WTF_LNG)
 -9.800466281249241 e_co_stock_block(11_2049_EU27_Gas_Stock_pipegas)
 -20.388981751780218 e_co_stock_block(11_2049_EU27_Gas_Stock_NM_LNG)
 -13.941306566747825 e_co_stock_block(11_2049_EU27_Gas_Stock_NZ_LNG)
--71.64083538924883 e_co_stock_block(12_2049_EU27_Gas_Stock_WTF_LNG)
+-71.64083538924883 e_co_stock_block(11_2049_EU27_Gas_Stock_WTF_LNG)
 -9.800466281249241 e_co_stock_block(12_2049_EU27_Gas_Stock_pipegas)
 -20.388981751780218 e_co_stock_block(12_2049_EU27_Gas_Stock_NM_LNG)
 -13.941306566747825 e_co_stock_block(12_2049_EU27_Gas_Stock_NZ_LNG)
+-71.64083538924883 e_co_stock_block(12_2049_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2049)
 = 0
 
 c_e_yearly_cost_constraint(2050)_:
--69.55420911577558 e_co_stock_block(1_2050_EU27_Gas_Stock_WTF_LNG)
 -9.515015807038099 e_co_stock_block(1_2050_EU27_Gas_Stock_pipegas)
 -19.795127914349727 e_co_stock_block(1_2050_EU27_Gas_Stock_NM_LNG)
 -13.535249093929927 e_co_stock_block(1_2050_EU27_Gas_Stock_NZ_LNG)
--69.55420911577558 e_co_stock_block(2_2050_EU27_Gas_Stock_WTF_LNG)
+-69.55420911577558 e_co_stock_block(1_2050_EU27_Gas_Stock_WTF_LNG)
 -9.515015807038099 e_co_stock_block(2_2050_EU27_Gas_Stock_pipegas)
 -19.795127914349727 e_co_stock_block(2_2050_EU27_Gas_Stock_NM_LNG)
 -13.535249093929927 e_co_stock_block(2_2050_EU27_Gas_Stock_NZ_LNG)
--69.55420911577558 e_co_stock_block(3_2050_EU27_Gas_Stock_WTF_LNG)
+-69.55420911577558 e_co_stock_block(2_2050_EU27_Gas_Stock_WTF_LNG)
 -9.515015807038099 e_co_stock_block(3_2050_EU27_Gas_Stock_pipegas)
 -19.795127914349727 e_co_stock_block(3_2050_EU27_Gas_Stock_NM_LNG)
 -13.535249093929927 e_co_stock_block(3_2050_EU27_Gas_Stock_NZ_LNG)
--69.55420911577558 e_co_stock_block(4_2050_EU27_Gas_Stock_WTF_LNG)
+-69.55420911577558 e_co_stock_block(3_2050_EU27_Gas_Stock_WTF_LNG)
 -9.515015807038099 e_co_stock_block(4_2050_EU27_Gas_Stock_pipegas)
 -19.795127914349727 e_co_stock_block(4_2050_EU27_Gas_Stock_NM_LNG)
 -13.535249093929927 e_co_stock_block(4_2050_EU27_Gas_Stock_NZ_LNG)
--69.55420911577558 e_co_stock_block(5_2050_EU27_Gas_Stock_WTF_LNG)
+-69.55420911577558 e_co_stock_block(4_2050_EU27_Gas_Stock_WTF_LNG)
 -9.515015807038099 e_co_stock_block(5_2050_EU27_Gas_Stock_pipegas)
 -19.795127914349727 e_co_stock_block(5_2050_EU27_Gas_Stock_NM_LNG)
 -13.535249093929927 e_co_stock_block(5_2050_EU27_Gas_Stock_NZ_LNG)
--69.55420911577558 e_co_stock_block(6_2050_EU27_Gas_Stock_WTF_LNG)
+-69.55420911577558 e_co_stock_block(5_2050_EU27_Gas_Stock_WTF_LNG)
 -9.515015807038099 e_co_stock_block(6_2050_EU27_Gas_Stock_pipegas)
 -19.795127914349727 e_co_stock_block(6_2050_EU27_Gas_Stock_NM_LNG)
 -13.535249093929927 e_co_stock_block(6_2050_EU27_Gas_Stock_NZ_LNG)
--69.55420911577558 e_co_stock_block(7_2050_EU27_Gas_Stock_WTF_LNG)
+-69.55420911577558 e_co_stock_block(6_2050_EU27_Gas_Stock_WTF_LNG)
 -9.515015807038099 e_co_stock_block(7_2050_EU27_Gas_Stock_pipegas)
 -19.795127914349727 e_co_stock_block(7_2050_EU27_Gas_Stock_NM_LNG)
 -13.535249093929927 e_co_stock_block(7_2050_EU27_Gas_Stock_NZ_LNG)
--69.55420911577558 e_co_stock_block(8_2050_EU27_Gas_Stock_WTF_LNG)
+-69.55420911577558 e_co_stock_block(7_2050_EU27_Gas_Stock_WTF_LNG)
 -9.515015807038099 e_co_stock_block(8_2050_EU27_Gas_Stock_pipegas)
 -19.795127914349727 e_co_stock_block(8_2050_EU27_Gas_Stock_NM_LNG)
 -13.535249093929927 e_co_stock_block(8_2050_EU27_Gas_Stock_NZ_LNG)
--69.55420911577558 e_co_stock_block(9_2050_EU27_Gas_Stock_WTF_LNG)
+-69.55420911577558 e_co_stock_block(8_2050_EU27_Gas_Stock_WTF_LNG)
 -9.515015807038099 e_co_stock_block(9_2050_EU27_Gas_Stock_pipegas)
 -19.795127914349727 e_co_stock_block(9_2050_EU27_Gas_Stock_NM_LNG)
 -13.535249093929927 e_co_stock_block(9_2050_EU27_Gas_Stock_NZ_LNG)
--69.55420911577558 e_co_stock_block(10_2050_EU27_Gas_Stock_WTF_LNG)
+-69.55420911577558 e_co_stock_block(9_2050_EU27_Gas_Stock_WTF_LNG)
 -9.515015807038099 e_co_stock_block(10_2050_EU27_Gas_Stock_pipegas)
 -19.795127914349727 e_co_stock_block(10_2050_EU27_Gas_Stock_NM_LNG)
 -13.535249093929927 e_co_stock_block(10_2050_EU27_Gas_Stock_NZ_LNG)
--69.55420911577558 e_co_stock_block(11_2050_EU27_Gas_Stock_WTF_LNG)
+-69.55420911577558 e_co_stock_block(10_2050_EU27_Gas_Stock_WTF_LNG)
 -9.515015807038099 e_co_stock_block(11_2050_EU27_Gas_Stock_pipegas)
 -19.795127914349727 e_co_stock_block(11_2050_EU27_Gas_Stock_NM_LNG)
 -13.535249093929927 e_co_stock_block(11_2050_EU27_Gas_Stock_NZ_LNG)
--69.55420911577558 e_co_stock_block(12_2050_EU27_Gas_Stock_WTF_LNG)
+-69.55420911577558 e_co_stock_block(11_2050_EU27_Gas_Stock_WTF_LNG)
 -9.515015807038099 e_co_stock_block(12_2050_EU27_Gas_Stock_pipegas)
 -19.795127914349727 e_co_stock_block(12_2050_EU27_Gas_Stock_NM_LNG)
 -13.535249093929927 e_co_stock_block(12_2050_EU27_Gas_Stock_NZ_LNG)
+-69.55420911577558 e_co_stock_block(12_2050_EU27_Gas_Stock_WTF_LNG)
 +1 gas_cost(2050)
 = 0
 
@@ -74605,22 +74605,6 @@ c_e_total_cost_constraint_:
 -1 gas_cost(2049)
 -1 gas_cost(2050)
 +1 gas_total_cost
-= 0
-
-c_e_yearly_usage_block_constraint(2024_WTF_LNG)_:
--1 e_co_stock_block(1_2024_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2024_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2024_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2024_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2024_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2024_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2024_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2024_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2024_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2024_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2024_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2024_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2024_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2024_pipegas)_:
@@ -74671,20 +74655,20 @@ c_e_yearly_usage_block_constraint(2024_NZ_LNG)_:
 +1 gas_usage_block(2024_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2025_WTF_LNG)_:
--1 e_co_stock_block(1_2025_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2025_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2025_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2025_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2025_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2025_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2025_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2025_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2025_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2025_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2025_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2025_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2025_WTF_LNG)
+c_e_yearly_usage_block_constraint(2024_WTF_LNG)_:
+-1 e_co_stock_block(1_2024_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2024_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2024_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2024_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2024_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2024_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2024_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2024_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2024_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2024_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2024_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2024_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2024_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2025_pipegas)_:
@@ -74735,20 +74719,20 @@ c_e_yearly_usage_block_constraint(2025_NZ_LNG)_:
 +1 gas_usage_block(2025_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2026_WTF_LNG)_:
--1 e_co_stock_block(1_2026_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2026_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2026_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2026_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2026_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2026_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2026_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2026_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2026_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2026_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2026_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2026_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2026_WTF_LNG)
+c_e_yearly_usage_block_constraint(2025_WTF_LNG)_:
+-1 e_co_stock_block(1_2025_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2025_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2025_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2025_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2025_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2025_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2025_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2025_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2025_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2025_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2025_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2025_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2025_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2026_pipegas)_:
@@ -74799,20 +74783,20 @@ c_e_yearly_usage_block_constraint(2026_NZ_LNG)_:
 +1 gas_usage_block(2026_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2027_WTF_LNG)_:
--1 e_co_stock_block(1_2027_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2027_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2027_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2027_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2027_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2027_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2027_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2027_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2027_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2027_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2027_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2027_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2027_WTF_LNG)
+c_e_yearly_usage_block_constraint(2026_WTF_LNG)_:
+-1 e_co_stock_block(1_2026_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2026_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2026_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2026_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2026_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2026_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2026_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2026_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2026_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2026_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2026_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2026_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2026_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2027_pipegas)_:
@@ -74863,20 +74847,20 @@ c_e_yearly_usage_block_constraint(2027_NZ_LNG)_:
 +1 gas_usage_block(2027_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2028_WTF_LNG)_:
--1 e_co_stock_block(1_2028_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2028_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2028_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2028_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2028_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2028_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2028_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2028_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2028_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2028_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2028_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2028_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2028_WTF_LNG)
+c_e_yearly_usage_block_constraint(2027_WTF_LNG)_:
+-1 e_co_stock_block(1_2027_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2027_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2027_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2027_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2027_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2027_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2027_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2027_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2027_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2027_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2027_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2027_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2027_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2028_pipegas)_:
@@ -74927,20 +74911,20 @@ c_e_yearly_usage_block_constraint(2028_NZ_LNG)_:
 +1 gas_usage_block(2028_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2029_WTF_LNG)_:
--1 e_co_stock_block(1_2029_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2029_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2029_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2029_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2029_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2029_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2029_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2029_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2029_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2029_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2029_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2029_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2029_WTF_LNG)
+c_e_yearly_usage_block_constraint(2028_WTF_LNG)_:
+-1 e_co_stock_block(1_2028_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2028_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2028_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2028_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2028_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2028_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2028_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2028_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2028_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2028_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2028_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2028_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2028_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2029_pipegas)_:
@@ -74991,20 +74975,20 @@ c_e_yearly_usage_block_constraint(2029_NZ_LNG)_:
 +1 gas_usage_block(2029_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2030_WTF_LNG)_:
--1 e_co_stock_block(1_2030_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2030_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2030_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2030_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2030_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2030_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2030_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2030_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2030_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2030_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2030_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2030_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2030_WTF_LNG)
+c_e_yearly_usage_block_constraint(2029_WTF_LNG)_:
+-1 e_co_stock_block(1_2029_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2029_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2029_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2029_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2029_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2029_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2029_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2029_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2029_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2029_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2029_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2029_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2029_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2030_pipegas)_:
@@ -75055,20 +75039,20 @@ c_e_yearly_usage_block_constraint(2030_NZ_LNG)_:
 +1 gas_usage_block(2030_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2031_WTF_LNG)_:
--1 e_co_stock_block(1_2031_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2031_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2031_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2031_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2031_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2031_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2031_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2031_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2031_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2031_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2031_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2031_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2031_WTF_LNG)
+c_e_yearly_usage_block_constraint(2030_WTF_LNG)_:
+-1 e_co_stock_block(1_2030_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2030_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2030_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2030_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2030_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2030_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2030_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2030_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2030_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2030_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2030_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2030_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2030_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2031_pipegas)_:
@@ -75119,20 +75103,20 @@ c_e_yearly_usage_block_constraint(2031_NZ_LNG)_:
 +1 gas_usage_block(2031_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2032_WTF_LNG)_:
--1 e_co_stock_block(1_2032_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2032_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2032_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2032_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2032_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2032_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2032_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2032_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2032_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2032_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2032_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2032_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2032_WTF_LNG)
+c_e_yearly_usage_block_constraint(2031_WTF_LNG)_:
+-1 e_co_stock_block(1_2031_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2031_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2031_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2031_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2031_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2031_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2031_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2031_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2031_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2031_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2031_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2031_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2031_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2032_pipegas)_:
@@ -75183,20 +75167,20 @@ c_e_yearly_usage_block_constraint(2032_NZ_LNG)_:
 +1 gas_usage_block(2032_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2033_WTF_LNG)_:
--1 e_co_stock_block(1_2033_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2033_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2033_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2033_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2033_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2033_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2033_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2033_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2033_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2033_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2033_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2033_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2033_WTF_LNG)
+c_e_yearly_usage_block_constraint(2032_WTF_LNG)_:
+-1 e_co_stock_block(1_2032_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2032_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2032_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2032_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2032_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2032_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2032_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2032_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2032_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2032_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2032_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2032_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2032_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2033_pipegas)_:
@@ -75247,20 +75231,20 @@ c_e_yearly_usage_block_constraint(2033_NZ_LNG)_:
 +1 gas_usage_block(2033_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2034_WTF_LNG)_:
--1 e_co_stock_block(1_2034_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2034_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2034_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2034_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2034_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2034_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2034_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2034_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2034_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2034_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2034_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2034_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2034_WTF_LNG)
+c_e_yearly_usage_block_constraint(2033_WTF_LNG)_:
+-1 e_co_stock_block(1_2033_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2033_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2033_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2033_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2033_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2033_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2033_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2033_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2033_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2033_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2033_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2033_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2033_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2034_pipegas)_:
@@ -75311,20 +75295,20 @@ c_e_yearly_usage_block_constraint(2034_NZ_LNG)_:
 +1 gas_usage_block(2034_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2035_WTF_LNG)_:
--1 e_co_stock_block(1_2035_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2035_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2035_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2035_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2035_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2035_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2035_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2035_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2035_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2035_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2035_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2035_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2035_WTF_LNG)
+c_e_yearly_usage_block_constraint(2034_WTF_LNG)_:
+-1 e_co_stock_block(1_2034_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2034_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2034_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2034_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2034_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2034_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2034_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2034_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2034_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2034_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2034_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2034_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2034_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2035_pipegas)_:
@@ -75375,20 +75359,20 @@ c_e_yearly_usage_block_constraint(2035_NZ_LNG)_:
 +1 gas_usage_block(2035_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2036_WTF_LNG)_:
--1 e_co_stock_block(1_2036_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2036_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2036_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2036_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2036_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2036_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2036_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2036_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2036_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2036_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2036_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2036_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2036_WTF_LNG)
+c_e_yearly_usage_block_constraint(2035_WTF_LNG)_:
+-1 e_co_stock_block(1_2035_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2035_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2035_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2035_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2035_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2035_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2035_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2035_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2035_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2035_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2035_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2035_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2035_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2036_pipegas)_:
@@ -75439,20 +75423,20 @@ c_e_yearly_usage_block_constraint(2036_NZ_LNG)_:
 +1 gas_usage_block(2036_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2037_WTF_LNG)_:
--1 e_co_stock_block(1_2037_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2037_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2037_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2037_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2037_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2037_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2037_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2037_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2037_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2037_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2037_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2037_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2037_WTF_LNG)
+c_e_yearly_usage_block_constraint(2036_WTF_LNG)_:
+-1 e_co_stock_block(1_2036_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2036_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2036_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2036_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2036_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2036_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2036_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2036_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2036_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2036_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2036_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2036_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2036_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2037_pipegas)_:
@@ -75503,20 +75487,20 @@ c_e_yearly_usage_block_constraint(2037_NZ_LNG)_:
 +1 gas_usage_block(2037_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2038_WTF_LNG)_:
--1 e_co_stock_block(1_2038_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2038_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2038_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2038_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2038_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2038_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2038_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2038_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2038_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2038_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2038_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2038_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2038_WTF_LNG)
+c_e_yearly_usage_block_constraint(2037_WTF_LNG)_:
+-1 e_co_stock_block(1_2037_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2037_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2037_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2037_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2037_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2037_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2037_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2037_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2037_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2037_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2037_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2037_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2037_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2038_pipegas)_:
@@ -75567,20 +75551,20 @@ c_e_yearly_usage_block_constraint(2038_NZ_LNG)_:
 +1 gas_usage_block(2038_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2039_WTF_LNG)_:
--1 e_co_stock_block(1_2039_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2039_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2039_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2039_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2039_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2039_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2039_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2039_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2039_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2039_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2039_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2039_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2039_WTF_LNG)
+c_e_yearly_usage_block_constraint(2038_WTF_LNG)_:
+-1 e_co_stock_block(1_2038_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2038_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2038_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2038_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2038_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2038_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2038_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2038_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2038_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2038_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2038_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2038_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2038_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2039_pipegas)_:
@@ -75631,20 +75615,20 @@ c_e_yearly_usage_block_constraint(2039_NZ_LNG)_:
 +1 gas_usage_block(2039_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2040_WTF_LNG)_:
--1 e_co_stock_block(1_2040_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2040_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2040_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2040_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2040_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2040_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2040_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2040_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2040_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2040_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2040_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2040_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2040_WTF_LNG)
+c_e_yearly_usage_block_constraint(2039_WTF_LNG)_:
+-1 e_co_stock_block(1_2039_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2039_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2039_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2039_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2039_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2039_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2039_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2039_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2039_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2039_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2039_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2039_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2039_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2040_pipegas)_:
@@ -75695,20 +75679,20 @@ c_e_yearly_usage_block_constraint(2040_NZ_LNG)_:
 +1 gas_usage_block(2040_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2041_WTF_LNG)_:
--1 e_co_stock_block(1_2041_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2041_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2041_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2041_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2041_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2041_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2041_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2041_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2041_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2041_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2041_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2041_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2041_WTF_LNG)
+c_e_yearly_usage_block_constraint(2040_WTF_LNG)_:
+-1 e_co_stock_block(1_2040_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2040_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2040_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2040_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2040_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2040_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2040_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2040_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2040_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2040_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2040_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2040_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2040_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2041_pipegas)_:
@@ -75759,20 +75743,20 @@ c_e_yearly_usage_block_constraint(2041_NZ_LNG)_:
 +1 gas_usage_block(2041_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2042_WTF_LNG)_:
--1 e_co_stock_block(1_2042_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2042_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2042_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2042_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2042_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2042_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2042_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2042_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2042_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2042_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2042_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2042_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2042_WTF_LNG)
+c_e_yearly_usage_block_constraint(2041_WTF_LNG)_:
+-1 e_co_stock_block(1_2041_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2041_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2041_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2041_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2041_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2041_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2041_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2041_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2041_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2041_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2041_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2041_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2041_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2042_pipegas)_:
@@ -75823,20 +75807,20 @@ c_e_yearly_usage_block_constraint(2042_NZ_LNG)_:
 +1 gas_usage_block(2042_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2043_WTF_LNG)_:
--1 e_co_stock_block(1_2043_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2043_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2043_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2043_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2043_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2043_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2043_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2043_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2043_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2043_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2043_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2043_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2043_WTF_LNG)
+c_e_yearly_usage_block_constraint(2042_WTF_LNG)_:
+-1 e_co_stock_block(1_2042_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2042_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2042_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2042_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2042_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2042_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2042_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2042_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2042_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2042_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2042_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2042_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2042_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2043_pipegas)_:
@@ -75887,20 +75871,20 @@ c_e_yearly_usage_block_constraint(2043_NZ_LNG)_:
 +1 gas_usage_block(2043_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2044_WTF_LNG)_:
--1 e_co_stock_block(1_2044_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2044_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2044_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2044_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2044_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2044_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2044_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2044_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2044_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2044_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2044_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2044_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2044_WTF_LNG)
+c_e_yearly_usage_block_constraint(2043_WTF_LNG)_:
+-1 e_co_stock_block(1_2043_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2043_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2043_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2043_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2043_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2043_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2043_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2043_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2043_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2043_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2043_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2043_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2043_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2044_pipegas)_:
@@ -75951,20 +75935,20 @@ c_e_yearly_usage_block_constraint(2044_NZ_LNG)_:
 +1 gas_usage_block(2044_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2045_WTF_LNG)_:
--1 e_co_stock_block(1_2045_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2045_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2045_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2045_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2045_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2045_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2045_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2045_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2045_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2045_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2045_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2045_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2045_WTF_LNG)
+c_e_yearly_usage_block_constraint(2044_WTF_LNG)_:
+-1 e_co_stock_block(1_2044_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2044_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2044_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2044_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2044_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2044_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2044_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2044_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2044_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2044_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2044_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2044_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2044_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2045_pipegas)_:
@@ -76015,20 +75999,20 @@ c_e_yearly_usage_block_constraint(2045_NZ_LNG)_:
 +1 gas_usage_block(2045_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2046_WTF_LNG)_:
--1 e_co_stock_block(1_2046_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2046_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2046_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2046_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2046_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2046_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2046_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2046_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2046_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2046_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2046_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2046_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2046_WTF_LNG)
+c_e_yearly_usage_block_constraint(2045_WTF_LNG)_:
+-1 e_co_stock_block(1_2045_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2045_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2045_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2045_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2045_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2045_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2045_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2045_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2045_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2045_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2045_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2045_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2045_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2046_pipegas)_:
@@ -76079,20 +76063,20 @@ c_e_yearly_usage_block_constraint(2046_NZ_LNG)_:
 +1 gas_usage_block(2046_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2047_WTF_LNG)_:
--1 e_co_stock_block(1_2047_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2047_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2047_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2047_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2047_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2047_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2047_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2047_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2047_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2047_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2047_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2047_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2047_WTF_LNG)
+c_e_yearly_usage_block_constraint(2046_WTF_LNG)_:
+-1 e_co_stock_block(1_2046_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2046_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2046_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2046_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2046_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2046_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2046_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2046_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2046_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2046_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2046_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2046_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2046_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2047_pipegas)_:
@@ -76143,20 +76127,20 @@ c_e_yearly_usage_block_constraint(2047_NZ_LNG)_:
 +1 gas_usage_block(2047_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2048_WTF_LNG)_:
--1 e_co_stock_block(1_2048_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2048_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2048_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2048_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2048_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2048_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2048_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2048_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2048_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2048_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2048_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2048_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2048_WTF_LNG)
+c_e_yearly_usage_block_constraint(2047_WTF_LNG)_:
+-1 e_co_stock_block(1_2047_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2047_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2047_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2047_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2047_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2047_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2047_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2047_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2047_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2047_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2047_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2047_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2047_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2048_pipegas)_:
@@ -76207,20 +76191,20 @@ c_e_yearly_usage_block_constraint(2048_NZ_LNG)_:
 +1 gas_usage_block(2048_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2049_WTF_LNG)_:
--1 e_co_stock_block(1_2049_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2049_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2049_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2049_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2049_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2049_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2049_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2049_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2049_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2049_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2049_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2049_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2049_WTF_LNG)
+c_e_yearly_usage_block_constraint(2048_WTF_LNG)_:
+-1 e_co_stock_block(1_2048_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2048_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2048_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2048_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2048_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2048_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2048_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2048_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2048_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2048_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2048_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2048_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2048_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2049_pipegas)_:
@@ -76271,20 +76255,20 @@ c_e_yearly_usage_block_constraint(2049_NZ_LNG)_:
 +1 gas_usage_block(2049_NZ_LNG)
 = 0
 
-c_e_yearly_usage_block_constraint(2050_WTF_LNG)_:
--1 e_co_stock_block(1_2050_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(2_2050_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(3_2050_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(4_2050_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(5_2050_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(6_2050_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(7_2050_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(8_2050_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(9_2050_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(10_2050_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(11_2050_EU27_Gas_Stock_WTF_LNG)
--1 e_co_stock_block(12_2050_EU27_Gas_Stock_WTF_LNG)
-+1 gas_usage_block(2050_WTF_LNG)
+c_e_yearly_usage_block_constraint(2049_WTF_LNG)_:
+-1 e_co_stock_block(1_2049_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2049_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2049_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2049_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2049_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2049_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2049_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2049_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2049_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2049_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2049_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2049_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2049_WTF_LNG)
 = 0
 
 c_e_yearly_usage_block_constraint(2050_pipegas)_:
@@ -76333,6 +76317,22 @@ c_e_yearly_usage_block_constraint(2050_NZ_LNG)_:
 -1 e_co_stock_block(11_2050_EU27_Gas_Stock_NZ_LNG)
 -1 e_co_stock_block(12_2050_EU27_Gas_Stock_NZ_LNG)
 +1 gas_usage_block(2050_NZ_LNG)
+= 0
+
+c_e_yearly_usage_block_constraint(2050_WTF_LNG)_:
+-1 e_co_stock_block(1_2050_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(2_2050_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(3_2050_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(4_2050_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(5_2050_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(6_2050_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(7_2050_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(8_2050_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(9_2050_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(10_2050_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(11_2050_EU27_Gas_Stock_WTF_LNG)
+-1 e_co_stock_block(12_2050_EU27_Gas_Stock_WTF_LNG)
++1 gas_usage_block(2050_WTF_LNG)
 = 0
 
 c_u_mat_block_limit_constraint(2024_aluminum_Tier1)_:
@@ -511540,542 +511540,542 @@ c_l_c_onetech_z_noneg_fom(2050_EU27_windoff_Wafer_6)_:
 
 c_e_scrap_solar_constr_unit(2024_EU27)_:
 +1 pricereduction_scrap_solar_unit(2024_EU27)
--86.91893999939998 BD_scrap_solar(2024_EU27_1)
--162.81526211999997 BD_scrap_solar(2024_EU27_2)
--229.0867992232 BD_scrap_solar(2024_EU27_3)
--286.9541171122 BD_scrap_solar(2024_EU27_4)
--337.48299633740004 BD_scrap_solar(2024_EU27_5)
--381.6040599961999 BD_scrap_solar(2024_EU27_6)
+-155.40406453583998 BD_scrap_solar(2024_EU27_1)
+-291.100576032 BD_scrap_solar(2024_EU27_2)
+-409.58874706752 BD_scrap_solar(2024_EU27_3)
+-513.0508509979201 BD_scrap_solar(2024_EU27_4)
+-603.3924176126401 BD_scrap_solar(2024_EU27_5)
+-682.27732606032 BD_scrap_solar(2024_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2025_EU27)_:
 +1 pricereduction_scrap_solar_unit(2025_EU27)
--86.91893999939998 BD_scrap_solar(2025_EU27_1)
--162.81526211999997 BD_scrap_solar(2025_EU27_2)
--229.0867992232 BD_scrap_solar(2025_EU27_3)
--286.9541171122 BD_scrap_solar(2025_EU27_4)
--337.48299633740004 BD_scrap_solar(2025_EU27_5)
--381.6040599961999 BD_scrap_solar(2025_EU27_6)
+-155.40406453583998 BD_scrap_solar(2025_EU27_1)
+-291.100576032 BD_scrap_solar(2025_EU27_2)
+-409.58874706752 BD_scrap_solar(2025_EU27_3)
+-513.0508509979201 BD_scrap_solar(2025_EU27_4)
+-603.3924176126401 BD_scrap_solar(2025_EU27_5)
+-682.27732606032 BD_scrap_solar(2025_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2026_EU27)_:
 +1 pricereduction_scrap_solar_unit(2026_EU27)
--86.91893999939998 BD_scrap_solar(2026_EU27_1)
--162.81526211999997 BD_scrap_solar(2026_EU27_2)
--229.0867992232 BD_scrap_solar(2026_EU27_3)
--286.9541171122 BD_scrap_solar(2026_EU27_4)
--337.48299633740004 BD_scrap_solar(2026_EU27_5)
--381.6040599961999 BD_scrap_solar(2026_EU27_6)
+-155.40406453583998 BD_scrap_solar(2026_EU27_1)
+-291.100576032 BD_scrap_solar(2026_EU27_2)
+-409.58874706752 BD_scrap_solar(2026_EU27_3)
+-513.0508509979201 BD_scrap_solar(2026_EU27_4)
+-603.3924176126401 BD_scrap_solar(2026_EU27_5)
+-682.27732606032 BD_scrap_solar(2026_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2027_EU27)_:
 +1 pricereduction_scrap_solar_unit(2027_EU27)
--86.91893999939998 BD_scrap_solar(2027_EU27_1)
--162.81526211999997 BD_scrap_solar(2027_EU27_2)
--229.0867992232 BD_scrap_solar(2027_EU27_3)
--286.9541171122 BD_scrap_solar(2027_EU27_4)
--337.48299633740004 BD_scrap_solar(2027_EU27_5)
--381.6040599961999 BD_scrap_solar(2027_EU27_6)
+-155.40406453583998 BD_scrap_solar(2027_EU27_1)
+-291.100576032 BD_scrap_solar(2027_EU27_2)
+-409.58874706752 BD_scrap_solar(2027_EU27_3)
+-513.0508509979201 BD_scrap_solar(2027_EU27_4)
+-603.3924176126401 BD_scrap_solar(2027_EU27_5)
+-682.27732606032 BD_scrap_solar(2027_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2028_EU27)_:
 +1 pricereduction_scrap_solar_unit(2028_EU27)
--86.91893999939998 BD_scrap_solar(2028_EU27_1)
--162.81526211999997 BD_scrap_solar(2028_EU27_2)
--229.0867992232 BD_scrap_solar(2028_EU27_3)
--286.9541171122 BD_scrap_solar(2028_EU27_4)
--337.48299633740004 BD_scrap_solar(2028_EU27_5)
--381.6040599961999 BD_scrap_solar(2028_EU27_6)
+-155.40406453583998 BD_scrap_solar(2028_EU27_1)
+-291.100576032 BD_scrap_solar(2028_EU27_2)
+-409.58874706752 BD_scrap_solar(2028_EU27_3)
+-513.0508509979201 BD_scrap_solar(2028_EU27_4)
+-603.3924176126401 BD_scrap_solar(2028_EU27_5)
+-682.27732606032 BD_scrap_solar(2028_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2029_EU27)_:
 +1 pricereduction_scrap_solar_unit(2029_EU27)
--86.91893999939998 BD_scrap_solar(2029_EU27_1)
--162.81526211999997 BD_scrap_solar(2029_EU27_2)
--229.0867992232 BD_scrap_solar(2029_EU27_3)
--286.9541171122 BD_scrap_solar(2029_EU27_4)
--337.48299633740004 BD_scrap_solar(2029_EU27_5)
--381.6040599961999 BD_scrap_solar(2029_EU27_6)
+-155.40406453583998 BD_scrap_solar(2029_EU27_1)
+-291.100576032 BD_scrap_solar(2029_EU27_2)
+-409.58874706752 BD_scrap_solar(2029_EU27_3)
+-513.0508509979201 BD_scrap_solar(2029_EU27_4)
+-603.3924176126401 BD_scrap_solar(2029_EU27_5)
+-682.27732606032 BD_scrap_solar(2029_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2030_EU27)_:
 +1 pricereduction_scrap_solar_unit(2030_EU27)
--86.91893999939998 BD_scrap_solar(2030_EU27_1)
--162.81526211999997 BD_scrap_solar(2030_EU27_2)
--229.0867992232 BD_scrap_solar(2030_EU27_3)
--286.9541171122 BD_scrap_solar(2030_EU27_4)
--337.48299633740004 BD_scrap_solar(2030_EU27_5)
--381.6040599961999 BD_scrap_solar(2030_EU27_6)
+-155.40406453583998 BD_scrap_solar(2030_EU27_1)
+-291.100576032 BD_scrap_solar(2030_EU27_2)
+-409.58874706752 BD_scrap_solar(2030_EU27_3)
+-513.0508509979201 BD_scrap_solar(2030_EU27_4)
+-603.3924176126401 BD_scrap_solar(2030_EU27_5)
+-682.27732606032 BD_scrap_solar(2030_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2031_EU27)_:
 +1 pricereduction_scrap_solar_unit(2031_EU27)
--86.91893999939998 BD_scrap_solar(2031_EU27_1)
--162.81526211999997 BD_scrap_solar(2031_EU27_2)
--229.0867992232 BD_scrap_solar(2031_EU27_3)
--286.9541171122 BD_scrap_solar(2031_EU27_4)
--337.48299633740004 BD_scrap_solar(2031_EU27_5)
--381.6040599961999 BD_scrap_solar(2031_EU27_6)
+-155.40406453583998 BD_scrap_solar(2031_EU27_1)
+-291.100576032 BD_scrap_solar(2031_EU27_2)
+-409.58874706752 BD_scrap_solar(2031_EU27_3)
+-513.0508509979201 BD_scrap_solar(2031_EU27_4)
+-603.3924176126401 BD_scrap_solar(2031_EU27_5)
+-682.27732606032 BD_scrap_solar(2031_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2032_EU27)_:
 +1 pricereduction_scrap_solar_unit(2032_EU27)
--86.91893999939998 BD_scrap_solar(2032_EU27_1)
--162.81526211999997 BD_scrap_solar(2032_EU27_2)
--229.0867992232 BD_scrap_solar(2032_EU27_3)
--286.9541171122 BD_scrap_solar(2032_EU27_4)
--337.48299633740004 BD_scrap_solar(2032_EU27_5)
--381.6040599961999 BD_scrap_solar(2032_EU27_6)
+-155.40406453583998 BD_scrap_solar(2032_EU27_1)
+-291.100576032 BD_scrap_solar(2032_EU27_2)
+-409.58874706752 BD_scrap_solar(2032_EU27_3)
+-513.0508509979201 BD_scrap_solar(2032_EU27_4)
+-603.3924176126401 BD_scrap_solar(2032_EU27_5)
+-682.27732606032 BD_scrap_solar(2032_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2033_EU27)_:
 +1 pricereduction_scrap_solar_unit(2033_EU27)
--86.91893999939998 BD_scrap_solar(2033_EU27_1)
--162.81526211999997 BD_scrap_solar(2033_EU27_2)
--229.0867992232 BD_scrap_solar(2033_EU27_3)
--286.9541171122 BD_scrap_solar(2033_EU27_4)
--337.48299633740004 BD_scrap_solar(2033_EU27_5)
--381.6040599961999 BD_scrap_solar(2033_EU27_6)
+-155.40406453583998 BD_scrap_solar(2033_EU27_1)
+-291.100576032 BD_scrap_solar(2033_EU27_2)
+-409.58874706752 BD_scrap_solar(2033_EU27_3)
+-513.0508509979201 BD_scrap_solar(2033_EU27_4)
+-603.3924176126401 BD_scrap_solar(2033_EU27_5)
+-682.27732606032 BD_scrap_solar(2033_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2034_EU27)_:
 +1 pricereduction_scrap_solar_unit(2034_EU27)
--86.91893999939998 BD_scrap_solar(2034_EU27_1)
--162.81526211999997 BD_scrap_solar(2034_EU27_2)
--229.0867992232 BD_scrap_solar(2034_EU27_3)
--286.9541171122 BD_scrap_solar(2034_EU27_4)
--337.48299633740004 BD_scrap_solar(2034_EU27_5)
--381.6040599961999 BD_scrap_solar(2034_EU27_6)
+-155.40406453583998 BD_scrap_solar(2034_EU27_1)
+-291.100576032 BD_scrap_solar(2034_EU27_2)
+-409.58874706752 BD_scrap_solar(2034_EU27_3)
+-513.0508509979201 BD_scrap_solar(2034_EU27_4)
+-603.3924176126401 BD_scrap_solar(2034_EU27_5)
+-682.27732606032 BD_scrap_solar(2034_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2035_EU27)_:
 +1 pricereduction_scrap_solar_unit(2035_EU27)
--86.91893999939998 BD_scrap_solar(2035_EU27_1)
--162.81526211999997 BD_scrap_solar(2035_EU27_2)
--229.0867992232 BD_scrap_solar(2035_EU27_3)
--286.9541171122 BD_scrap_solar(2035_EU27_4)
--337.48299633740004 BD_scrap_solar(2035_EU27_5)
--381.6040599961999 BD_scrap_solar(2035_EU27_6)
+-155.40406453583998 BD_scrap_solar(2035_EU27_1)
+-291.100576032 BD_scrap_solar(2035_EU27_2)
+-409.58874706752 BD_scrap_solar(2035_EU27_3)
+-513.0508509979201 BD_scrap_solar(2035_EU27_4)
+-603.3924176126401 BD_scrap_solar(2035_EU27_5)
+-682.27732606032 BD_scrap_solar(2035_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2036_EU27)_:
 +1 pricereduction_scrap_solar_unit(2036_EU27)
--86.91893999939998 BD_scrap_solar(2036_EU27_1)
--162.81526211999997 BD_scrap_solar(2036_EU27_2)
--229.0867992232 BD_scrap_solar(2036_EU27_3)
--286.9541171122 BD_scrap_solar(2036_EU27_4)
--337.48299633740004 BD_scrap_solar(2036_EU27_5)
--381.6040599961999 BD_scrap_solar(2036_EU27_6)
+-155.40406453583998 BD_scrap_solar(2036_EU27_1)
+-291.100576032 BD_scrap_solar(2036_EU27_2)
+-409.58874706752 BD_scrap_solar(2036_EU27_3)
+-513.0508509979201 BD_scrap_solar(2036_EU27_4)
+-603.3924176126401 BD_scrap_solar(2036_EU27_5)
+-682.27732606032 BD_scrap_solar(2036_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2037_EU27)_:
 +1 pricereduction_scrap_solar_unit(2037_EU27)
--86.91893999939998 BD_scrap_solar(2037_EU27_1)
--162.81526211999997 BD_scrap_solar(2037_EU27_2)
--229.0867992232 BD_scrap_solar(2037_EU27_3)
--286.9541171122 BD_scrap_solar(2037_EU27_4)
--337.48299633740004 BD_scrap_solar(2037_EU27_5)
--381.6040599961999 BD_scrap_solar(2037_EU27_6)
+-155.40406453583998 BD_scrap_solar(2037_EU27_1)
+-291.100576032 BD_scrap_solar(2037_EU27_2)
+-409.58874706752 BD_scrap_solar(2037_EU27_3)
+-513.0508509979201 BD_scrap_solar(2037_EU27_4)
+-603.3924176126401 BD_scrap_solar(2037_EU27_5)
+-682.27732606032 BD_scrap_solar(2037_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2038_EU27)_:
 +1 pricereduction_scrap_solar_unit(2038_EU27)
--86.91893999939998 BD_scrap_solar(2038_EU27_1)
--162.81526211999997 BD_scrap_solar(2038_EU27_2)
--229.0867992232 BD_scrap_solar(2038_EU27_3)
--286.9541171122 BD_scrap_solar(2038_EU27_4)
--337.48299633740004 BD_scrap_solar(2038_EU27_5)
--381.6040599961999 BD_scrap_solar(2038_EU27_6)
+-155.40406453583998 BD_scrap_solar(2038_EU27_1)
+-291.100576032 BD_scrap_solar(2038_EU27_2)
+-409.58874706752 BD_scrap_solar(2038_EU27_3)
+-513.0508509979201 BD_scrap_solar(2038_EU27_4)
+-603.3924176126401 BD_scrap_solar(2038_EU27_5)
+-682.27732606032 BD_scrap_solar(2038_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2039_EU27)_:
 +1 pricereduction_scrap_solar_unit(2039_EU27)
--86.91893999939998 BD_scrap_solar(2039_EU27_1)
--162.81526211999997 BD_scrap_solar(2039_EU27_2)
--229.0867992232 BD_scrap_solar(2039_EU27_3)
--286.9541171122 BD_scrap_solar(2039_EU27_4)
--337.48299633740004 BD_scrap_solar(2039_EU27_5)
--381.6040599961999 BD_scrap_solar(2039_EU27_6)
+-155.40406453583998 BD_scrap_solar(2039_EU27_1)
+-291.100576032 BD_scrap_solar(2039_EU27_2)
+-409.58874706752 BD_scrap_solar(2039_EU27_3)
+-513.0508509979201 BD_scrap_solar(2039_EU27_4)
+-603.3924176126401 BD_scrap_solar(2039_EU27_5)
+-682.27732606032 BD_scrap_solar(2039_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2040_EU27)_:
 +1 pricereduction_scrap_solar_unit(2040_EU27)
--86.91893999939998 BD_scrap_solar(2040_EU27_1)
--162.81526211999997 BD_scrap_solar(2040_EU27_2)
--229.0867992232 BD_scrap_solar(2040_EU27_3)
--286.9541171122 BD_scrap_solar(2040_EU27_4)
--337.48299633740004 BD_scrap_solar(2040_EU27_5)
--381.6040599961999 BD_scrap_solar(2040_EU27_6)
+-155.40406453583998 BD_scrap_solar(2040_EU27_1)
+-291.100576032 BD_scrap_solar(2040_EU27_2)
+-409.58874706752 BD_scrap_solar(2040_EU27_3)
+-513.0508509979201 BD_scrap_solar(2040_EU27_4)
+-603.3924176126401 BD_scrap_solar(2040_EU27_5)
+-682.27732606032 BD_scrap_solar(2040_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2041_EU27)_:
 +1 pricereduction_scrap_solar_unit(2041_EU27)
--86.91893999939998 BD_scrap_solar(2041_EU27_1)
--162.81526211999997 BD_scrap_solar(2041_EU27_2)
--229.0867992232 BD_scrap_solar(2041_EU27_3)
--286.9541171122 BD_scrap_solar(2041_EU27_4)
--337.48299633740004 BD_scrap_solar(2041_EU27_5)
--381.6040599961999 BD_scrap_solar(2041_EU27_6)
+-155.40406453583998 BD_scrap_solar(2041_EU27_1)
+-291.100576032 BD_scrap_solar(2041_EU27_2)
+-409.58874706752 BD_scrap_solar(2041_EU27_3)
+-513.0508509979201 BD_scrap_solar(2041_EU27_4)
+-603.3924176126401 BD_scrap_solar(2041_EU27_5)
+-682.27732606032 BD_scrap_solar(2041_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2042_EU27)_:
 +1 pricereduction_scrap_solar_unit(2042_EU27)
--86.91893999939998 BD_scrap_solar(2042_EU27_1)
--162.81526211999997 BD_scrap_solar(2042_EU27_2)
--229.0867992232 BD_scrap_solar(2042_EU27_3)
--286.9541171122 BD_scrap_solar(2042_EU27_4)
--337.48299633740004 BD_scrap_solar(2042_EU27_5)
--381.6040599961999 BD_scrap_solar(2042_EU27_6)
+-155.40406453583998 BD_scrap_solar(2042_EU27_1)
+-291.100576032 BD_scrap_solar(2042_EU27_2)
+-409.58874706752 BD_scrap_solar(2042_EU27_3)
+-513.0508509979201 BD_scrap_solar(2042_EU27_4)
+-603.3924176126401 BD_scrap_solar(2042_EU27_5)
+-682.27732606032 BD_scrap_solar(2042_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2043_EU27)_:
 +1 pricereduction_scrap_solar_unit(2043_EU27)
--86.91893999939998 BD_scrap_solar(2043_EU27_1)
--162.81526211999997 BD_scrap_solar(2043_EU27_2)
--229.0867992232 BD_scrap_solar(2043_EU27_3)
--286.9541171122 BD_scrap_solar(2043_EU27_4)
--337.48299633740004 BD_scrap_solar(2043_EU27_5)
--381.6040599961999 BD_scrap_solar(2043_EU27_6)
+-155.40406453583998 BD_scrap_solar(2043_EU27_1)
+-291.100576032 BD_scrap_solar(2043_EU27_2)
+-409.58874706752 BD_scrap_solar(2043_EU27_3)
+-513.0508509979201 BD_scrap_solar(2043_EU27_4)
+-603.3924176126401 BD_scrap_solar(2043_EU27_5)
+-682.27732606032 BD_scrap_solar(2043_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2044_EU27)_:
 +1 pricereduction_scrap_solar_unit(2044_EU27)
--86.91893999939998 BD_scrap_solar(2044_EU27_1)
--162.81526211999997 BD_scrap_solar(2044_EU27_2)
--229.0867992232 BD_scrap_solar(2044_EU27_3)
--286.9541171122 BD_scrap_solar(2044_EU27_4)
--337.48299633740004 BD_scrap_solar(2044_EU27_5)
--381.6040599961999 BD_scrap_solar(2044_EU27_6)
+-155.40406453583998 BD_scrap_solar(2044_EU27_1)
+-291.100576032 BD_scrap_solar(2044_EU27_2)
+-409.58874706752 BD_scrap_solar(2044_EU27_3)
+-513.0508509979201 BD_scrap_solar(2044_EU27_4)
+-603.3924176126401 BD_scrap_solar(2044_EU27_5)
+-682.27732606032 BD_scrap_solar(2044_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2045_EU27)_:
 +1 pricereduction_scrap_solar_unit(2045_EU27)
--86.91893999939998 BD_scrap_solar(2045_EU27_1)
--162.81526211999997 BD_scrap_solar(2045_EU27_2)
--229.0867992232 BD_scrap_solar(2045_EU27_3)
--286.9541171122 BD_scrap_solar(2045_EU27_4)
--337.48299633740004 BD_scrap_solar(2045_EU27_5)
--381.6040599961999 BD_scrap_solar(2045_EU27_6)
+-155.40406453583998 BD_scrap_solar(2045_EU27_1)
+-291.100576032 BD_scrap_solar(2045_EU27_2)
+-409.58874706752 BD_scrap_solar(2045_EU27_3)
+-513.0508509979201 BD_scrap_solar(2045_EU27_4)
+-603.3924176126401 BD_scrap_solar(2045_EU27_5)
+-682.27732606032 BD_scrap_solar(2045_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2046_EU27)_:
 +1 pricereduction_scrap_solar_unit(2046_EU27)
--86.91893999939998 BD_scrap_solar(2046_EU27_1)
--162.81526211999997 BD_scrap_solar(2046_EU27_2)
--229.0867992232 BD_scrap_solar(2046_EU27_3)
--286.9541171122 BD_scrap_solar(2046_EU27_4)
--337.48299633740004 BD_scrap_solar(2046_EU27_5)
--381.6040599961999 BD_scrap_solar(2046_EU27_6)
+-155.40406453583998 BD_scrap_solar(2046_EU27_1)
+-291.100576032 BD_scrap_solar(2046_EU27_2)
+-409.58874706752 BD_scrap_solar(2046_EU27_3)
+-513.0508509979201 BD_scrap_solar(2046_EU27_4)
+-603.3924176126401 BD_scrap_solar(2046_EU27_5)
+-682.27732606032 BD_scrap_solar(2046_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2047_EU27)_:
 +1 pricereduction_scrap_solar_unit(2047_EU27)
--86.91893999939998 BD_scrap_solar(2047_EU27_1)
--162.81526211999997 BD_scrap_solar(2047_EU27_2)
--229.0867992232 BD_scrap_solar(2047_EU27_3)
--286.9541171122 BD_scrap_solar(2047_EU27_4)
--337.48299633740004 BD_scrap_solar(2047_EU27_5)
--381.6040599961999 BD_scrap_solar(2047_EU27_6)
+-155.40406453583998 BD_scrap_solar(2047_EU27_1)
+-291.100576032 BD_scrap_solar(2047_EU27_2)
+-409.58874706752 BD_scrap_solar(2047_EU27_3)
+-513.0508509979201 BD_scrap_solar(2047_EU27_4)
+-603.3924176126401 BD_scrap_solar(2047_EU27_5)
+-682.27732606032 BD_scrap_solar(2047_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2048_EU27)_:
 +1 pricereduction_scrap_solar_unit(2048_EU27)
--86.91893999939998 BD_scrap_solar(2048_EU27_1)
--162.81526211999997 BD_scrap_solar(2048_EU27_2)
--229.0867992232 BD_scrap_solar(2048_EU27_3)
--286.9541171122 BD_scrap_solar(2048_EU27_4)
--337.48299633740004 BD_scrap_solar(2048_EU27_5)
--381.6040599961999 BD_scrap_solar(2048_EU27_6)
+-155.40406453583998 BD_scrap_solar(2048_EU27_1)
+-291.100576032 BD_scrap_solar(2048_EU27_2)
+-409.58874706752 BD_scrap_solar(2048_EU27_3)
+-513.0508509979201 BD_scrap_solar(2048_EU27_4)
+-603.3924176126401 BD_scrap_solar(2048_EU27_5)
+-682.27732606032 BD_scrap_solar(2048_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2049_EU27)_:
 +1 pricereduction_scrap_solar_unit(2049_EU27)
--86.91893999939998 BD_scrap_solar(2049_EU27_1)
--162.81526211999997 BD_scrap_solar(2049_EU27_2)
--229.0867992232 BD_scrap_solar(2049_EU27_3)
--286.9541171122 BD_scrap_solar(2049_EU27_4)
--337.48299633740004 BD_scrap_solar(2049_EU27_5)
--381.6040599961999 BD_scrap_solar(2049_EU27_6)
+-155.40406453583998 BD_scrap_solar(2049_EU27_1)
+-291.100576032 BD_scrap_solar(2049_EU27_2)
+-409.58874706752 BD_scrap_solar(2049_EU27_3)
+-513.0508509979201 BD_scrap_solar(2049_EU27_4)
+-603.3924176126401 BD_scrap_solar(2049_EU27_5)
+-682.27732606032 BD_scrap_solar(2049_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_unit(2050_EU27)_:
 +1 pricereduction_scrap_solar_unit(2050_EU27)
--86.91893999939998 BD_scrap_solar(2050_EU27_1)
--162.81526211999997 BD_scrap_solar(2050_EU27_2)
--229.0867992232 BD_scrap_solar(2050_EU27_3)
--286.9541171122 BD_scrap_solar(2050_EU27_4)
--337.48299633740004 BD_scrap_solar(2050_EU27_5)
--381.6040599961999 BD_scrap_solar(2050_EU27_6)
+-155.40406453583998 BD_scrap_solar(2050_EU27_1)
+-291.100576032 BD_scrap_solar(2050_EU27_2)
+-409.58874706752 BD_scrap_solar(2050_EU27_3)
+-513.0508509979201 BD_scrap_solar(2050_EU27_4)
+-603.3924176126401 BD_scrap_solar(2050_EU27_5)
+-682.27732606032 BD_scrap_solar(2050_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2024_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2024_EU27)
--86.91893999939998 aux_scrap_solar(2024_EU27_1)
--162.81526211999997 aux_scrap_solar(2024_EU27_2)
--229.0867992232 aux_scrap_solar(2024_EU27_3)
--286.9541171122 aux_scrap_solar(2024_EU27_4)
--337.48299633740004 aux_scrap_solar(2024_EU27_5)
--381.6040599961999 aux_scrap_solar(2024_EU27_6)
+-155.40406453583998 aux_scrap_solar(2024_EU27_1)
+-291.100576032 aux_scrap_solar(2024_EU27_2)
+-409.58874706752 aux_scrap_solar(2024_EU27_3)
+-513.0508509979201 aux_scrap_solar(2024_EU27_4)
+-603.3924176126401 aux_scrap_solar(2024_EU27_5)
+-682.27732606032 aux_scrap_solar(2024_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2025_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2025_EU27)
--86.91893999939998 aux_scrap_solar(2025_EU27_1)
--162.81526211999997 aux_scrap_solar(2025_EU27_2)
--229.0867992232 aux_scrap_solar(2025_EU27_3)
--286.9541171122 aux_scrap_solar(2025_EU27_4)
--337.48299633740004 aux_scrap_solar(2025_EU27_5)
--381.6040599961999 aux_scrap_solar(2025_EU27_6)
+-155.40406453583998 aux_scrap_solar(2025_EU27_1)
+-291.100576032 aux_scrap_solar(2025_EU27_2)
+-409.58874706752 aux_scrap_solar(2025_EU27_3)
+-513.0508509979201 aux_scrap_solar(2025_EU27_4)
+-603.3924176126401 aux_scrap_solar(2025_EU27_5)
+-682.27732606032 aux_scrap_solar(2025_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2026_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2026_EU27)
--86.91893999939998 aux_scrap_solar(2026_EU27_1)
--162.81526211999997 aux_scrap_solar(2026_EU27_2)
--229.0867992232 aux_scrap_solar(2026_EU27_3)
--286.9541171122 aux_scrap_solar(2026_EU27_4)
--337.48299633740004 aux_scrap_solar(2026_EU27_5)
--381.6040599961999 aux_scrap_solar(2026_EU27_6)
+-155.40406453583998 aux_scrap_solar(2026_EU27_1)
+-291.100576032 aux_scrap_solar(2026_EU27_2)
+-409.58874706752 aux_scrap_solar(2026_EU27_3)
+-513.0508509979201 aux_scrap_solar(2026_EU27_4)
+-603.3924176126401 aux_scrap_solar(2026_EU27_5)
+-682.27732606032 aux_scrap_solar(2026_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2027_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2027_EU27)
--86.91893999939998 aux_scrap_solar(2027_EU27_1)
--162.81526211999997 aux_scrap_solar(2027_EU27_2)
--229.0867992232 aux_scrap_solar(2027_EU27_3)
--286.9541171122 aux_scrap_solar(2027_EU27_4)
--337.48299633740004 aux_scrap_solar(2027_EU27_5)
--381.6040599961999 aux_scrap_solar(2027_EU27_6)
+-155.40406453583998 aux_scrap_solar(2027_EU27_1)
+-291.100576032 aux_scrap_solar(2027_EU27_2)
+-409.58874706752 aux_scrap_solar(2027_EU27_3)
+-513.0508509979201 aux_scrap_solar(2027_EU27_4)
+-603.3924176126401 aux_scrap_solar(2027_EU27_5)
+-682.27732606032 aux_scrap_solar(2027_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2028_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2028_EU27)
--86.91893999939998 aux_scrap_solar(2028_EU27_1)
--162.81526211999997 aux_scrap_solar(2028_EU27_2)
--229.0867992232 aux_scrap_solar(2028_EU27_3)
--286.9541171122 aux_scrap_solar(2028_EU27_4)
--337.48299633740004 aux_scrap_solar(2028_EU27_5)
--381.6040599961999 aux_scrap_solar(2028_EU27_6)
+-155.40406453583998 aux_scrap_solar(2028_EU27_1)
+-291.100576032 aux_scrap_solar(2028_EU27_2)
+-409.58874706752 aux_scrap_solar(2028_EU27_3)
+-513.0508509979201 aux_scrap_solar(2028_EU27_4)
+-603.3924176126401 aux_scrap_solar(2028_EU27_5)
+-682.27732606032 aux_scrap_solar(2028_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2029_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2029_EU27)
--86.91893999939998 aux_scrap_solar(2029_EU27_1)
--162.81526211999997 aux_scrap_solar(2029_EU27_2)
--229.0867992232 aux_scrap_solar(2029_EU27_3)
--286.9541171122 aux_scrap_solar(2029_EU27_4)
--337.48299633740004 aux_scrap_solar(2029_EU27_5)
--381.6040599961999 aux_scrap_solar(2029_EU27_6)
+-155.40406453583998 aux_scrap_solar(2029_EU27_1)
+-291.100576032 aux_scrap_solar(2029_EU27_2)
+-409.58874706752 aux_scrap_solar(2029_EU27_3)
+-513.0508509979201 aux_scrap_solar(2029_EU27_4)
+-603.3924176126401 aux_scrap_solar(2029_EU27_5)
+-682.27732606032 aux_scrap_solar(2029_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2030_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2030_EU27)
--86.91893999939998 aux_scrap_solar(2030_EU27_1)
--162.81526211999997 aux_scrap_solar(2030_EU27_2)
--229.0867992232 aux_scrap_solar(2030_EU27_3)
--286.9541171122 aux_scrap_solar(2030_EU27_4)
--337.48299633740004 aux_scrap_solar(2030_EU27_5)
--381.6040599961999 aux_scrap_solar(2030_EU27_6)
+-155.40406453583998 aux_scrap_solar(2030_EU27_1)
+-291.100576032 aux_scrap_solar(2030_EU27_2)
+-409.58874706752 aux_scrap_solar(2030_EU27_3)
+-513.0508509979201 aux_scrap_solar(2030_EU27_4)
+-603.3924176126401 aux_scrap_solar(2030_EU27_5)
+-682.27732606032 aux_scrap_solar(2030_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2031_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2031_EU27)
--86.91893999939998 aux_scrap_solar(2031_EU27_1)
--162.81526211999997 aux_scrap_solar(2031_EU27_2)
--229.0867992232 aux_scrap_solar(2031_EU27_3)
--286.9541171122 aux_scrap_solar(2031_EU27_4)
--337.48299633740004 aux_scrap_solar(2031_EU27_5)
--381.6040599961999 aux_scrap_solar(2031_EU27_6)
+-155.40406453583998 aux_scrap_solar(2031_EU27_1)
+-291.100576032 aux_scrap_solar(2031_EU27_2)
+-409.58874706752 aux_scrap_solar(2031_EU27_3)
+-513.0508509979201 aux_scrap_solar(2031_EU27_4)
+-603.3924176126401 aux_scrap_solar(2031_EU27_5)
+-682.27732606032 aux_scrap_solar(2031_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2032_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2032_EU27)
--86.91893999939998 aux_scrap_solar(2032_EU27_1)
--162.81526211999997 aux_scrap_solar(2032_EU27_2)
--229.0867992232 aux_scrap_solar(2032_EU27_3)
--286.9541171122 aux_scrap_solar(2032_EU27_4)
--337.48299633740004 aux_scrap_solar(2032_EU27_5)
--381.6040599961999 aux_scrap_solar(2032_EU27_6)
+-155.40406453583998 aux_scrap_solar(2032_EU27_1)
+-291.100576032 aux_scrap_solar(2032_EU27_2)
+-409.58874706752 aux_scrap_solar(2032_EU27_3)
+-513.0508509979201 aux_scrap_solar(2032_EU27_4)
+-603.3924176126401 aux_scrap_solar(2032_EU27_5)
+-682.27732606032 aux_scrap_solar(2032_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2033_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2033_EU27)
--86.91893999939998 aux_scrap_solar(2033_EU27_1)
--162.81526211999997 aux_scrap_solar(2033_EU27_2)
--229.0867992232 aux_scrap_solar(2033_EU27_3)
--286.9541171122 aux_scrap_solar(2033_EU27_4)
--337.48299633740004 aux_scrap_solar(2033_EU27_5)
--381.6040599961999 aux_scrap_solar(2033_EU27_6)
+-155.40406453583998 aux_scrap_solar(2033_EU27_1)
+-291.100576032 aux_scrap_solar(2033_EU27_2)
+-409.58874706752 aux_scrap_solar(2033_EU27_3)
+-513.0508509979201 aux_scrap_solar(2033_EU27_4)
+-603.3924176126401 aux_scrap_solar(2033_EU27_5)
+-682.27732606032 aux_scrap_solar(2033_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2034_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2034_EU27)
--86.91893999939998 aux_scrap_solar(2034_EU27_1)
--162.81526211999997 aux_scrap_solar(2034_EU27_2)
--229.0867992232 aux_scrap_solar(2034_EU27_3)
--286.9541171122 aux_scrap_solar(2034_EU27_4)
--337.48299633740004 aux_scrap_solar(2034_EU27_5)
--381.6040599961999 aux_scrap_solar(2034_EU27_6)
+-155.40406453583998 aux_scrap_solar(2034_EU27_1)
+-291.100576032 aux_scrap_solar(2034_EU27_2)
+-409.58874706752 aux_scrap_solar(2034_EU27_3)
+-513.0508509979201 aux_scrap_solar(2034_EU27_4)
+-603.3924176126401 aux_scrap_solar(2034_EU27_5)
+-682.27732606032 aux_scrap_solar(2034_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2035_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2035_EU27)
--86.91893999939998 aux_scrap_solar(2035_EU27_1)
--162.81526211999997 aux_scrap_solar(2035_EU27_2)
--229.0867992232 aux_scrap_solar(2035_EU27_3)
--286.9541171122 aux_scrap_solar(2035_EU27_4)
--337.48299633740004 aux_scrap_solar(2035_EU27_5)
--381.6040599961999 aux_scrap_solar(2035_EU27_6)
+-155.40406453583998 aux_scrap_solar(2035_EU27_1)
+-291.100576032 aux_scrap_solar(2035_EU27_2)
+-409.58874706752 aux_scrap_solar(2035_EU27_3)
+-513.0508509979201 aux_scrap_solar(2035_EU27_4)
+-603.3924176126401 aux_scrap_solar(2035_EU27_5)
+-682.27732606032 aux_scrap_solar(2035_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2036_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2036_EU27)
--86.91893999939998 aux_scrap_solar(2036_EU27_1)
--162.81526211999997 aux_scrap_solar(2036_EU27_2)
--229.0867992232 aux_scrap_solar(2036_EU27_3)
--286.9541171122 aux_scrap_solar(2036_EU27_4)
--337.48299633740004 aux_scrap_solar(2036_EU27_5)
--381.6040599961999 aux_scrap_solar(2036_EU27_6)
+-155.40406453583998 aux_scrap_solar(2036_EU27_1)
+-291.100576032 aux_scrap_solar(2036_EU27_2)
+-409.58874706752 aux_scrap_solar(2036_EU27_3)
+-513.0508509979201 aux_scrap_solar(2036_EU27_4)
+-603.3924176126401 aux_scrap_solar(2036_EU27_5)
+-682.27732606032 aux_scrap_solar(2036_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2037_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2037_EU27)
--86.91893999939998 aux_scrap_solar(2037_EU27_1)
--162.81526211999997 aux_scrap_solar(2037_EU27_2)
--229.0867992232 aux_scrap_solar(2037_EU27_3)
--286.9541171122 aux_scrap_solar(2037_EU27_4)
--337.48299633740004 aux_scrap_solar(2037_EU27_5)
--381.6040599961999 aux_scrap_solar(2037_EU27_6)
+-155.40406453583998 aux_scrap_solar(2037_EU27_1)
+-291.100576032 aux_scrap_solar(2037_EU27_2)
+-409.58874706752 aux_scrap_solar(2037_EU27_3)
+-513.0508509979201 aux_scrap_solar(2037_EU27_4)
+-603.3924176126401 aux_scrap_solar(2037_EU27_5)
+-682.27732606032 aux_scrap_solar(2037_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2038_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2038_EU27)
--86.91893999939998 aux_scrap_solar(2038_EU27_1)
--162.81526211999997 aux_scrap_solar(2038_EU27_2)
--229.0867992232 aux_scrap_solar(2038_EU27_3)
--286.9541171122 aux_scrap_solar(2038_EU27_4)
--337.48299633740004 aux_scrap_solar(2038_EU27_5)
--381.6040599961999 aux_scrap_solar(2038_EU27_6)
+-155.40406453583998 aux_scrap_solar(2038_EU27_1)
+-291.100576032 aux_scrap_solar(2038_EU27_2)
+-409.58874706752 aux_scrap_solar(2038_EU27_3)
+-513.0508509979201 aux_scrap_solar(2038_EU27_4)
+-603.3924176126401 aux_scrap_solar(2038_EU27_5)
+-682.27732606032 aux_scrap_solar(2038_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2039_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2039_EU27)
--86.91893999939998 aux_scrap_solar(2039_EU27_1)
--162.81526211999997 aux_scrap_solar(2039_EU27_2)
--229.0867992232 aux_scrap_solar(2039_EU27_3)
--286.9541171122 aux_scrap_solar(2039_EU27_4)
--337.48299633740004 aux_scrap_solar(2039_EU27_5)
--381.6040599961999 aux_scrap_solar(2039_EU27_6)
+-155.40406453583998 aux_scrap_solar(2039_EU27_1)
+-291.100576032 aux_scrap_solar(2039_EU27_2)
+-409.58874706752 aux_scrap_solar(2039_EU27_3)
+-513.0508509979201 aux_scrap_solar(2039_EU27_4)
+-603.3924176126401 aux_scrap_solar(2039_EU27_5)
+-682.27732606032 aux_scrap_solar(2039_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2040_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2040_EU27)
--86.91893999939998 aux_scrap_solar(2040_EU27_1)
--162.81526211999997 aux_scrap_solar(2040_EU27_2)
--229.0867992232 aux_scrap_solar(2040_EU27_3)
--286.9541171122 aux_scrap_solar(2040_EU27_4)
--337.48299633740004 aux_scrap_solar(2040_EU27_5)
--381.6040599961999 aux_scrap_solar(2040_EU27_6)
+-155.40406453583998 aux_scrap_solar(2040_EU27_1)
+-291.100576032 aux_scrap_solar(2040_EU27_2)
+-409.58874706752 aux_scrap_solar(2040_EU27_3)
+-513.0508509979201 aux_scrap_solar(2040_EU27_4)
+-603.3924176126401 aux_scrap_solar(2040_EU27_5)
+-682.27732606032 aux_scrap_solar(2040_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2041_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2041_EU27)
--86.91893999939998 aux_scrap_solar(2041_EU27_1)
--162.81526211999997 aux_scrap_solar(2041_EU27_2)
--229.0867992232 aux_scrap_solar(2041_EU27_3)
--286.9541171122 aux_scrap_solar(2041_EU27_4)
--337.48299633740004 aux_scrap_solar(2041_EU27_5)
--381.6040599961999 aux_scrap_solar(2041_EU27_6)
+-155.40406453583998 aux_scrap_solar(2041_EU27_1)
+-291.100576032 aux_scrap_solar(2041_EU27_2)
+-409.58874706752 aux_scrap_solar(2041_EU27_3)
+-513.0508509979201 aux_scrap_solar(2041_EU27_4)
+-603.3924176126401 aux_scrap_solar(2041_EU27_5)
+-682.27732606032 aux_scrap_solar(2041_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2042_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2042_EU27)
--86.91893999939998 aux_scrap_solar(2042_EU27_1)
--162.81526211999997 aux_scrap_solar(2042_EU27_2)
--229.0867992232 aux_scrap_solar(2042_EU27_3)
--286.9541171122 aux_scrap_solar(2042_EU27_4)
--337.48299633740004 aux_scrap_solar(2042_EU27_5)
--381.6040599961999 aux_scrap_solar(2042_EU27_6)
+-155.40406453583998 aux_scrap_solar(2042_EU27_1)
+-291.100576032 aux_scrap_solar(2042_EU27_2)
+-409.58874706752 aux_scrap_solar(2042_EU27_3)
+-513.0508509979201 aux_scrap_solar(2042_EU27_4)
+-603.3924176126401 aux_scrap_solar(2042_EU27_5)
+-682.27732606032 aux_scrap_solar(2042_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2043_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2043_EU27)
--86.91893999939998 aux_scrap_solar(2043_EU27_1)
--162.81526211999997 aux_scrap_solar(2043_EU27_2)
--229.0867992232 aux_scrap_solar(2043_EU27_3)
--286.9541171122 aux_scrap_solar(2043_EU27_4)
--337.48299633740004 aux_scrap_solar(2043_EU27_5)
--381.6040599961999 aux_scrap_solar(2043_EU27_6)
+-155.40406453583998 aux_scrap_solar(2043_EU27_1)
+-291.100576032 aux_scrap_solar(2043_EU27_2)
+-409.58874706752 aux_scrap_solar(2043_EU27_3)
+-513.0508509979201 aux_scrap_solar(2043_EU27_4)
+-603.3924176126401 aux_scrap_solar(2043_EU27_5)
+-682.27732606032 aux_scrap_solar(2043_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2044_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2044_EU27)
--86.91893999939998 aux_scrap_solar(2044_EU27_1)
--162.81526211999997 aux_scrap_solar(2044_EU27_2)
--229.0867992232 aux_scrap_solar(2044_EU27_3)
--286.9541171122 aux_scrap_solar(2044_EU27_4)
--337.48299633740004 aux_scrap_solar(2044_EU27_5)
--381.6040599961999 aux_scrap_solar(2044_EU27_6)
+-155.40406453583998 aux_scrap_solar(2044_EU27_1)
+-291.100576032 aux_scrap_solar(2044_EU27_2)
+-409.58874706752 aux_scrap_solar(2044_EU27_3)
+-513.0508509979201 aux_scrap_solar(2044_EU27_4)
+-603.3924176126401 aux_scrap_solar(2044_EU27_5)
+-682.27732606032 aux_scrap_solar(2044_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2045_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2045_EU27)
--86.91893999939998 aux_scrap_solar(2045_EU27_1)
--162.81526211999997 aux_scrap_solar(2045_EU27_2)
--229.0867992232 aux_scrap_solar(2045_EU27_3)
--286.9541171122 aux_scrap_solar(2045_EU27_4)
--337.48299633740004 aux_scrap_solar(2045_EU27_5)
--381.6040599961999 aux_scrap_solar(2045_EU27_6)
+-155.40406453583998 aux_scrap_solar(2045_EU27_1)
+-291.100576032 aux_scrap_solar(2045_EU27_2)
+-409.58874706752 aux_scrap_solar(2045_EU27_3)
+-513.0508509979201 aux_scrap_solar(2045_EU27_4)
+-603.3924176126401 aux_scrap_solar(2045_EU27_5)
+-682.27732606032 aux_scrap_solar(2045_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2046_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2046_EU27)
--86.91893999939998 aux_scrap_solar(2046_EU27_1)
--162.81526211999997 aux_scrap_solar(2046_EU27_2)
--229.0867992232 aux_scrap_solar(2046_EU27_3)
--286.9541171122 aux_scrap_solar(2046_EU27_4)
--337.48299633740004 aux_scrap_solar(2046_EU27_5)
--381.6040599961999 aux_scrap_solar(2046_EU27_6)
+-155.40406453583998 aux_scrap_solar(2046_EU27_1)
+-291.100576032 aux_scrap_solar(2046_EU27_2)
+-409.58874706752 aux_scrap_solar(2046_EU27_3)
+-513.0508509979201 aux_scrap_solar(2046_EU27_4)
+-603.3924176126401 aux_scrap_solar(2046_EU27_5)
+-682.27732606032 aux_scrap_solar(2046_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2047_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2047_EU27)
--86.91893999939998 aux_scrap_solar(2047_EU27_1)
--162.81526211999997 aux_scrap_solar(2047_EU27_2)
--229.0867992232 aux_scrap_solar(2047_EU27_3)
--286.9541171122 aux_scrap_solar(2047_EU27_4)
--337.48299633740004 aux_scrap_solar(2047_EU27_5)
--381.6040599961999 aux_scrap_solar(2047_EU27_6)
+-155.40406453583998 aux_scrap_solar(2047_EU27_1)
+-291.100576032 aux_scrap_solar(2047_EU27_2)
+-409.58874706752 aux_scrap_solar(2047_EU27_3)
+-513.0508509979201 aux_scrap_solar(2047_EU27_4)
+-603.3924176126401 aux_scrap_solar(2047_EU27_5)
+-682.27732606032 aux_scrap_solar(2047_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2048_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2048_EU27)
--86.91893999939998 aux_scrap_solar(2048_EU27_1)
--162.81526211999997 aux_scrap_solar(2048_EU27_2)
--229.0867992232 aux_scrap_solar(2048_EU27_3)
--286.9541171122 aux_scrap_solar(2048_EU27_4)
--337.48299633740004 aux_scrap_solar(2048_EU27_5)
--381.6040599961999 aux_scrap_solar(2048_EU27_6)
+-155.40406453583998 aux_scrap_solar(2048_EU27_1)
+-291.100576032 aux_scrap_solar(2048_EU27_2)
+-409.58874706752 aux_scrap_solar(2048_EU27_3)
+-513.0508509979201 aux_scrap_solar(2048_EU27_4)
+-603.3924176126401 aux_scrap_solar(2048_EU27_5)
+-682.27732606032 aux_scrap_solar(2048_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2049_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2049_EU27)
--86.91893999939998 aux_scrap_solar(2049_EU27_1)
--162.81526211999997 aux_scrap_solar(2049_EU27_2)
--229.0867992232 aux_scrap_solar(2049_EU27_3)
--286.9541171122 aux_scrap_solar(2049_EU27_4)
--337.48299633740004 aux_scrap_solar(2049_EU27_5)
--381.6040599961999 aux_scrap_solar(2049_EU27_6)
+-155.40406453583998 aux_scrap_solar(2049_EU27_1)
+-291.100576032 aux_scrap_solar(2049_EU27_2)
+-409.58874706752 aux_scrap_solar(2049_EU27_3)
+-513.0508509979201 aux_scrap_solar(2049_EU27_4)
+-603.3924176126401 aux_scrap_solar(2049_EU27_5)
+-682.27732606032 aux_scrap_solar(2049_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total(2050_EU27)_:
 +1 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2050_EU27)
--86.91893999939998 aux_scrap_solar(2050_EU27_1)
--162.81526211999997 aux_scrap_solar(2050_EU27_2)
--229.0867992232 aux_scrap_solar(2050_EU27_3)
--286.9541171122 aux_scrap_solar(2050_EU27_4)
--337.48299633740004 aux_scrap_solar(2050_EU27_5)
--381.6040599961999 aux_scrap_solar(2050_EU27_6)
+-155.40406453583998 aux_scrap_solar(2050_EU27_1)
+-291.100576032 aux_scrap_solar(2050_EU27_2)
+-409.58874706752 aux_scrap_solar(2050_EU27_3)
+-513.0508509979201 aux_scrap_solar(2050_EU27_4)
+-603.3924176126401 aux_scrap_solar(2050_EU27_5)
+-682.27732606032 aux_scrap_solar(2050_EU27_6)
 = 0
 
 c_e_scrap_solar_constr_total_capex(2024_EU27)_:
@@ -527714,7 +527714,6 @@ c_e_capacity_scrap_total_rule(2050_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2024_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2024_EU27_Batteries)
 +1 cost_scrap(2024_EU27_Batteries)
 = 0
 
@@ -527722,7 +527721,7 @@ c_e_cost_scrap_rule(2024_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2024_EU27)
 +107.14953153384035 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2024_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2024_EU27)
--47290.88138507462 capacity_scrap_rec(2024_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2024_EU27_solarPV)
 +1 cost_scrap(2024_EU27_solarPV)
 -53005.88833129696 scraphandling_cap_new(2024_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2024_EU27_solarPV)
@@ -527753,7 +527752,6 @@ c_e_cost_scrap_rule(2024_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2025_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2025_EU27_Batteries)
 +1 cost_scrap(2025_EU27_Batteries)
 = 0
 
@@ -527761,7 +527759,7 @@ c_e_cost_scrap_rule(2025_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2025_EU27)
 +104.028671392078 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2025_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2025_EU27)
--47290.88138507462 capacity_scrap_rec(2025_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2025_EU27_solarPV)
 +1 cost_scrap(2025_EU27_solarPV)
 -51462.02750611355 scraphandling_cap_new(2025_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2025_EU27_solarPV)
@@ -527792,7 +527790,6 @@ c_e_cost_scrap_rule(2025_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2026_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2026_EU27_Batteries)
 +1 cost_scrap(2026_EU27_Batteries)
 = 0
 
@@ -527800,7 +527797,7 @@ c_e_cost_scrap_rule(2026_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2026_EU27)
 +100.99871008939611 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2026_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2026_EU27)
--47290.88138507462 capacity_scrap_rec(2026_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2026_EU27_solarPV)
 +1 cost_scrap(2026_EU27_solarPV)
 -49963.133501081116 scraphandling_cap_new(2026_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2026_EU27_solarPV)
@@ -527831,7 +527828,6 @@ c_e_cost_scrap_rule(2026_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2027_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2027_EU27_Batteries)
 +1 cost_scrap(2027_EU27_Batteries)
 = 0
 
@@ -527839,7 +527835,7 @@ c_e_cost_scrap_rule(2027_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2027_EU27)
 +95.36750533392805 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2027_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2027_EU27)
--47290.88138507462 capacity_scrap_rec(2027_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2027_EU27_solarPV)
 +1 cost_scrap(2027_EU27_solarPV)
 -47177.42827058518 scraphandling_cap_new(2027_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2027_EU27_solarPV)
@@ -527870,7 +527866,6 @@ c_e_cost_scrap_rule(2027_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2028_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2028_EU27_Batteries)
 +1 cost_scrap(2028_EU27_Batteries)
 = 0
 
@@ -527878,7 +527873,7 @@ c_e_cost_scrap_rule(2028_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2028_EU27)
 +89.90031625094937 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2028_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2028_EU27)
--47290.88138507462 capacity_scrap_rec(2028_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2028_EU27_solarPV)
 +1 cost_scrap(2028_EU27_solarPV)
 -44472.86008563768 scraphandling_cap_new(2028_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2028_EU27_solarPV)
@@ -527909,7 +527904,6 @@ c_e_cost_scrap_rule(2028_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2029_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2029_EU27_Batteries)
 +1 cost_scrap(2029_EU27_Batteries)
 = 0
 
@@ -527917,7 +527911,7 @@ c_e_cost_scrap_rule(2029_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2029_EU27)
 +84.59236568495062 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2029_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2029_EU27)
--47290.88138507462 capacity_scrap_rec(2029_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2029_EU27_solarPV)
 +1 cost_scrap(2029_EU27_solarPV)
 -41847.0657313197 scraphandling_cap_new(2029_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2029_EU27_solarPV)
@@ -527948,7 +527942,6 @@ c_e_cost_scrap_rule(2029_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2030_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2030_EU27_Batteries)
 +1 cost_scrap(2030_EU27_Batteries)
 = 0
 
@@ -527956,7 +527949,7 @@ c_e_cost_scrap_rule(2030_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2030_EU27)
 +79.43901562087419 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2030_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2030_EU27)
--47290.88138507462 capacity_scrap_rec(2030_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2030_EU27_solarPV)
 +1 cost_scrap(2030_EU27_solarPV)
 -39297.75082421487 scraphandling_cap_new(2030_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2030_EU27_solarPV)
@@ -527987,7 +527980,6 @@ c_e_cost_scrap_rule(2030_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2031_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2031_EU27_Batteries)
 +1 cost_scrap(2031_EU27_Batteries)
 = 0
 
@@ -527995,7 +527987,7 @@ c_e_cost_scrap_rule(2031_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2031_EU27)
 +74.4357631314796 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2031_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2031_EU27)
--47290.88138507462 capacity_scrap_rec(2031_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2031_EU27_solarPV)
 +1 cost_scrap(2031_EU27_solarPV)
 -36822.68780760826 scraphandling_cap_new(2031_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2031_EU27_solarPV)
@@ -528026,7 +528018,6 @@ c_e_cost_scrap_rule(2031_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2032_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2032_EU27_Batteries)
 +1 cost_scrap(2032_EU27_Batteries)
 = 0
 
@@ -528034,7 +528025,7 @@ c_e_cost_scrap_rule(2032_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2032_EU27)
 +69.57823644274696 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2032_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2032_EU27)
--47290.88138507462 capacity_scrap_rec(2032_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2032_EU27_solarPV)
 +1 cost_scrap(2032_EU27_solarPV)
 -34419.71400507754 scraphandling_cap_new(2032_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2032_EU27_solarPV)
@@ -528065,7 +528056,6 @@ c_e_cost_scrap_rule(2032_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2033_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2033_EU27_Batteries)
 +1 cost_scrap(2033_EU27_Batteries)
 = 0
 
@@ -528073,7 +528063,7 @@ c_e_cost_scrap_rule(2033_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2033_EU27)
 +64.86219111388034 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2033_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2033_EU27)
--47290.88138507462 capacity_scrap_rec(2033_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2033_EU27_solarPV)
 +1 cost_scrap(2033_EU27_solarPV)
 -32086.729730775885 scraphandling_cap_new(2033_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2033_EU27_solarPV)
@@ -528104,7 +528094,6 @@ c_e_cost_scrap_rule(2033_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2034_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2034_EU27_Batteries)
 +1 cost_scrap(2034_EU27_Batteries)
 = 0
 
@@ -528112,7 +528101,7 @@ c_e_cost_scrap_rule(2034_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2034_EU27)
 +60.283506328572926 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2034_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2034_EU27)
--47290.88138507462 capacity_scrap_rec(2034_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2034_EU27_solarPV)
 +1 cost_scrap(2034_EU27_solarPV)
 -29821.696454754856 scraphandling_cap_new(2034_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2034_EU27_solarPV)
@@ -528143,7 +528132,6 @@ c_e_cost_scrap_rule(2034_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2035_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2035_EU27_Batteries)
 +1 cost_scrap(2035_EU27_Batteries)
 = 0
 
@@ -528151,7 +528139,7 @@ c_e_cost_scrap_rule(2035_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2035_EU27)
 +55.83818129429392 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2035_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2035_EU27)
--47290.88138507462 capacity_scrap_rec(2035_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2035_EU27_solarPV)
 +1 cost_scrap(2035_EU27_solarPV)
 -27622.635021724745 scraphandling_cap_new(2035_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2035_EU27_solarPV)
@@ -528182,7 +528170,6 @@ c_e_cost_scrap_rule(2035_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2036_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2036_EU27_Batteries)
 +1 cost_scrap(2036_EU27_Batteries)
 = 0
 
@@ -528190,7 +528177,7 @@ c_e_cost_scrap_rule(2036_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2036_EU27)
 +51.52233174645019 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2036_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2036_EU27)
--47290.88138507462 capacity_scrap_rec(2036_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2036_EU27_solarPV)
 +1 cost_scrap(2036_EU27_solarPV)
 -25487.623921695496 scraphandling_cap_new(2036_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2036_EU27_solarPV)
@@ -528221,7 +528208,6 @@ c_e_cost_scrap_rule(2036_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2037_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2037_EU27_Batteries)
 +1 cost_scrap(2037_EU27_Batteries)
 = 0
 
@@ -528229,7 +528215,7 @@ c_e_cost_scrap_rule(2037_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2037_EU27)
 +47.33218655436891 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2037_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2037_EU27)
--47290.88138507462 capacity_scrap_rec(2037_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2037_EU27_solarPV)
 +1 cost_scrap(2037_EU27_solarPV)
 -23414.79761098749 scraphandling_cap_new(2037_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2037_EU27_solarPV)
@@ -528260,7 +528246,6 @@ c_e_cost_scrap_rule(2037_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2038_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2038_EU27_Batteries)
 +1 cost_scrap(2038_EU27_Batteries)
 = 0
 
@@ -528268,7 +528253,7 @@ c_e_cost_scrap_rule(2038_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2038_EU27)
 +43.264084426134666 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2038_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2038_EU27)
--47290.88138507462 capacity_scrap_rec(2038_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2038_EU27_solarPV)
 +1 cost_scrap(2038_EU27_solarPV)
 -21402.344882144775 scraphandling_cap_new(2038_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2038_EU27_solarPV)
@@ -528299,7 +528284,6 @@ c_e_cost_scrap_rule(2038_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2039_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2039_EU27_Batteries)
 +1 cost_scrap(2039_EU27_Batteries)
 = 0
 
@@ -528307,7 +528291,7 @@ c_e_cost_scrap_rule(2039_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2039_EU27)
 +39.31447070940237 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2039_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2039_EU27)
--47290.88138507462 capacity_scrap_rec(2039_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2039_EU27_solarPV)
 +1 cost_scrap(2039_EU27_solarPV)
 -19448.507281326594 scraphandling_cap_new(2039_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2039_EU27_solarPV)
@@ -528338,7 +528322,6 @@ c_e_cost_scrap_rule(2039_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2040_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2040_EU27_Batteries)
 +1 cost_scrap(2040_EU27_Batteries)
 = 0
 
@@ -528346,7 +528329,7 @@ c_e_cost_scrap_rule(2040_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2040_EU27)
 +35.47989428539044 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2040_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2040_EU27)
--47290.88138507462 capacity_scrap_rec(2040_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2040_EU27_solarPV)
 +1 cost_scrap(2040_EU27_solarPV)
 -17551.577571794383 scraphandling_cap_new(2040_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2040_EU27_solarPV)
@@ -528377,7 +528360,6 @@ c_e_cost_scrap_rule(2040_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2041_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2041_EU27_Batteries)
 +1 cost_scrap(2041_EU27_Batteries)
 = 0
 
@@ -528385,7 +528367,7 @@ c_e_cost_scrap_rule(2041_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2041_EU27)
 +31.75700455334004 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2041_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2041_EU27)
--47290.88138507462 capacity_scrap_rec(2041_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2041_EU27_solarPV)
 +1 cost_scrap(2041_EU27_solarPV)
 -15709.898242151463 scraphandling_cap_new(2041_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2041_EU27_solarPV)
@@ -528416,7 +528398,6 @@ c_e_cost_scrap_rule(2041_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2042_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2042_EU27_Batteries)
 +1 cost_scrap(2042_EU27_Batteries)
 = 0
 
@@ -528424,7 +528405,7 @@ c_e_cost_scrap_rule(2042_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2042_EU27)
 +28.14254850280566 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2042_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2042_EU27)
--47290.88138507462 capacity_scrap_rec(2042_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2042_EU27_solarPV)
 +1 cost_scrap(2042_EU27_solarPV)
 -13921.860058032122 scraphandling_cap_new(2042_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2042_EU27_solarPV)
@@ -528455,7 +528436,6 @@ c_e_cost_scrap_rule(2042_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2043_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2043_EU27_Batteries)
 +1 cost_scrap(2043_EU27_Batteries)
 = 0
 
@@ -528463,7 +528443,7 @@ c_e_cost_scrap_rule(2043_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2043_EU27)
 +24.633367871218876 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2043_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2043_EU27)
--47290.88138507462 capacity_scrap_rec(2043_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2043_EU27_solarPV)
 +1 cost_scrap(2043_EU27_solarPV)
 -12185.900655974507 scraphandling_cap_new(2043_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2043_EU27_solarPV)
@@ -528494,7 +528474,6 @@ c_e_cost_scrap_rule(2043_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2044_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2044_EU27_Batteries)
 +1 cost_scrap(2044_EU27_Batteries)
 = 0
 
@@ -528502,7 +528481,7 @@ c_e_cost_scrap_rule(2044_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2044_EU27)
 +21.226396384241415 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2044_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2044_EU27)
--47290.88138507462 capacity_scrap_rec(2044_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2044_EU27_solarPV)
 +1 cost_scrap(2044_EU27_solarPV)
 -10500.503178248666 scraphandling_cap_new(2044_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2044_EU27_solarPV)
@@ -528533,7 +528512,6 @@ c_e_cost_scrap_rule(2044_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2045_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2045_EU27_Batteries)
 +1 cost_scrap(2045_EU27_Batteries)
 = 0
 
@@ -528541,7 +528519,7 @@ c_e_cost_scrap_rule(2045_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2045_EU27)
 +17.918657076496324 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2045_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2045_EU27)
--47290.88138507462 capacity_scrap_rec(2045_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2045_EU27_solarPV)
 +1 cost_scrap(2045_EU27_solarPV)
 -8864.194947446884 scraphandling_cap_new(2045_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2045_EU27_solarPV)
@@ -528572,7 +528550,6 @@ c_e_cost_scrap_rule(2045_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2046_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2046_EU27_Batteries)
 +1 cost_scrap(2046_EU27_Batteries)
 = 0
 
@@ -528580,7 +528557,7 @@ c_e_cost_scrap_rule(2046_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2046_EU27)
 +14.70725969033602 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2046_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2046_EU27)
--47290.88138507462 capacity_scrap_rec(2046_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2046_EU27_solarPV)
 +1 cost_scrap(2046_EU27_solarPV)
 -7275.546179678156 scraphandling_cap_new(2046_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2046_EU27_solarPV)
@@ -528611,7 +528588,6 @@ c_e_cost_scrap_rule(2046_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2047_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2047_EU27_Batteries)
 +1 cost_scrap(2047_EU27_Batteries)
 = 0
 
@@ -528619,7 +528595,7 @@ c_e_cost_scrap_rule(2047_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2047_EU27)
 +11.589398150374588 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2047_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2047_EU27)
--47290.88138507462 capacity_scrap_rec(2047_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2047_EU27_solarPV)
 +1 cost_scrap(2047_EU27_solarPV)
 -5733.168735242511 scraphandling_cap_new(2047_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2047_EU27_solarPV)
@@ -528650,7 +528626,6 @@ c_e_cost_scrap_rule(2047_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2048_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2048_EU27_Batteries)
 +1 cost_scrap(2048_EU27_Batteries)
 = 0
 
@@ -528658,7 +528633,7 @@ c_e_cost_scrap_rule(2048_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2048_EU27)
 +8.562348111577055 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2048_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2048_EU27)
--47290.88138507462 capacity_scrap_rec(2048_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2048_EU27_solarPV)
 +1 cost_scrap(2048_EU27_solarPV)
 -4235.714905693328 scraphandling_cap_new(2048_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2048_EU27_solarPV)
@@ -528689,7 +528664,6 @@ c_e_cost_scrap_rule(2048_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2049_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2049_EU27_Batteries)
 +1 cost_scrap(2049_EU27_Batteries)
 = 0
 
@@ -528697,7 +528671,7 @@ c_e_cost_scrap_rule(2049_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2049_EU27)
 +5.623464578763925 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2049_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2049_EU27)
--47290.88138507462 capacity_scrap_rec(2049_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2049_EU27_solarPV)
 +1 cost_scrap(2049_EU27_solarPV)
 -2781.876236228106 scraphandling_cap_new(2049_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2049_EU27_solarPV)
@@ -528728,7 +528702,6 @@ c_e_cost_scrap_rule(2049_EU27_windon)_:
 = 0
 
 c_e_cost_scrap_rule(2050_EU27_Batteries)_:
--5309.74 capacity_scrap_rec(2050_EU27_Batteries)
 +1 cost_scrap(2050_EU27_Batteries)
 = 0
 
@@ -528736,7 +528709,7 @@ c_e_cost_scrap_rule(2050_EU27_solarPV)_:
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED(2050_EU27)
 +2.7701795954502058 PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED(2050_EU27)
 +68.99749253731343 PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED(2050_EU27)
--47290.88138507462 capacity_scrap_rec(2050_EU27_solarPV)
+-84552.28725492538 capacity_scrap_rec(2050_EU27_solarPV)
 +1 cost_scrap(2050_EU27_solarPV)
 -1370.3823823783755 scraphandling_cap_new(2050_EU27_solarPV)
 -84567.91123112883 capacity_scrap_handling_total(2050_EU27_solarPV)
@@ -1524990,1302 +1524963,1302 @@ bounds
    -inf <= storage_costs(2050_EU27_Pump_storage_Elec_Variable) <= +inf
    -inf <= storage_costs(2050_EU27_Pump_storage_Elec_Fuel) <= +inf
    -inf <= storage_costs(2050_EU27_Pump_storage_Elec_Environmental) <= +inf
-   0 <= e_co_stock_block(1_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2024_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2024_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2024_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2025_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2025_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2025_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2026_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2026_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2026_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2027_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2027_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2027_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2028_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2028_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2028_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2029_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2029_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2029_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2030_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2030_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2030_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2031_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2031_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2031_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2032_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2032_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2032_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2033_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2033_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2033_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2034_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2034_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2034_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2035_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2035_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2035_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2036_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2036_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2036_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2037_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2037_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2037_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2038_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2038_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2038_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2039_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2039_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2039_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2040_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2040_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2040_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2041_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2041_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2041_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2042_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2042_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2042_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2043_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2043_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2043_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2044_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2044_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2044_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2045_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2045_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2045_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2046_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2046_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2046_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2047_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2047_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2047_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2048_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2048_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2048_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2049_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2049_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2049_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(1_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(1_2050_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(1_2050_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(1_2050_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(1_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2024_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2024_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2024_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2025_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2025_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2025_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2026_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2026_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2026_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2027_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2027_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2027_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2028_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2028_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2028_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2029_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2029_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2029_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2030_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2030_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2030_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2031_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2031_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2031_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2032_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2032_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2032_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2033_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2033_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2033_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2034_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2034_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2034_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2035_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2035_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2035_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2036_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2036_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2036_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2037_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2037_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2037_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2038_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2038_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2038_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2039_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2039_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2039_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2040_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2040_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2040_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2041_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2041_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2041_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2042_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2042_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2042_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2043_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2043_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2043_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2044_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2044_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2044_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2045_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2045_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2045_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2046_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2046_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2046_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2047_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2047_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2047_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2048_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2048_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2048_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2049_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2049_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2049_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(2_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(2_2050_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(2_2050_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(2_2050_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(2_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2024_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2024_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2024_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2025_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2025_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2025_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2026_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2026_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2026_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2027_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2027_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2027_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2028_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2028_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2028_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2029_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2029_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2029_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2030_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2030_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2030_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2031_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2031_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2031_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2032_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2032_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2032_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2033_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2033_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2033_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2034_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2034_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2034_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2035_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2035_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2035_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2036_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2036_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2036_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2037_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2037_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2037_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2038_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2038_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2038_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2039_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2039_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2039_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2040_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2040_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2040_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2041_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2041_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2041_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2042_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2042_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2042_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2043_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2043_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2043_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2044_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2044_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2044_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2045_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2045_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2045_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2046_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2046_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2046_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2047_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2047_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2047_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2048_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2048_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2048_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2049_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2049_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2049_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(3_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(3_2050_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(3_2050_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(3_2050_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(3_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2024_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2024_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2024_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2025_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2025_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2025_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2026_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2026_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2026_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2027_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2027_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2027_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2028_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2028_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2028_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2029_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2029_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2029_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2030_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2030_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2030_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2031_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2031_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2031_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2032_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2032_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2032_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2033_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2033_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2033_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2034_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2034_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2034_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2035_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2035_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2035_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2036_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2036_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2036_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2037_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2037_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2037_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2038_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2038_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2038_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2039_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2039_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2039_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2040_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2040_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2040_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2041_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2041_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2041_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2042_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2042_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2042_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2043_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2043_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2043_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2044_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2044_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2044_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2045_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2045_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2045_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2046_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2046_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2046_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2047_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2047_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2047_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2048_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2048_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2048_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2049_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2049_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2049_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(4_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(4_2050_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(4_2050_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(4_2050_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(4_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2024_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2024_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2024_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2025_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2025_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2025_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2026_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2026_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2026_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2027_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2027_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2027_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2028_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2028_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2028_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2029_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2029_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2029_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2030_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2030_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2030_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2031_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2031_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2031_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2032_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2032_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2032_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2033_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2033_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2033_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2034_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2034_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2034_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2035_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2035_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2035_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2036_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2036_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2036_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2037_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2037_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2037_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2038_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2038_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2038_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2039_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2039_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2039_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2040_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2040_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2040_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2041_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2041_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2041_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2042_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2042_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2042_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2043_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2043_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2043_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2044_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2044_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2044_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2045_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2045_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2045_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2046_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2046_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2046_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2047_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2047_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2047_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2048_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2048_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2048_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2049_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2049_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2049_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(5_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(5_2050_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(5_2050_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(5_2050_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(5_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2024_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2024_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2024_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2025_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2025_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2025_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2026_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2026_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2026_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2027_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2027_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2027_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2028_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2028_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2028_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2029_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2029_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2029_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2030_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2030_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2030_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2031_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2031_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2031_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2032_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2032_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2032_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2033_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2033_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2033_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2034_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2034_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2034_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2035_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2035_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2035_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2036_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2036_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2036_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2037_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2037_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2037_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2038_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2038_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2038_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2039_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2039_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2039_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2040_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2040_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2040_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2041_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2041_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2041_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2042_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2042_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2042_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2043_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2043_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2043_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2044_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2044_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2044_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2045_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2045_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2045_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2046_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2046_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2046_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2047_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2047_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2047_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2048_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2048_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2048_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2049_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2049_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2049_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(6_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(6_2050_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(6_2050_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(6_2050_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(6_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2024_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2024_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2024_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2025_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2025_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2025_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2026_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2026_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2026_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2027_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2027_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2027_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2028_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2028_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2028_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2029_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2029_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2029_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2030_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2030_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2030_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2031_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2031_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2031_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2032_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2032_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2032_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2033_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2033_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2033_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2034_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2034_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2034_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2035_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2035_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2035_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2036_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2036_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2036_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2037_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2037_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2037_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2038_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2038_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2038_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2039_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2039_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2039_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2040_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2040_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2040_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2041_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2041_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2041_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2042_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2042_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2042_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2043_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2043_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2043_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2044_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2044_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2044_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2045_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2045_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2045_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2046_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2046_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2046_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2047_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2047_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2047_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2048_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2048_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2048_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2049_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2049_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2049_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(7_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(7_2050_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(7_2050_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(7_2050_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(7_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2024_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2024_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2024_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2025_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2025_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2025_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2026_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2026_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2026_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2027_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2027_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2027_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2028_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2028_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2028_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2029_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2029_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2029_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2030_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2030_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2030_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2031_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2031_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2031_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2032_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2032_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2032_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2033_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2033_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2033_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2034_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2034_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2034_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2035_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2035_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2035_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2036_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2036_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2036_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2037_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2037_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2037_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2038_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2038_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2038_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2039_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2039_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2039_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2040_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2040_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2040_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2041_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2041_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2041_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2042_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2042_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2042_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2043_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2043_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2043_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2044_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2044_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2044_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2045_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2045_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2045_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2046_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2046_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2046_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2047_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2047_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2047_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2048_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2048_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2048_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2049_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2049_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2049_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(8_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(8_2050_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(8_2050_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(8_2050_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(8_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2024_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2024_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2024_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2025_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2025_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2025_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2026_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2026_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2026_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2027_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2027_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2027_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2028_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2028_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2028_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2029_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2029_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2029_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2030_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2030_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2030_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2031_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2031_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2031_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2032_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2032_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2032_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2033_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2033_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2033_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2034_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2034_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2034_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2035_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2035_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2035_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2036_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2036_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2036_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2037_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2037_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2037_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2038_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2038_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2038_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2039_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2039_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2039_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2040_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2040_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2040_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2041_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2041_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2041_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2042_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2042_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2042_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2043_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2043_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2043_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2044_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2044_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2044_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2045_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2045_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2045_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2046_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2046_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2046_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2047_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2047_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2047_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2048_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2048_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2048_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2049_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2049_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2049_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(9_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(9_2050_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(9_2050_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(9_2050_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(9_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2024_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2024_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2024_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2025_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2025_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2025_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2026_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2026_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2026_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2027_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2027_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2027_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2028_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2028_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2028_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2029_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2029_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2029_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2030_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2030_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2030_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2031_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2031_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2031_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2032_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2032_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2032_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2033_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2033_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2033_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2034_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2034_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2034_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2035_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2035_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2035_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2036_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2036_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2036_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2037_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2037_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2037_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2038_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2038_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2038_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2039_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2039_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2039_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2040_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2040_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2040_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2041_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2041_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2041_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2042_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2042_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2042_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2043_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2043_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2043_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2044_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2044_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2044_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2045_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2045_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2045_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2046_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2046_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2046_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2047_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2047_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2047_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2048_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2048_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2048_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2049_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2049_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2049_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(10_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(10_2050_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(10_2050_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(10_2050_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(10_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2024_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2024_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2024_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2025_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2025_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2025_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2026_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2026_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2026_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2027_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2027_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2027_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2028_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2028_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2028_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2029_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2029_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2029_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2030_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2030_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2030_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2031_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2031_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2031_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2032_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2032_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2032_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2033_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2033_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2033_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2034_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2034_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2034_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2035_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2035_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2035_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2036_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2036_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2036_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2037_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2037_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2037_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2038_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2038_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2038_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2039_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2039_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2039_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2040_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2040_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2040_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2041_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2041_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2041_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2042_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2042_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2042_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2043_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2043_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2043_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2044_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2044_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2044_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2045_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2045_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2045_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2046_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2046_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2046_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2047_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2047_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2047_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2048_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2048_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2048_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2049_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2049_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2049_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(11_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(11_2050_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(11_2050_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(11_2050_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(11_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2024_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2024_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2024_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2024_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2025_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2025_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2025_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2025_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2026_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2026_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2026_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2026_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2027_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2027_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2027_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2027_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2028_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2028_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2028_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2028_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2029_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2029_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2029_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2029_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2030_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2030_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2030_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2030_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2031_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2031_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2031_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2031_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2032_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2032_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2032_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2032_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2033_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2033_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2033_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2033_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2034_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2034_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2034_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2034_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2035_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2035_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2035_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2035_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2036_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2036_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2036_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2036_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2037_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2037_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2037_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2037_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2038_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2038_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2038_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2038_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2039_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2039_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2039_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2039_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2040_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2040_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2040_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2040_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2041_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2041_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2041_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2041_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2042_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2042_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2042_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2042_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2043_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2043_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2043_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2043_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2044_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2044_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2044_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2044_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2045_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2045_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2045_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2045_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2046_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2046_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2046_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2046_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2047_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2047_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2047_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2047_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2048_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2048_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2048_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2048_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2049_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2049_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2049_EU27_Gas_Stock_NZ_LNG) <= +inf
-   0 <= e_co_stock_block(12_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
+   0 <= e_co_stock_block(12_2049_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock_block(12_2050_EU27_Gas_Stock_pipegas) <= +inf
    0 <= e_co_stock_block(12_2050_EU27_Gas_Stock_NM_LNG) <= +inf
    0 <= e_co_stock_block(12_2050_EU27_Gas_Stock_NZ_LNG) <= +inf
+   0 <= e_co_stock_block(12_2050_EU27_Gas_Stock_WTF_LNG) <= +inf
    0 <= e_co_stock(1_2024_EU27_Biomass_Stock) <= +inf
    0 <= e_co_stock(1_2024_EU27_Coal_Stock) <= +inf
    0 <= e_co_stock(1_2024_EU27_Gas_Stock) <= +inf
@@ -1528582,114 +1528555,114 @@ bounds
    0 <= gas_cost(2049) <= +inf
    0 <= gas_cost(2050) <= +inf
    0 <= gas_total_cost <= +inf
-   0 <= gas_usage_block(2024_WTF_LNG) <= +inf
    0 <= gas_usage_block(2024_pipegas) <= +inf
    0 <= gas_usage_block(2024_NM_LNG) <= +inf
    0 <= gas_usage_block(2024_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2025_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2024_WTF_LNG) <= +inf
    0 <= gas_usage_block(2025_pipegas) <= +inf
    0 <= gas_usage_block(2025_NM_LNG) <= +inf
    0 <= gas_usage_block(2025_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2026_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2025_WTF_LNG) <= +inf
    0 <= gas_usage_block(2026_pipegas) <= +inf
    0 <= gas_usage_block(2026_NM_LNG) <= +inf
    0 <= gas_usage_block(2026_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2027_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2026_WTF_LNG) <= +inf
    0 <= gas_usage_block(2027_pipegas) <= +inf
    0 <= gas_usage_block(2027_NM_LNG) <= +inf
    0 <= gas_usage_block(2027_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2028_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2027_WTF_LNG) <= +inf
    0 <= gas_usage_block(2028_pipegas) <= +inf
    0 <= gas_usage_block(2028_NM_LNG) <= +inf
    0 <= gas_usage_block(2028_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2029_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2028_WTF_LNG) <= +inf
    0 <= gas_usage_block(2029_pipegas) <= +inf
    0 <= gas_usage_block(2029_NM_LNG) <= +inf
    0 <= gas_usage_block(2029_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2030_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2029_WTF_LNG) <= +inf
    0 <= gas_usage_block(2030_pipegas) <= +inf
    0 <= gas_usage_block(2030_NM_LNG) <= +inf
    0 <= gas_usage_block(2030_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2031_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2030_WTF_LNG) <= +inf
    0 <= gas_usage_block(2031_pipegas) <= +inf
    0 <= gas_usage_block(2031_NM_LNG) <= +inf
    0 <= gas_usage_block(2031_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2032_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2031_WTF_LNG) <= +inf
    0 <= gas_usage_block(2032_pipegas) <= +inf
    0 <= gas_usage_block(2032_NM_LNG) <= +inf
    0 <= gas_usage_block(2032_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2033_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2032_WTF_LNG) <= +inf
    0 <= gas_usage_block(2033_pipegas) <= +inf
    0 <= gas_usage_block(2033_NM_LNG) <= +inf
    0 <= gas_usage_block(2033_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2034_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2033_WTF_LNG) <= +inf
    0 <= gas_usage_block(2034_pipegas) <= +inf
    0 <= gas_usage_block(2034_NM_LNG) <= +inf
    0 <= gas_usage_block(2034_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2035_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2034_WTF_LNG) <= +inf
    0 <= gas_usage_block(2035_pipegas) <= +inf
    0 <= gas_usage_block(2035_NM_LNG) <= +inf
    0 <= gas_usage_block(2035_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2036_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2035_WTF_LNG) <= +inf
    0 <= gas_usage_block(2036_pipegas) <= +inf
    0 <= gas_usage_block(2036_NM_LNG) <= +inf
    0 <= gas_usage_block(2036_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2037_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2036_WTF_LNG) <= +inf
    0 <= gas_usage_block(2037_pipegas) <= +inf
    0 <= gas_usage_block(2037_NM_LNG) <= +inf
    0 <= gas_usage_block(2037_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2038_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2037_WTF_LNG) <= +inf
    0 <= gas_usage_block(2038_pipegas) <= +inf
    0 <= gas_usage_block(2038_NM_LNG) <= +inf
    0 <= gas_usage_block(2038_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2039_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2038_WTF_LNG) <= +inf
    0 <= gas_usage_block(2039_pipegas) <= +inf
    0 <= gas_usage_block(2039_NM_LNG) <= +inf
    0 <= gas_usage_block(2039_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2040_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2039_WTF_LNG) <= +inf
    0 <= gas_usage_block(2040_pipegas) <= +inf
    0 <= gas_usage_block(2040_NM_LNG) <= +inf
    0 <= gas_usage_block(2040_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2041_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2040_WTF_LNG) <= +inf
    0 <= gas_usage_block(2041_pipegas) <= +inf
    0 <= gas_usage_block(2041_NM_LNG) <= +inf
    0 <= gas_usage_block(2041_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2042_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2041_WTF_LNG) <= +inf
    0 <= gas_usage_block(2042_pipegas) <= +inf
    0 <= gas_usage_block(2042_NM_LNG) <= +inf
    0 <= gas_usage_block(2042_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2043_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2042_WTF_LNG) <= +inf
    0 <= gas_usage_block(2043_pipegas) <= +inf
    0 <= gas_usage_block(2043_NM_LNG) <= +inf
    0 <= gas_usage_block(2043_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2044_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2043_WTF_LNG) <= +inf
    0 <= gas_usage_block(2044_pipegas) <= +inf
    0 <= gas_usage_block(2044_NM_LNG) <= +inf
    0 <= gas_usage_block(2044_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2045_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2044_WTF_LNG) <= +inf
    0 <= gas_usage_block(2045_pipegas) <= +inf
    0 <= gas_usage_block(2045_NM_LNG) <= +inf
    0 <= gas_usage_block(2045_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2046_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2045_WTF_LNG) <= +inf
    0 <= gas_usage_block(2046_pipegas) <= +inf
    0 <= gas_usage_block(2046_NM_LNG) <= +inf
    0 <= gas_usage_block(2046_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2047_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2046_WTF_LNG) <= +inf
    0 <= gas_usage_block(2047_pipegas) <= +inf
    0 <= gas_usage_block(2047_NM_LNG) <= +inf
    0 <= gas_usage_block(2047_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2048_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2047_WTF_LNG) <= +inf
    0 <= gas_usage_block(2048_pipegas) <= +inf
    0 <= gas_usage_block(2048_NM_LNG) <= +inf
    0 <= gas_usage_block(2048_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2049_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2048_WTF_LNG) <= +inf
    0 <= gas_usage_block(2049_pipegas) <= +inf
    0 <= gas_usage_block(2049_NM_LNG) <= +inf
    0 <= gas_usage_block(2049_NZ_LNG) <= +inf
-   0 <= gas_usage_block(2050_WTF_LNG) <= +inf
+   0 <= gas_usage_block(2049_WTF_LNG) <= +inf
    0 <= gas_usage_block(2050_pipegas) <= +inf
    0 <= gas_usage_block(2050_NM_LNG) <= +inf
    0 <= gas_usage_block(2050_NZ_LNG) <= +inf
+   0 <= gas_usage_block(2050_WTF_LNG) <= +inf
    0 <= material_imported_block(2024_aluminum_Tier1) <= +inf
    0 <= material_imported_block(2024_aluminum_Tier2) <= +inf
    0 <= material_imported_block(2024_aluminum_Tier3) <= +inf
