@@ -36,7 +36,7 @@ class AbstractConstraint(ABC):
 # 2. NZIA CONSTRAINTS (40% Assembly in the EU)
 # ==============================================================================
 class nzia_strict_rule(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech, stage, target_techs):
+    def apply_rule(self, m, stf, location, tech, stage, target_techs, target_quota):
         if stf < 2030:
             return pyomo.Constraint.Skip
 
@@ -47,11 +47,11 @@ class nzia_strict_rule(AbstractConstraint):
             m.capacity_produced_flow[stf, location, tech, stage]
             + m.capacity_produced_stockout[stf, location, tech, stage]
         )
-        return domestic_contribution >= 0.40 * m.Supply[stf, location, tech, stage]
+        return domestic_contribution >= target_quota * m.Supply[stf, location, tech, stage]
 
 
 class nzia_flex_rule(AbstractConstraint):
-    def apply_rule(self, m, stf, location, tech, target_techs):
+    def apply_rule(self, m, stf, location, tech, target_techs, target_quota):
         if stf < 2030:
             return pyomo.Constraint.Skip
 
@@ -65,7 +65,7 @@ class nzia_flex_rule(AbstractConstraint):
             for stage in m.stages
         )
         total_supply = sum(m.Supply[stf, location, tech, stage] for stage in m.stages)
-        return total_domestic_output >= 0.40 * total_supply
+        return total_domestic_output >= target_quota * total_supply
 
 
 # ==============================================================================
@@ -133,6 +133,7 @@ def apply_scenario_constraints(
     crma_mode="combined",
     crma_active=True,
     target_techs=None,
+    nzia_quota=0.40,
     crma_quota=0.35,
 ):
     if target_techs is None:
@@ -149,7 +150,9 @@ def apply_scenario_constraints(
         m.location,
         m.tech,
         m.stages,
-        rule=lambda m, y, l, t, s: strict_logic.apply_rule(m, y, l, t, s, target_techs),
+        rule=lambda m, y, l, t, s: strict_logic.apply_rule(
+            m, y, l, t, s, target_techs, nzia_quota
+        ),
     )
 
     flex_logic = nzia_flex_rule()
@@ -157,17 +160,23 @@ def apply_scenario_constraints(
         m.stf,
         m.location,
         m.tech,
-        rule=lambda m, y, l, t: flex_logic.apply_rule(m, y, l, t, target_techs),
+        rule=lambda m, y, l, t: flex_logic.apply_rule(
+            m, y, l, t, target_techs, nzia_quota
+        ),
     )
 
     if nzia_mode == "strict":
         m.nzia_strict_constraint.activate()
         m.nzia_flex_constraint.deactivate()
-        print(f"✅ NZIA STRICT: Active (>=2030) for {target_techs}")
+        print(
+            f"✅ NZIA STRICT: Active (>=2030, {int(nzia_quota * 100)}%) for {target_techs}"
+        )
     elif nzia_mode == "flex":
         m.nzia_strict_constraint.deactivate()
         m.nzia_flex_constraint.activate()
-        print(f"✅ NZIA FLEX:   Active (>=2030) for {target_techs}")
+        print(
+            f"✅ NZIA FLEX:   Active (>=2030, {int(nzia_quota * 100)}%) for {target_techs}"
+        )
     else:
         m.nzia_strict_constraint.deactivate()
         m.nzia_flex_constraint.deactivate()

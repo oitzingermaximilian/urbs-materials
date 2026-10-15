@@ -4,6 +4,7 @@ import argparse
 import urbs
 from datetime import date
 import pandas as pd
+from copy import deepcopy
 from collections import defaultdict
 import warnings  # <--- 1. Import warnings here
 
@@ -28,14 +29,21 @@ parser.add_argument(
 )
 parser.add_argument(
     "--lr",
-    choices=["LR1", "LR3_5", "LR4", "LR5", "LR6", "LR7", "LR8", "LR9", "LR10", "LR25"],
-    default="LR4",
-    help="Learning rate scenario (default: LR4)",
+    choices=["all", "LR1", "LR4", "LR7", "LR10"],
+    default="all",
+    help="Learning rate scenario, or all four matrix levels (default: all)",
+)
+parser.add_argument(
+    "--audit-matrix",
+    action="store_true",
+    help="Write the exact smallest/largest matrix coefficients for each run",
 )
 args = parser.parse_args()
 
 # Set environment variable for learning rate BEFORE importing urbs
-os.environ["URBS_LR"] = args.lr
+os.environ["URBS_LR"] = "LR4"
+if args.audit_matrix:
+    os.environ["URBS_AUDIT_MATRIX"] = "1"
 
 # Original setup (unchanged)
 # Use the new master Excel file instead of the directory
@@ -43,8 +51,7 @@ input_files = "urbs_intertemporal_master_vintages.xlsx"
 input_dir = "Input"
 input_path = os.path.join(input_dir, input_files)
 
-learning_rate = args.lr  # Use the selected learning rate
-result_name = f"urbs-{learning_rate}"
+result_name = "scenario-matrix" if args.lr == "all" else f"urbs-{args.lr}"
 result_dir = urbs.prepare_result_directory(result_name)
 year = date.today().year
 
@@ -71,27 +78,84 @@ plot_periods = {"all": timesteps[1:]}
 my_colors = {"EU27": (200, 230, 200)}
 for country, color in my_colors.items():
     urbs.COLORS[country] = color
-# Generate one scenario per CRMA quota. Recycling prices come exclusively
-# from Input_urbsextensionv1.xlsx.
+# Generate the full learning-rate x industry-independence x material-price matrix.
 scenarios = []
-quotas_to_test = [0.35]
+learning_rates = ["LR1", "LR4", "LR7", "LR10"]
+industry_levels = [
+    ("nzia_0_crma_0", 0.00, 0.00),
+    ("nzia_15_crma_10", 0.15, 0.10),
+    ("nzia_30_crma_20", 0.30, 0.20),
+    ("nzia_40_crma_25", 0.40, 0.25),
+    ("nzia_50_crma_35", 0.50, 0.35),
+]
+material_levels = [
+    ("materials_base", 1.00, 1.00, 1.00),
+    ("materials_price_150", 1.50, 1.00, 1.00),
+    ("materials_tier1_50_tier2_75_price_150", 1.50, 0.50, 0.75),
+    ("materials_tier1_25_tier2_50_price_200", 2.00, 0.25, 0.50),
+]
 
-for quota in quotas_to_test:
-    quota_percent = int(quota * 100)
-    scen_name = f"scenario_crma_{quota_percent}"
 
-    def make_crma_scenario(q=quota, final_name=scen_name):
-        def crma_scenario(data, data_urbsextensionv1):
-            data_urbsextensionv1["crma_quota"] = q
-            return data, data_urbsextensionv1
+def make_matrix_scenario(
+    learning_rate,
+    industry_name,
+    nzia_quota,
+    crma_quota,
+    material_name,
+    price_multiplier,
+    tier1_limit_multiplier,
+    tier2_limit_multiplier,
+):
+    scenario_name = f"{learning_rate}_{industry_name}_{material_name}"
 
-        crma_scenario.__name__ = final_name
-        return crma_scenario
+    def matrix_scenario(data, data_urbsextensionv1):
+        extension_data = deepcopy(data_urbsextensionv1)
+        extension_data["learning_rate"] = learning_rate
+        extension_data["nzia_quota"] = nzia_quota
+        extension_data["crma_quota"] = crma_quota
+        extension_data["mat_prices"] = {
+            key: value * price_multiplier
+            for key, value in extension_data["mat_prices"].items()
+        }
+        limit_multipliers = {
+            "Tier1": tier1_limit_multiplier,
+            "Tier2": tier2_limit_multiplier,
+        }
+        extension_data["mat_limits"] = {
+            key: value * limit_multipliers.get(key[2], 1.0)
+            for key, value in extension_data["mat_limits"].items()
+        }
+        return data, extension_data
 
-    scenarios.append((scen_name, make_crma_scenario()))
+    matrix_scenario.__name__ = scenario_name
+    return matrix_scenario
 
 
-# Run the configured CRMA quota scenarios.
+for learning_rate in learning_rates:
+    if args.lr != "all" and args.lr != learning_rate:
+        continue
+    for industry_name, nzia_quota, crma_quota in industry_levels:
+        for material_name, price_multiplier, tier1_multiplier, tier2_multiplier in material_levels:
+            scenario_name = (
+                f"{learning_rate}_{industry_name}_{material_name}"
+            )
+            scenarios.append(
+                (
+                    scenario_name,
+                    make_matrix_scenario(
+                        learning_rate,
+                        industry_name,
+                        nzia_quota,
+                        crma_quota,
+                        material_name,
+                        price_multiplier,
+                        tier1_multiplier,
+                        tier2_multiplier,
+                    ),
+                )
+            )
+
+
 def run_perfect_foresight():
     """Original perfect foresight execution"""
     for scenario_name, scenario in scenarios:

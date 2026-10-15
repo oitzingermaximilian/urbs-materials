@@ -498,7 +498,7 @@ def main():
 
         # Load CRMA quotas
         for q in QUOTAS:
-            folder_name = f"scenario_solar_recycling_low_crma_{q}"
+            folder_name = f"scenario_crma_{q}"
             file_name = f"{folder_name}.xlsx"
             file_path = os.path.join(BASE_DIR, folder_name, file_name)
 

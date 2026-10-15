@@ -493,7 +493,7 @@ def main():
                 scenarios_dict["Base_case"] = base_s.reindex(YEARS_TO_PLOT).fillna(0)
 
         for q in QUOTAS:
-            folder_name = f"scenario_solar_recycling_low_crma_{q}"
+            folder_name = f"scenario_crma_{q}"
             file_path = os.path.join(BASE_DIR, folder_name, f"{folder_name}.xlsx")
             if os.path.exists(file_path):
                 s = get_total_capacity(file_path, tech_id)

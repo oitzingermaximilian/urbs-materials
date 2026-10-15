@@ -15,6 +15,7 @@ import pyomo.environ as pyomo
 import pandas as pd
 import numpy as np
 import sys
+from pyomo.repn.standard_repn import generate_standard_repn
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -40,7 +41,7 @@ def setup_solver(optim, logfile="solver.log"):
         optim.set_options("MIPGap=1e-4")
         # optim.set_options("NumericFocus=2")  # Can cause solver crashes on hard MIPs
         # optim.set_options("ScaleFlag=2")     # Can cause solver crashes on hard MIPs
-        optim.set_options("FeasibilityTol=1e-6")
+        optim.set_options("FeasibilityTol=1e-9")
         optim.set_options("IntFeasTol=1e-6")
         optim.set_options("OptimalityTol=1e-6")
 
@@ -59,6 +60,68 @@ def setup_solver(optim, logfile="solver.log"):
         print(f"Warning: no options set for solver '{optim.name}'!")
 
     return optim
+
+
+def audit_matrix_coefficients(model, output_filename):
+    """Write the exact smallest/largest linear matrix entries and RHS values."""
+    smallest = None
+    largest = None
+    smallest_rhs = None
+    largest_rhs = None
+
+    def update(current, candidate):
+        if current is None or candidate[0] < current[0]:
+            return candidate
+        return current
+
+    def update_max(current, candidate):
+        if current is None or candidate[0] > current[0]:
+            return candidate
+        return current
+
+    for constraint in model.component_data_objects(
+        pyomo.Constraint, active=True, descend_into=True
+    ):
+        repn = generate_standard_repn(constraint.body, quadratic=False)
+        if repn.linear_coefs is None:
+            continue
+
+        constraint_name = f"{constraint.parent_component().name}[{constraint.index()}]"
+        for variable, coefficient in zip(repn.linear_vars, repn.linear_coefs):
+            coefficient = float(coefficient)
+            if coefficient == 0:
+                continue
+            candidate = (
+                abs(coefficient),
+                coefficient,
+                constraint_name,
+                variable.name,
+            )
+            smallest = update(smallest, candidate)
+            largest = update_max(largest, candidate)
+
+        for bound_name, bound in (
+            ("lower", constraint.lower),
+            ("upper", constraint.upper),
+        ):
+            if bound is None or not bound.is_constant():
+                continue
+            value = float(pyomo.value(bound))
+            if not np.isfinite(value):
+                continue
+            candidate = (abs(value), value, constraint_name, bound_name)
+            smallest_rhs = update(smallest_rhs, candidate)
+            largest_rhs = update_max(largest_rhs, candidate)
+
+    with open(output_filename, "w", encoding="utf-8") as output:
+        output.write("Pyomo linear matrix coefficient audit\n")
+        output.write("Values are in the model's scaled units (GW/kton/kEUR).\n\n")
+        output.write(f"Smallest absolute matrix coefficient: {smallest}\n")
+        output.write(f"Largest absolute matrix coefficient: {largest}\n")
+        output.write(f"Smallest absolute constant RHS/bound: {smallest_rhs}\n")
+        output.write(f"Largest absolute constant RHS/bound: {largest_rhs}\n")
+
+    print(f"Matrix coefficient audit written to {output_filename}")
 
 
 # =============================================================================
@@ -623,6 +686,7 @@ def load_data_from_excel(file_path):
 
         # E. Import Cost Stage
         proc_part_import_dict = {}
+        forbidden_part_imports = set()
         sheet_name = "Import_Cost_Stage"
 
         if sheet_name in xls.sheet_names:
@@ -652,6 +716,13 @@ def load_data_from_excel(file_path):
                     parts = header.split("_", 1)
                     tech = parts[0]
                     stage = parts[1]
+
+                    import_key = (int(row["Year"]), "EU27", tech, stage)
+                    # Zero and the legacy 9,999,999 marker both mean that
+                    # importing this component is not allowed.
+                    if cost == 0 or cost >= 9_999_999:
+                        forbidden_part_imports.add(import_key)
+                        continue
 
                     # Use COST_SCALE (1.0 for k-Universe)
                     scaled_cost = cost * COST_SCALE
@@ -792,6 +863,7 @@ def load_data_from_excel(file_path):
         "processing_opex_var_dict": proc_opex_var_dict,  # k€/GW
         "material_downstream_cost_dict": mat_down_cost_dict,  # k€/GW
         "part_import_cost_dict": proc_part_import_dict,  # k€/GW
+        "forbidden_part_imports": forbidden_part_imports,
         "bom_map_dict": bom_map_dict,
         "valid_tech_stage_list": valid_tech_stage_list,
         "mining_energy_share_dict": mat_energy_transision_factor_dict,
@@ -937,6 +1009,11 @@ def run_scenario(
         window_end=window_end,
         indexlist=indexlist,
     )
+
+    if os.environ.get("URBS_AUDIT_MATRIX") == "1":
+        audit_matrix_coefficients(
+            prob, os.path.join(result_dir, f"{sce}_matrix_audit.txt")
+        )
 
     # ---> ADD THIS RAW PARAMETER DUMP RIGHT HERE <---
     # print("Dumping all Pyomo parameters to Excel...")

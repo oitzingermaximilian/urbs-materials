@@ -427,10 +427,14 @@ def create_model(
 
     setup_split_scrap_learning(m)
 
-    current_quota = data_urbsextensionv1.get("crma_quota", 0.35)
-    # apply_scenario_constraints(m, nzia_mode='strict', crma_mode='combined', crma_active=True,
-    #                           crma_quota=current_quota)
-
+    apply_scenario_constraints(
+        m,
+        nzia_mode="strict",
+        crma_mode="combined",
+        crma_active=True,
+        nzia_quota=data_urbsextensionv1.get("nzia_quota", 0.40),
+        crma_quota=data_urbsextensionv1.get("crma_quota", 0.35),
+    )
     apply_scrap_constraints(m)
 
     apply_balance_constraints(m)

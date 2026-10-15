@@ -370,6 +370,12 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         m.location,
         m.tech_stage_combinations,
         initialize=data_urbsextensionv1.get("part_import_cost_dict", {}),
+        default=0,
+    )
+    m.forbidden_part_imports = pyomo.Set(
+        dimen=4,
+        initialize=data_urbsextensionv1.get("forbidden_part_imports", set()),
+        doc="Technology stages that cannot be imported",
     )
     m.bom_map = pyomo.Param(
         m.tech_stage_combinations,
@@ -393,8 +399,11 @@ def apply_sets_and_params(m, data_urbsextensionv1):
     # -------------------------------------------------------------------------
     # 5. LEARNING CURVE REDUCTIONS (Dynamic Application)
     # -------------------------------------------------------------------------
+    learning_rate_selection = data_urbsextensionv1.get(
+        "learning_rate", LEARNING_RATE_SELECTION
+    )
     active_reductions = LEARNING_RATES.get(
-        LEARNING_RATE_SELECTION, LEARNING_RATES["LR4"]
+        learning_rate_selection, LEARNING_RATES["LR4"]
     )
 
     # 5.1 Calculate Absolutes using Unified Helper
@@ -655,7 +664,8 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         m.location, m.tech, initialize=init_tech_param("last_sec_cap")
     )
     m.factor_bess = pyomo.Param(
-        m.location, m.tech, initialize=init_tech_param("factor_bess")
+        m.location, m.tech, initialize=0
+        #TODO rethink how this works, set to 0 for now init_tech_param("factor_bess")
     )
     m.scrap_total = pyomo.Param(
         m.location, m.tech, initialize=init_tech_param("capacity_scrap_total")

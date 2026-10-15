@@ -125,6 +125,13 @@ class CapacityImportedCompositionRule(AbstractConstraint):
         )
 
 
+class ForbiddenPartImportRule(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage):
+        if (stf, location, tech, stage) not in m.forbidden_part_imports:
+            return pyomo.Constraint.Skip
+        return m.capacity_imported[stf, location, tech, stage] == 0
+
+
 class LimitFinalWindImportsRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech, stage):
         if not check_valid_indices(m, tech, stage):
@@ -718,6 +725,7 @@ def apply_material_constraints(m):
         ProcessingCapacitiesOutputLimitRule(),
         CapacityProducedOutputCompositionRule(),
         CapacityImportedCompositionRule(),
+        ForbiddenPartImportRule(),
         LimitFinalWindImportsRule(),
         StockpileTotalRule(),
         StockpileDomesticRule(),
