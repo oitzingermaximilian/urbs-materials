@@ -80,7 +80,7 @@ for country, color in my_colors.items():
     urbs.COLORS[country] = color
 # Generate the full learning-rate x industry-independence x material-price matrix.
 scenarios = []
-learning_rates = ["LR1", "LR4", "LR7", "LR10"]
+learning_rates = ["LR1", "LR4", "LR7"]
 industry_levels = [
     ("nzia_0_crma_0", 0.00, 0.00),
     ("nzia_15_crma_10", 0.15, 0.10),
