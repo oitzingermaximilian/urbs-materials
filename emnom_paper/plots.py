@@ -296,10 +296,130 @@ def load_processing_capacities_by_stage():
 
     print(f"Loaded in {round(time.time() - start, 1)} seconds.")
     return pd.concat(all_data, ignore_index=True) if all_data else pd.DataFrame()
+
+
+def process_single_scrap_processed(args):
+    """
+    Top-level helper function for multi-processing. Extracts recovered scrap volumes.
+    """
+    import pandas as pd
+    from pathlib import Path
+
+    lr, ind, mat, base_dir_str = args
+    base_dir = Path(base_dir_str)
+    scenario_name = f"{lr}_{ind}_{mat}"
+    file_path = base_dir / scenario_name / f"{scenario_name}.xlsx"
+
+    if not file_path.exists():
+        return None
+
+    try:
+        df = pd.read_excel(file_path, sheet_name="scrap_processed")
+
+        # Forward fill formatting gaps
+        cols = ["stf", "location", "tech"]
+        existing_cols = [c for c in cols if c in df.columns]
+        df[existing_cols] = df[existing_cols].ffill()
+
+        # Filter for relevant technologies (Drop Batteries)
+        df = df[df["tech"].isin(["solarPV", "windon", "windoff"])]
+
+        # Group by Year and Tech to sum the capacity_scrap_rec
+        df_agg = df.groupby(["stf", "tech"])["capacity_scrap_rec"].sum().reset_index()
+
+        # Tag with scenario dimensions
+        df_agg["LR"] = lr
+        df_agg["Industry"] = ind
+        df_agg["Material"] = mat
+
+        return df_agg
+    except Exception:
+        return None
+
+
+def load_scrap_processed_across_scenarios():
+    """
+    Loads the 'scrap_processed' sheet across all LR, Industry, and Material combinations.
+    """
+    scenarios = [
+        (lr, ind, mat, str(BASE_DIR))
+        for lr in learning_rates
+        for ind in industry_names
+        for mat in material_names
+    ]
+
+    print(f"Loading recovered scrap volumes from {len(scenarios)} scenarios...")
+    start = time.time()
+
+    all_data = []
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        for result in executor.map(process_single_scrap_processed, scenarios):
+            if result is not None:
+                all_data.append(result)
+
+    print(f"Loaded in {round(time.time() - start, 1)} seconds.")
+    return pd.concat(all_data, ignore_index=True) if all_data else pd.DataFrame()
 # ==========================================
 # COMPARATIVE PLOTTING FUNCTIONS
 # ==========================================
+def plot_scrap_processed_comprehensive(df):
+    """
+    Plots Recovered Scrap (kt) for Solar PV, Wind Onshore, and Wind Offshore
+    across all Learning Rates, Industry constraints, and Material Prices.
+    """
+    print("Plotting Comprehensive Recovered Scrap Volumes...")
 
+    # Filter to start from 2025
+    df_plot = df[df["stf"] >= 2025].copy()
+
+    # Clean up tech names for the plot labels
+    tech_mapping = {
+        "solarPV": "Solar PV",
+        "windon": "Wind Onshore",
+        "windoff": "Wind Offshore",
+    }
+    df_plot["tech_label"] = df_plot["tech"].map(tech_mapping)
+
+    # Create FacetGrid: Columns = LRs, Rows = Technologies
+    g = sns.relplot(
+        data=df_plot,
+        x="stf",
+        y="capacity_scrap_rec",
+        col="LR",
+        row="tech_label",
+        col_order=["LR1", "LR4", "LR7"],
+        row_order=["Solar PV", "Wind Onshore", "Wind Offshore"],
+        hue="Industry",
+        style="Material",
+        kind="line",
+        height=3.5,  # Height of each individual subplot
+        aspect=1.4,  # Width ratio
+        markers=True,
+        dashes=True,
+        alpha=0.8,
+        palette="viridis",
+        facet_kws={"sharey": "row"},  # Ensures Wind/Solar get their own Y-axis scales
+    )
+
+    # Formatting and Labels
+    g.set_axis_labels("Year", "Recovered Scrap (kt)")
+    g.set_titles(col_template="Learning Rate: {col_name}", row_template="{row_name}")
+
+    g.fig.suptitle(
+        "Recovered Scrap Volumes vs. NZIA/CRMA Stringency and Material Prices",
+        y=1.03,
+        fontsize=18,
+        weight="bold",
+    )
+
+    # Move legend outside the main grid
+    sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1), frameon=False)
+
+    # Save as High-Res Vector PDF
+    out_file = "comp_scrap_processed_comprehensive.pdf"
+    plt.savefig(out_file, format="pdf", bbox_inches="tight")
+    plt.close()
+    print(f"   ✔ Comprehensive Recovered Scrap plot saved -> {out_file}")
 
 def plot_induced_demand_comparison(df, target_lr="LR4", target_mat="materials_base"):
     """Compares Induced Electricity Demand across Industry Policy stringencies."""
@@ -675,5 +795,11 @@ if __name__ == "__main__":
 
     if not df_stage_caps.empty:
         plot_stage_processing_capacities(df_stage_caps)
+
+    # Load and Plot the Recovered Scrap Volumes
+    df_scrap_proc = load_scrap_processed_across_scenarios()
+
+    if not df_scrap_proc.empty:
+        plot_scrap_processed_comprehensive(df_scrap_proc)
 
     print("All comparison plots generated successfully.")

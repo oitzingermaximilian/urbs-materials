@@ -86,7 +86,6 @@ industry_levels = [
     ("nzia_15_crma_10", 0.15, 0.10),
     ("nzia_30_crma_20", 0.30, 0.20),
     ("nzia_40_crma_25", 0.40, 0.25),
-    ("nzia_50_crma_35", 0.50, 0.35),
 ]
 material_levels = [
     ("materials_base", 1.00, 1.00, 1.00),
