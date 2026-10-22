@@ -275,10 +275,20 @@ def plot_electricity_generation(
 
     # Configure inside-facing ticks
     ax.tick_params(
-        axis="both", which="major", direction="in", length=4, top=True, right=True
+        axis="both",
+        which="major",
+        direction="in",
+        length=4,
+        top=True,
+        right=True,
     )
     ax.tick_params(
-        axis="both", which="minor", direction="in", length=2, top=True, right=True
+        axis="both",
+        which="minor",
+        direction="in",
+        length=2,
+        top=True,
+        right=True,
     )
     ax.xaxis.set_minor_locator(MultipleLocator(1))
     ax.yaxis.set_minor_locator(MultipleLocator(500))
@@ -295,6 +305,8 @@ def plot_electricity_generation(
         ncol=5,
         frameon=True,
         fontsize=8.5,
+        framealpha=1.0,
+        edgecolor="black",
         columnspacing=1.2,
         handlelength=1.4,
     )
@@ -377,10 +389,20 @@ def plot_capacity_bar(
 
     # Configure inside-facing ticks
     ax.tick_params(
-        axis="both", which="major", direction="in", length=4, top=True, right=True
+        axis="both",
+        which="major",
+        direction="in",
+        length=4,
+        top=True,
+        right=True,
     )
     ax.tick_params(
-        axis="both", which="minor", direction="in", length=2, top=True, right=True
+        axis="both",
+        which="minor",
+        direction="in",
+        length=2,
+        top=True,
+        right=True,
     )
     ax.xaxis.set_minor_locator(MultipleLocator(1))
     ax.yaxis.set_minor_locator(AutoMinorLocator(2))
@@ -397,6 +419,8 @@ def plot_capacity_bar(
         ncol=5,
         frameon=True,
         fontsize=8.5,
+        framealpha=1.0,
+        edgecolor="black",
         columnspacing=1.2,
         handlelength=1.4,
     )

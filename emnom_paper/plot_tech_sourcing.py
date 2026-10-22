@@ -1,5 +1,6 @@
 import os
 import math
+import tempfile
 from pathlib import Path
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
@@ -31,11 +32,17 @@ plt.rcParams["pdf.fonttype"] = 42
 plt.rcParams["ps.fonttype"] = 42
 
 # ================= KONFIGURATION =================
-BASE_DIR = Path("result/results_server_201026")
+PROJECT_DIR = Path(__file__).resolve().parent
+BASE_DIR = PROJECT_DIR / "result/results_server_201026"
 SCENARIO_LR4 = "LR4_nzia_40_crma_25_materials_base"
 FILE_PATH = BASE_DIR / SCENARIO_LR4 / f"{SCENARIO_LR4}.xlsx"
 
-PLOT_OUTPUT_DIR = Path("plots/supply_mix")
+PLOT_OUTPUT_DIR = PROJECT_DIR / "plots/supply_mix"
+PLOT_SCALE = 1.35
+
+
+def scaled_size(size):
+    return size * PLOT_SCALE
 
 YEARS_TO_PLOT = [2025, 2030, 2035, 2040]
 
@@ -43,6 +50,14 @@ TECH_STAGE_MAP = {
     "solarPV": ["Polysilicon", "Wafer", "Cell", "Module"],
     "windon": ["BladeOn", "TowerOn", "NacelleOn"],
     "windoff": ["BladeOff", "TowerOff", "NacelleOff"],
+}
+STAGE_LABELS = {
+    "BladeOn": "Blade",
+    "BladeOff": "Blade",
+    "TowerOn": "Tower",
+    "TowerOff": "Tower",
+    "NacelleOn": "Nacelle",
+    "NacelleOff": "Nacelle",
 }
 
 SCENARIO_ORDER = ["LR1_Slow", "LR4_Base", "LR7_Fast"]
@@ -129,6 +144,7 @@ def format_grid_axes(ax, is_100_pct=True, max_y=None):
             ax.axhline(
                 y, color="gray", linestyle="--", linewidth=0.5, alpha=0.3, zorder=0
             )
+
     else:
         if max_y and max_y > 0:
             ax.set_ylim(0, max_y * 1.15)
@@ -148,30 +164,62 @@ def format_grid_axes(ax, is_100_pct=True, max_y=None):
 
     ax.set_axisbelow(False)
     ax.tick_params(
-        axis="both",
+        axis="x",
         which="major",
         direction="in",
         length=3.5,
-        labelsize=9,
+        labelsize=scaled_size(9),
+        bottom=True,
         top=True,
+    )
+    ax.tick_params(
+        axis="y",
+        which="major",
+        direction="in",
+        length=3.5,
+        labelsize=scaled_size(9),
+        left=True,
         right=True,
     )
     ax.set_xlim(min(YEARS_TO_PLOT) - 1, max(YEARS_TO_PLOT) + 1)
     ax.set_xticks(YEARS_TO_PLOT)
     ax.set_xticklabels([str(y) for y in YEARS_TO_PLOT], rotation=45)
     ax.xaxis.set_minor_locator(MultipleLocator(1))
+    ax.tick_params(axis="x", which="minor", direction="in", bottom=True, top=True)
+
+
+def save_matrix_figure(fig, output_dir, filename):
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    output_path = output_dir / filename
+    with tempfile.NamedTemporaryFile(
+        mode="wb", suffix=".pdf", dir=output_dir, delete=False
+    ) as output_file:
+        fig.savefig(output_file, format="pdf", bbox_inches="tight")
+        temporary_path = Path(output_file.name)
+    os.replace(temporary_path, output_path)
 
 
 # ================= PLOTTING FUNCTIONS =================
 
 
 def plot_supply_alluvial_matrix(
-    tech_name, scenario_dict, stages, output_dir=PLOT_OUTPUT_DIR
+    tech_name,
+    scenario_dict,
+    stages,
+    output_dir=PLOT_OUTPUT_DIR,
+    show_percentage_labels=True,
+    filename_suffix="",
+    absolute=False,
 ):
     n_rows = len(stages)
     n_cols = len(SCENARIO_ORDER)
     fig, axs = plt.subplots(
-        n_rows, n_cols, figsize=(3 * n_cols, 2.5 * n_rows), sharex=True, sharey=True
+        n_rows,
+        n_cols,
+        figsize=(3 * n_cols, 2.5 * n_rows),
+        sharex=True,
+        sharey="row" if absolute else True,
     )
 
     if n_rows == 1 and n_cols == 1:
@@ -182,6 +230,27 @@ def plot_supply_alluvial_matrix(
         axs = axs[:, np.newaxis]
 
     bar_width = 1.0
+    stage_max_values = {}
+    if absolute:
+        for stage in stages:
+            stage_values = [
+                    df[
+                        (df["tech"] == tech_name) & (df["stages"] == stage)
+                    ]
+                    .set_index("stf")
+                    .reindex(YEARS_TO_PLOT)
+                    .fillna(0)[
+                        [
+                            "capacity_produced_flow",
+                            "capacity_produced_stockout",
+                            "Imported",
+                        ]
+                    ]
+                    .sum(axis=1)
+                    .max()
+                    for df in scenario_dict.values()
+            ]
+            stage_max_values[stage] = max(stage_values, default=0)
 
     for r, stage in enumerate(stages):
         for c, scen_key in enumerate(SCENARIO_ORDER):
@@ -194,92 +263,111 @@ def plot_supply_alluvial_matrix(
                 .fillna(0)
             )
 
-            pct_prod = np.zeros(len(YEARS_TO_PLOT))
-            pct_stock = np.zeros(len(YEARS_TO_PLOT))
-            pct_imp = np.zeros(len(YEARS_TO_PLOT))
+            prod_values = np.zeros(len(YEARS_TO_PLOT))
+            stock_values = np.zeros(len(YEARS_TO_PLOT))
+            imp_values = np.zeros(len(YEARS_TO_PLOT))
 
             for j, year in enumerate(YEARS_TO_PLOT):
                 prod = df_stage.loc[year, "capacity_produced_flow"]
                 stock = df_stage.loc[year, "capacity_produced_stockout"]
                 imp = df_stage.loc[year, "Imported"]
                 total = prod + stock + imp
-                if total > 0:
-                    pct_prod[j] = (prod / total) * 100
-                    pct_stock[j] = (stock / total) * 100
-                    pct_imp[j] = (imp / total) * 100
+                if absolute:
+                    prod_values[j] = prod
+                    stock_values[j] = stock
+                    imp_values[j] = imp
+                elif total > 0:
+                    prod_values[j] = (prod / total) * 100
+                    stock_values[j] = (stock / total) * 100
+                    imp_values[j] = (imp / total) * 100
 
             # Draw smooth flows for 3 layers
             for j in range(len(YEARS_TO_PLOT) - 1):
                 x_start = YEARS_TO_PLOT[j] + bar_width / 2
                 x_end = YEARS_TO_PLOT[j + 1] - bar_width / 2
 
-                x_flow, curve_prod = generate_smooth_curve(
-                    x_start, x_end, pct_prod[j], pct_prod[j + 1]
+                x_flow, curve_stock = generate_smooth_curve(
+                    x_start, x_end, prod_values[j], prod_values[j + 1]
                 )
                 ax.fill_between(
                     x_flow,
-                    np.zeros_like(curve_prod),
-                    curve_prod,
+                    np.zeros_like(curve_stock),
+                    curve_stock,
                     color=MIX_COLORS["capacity_produced_flow"],
-                    alpha=0.35,
+                    alpha=0.5,
                     edgecolor="none",
                 )
 
-                x_flow, curve_stock = generate_smooth_curve(
+                x_flow, curve_prod = generate_smooth_curve(
                     x_start,
                     x_end,
-                    pct_prod[j] + pct_stock[j],
-                    pct_prod[j + 1] + pct_stock[j + 1],
+                    prod_values[j] + stock_values[j],
+                    prod_values[j + 1] + stock_values[j + 1],
+                )
+                _, curve_total = generate_smooth_curve(
+                    x_start,
+                    x_end,
+                    prod_values[j] + stock_values[j] + imp_values[j],
+                    prod_values[j + 1]
+                    + stock_values[j + 1]
+                    + imp_values[j + 1],
                 )
                 ax.fill_between(
                     x_flow,
-                    curve_prod,
                     curve_stock,
+                    curve_prod,
                     color=MIX_COLORS["capacity_produced_stockout"],
-                    alpha=0.35,
+                    alpha=0.5,
                     edgecolor="none",
                 )
 
                 ax.fill_between(
                     x_flow,
-                    curve_stock,
-                    np.ones_like(curve_stock) * 100,
+                    curve_prod,
+                    curve_total,
                     color=MIX_COLORS["Imported"],
-                    alpha=0.35,
+                    alpha=0.5,
                     edgecolor="none",
                 )
 
             # Draw solid bars
             for j, year in enumerate(YEARS_TO_PLOT):
-                if pct_prod[j] > 0 or pct_stock[j] > 0 or pct_imp[j] > 0:
-                    bottom = 0
+                if (
+                    prod_values[j] > 0
+                    or stock_values[j] > 0
+                    or imp_values[j] > 0
+                ):
                     ax.bar(
                         year,
-                        pct_prod[j],
-                        bottom=bottom,
+                        prod_values[j],
+                        bottom=0,
                         width=bar_width,
                         color=MIX_COLORS["capacity_produced_flow"],
                         edgecolor="black",
                         linewidth=0.5,
                         zorder=3,
                     )
-                    if pct_prod[j] > 8:
+                    if (
+                        show_percentage_labels
+                        and prod_values[j] > (8 if not absolute else 0)
+                    ):
                         ax.text(
                             year,
-                            bottom + pct_prod[j] / 2,
-                            f"{pct_prod[j]:.0f}%",
+                            prod_values[j] / 2,
+                            f"{prod_values[j]:.0f}"
+                            + ("" if absolute else "%"),
                             ha="center",
                             va="center",
                             color="black",
-                            fontsize=9,
+                            fontsize=scaled_size(9),
                             fontweight="bold",
                             zorder=4,
                         )
-                    bottom += pct_prod[j]
+                    bottom = prod_values[j]
 
                     ax.bar(
                         year,
-                        pct_stock[j],
+                        stock_values[j],
                         bottom=bottom,
                         width=bar_width,
                         color=MIX_COLORS["capacity_produced_stockout"],
@@ -287,23 +375,27 @@ def plot_supply_alluvial_matrix(
                         linewidth=0.5,
                         zorder=3,
                     )
-                    if pct_stock[j] > 8:
+                    if (
+                        show_percentage_labels
+                        and stock_values[j] > (8 if not absolute else 0)
+                    ):
                         ax.text(
                             year,
-                            bottom + pct_stock[j] / 2,
-                            f"{pct_stock[j]:.0f}%",
+                            bottom + stock_values[j] / 2,
+                            f"{stock_values[j]:.0f}"
+                            + ("" if absolute else "%"),
                             ha="center",
                             va="center",
                             color="black",
-                            fontsize=9,
+                            fontsize=scaled_size(9),
                             fontweight="bold",
                             zorder=4,
                         )
-                    bottom += pct_stock[j]
+                    bottom += stock_values[j]
 
                     ax.bar(
                         year,
-                        pct_imp[j],
+                        imp_values[j],
                         bottom=bottom,
                         width=bar_width,
                         color=MIX_COLORS["Imported"],
@@ -311,28 +403,43 @@ def plot_supply_alluvial_matrix(
                         linewidth=0.5,
                         zorder=3,
                     )
-                    if pct_imp[j] > 8:
+                    if (
+                        show_percentage_labels
+                        and imp_values[j] > (8 if not absolute else 0)
+                    ):
                         ax.text(
                             year,
-                            bottom + pct_imp[j] / 2,
-                            f"{pct_imp[j]:.0f}%",
+                            bottom + imp_values[j] / 2,
+                            f"{imp_values[j]:.0f}"
+                            + ("" if absolute else "%"),
                             ha="center",
                             va="center",
                             color="black",
-                            fontsize=9,
+                            fontsize=scaled_size(9),
                             fontweight="bold",
                             zorder=4,
                         )
 
-            format_grid_axes(ax, is_100_pct=True)
+            if absolute:
+                format_grid_axes(
+                    ax, is_100_pct=False, max_y=stage_max_values[stage]
+                )
+            else:
+                format_grid_axes(ax, is_100_pct=True)
 
             if r == 0:
                 ax.set_title(
-                    SCENARIO_LABELS[scen_key], fontweight="bold", fontsize=12, pad=8
+                    SCENARIO_LABELS[scen_key],
+                    fontweight="bold",
+                    fontsize=scaled_size(12),
+                    pad=scaled_size(8),
                 )
             if c == 0:
                 ax.set_ylabel(
-                    f"{stage}\nMix (%)", fontsize=10, fontweight="bold", labelpad=8
+                    f"{STAGE_LABELS.get(stage, stage)}\n"
+                    + ("Capacity (GW)" if absolute else "Mix (%)"),
+                    fontsize=scaled_size(10),
+                    labelpad=8,
                 )
 
             if r < n_rows - 1:
@@ -349,15 +456,14 @@ def plot_supply_alluvial_matrix(
         ncol=3,
         frameon=True,
         edgecolor="black",
-        fontsize=11,
+        fontsize=scaled_size(11),
     )
 
     plt.tight_layout()
     plt.subplots_adjust(bottom=max(0.12, 0.4 / n_rows), hspace=0.15, wspace=0.1)
 
-    output_dir.mkdir(parents=True, exist_ok=True)
-    plt.savefig(
-        output_dir / f"Fig_Matrix_Alluvial_{tech_name}.pdf", bbox_inches="tight"
+    save_matrix_figure(
+        fig, output_dir, f"Fig_Matrix_Alluvial_{tech_name}{filename_suffix}.pdf"
     )
     plt.close()
 
@@ -439,11 +545,16 @@ def plot_supply_100bars_matrix(
 
             if r == 0:
                 ax.set_title(
-                    SCENARIO_LABELS[scen_key], fontweight="bold", fontsize=12, pad=8
+                    SCENARIO_LABELS[scen_key],
+                    fontweight="bold",
+                    fontsize=scaled_size(12),
+                    pad=scaled_size(8),
                 )
             if c == 0:
                 ax.set_ylabel(
-                    f"{stage}\nMix (%)", fontsize=10, fontweight="bold", labelpad=8
+                    f"{STAGE_LABELS.get(stage, stage)}\nMix (%)",
+                    fontsize=scaled_size(10),
+                    labelpad=8,
                 )
 
             if r < n_rows - 1:
@@ -460,13 +571,13 @@ def plot_supply_100bars_matrix(
         ncol=3,
         frameon=True,
         edgecolor="black",
-        fontsize=11,
+        fontsize=scaled_size(11),
     )
 
     plt.tight_layout()
     plt.subplots_adjust(bottom=max(0.12, 0.4 / n_rows), hspace=0.15, wspace=0.1)
 
-    plt.savefig(output_dir / f"Fig_Matrix_100Bars_{tech_name}.pdf", bbox_inches="tight")
+    save_matrix_figure(fig, output_dir, f"Fig_Matrix_100Bars_{tech_name}.pdf")
     plt.close()
 
 
@@ -556,11 +667,16 @@ def plot_supply_absolute_bars_matrix(
 
             if r == 0:
                 ax.set_title(
-                    SCENARIO_LABELS[scen_key], fontweight="bold", fontsize=12, pad=8
+                    SCENARIO_LABELS[scen_key],
+                    fontweight="bold",
+                    fontsize=scaled_size(12),
+                    pad=scaled_size(8),
                 )
             if c == 0:
                 ax.set_ylabel(
-                    f"{stage}\nCap (GW)", fontsize=10, fontweight="bold", labelpad=8
+                    f"{STAGE_LABELS.get(stage, stage)}\nCapacity (GW)",
+                    fontsize=scaled_size(10),
+                    labelpad=8,
                 )
 
             if r < n_rows - 1:
@@ -577,14 +693,14 @@ def plot_supply_absolute_bars_matrix(
         ncol=3,
         frameon=True,
         edgecolor="black",
-        fontsize=11,
+        fontsize=scaled_size(11),
     )
 
     plt.tight_layout()
     plt.subplots_adjust(bottom=max(0.12, 0.4 / n_rows), hspace=0.15, wspace=0.15)
 
-    plt.savefig(
-        output_dir / f"Fig_Matrix_AbsoluteBars_{tech_name}.pdf", bbox_inches="tight"
+    save_matrix_figure(
+        fig, output_dir, f"Fig_Matrix_AbsoluteBars_{tech_name}.pdf"
     )
     plt.close()
 
@@ -651,11 +767,16 @@ def plot_supply_100area_matrix(
 
             if r == 0:
                 ax.set_title(
-                    SCENARIO_LABELS[scen_key], fontweight="bold", fontsize=12, pad=8
+                    SCENARIO_LABELS[scen_key],
+                    fontweight="bold",
+                    fontsize=scaled_size(12),
+                    pad=scaled_size(8),
                 )
             if c == 0:
                 ax.set_ylabel(
-                    f"{stage}\nMix (%)", fontsize=10, fontweight="bold", labelpad=8
+                    f"{STAGE_LABELS.get(stage, stage)}\nMix (%)",
+                    fontsize=scaled_size(10),
+                    labelpad=8,
                 )
 
             if r < n_rows - 1:
@@ -672,13 +793,13 @@ def plot_supply_100area_matrix(
         ncol=3,
         frameon=True,
         edgecolor="black",
-        fontsize=11,
+        fontsize=scaled_size(11),
     )
 
     plt.tight_layout()
     plt.subplots_adjust(bottom=max(0.12, 0.4 / n_rows), hspace=0.15, wspace=0.1)
 
-    plt.savefig(output_dir / f"Fig_Matrix_100Area_{tech_name}.pdf", bbox_inches="tight")
+    save_matrix_figure(fig, output_dir, f"Fig_Matrix_100Area_{tech_name}.pdf")
     plt.close()
 
 
@@ -720,6 +841,21 @@ if __name__ == "__main__":
             print(f"\n📊 Generating Scenario Supply Mix matrices for {tech}...")
 
             plot_supply_alluvial_matrix(tech, scenario_data_dict, stages)
+            plot_supply_alluvial_matrix(
+                tech,
+                scenario_data_dict,
+                stages,
+                show_percentage_labels=False,
+                filename_suffix="_NoLabels",
+            )
+            plot_supply_alluvial_matrix(
+                tech,
+                scenario_data_dict,
+                stages,
+                show_percentage_labels=False,
+                filename_suffix="_Absolute",
+                absolute=True,
+            )
             plot_supply_100bars_matrix(tech, scenario_data_dict, stages)
             plot_supply_absolute_bars_matrix(tech, scenario_data_dict, stages)
             plot_supply_100area_matrix(tech, scenario_data_dict, stages)
