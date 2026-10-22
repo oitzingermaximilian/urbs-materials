@@ -39,6 +39,8 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         P_sec_relative,
         minerals_df,
         process_capacities,
+        net_domestic_production,
+        net_domestic_stockout,
         domestic_caps,
         imported_caps,
         supply,
@@ -70,6 +72,8 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         minerals_df.to_excel(writer, sheet_name="minerals")
         process_capacities.to_excel(writer, sheet_name="processing_capacities")
         domestic_caps.to_excel(writer, sheet_name="domestic_caps")
+        net_domestic_production.to_excel(writer, sheet_name="net_domestic_production")
+        net_domestic_stockout.to_excel(writer, sheet_name="net_domestic_stockout")
         imported_caps.to_excel(writer, sheet_name="imported_caps")
         supply.to_excel(writer, sheet_name="supply_mix")
         stock.to_excel(writer, sheet_name="stock_levels")

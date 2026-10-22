@@ -72,6 +72,8 @@ def get_constants(instance):
         instance, ["capacity_processing_total", "processing_cap_new"]
     )
     domestic_caps = get_entity(instance, "capacity_produced_output")
+    net_domestic_production = get_entity(instance, "capacity_produced_flow")
+    net_domestic_stockout = get_entity(instance, "capacity_produced_stockout")
     imported_caps = get_entity(instance, "capacity_imported")
     supply = get_entity(instance, "Supply")
     stock = get_entity(instance, "components_stockpile")
@@ -236,6 +238,8 @@ def get_constants(instance):
         P_sec_relative,
         minerals_df,
         process_capacities,
+        net_domestic_production,
+        net_domestic_stockout,
         domestic_caps,
         imported_caps,
         supply,

@@ -417,6 +417,7 @@ def create_model(
         }
     )
 
+    # Apply the one-technology learning setup
     setup_onetech_learning(
         m,
         target_tech_name=learning_techs,
@@ -435,6 +436,7 @@ def create_model(
         nzia_quota=data_urbsextensionv1.get("nzia_quota", 0.40),
         crma_quota=data_urbsextensionv1.get("crma_quota", 0.35),
     )
+
     apply_scrap_constraints(m)
 
     apply_balance_constraints(m)
