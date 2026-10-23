@@ -49,6 +49,10 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         bd_scrap_solar,
         bd_scrap_wind,
         scrap_processed,
+        stock_domestic,
+        stock_imported,
+        scrap_magnet_route,
+        scrap_bulk_route,
         bd_one_tech_base,
         costs_extension,
         new_balance,
@@ -84,6 +88,14 @@ def report(instance, filename, report_tuples=None, report_sites_name={}):
         if not bd_scrap_wind.empty:
             bd_scrap_wind.to_excel(writer, sheet_name="bd_scrap_wind")
         scrap_processed.to_excel(writer, sheet_name="scrap_processed")
+        stock_domestic.to_excel(writer, sheet_name="stock_domestic")
+        stock_imported.to_excel(writer, sheet_name="stock_imported")
+        scrap_magnet_route.to_excel(
+            writer, sheet_name="capacity_scrap_magnet_route"
+        )
+        scrap_bulk_route.to_excel(
+            writer, sheet_name="capacity_scrap_bulk_route"
+        )
         bd_one_tech_base.to_excel(writer, sheet_name="bd_one_tech_base")
         costs_extension.to_excel(writer, sheet_name="costs_extension")
         new_balance.to_excel(writer, sheet_name="new_balance")

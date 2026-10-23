@@ -141,7 +141,7 @@ def sort_legend_handles(handles, labels):
 
 
 # ================= DATEN LADEN =================
-def load_baseline_generation(file_path, start_year=2025, end_year=2040):
+def load_baseline_generation(file_path, start_year=2025, end_year=2050):
     df_bal = pd.read_excel(file_path, sheet_name="extension_balance")
     df_bal.columns = df_bal.columns.str.lower()
     df_bal[["stf", "process"]] = df_bal[["stf", "process"]].ffill()
@@ -160,7 +160,7 @@ def load_baseline_generation(file_path, start_year=2025, end_year=2040):
     return df_gen
 
 
-def load_capacity_data(file_path, start_year=2025, end_year=2040):
+def load_capacity_data(file_path, start_year=2025, end_year=2050):
     df_proc = pd.read_excel(file_path, sheet_name="Process caps")
     df_proc.columns = df_proc.columns.str.lower()
     df_proc["stf"] = df_proc["stf"].ffill()
@@ -259,7 +259,7 @@ def plot_electricity_generation(
     ax.set_yticks([1000, 2000, 3000, 4000])
     ax.set_yticklabels(["1,000", "2,000", "3,000", "4,000"])
 
-    xticks = [y for y in [2025, 2030, 2035, 2040] if y in years]
+    xticks = [y for y in [2025, 2030, 2035, 2040, 2045, 2050] if y in years]
     if not xticks:
         xticks = years.tolist()
     ax.set_xticks(xticks)
@@ -303,7 +303,7 @@ def plot_electricity_generation(
         loc="upper center",
         bbox_to_anchor=(0.5, -0.15),
         ncol=5,
-        frameon=True,
+        frameon=False,
         fontsize=8.5,
         framealpha=1.0,
         edgecolor="black",
@@ -369,7 +369,7 @@ def plot_capacity_bar(
     ax.yaxis.set_major_locator(MaxNLocator(nbins=5, integer=True))
     ax.yaxis.set_major_formatter(StrMethodFormatter("{x:,.0f}"))
 
-    xticks = [y for y in [2025, 2030, 2035, 2040] if y in years]
+    xticks = [y for y in [2025, 2030, 2035, 2040, 2045, 2050] if y in years]
     if not xticks:
         xticks = years.tolist()
     ax.set_xticks(xticks)
@@ -417,7 +417,7 @@ def plot_capacity_bar(
         loc="upper center",
         bbox_to_anchor=(0.5, -0.15),
         ncol=5,
-        frameon=True,
+        frameon=False,
         fontsize=8.5,
         framealpha=1.0,
         edgecolor="black",
@@ -438,7 +438,7 @@ if __name__ == "__main__":
     if not FILE_PATH.exists():
         print(f"❌ Datei nicht gefunden: {FILE_PATH}\nBitte Pfad (BASE_DIR) prüfen.")
     else:
-        df_gen = load_baseline_generation(FILE_PATH, start_year=2025, end_year=2040)
+        df_gen = load_baseline_generation(FILE_PATH, start_year=2025, end_year=2050)
         if not df_gen.empty:
             plot_electricity_generation(
                 df_gen,
@@ -453,7 +453,7 @@ if __name__ == "__main__":
                 output_filename="Fig_Baseline_Electricity_Generation_Bar.pdf",
             )
 
-        df_cap = load_capacity_data(FILE_PATH, start_year=2025, end_year=2040)
+        df_cap = load_capacity_data(FILE_PATH, start_year=2025, end_year=2050)
         if not df_cap.empty:
             plot_capacity_bar(
                 df_cap,

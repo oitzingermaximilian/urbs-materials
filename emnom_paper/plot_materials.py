@@ -10,6 +10,11 @@ from matplotlib.ticker import (
 )
 import numpy as np
 import pandas as pd
+from scenario_config import (
+    LEARNING_RATES,
+    MATERIAL_SCENARIOS,
+    scenario_file,
+)
 
 # ==========================================
 # Setup matplotlib style (Science / IEEE)
@@ -30,13 +35,9 @@ plt.rcParams["pdf.fonttype"] = 42
 plt.rcParams["ps.fonttype"] = 42
 
 # ================= KONFIGURATION =================
-BASE_DIR = Path("result/results_server_201026")
-SCENARIO_LR4 = "LR4_nzia_40_crma_25_materials_base"
-FILE_PATH = BASE_DIR / SCENARIO_LR4 / f"{SCENARIO_LR4}.xlsx"
-PLOT_OUTPUT_DIR = Path("plots/materials")
-
-# Column headers for our Scenarios
-SCENARIOS = ["LR1", "LR4", "LR7"]
+PROJECT_DIR = Path(__file__).resolve().parent
+BASE_DIR = PROJECT_DIR / "result" / "results_server_201026"
+PLOT_OUTPUT_DIR = PROJECT_DIR / "plots/materials"
 
 # CRMA Target Materials List
 CRMA_TARGET_MATERIALS = [
@@ -69,7 +70,7 @@ MAT_COLORS = {
 
 
 # ================= DATEN LADEN & FILTERN =================
-def load_minerals_data(file_path, start_year=2025, end_year=2040):
+def load_minerals_data(file_path, start_year=2025, end_year=2050):
     print(f"Lade Mineralien-Daten aus: {file_path}")
     df = pd.read_excel(file_path, sheet_name="minerals")
     df.columns = df.columns.str.lower()
@@ -92,7 +93,10 @@ def determine_scale(max_value):
 
 # ================= MASSIVE MATRIX PLOTTING =================
 def plot_materials_scenario_matrix(
-    df_list, scenario_names, output_filename="Fig_Massive_Scenario_Matrix.pdf"
+    df_list,
+    scenario_names,
+    output_filename="Fig_Massive_Scenario_Matrix.pdf",
+    material_title=None,
 ):
     print("\n📊 Generating Massive Matrix Plot...")
 
@@ -126,8 +130,8 @@ def plot_materials_scenario_matrix(
         n_rows, n_cols, figsize=(14, 2.5 * n_rows), sharex=True, sharey="row"
     )
 
-    target_years = [2025, 2030, 2035, 2040]
-    all_years = np.arange(2025, 2041)
+    target_years = [2025, 2030, 2035, 2040, 2045, 2050]
+    all_years = np.arange(2025, 2051)
 
     # 3. Iterate through Grid
     for i, meta in enumerate(sorted_materials):
@@ -190,7 +194,7 @@ def plot_materials_scenario_matrix(
             )
 
             # Aesthetics & Limits
-            ax.set_xlim(2025, 2040)
+            ax.set_xlim(2025, 2050)
             if row_max_y > 0:
                 ax.set_ylim(0, row_max_y * 1.15)
 
@@ -237,14 +241,13 @@ def plot_materials_scenario_matrix(
 
             # Column Titles (Top Row only)
             if i == 0:
-                ax.set_title(scen_name, fontsize=14, weight="bold", pad=15)
+                ax.set_title(scen_name, fontsize=14, pad=15)
 
             # Row Titles (Leftmost Column only - Removed "Demand")
             if j == 0:
                 ax.set_ylabel(
                     f"{mat_name.capitalize()}\n({unit})",
                     fontsize=11,
-                    weight="bold",
                     labelpad=10,
                 )
 
@@ -288,6 +291,9 @@ def plot_materials_scenario_matrix(
         bbox_to_anchor=(0.5, 0.005),
     )
 
+    if material_title:
+        fig.suptitle(material_title, fontsize=16, y=0.995)
+
     plt.tight_layout()
     # Adjust spacing: hspace handles space between rows, bottom handles space for legend
     plt.subplots_adjust(
@@ -301,16 +307,161 @@ def plot_materials_scenario_matrix(
     print(f"   ✔ Massive Matrix saved -> {out_file}")
 
 
+def plot_copper_aluminum_all_scenarios(
+    scenario_data,
+):
+    """Create one LR-by-material-price matrix for copper and one for aluminum."""
+    years = np.arange(2025, 2051)
+
+    for target_material in ["copper", "aluminum"]:
+        fig, axs = plt.subplots(
+            len(LEARNING_RATES),
+            len(MATERIAL_SCENARIOS),
+            figsize=(16, 9),
+            sharex=True,
+            sharey="row",
+            squeeze=False,
+        )
+
+        for learning_rate in LEARNING_RATES:
+            row_max = 0
+            for material in MATERIAL_SCENARIOS:
+                df = scenario_data[material][learning_rate]
+                df_material = df[df["materials"] == target_material].set_index("stf")
+                if df_material.empty:
+                    continue
+                df_material = df_material.reindex(years).fillna(0)
+                total = df_material[
+                    ["material_imported", "material_mined", "material_recycled"]
+                ].sum(axis=1)
+                row_max = max(row_max, total.max())
+            multiplier, unit = determine_scale(row_max)
+            for column, material in enumerate(MATERIAL_SCENARIOS):
+                ax = axs[LEARNING_RATES.index(learning_rate), column]
+                df = scenario_data[material][learning_rate]
+                df_material = (
+                    df[df["materials"] == target_material]
+                    .set_index("stf")
+                    .reindex(years)
+                    .fillna(0)
+                )
+                imported = df_material["material_imported"].values * multiplier
+                mined = df_material["material_mined"].values * multiplier
+                recycled = df_material["material_recycled"].values * multiplier
+                total = imported + mined + recycled
+
+                ax.stackplot(
+                    years,
+                    imported,
+                    mined,
+                    recycled,
+                    colors=[
+                        MAT_COLORS["Imported"],
+                        MAT_COLORS["Mined"],
+                        MAT_COLORS["Recycled"],
+                    ],
+                    edgecolor="black",
+                    linewidth=0.4,
+                )
+                ax.plot(years, total, color=MAT_COLORS["Demand"], linewidth=1.4)
+                ax.set_xlim(2025, 2050)
+                if row_max > 0:
+                    ax.set_ylim(0, row_max * multiplier * 1.15)
+                ax.set_xticks([2025, 2030, 2035, 2040, 2045, 2050])
+                ax.tick_params(
+                    axis="both",
+                    which="major",
+                    direction="in",
+                    length=4,
+                    labelsize=8,
+                    top=True,
+                    right=True,
+                )
+                ax.grid(False)
+
+                if LEARNING_RATES.index(learning_rate) == 0:
+                    ax.set_title(material, fontsize=9, pad=8)
+                if column == 0:
+                    ax.set_ylabel(
+                        f"{learning_rate}\n{target_material.capitalize()} ({unit})",
+                        fontsize=10,
+                    )
+                if learning_rate == LEARNING_RATES[-1]:
+                    ax.tick_params(axis="x", labelrotation=45)
+
+        handles = [
+            plt.Line2D([], [], color=MAT_COLORS["Demand"], lw=2, label="Annual Demand"),
+            plt.Rectangle(
+                (0, 0),
+                1,
+                1,
+                facecolor=MAT_COLORS["Imported"],
+                edgecolor="black",
+                label="Imported",
+            ),
+            plt.Rectangle(
+                (0, 0),
+                1,
+                1,
+                facecolor=MAT_COLORS["Mined"],
+                edgecolor="black",
+                label="Mined",
+            ),
+            plt.Rectangle(
+                (0, 0),
+                1,
+                1,
+                facecolor=MAT_COLORS["Recycled"],
+                edgecolor="black",
+                label="Recycled",
+            ),
+        ]
+        fig.legend(handles=handles, loc="lower center", ncol=4, frameon=True)
+        fig.suptitle(
+            f"{target_material.capitalize()} Across All Material-Price Scenarios"
+        )
+        fig.supxlabel("Year")
+        fig.supylabel(f"{target_material.capitalize()} ({unit})")
+        fig.tight_layout(rect=(0, 0.08, 1, 0.95))
+
+        PLOT_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+        output_filename = f"Fig_{target_material.capitalize()}_All_Scenarios.pdf"
+        out_file = PLOT_OUTPUT_DIR / output_filename
+        plt.savefig(out_file, bbox_inches="tight")
+        plt.close()
+        print(f"   ✔ {target_material.capitalize()} comparison saved -> {out_file}")
+
+
 # ================= EXECUTION =================
 if __name__ == "__main__":
-    if not FILE_PATH.exists():
-        print(f"❌ Datei nicht gefunden: {FILE_PATH}\nBitte Pfad prüfen.")
-    else:
-        # Load the base dataframe
-        df_base = load_minerals_data(FILE_PATH, start_year=2025, end_year=2040)
+    all_scenario_data = {}
+    for material in MATERIAL_SCENARIOS:
+        files = [
+            scenario_file(BASE_DIR, learning_rate, material)
+            for learning_rate in LEARNING_RATES
+        ]
+        missing = [str(path) for path in files if not path.exists()]
+        if missing:
+            print(f"❌ Missing {material} scenario files: {', '.join(missing)}")
+            continue
 
-        if not df_base.empty:
-            # Mock the 3 scenarios by duplicating the base df (Replace with actual data later)
-            df_list = [df_base, df_base, df_base]
+        data = [
+            load_minerals_data(path, start_year=2025, end_year=2050)
+            for path in files
+        ]
+        if all(not frame.empty for frame in data):
+            all_scenario_data[material] = dict(zip(LEARNING_RATES, data))
+            plot_materials_scenario_matrix(
+                data,
+                list(LEARNING_RATES),
+                output_filename=f"Fig_Materials_{material}_WithMaterialTitle.pdf",
+                material_title=material,
+            )
+            plot_materials_scenario_matrix(
+                data,
+                list(LEARNING_RATES),
+                output_filename=f"Fig_Materials_{material}_NoMaterialTitle.pdf",
+            )
 
-            plot_materials_scenario_matrix(df_list, SCENARIOS)
+    if len(all_scenario_data) == len(MATERIAL_SCENARIOS):
+        plot_copper_aluminum_all_scenarios(all_scenario_data)

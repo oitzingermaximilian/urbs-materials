@@ -12,6 +12,11 @@ from matplotlib.ticker import (
 )
 import numpy as np
 import pandas as pd
+from scenario_config import (
+    LEARNING_RATES,
+    MATERIAL_SCENARIOS,
+    scenario_file,
+)
 
 # ==========================================
 # Setup matplotlib style (Science / IEEE)
@@ -33,9 +38,7 @@ plt.rcParams["ps.fonttype"] = 42
 
 # ================= KONFIGURATION =================
 PROJECT_DIR = Path(__file__).resolve().parent
-BASE_DIR = PROJECT_DIR / "result/results_server_201026"
-SCENARIO_LR4 = "LR4_nzia_40_crma_25_materials_base"
-FILE_PATH = BASE_DIR / SCENARIO_LR4 / f"{SCENARIO_LR4}.xlsx"
+BASE_DIR = PROJECT_DIR / "result" / "results_server_201026"
 
 PLOT_OUTPUT_DIR = PROJECT_DIR / "plots/supply_mix"
 PLOT_SCALE = 1.35
@@ -44,7 +47,7 @@ PLOT_SCALE = 1.35
 def scaled_size(size):
     return size * PLOT_SCALE
 
-YEARS_TO_PLOT = [2025, 2030, 2035, 2040]
+YEARS_TO_PLOT = [2025, 2030, 2035, 2040, 2045, 2050]
 
 TECH_STAGE_MAP = {
     "solarPV": ["Polysilicon", "Wafer", "Cell", "Module"],
@@ -62,9 +65,9 @@ STAGE_LABELS = {
 
 SCENARIO_ORDER = ["LR1_Slow", "LR4_Base", "LR7_Fast"]
 SCENARIO_LABELS = {
-    "LR1_Slow": "LR1 (Slow)",
-    "LR4_Base": "LR4 (Base)",
-    "LR7_Fast": "LR7 (Fast)",
+    "LR1_Slow": "LR1",
+    "LR4_Base": "LR4",
+    "LR7_Fast": "LR7",
 }
 
 # UPDATED COLORS FOR 3 COMPONENTS
@@ -211,6 +214,7 @@ def plot_supply_alluvial_matrix(
     show_percentage_labels=True,
     filename_suffix="",
     absolute=False,
+    material_title=None,
 ):
     n_rows = len(stages)
     n_cols = len(SCENARIO_ORDER)
@@ -360,7 +364,6 @@ def plot_supply_alluvial_matrix(
                             va="center",
                             color="black",
                             fontsize=scaled_size(9),
-                            fontweight="bold",
                             zorder=4,
                         )
                     bottom = prod_values[j]
@@ -388,7 +391,6 @@ def plot_supply_alluvial_matrix(
                             va="center",
                             color="black",
                             fontsize=scaled_size(9),
-                            fontweight="bold",
                             zorder=4,
                         )
                     bottom += stock_values[j]
@@ -416,7 +418,6 @@ def plot_supply_alluvial_matrix(
                             va="center",
                             color="black",
                             fontsize=scaled_size(9),
-                            fontweight="bold",
                             zorder=4,
                         )
 
@@ -430,7 +431,6 @@ def plot_supply_alluvial_matrix(
             if r == 0:
                 ax.set_title(
                     SCENARIO_LABELS[scen_key],
-                    fontweight="bold",
                     fontsize=scaled_size(12),
                     pad=scaled_size(8),
                 )
@@ -459,6 +459,9 @@ def plot_supply_alluvial_matrix(
         fontsize=scaled_size(11),
     )
 
+    if material_title:
+        fig.suptitle(material_title, fontsize=scaled_size(16), y=1.01)
+
     plt.tight_layout()
     plt.subplots_adjust(bottom=max(0.12, 0.4 / n_rows), hspace=0.15, wspace=0.1)
 
@@ -469,7 +472,12 @@ def plot_supply_alluvial_matrix(
 
 
 def plot_supply_100bars_matrix(
-    tech_name, scenario_dict, stages, output_dir=PLOT_OUTPUT_DIR
+    tech_name,
+    scenario_dict,
+    stages,
+    output_dir=PLOT_OUTPUT_DIR,
+    material_title=None,
+    filename_suffix="",
 ):
     n_rows = len(stages)
     n_cols = len(SCENARIO_ORDER)
@@ -546,7 +554,6 @@ def plot_supply_100bars_matrix(
             if r == 0:
                 ax.set_title(
                     SCENARIO_LABELS[scen_key],
-                    fontweight="bold",
                     fontsize=scaled_size(12),
                     pad=scaled_size(8),
                 )
@@ -574,15 +581,27 @@ def plot_supply_100bars_matrix(
         fontsize=scaled_size(11),
     )
 
+    if material_title:
+        fig.suptitle(material_title, fontsize=scaled_size(16), y=1.01)
+
     plt.tight_layout()
     plt.subplots_adjust(bottom=max(0.12, 0.4 / n_rows), hspace=0.15, wspace=0.1)
 
-    save_matrix_figure(fig, output_dir, f"Fig_Matrix_100Bars_{tech_name}.pdf")
+    save_matrix_figure(
+        fig,
+        output_dir,
+        f"Fig_Matrix_100Bars_{tech_name}{filename_suffix}.pdf",
+    )
     plt.close()
 
 
 def plot_supply_absolute_bars_matrix(
-    tech_name, scenario_dict, stages, output_dir=PLOT_OUTPUT_DIR
+    tech_name,
+    scenario_dict,
+    stages,
+    output_dir=PLOT_OUTPUT_DIR,
+    material_title=None,
+    filename_suffix="",
 ):
     n_rows = len(stages)
     n_cols = len(SCENARIO_ORDER)
@@ -668,7 +687,6 @@ def plot_supply_absolute_bars_matrix(
             if r == 0:
                 ax.set_title(
                     SCENARIO_LABELS[scen_key],
-                    fontweight="bold",
                     fontsize=scaled_size(12),
                     pad=scaled_size(8),
                 )
@@ -696,17 +714,27 @@ def plot_supply_absolute_bars_matrix(
         fontsize=scaled_size(11),
     )
 
+    if material_title:
+        fig.suptitle(material_title, fontsize=scaled_size(16), y=1.01)
+
     plt.tight_layout()
     plt.subplots_adjust(bottom=max(0.12, 0.4 / n_rows), hspace=0.15, wspace=0.15)
 
     save_matrix_figure(
-        fig, output_dir, f"Fig_Matrix_AbsoluteBars_{tech_name}.pdf"
+        fig,
+        output_dir,
+        f"Fig_Matrix_AbsoluteBars_{tech_name}{filename_suffix}.pdf",
     )
     plt.close()
 
 
 def plot_supply_100area_matrix(
-    tech_name, scenario_dict, stages, output_dir=PLOT_OUTPUT_DIR
+    tech_name,
+    scenario_dict,
+    stages,
+    output_dir=PLOT_OUTPUT_DIR,
+    material_title=None,
+    filename_suffix="",
 ):
     n_rows = len(stages)
     n_cols = len(SCENARIO_ORDER)
@@ -768,7 +796,6 @@ def plot_supply_100area_matrix(
             if r == 0:
                 ax.set_title(
                     SCENARIO_LABELS[scen_key],
-                    fontweight="bold",
                     fontsize=scaled_size(12),
                     pad=scaled_size(8),
                 )
@@ -796,70 +823,138 @@ def plot_supply_100area_matrix(
         fontsize=scaled_size(11),
     )
 
+    if material_title:
+        fig.suptitle(material_title, fontsize=scaled_size(16), y=1.01)
+
     plt.tight_layout()
     plt.subplots_adjust(bottom=max(0.12, 0.4 / n_rows), hspace=0.15, wspace=0.1)
 
-    save_matrix_figure(fig, output_dir, f"Fig_Matrix_100Area_{tech_name}.pdf")
+    save_matrix_figure(
+        fig,
+        output_dir,
+        f"Fig_Matrix_100Area_{tech_name}{filename_suffix}.pdf",
+    )
     plt.close()
 
 
 # ================= EXECUTION =================
 if __name__ == "__main__":
-    if not FILE_PATH.exists():
-        print(f"❌ Datei nicht gefunden: {FILE_PATH}\nBitte Pfad prüfen.")
-    else:
-        df_base = load_and_merge_supply_data(FILE_PATH)
-
-        # ---------------------------------------------------------
-        # MOCK DATA SCENARIOS FOR ALL THREE COMPONENTS
-        # ---------------------------------------------------------
-        df_lr1 = df_base.copy()
-        df_lr7 = df_base.copy()
-
-        # LR1 (Slow): Shift towards imports, shrink domestic
-        df_lr1["Imported"] = df_lr1["Imported"] * 1.30
-        df_lr1["capacity_produced_flow"] = df_lr1["capacity_produced_flow"] * 0.70
-        df_lr1["capacity_produced_stockout"] = (
-            df_lr1["capacity_produced_stockout"] * 0.80
-        )
-
-        # LR7 (Fast): Shift towards domestic, shrink imports
-        df_lr7["Imported"] = df_lr7["Imported"] * 0.70
-        df_lr7["capacity_produced_flow"] = df_lr7["capacity_produced_flow"] * 1.30
-        df_lr7["capacity_produced_stockout"] = (
-            df_lr7["capacity_produced_stockout"] * 1.10
-        )
-        # ---------------------------------------------------------
+    for material in MATERIAL_SCENARIOS:
+        files = [
+            scenario_file(BASE_DIR, learning_rate, material)
+            for learning_rate in LEARNING_RATES
+        ]
+        missing = [str(path) for path in files if not path.exists()]
+        if missing:
+            print(f"❌ Missing {material} scenario files: {', '.join(missing)}")
+            continue
 
         scenario_data_dict = {
-            "LR1_Slow": df_lr1,
-            "LR4_Base": df_base,
-            "LR7_Fast": df_lr7,
+            key: load_and_merge_supply_data(path)
+            for key, path in zip(SCENARIO_ORDER, files)
         }
+        material_output_dir = PLOT_OUTPUT_DIR / material
 
         for tech, stages in TECH_STAGE_MAP.items():
-            print(f"\n📊 Generating Scenario Supply Mix matrices for {tech}...")
+            print(f"\n📊 Generating {material} supply-mix matrices for {tech}...")
 
-            plot_supply_alluvial_matrix(tech, scenario_data_dict, stages)
             plot_supply_alluvial_matrix(
                 tech,
                 scenario_data_dict,
                 stages,
-                show_percentage_labels=False,
-                filename_suffix="_NoLabels",
+                material_output_dir,
+                material_title=material,
+                filename_suffix="_WithMaterialTitle",
             )
             plot_supply_alluvial_matrix(
                 tech,
                 scenario_data_dict,
                 stages,
+                material_output_dir,
                 show_percentage_labels=False,
-                filename_suffix="_Absolute",
+                filename_suffix="_NoLabels_WithMaterialTitle",
+                material_title=material,
+            )
+            plot_supply_alluvial_matrix(
+                tech,
+                scenario_data_dict,
+                stages,
+                material_output_dir,
+                show_percentage_labels=False,
+                filename_suffix="_Absolute_WithMaterialTitle",
+                absolute=True,
+                material_title=material,
+            )
+            plot_supply_100bars_matrix(
+                tech,
+                scenario_data_dict,
+                stages,
+                material_output_dir,
+                material_title=material,
+                filename_suffix="_WithMaterialTitle",
+            )
+            plot_supply_absolute_bars_matrix(
+                tech,
+                scenario_data_dict,
+                stages,
+                material_output_dir,
+                material_title=material,
+                filename_suffix="_WithMaterialTitle",
+            )
+            plot_supply_100area_matrix(
+                tech,
+                scenario_data_dict,
+                stages,
+                material_output_dir,
+                material_title=material,
+                filename_suffix="_WithMaterialTitle",
+            )
+            plot_supply_alluvial_matrix(
+                tech,
+                scenario_data_dict,
+                stages,
+                material_output_dir,
+                filename_suffix="_NoMaterialTitle",
+            )
+            plot_supply_alluvial_matrix(
+                tech,
+                scenario_data_dict,
+                stages,
+                material_output_dir,
+                show_percentage_labels=False,
+                filename_suffix="_NoLabels_NoMaterialTitle",
+            )
+            plot_supply_alluvial_matrix(
+                tech,
+                scenario_data_dict,
+                stages,
+                material_output_dir,
+                show_percentage_labels=False,
+                filename_suffix="_Absolute_NoMaterialTitle",
                 absolute=True,
             )
-            plot_supply_100bars_matrix(tech, scenario_data_dict, stages)
-            plot_supply_absolute_bars_matrix(tech, scenario_data_dict, stages)
-            plot_supply_100area_matrix(tech, scenario_data_dict, stages)
+            plot_supply_100bars_matrix(
+                tech,
+                scenario_data_dict,
+                stages,
+                material_output_dir,
+                filename_suffix="_NoMaterialTitle",
+            )
+            plot_supply_absolute_bars_matrix(
+                tech,
+                scenario_data_dict,
+                stages,
+                material_output_dir,
+                filename_suffix="_NoMaterialTitle",
+            )
+            plot_supply_100area_matrix(
+                tech,
+                scenario_data_dict,
+                stages,
+                material_output_dir,
+                filename_suffix="_NoMaterialTitle",
+            )
 
-        print(
-            "\n✅ All Supply Mix Matrix visualizations successfully generated in plots/supply_mix!"
-        )
+    print(
+        "\n✅ All supply-mix matrices generated for every material scenario!"
+    )

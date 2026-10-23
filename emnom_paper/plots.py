@@ -491,7 +491,7 @@ def plot_valley_of_death_comparison(df, target_lr="LR4"):
     plt.close()
 
 
-def plot_sourcing_comparison(df, target_year=2040, target_lr="LR4"):
+def plot_sourcing_comparison(df, target_year=2050, target_lr="LR4"):
     """100% Stacked bar comparing Sourcing (Import/Mine/Recycle) across Industry Policies."""
     df_plot = df[
         (df["stf"] == target_year)
@@ -535,7 +535,7 @@ def plot_sourcing_comparison(df, target_year=2040, target_lr="LR4"):
     plt.close()
 
 
-def plot_ccus_escape_route(df, target_year=2040, target_lr="LR4"):
+def plot_ccus_escape_route(df, target_year=2050, target_lr="LR4"):
     """Shows how the share of Fossil+CCUS increases as Material Constraints get tighter."""
     df_plot = df[(df["stf"] == target_year) & (df["LR"] == target_lr)].copy()
 

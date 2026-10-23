@@ -223,11 +223,14 @@ def apply_scenario_constraints(
 
     elif crma_mode == "combined":
         m.eu_extraction_constraint.deactivate()
-        m.eu_recycling_constraint.deactivate()
+        # The EU recycling target is mandatory in every active CRMA setup.
+        # The combined constraint provides the additional buffer when mining
+        # alone cannot meet the total domestic-supply quota.
+        m.eu_recycling_constraint.activate()
         m.eu_crma_combined_constraint.activate()
-        # UPDATE PRINT STATEMENT TO SHOW CURRENT QUOTA
         print(
-            f"✅ CRMA COMBINED:  Active (>=2030) - Joint (Mining + Recycling) >= {int(crma_quota * 100)}% resilience pool."
+            f"✅ CRMA COMBINED:  Active (>=2030) - Recycling >= 25% and "
+            f"(Mining + Recycling) >= {int(crma_quota * 100)}% resilience pool."
         )
 
     print("-----------------------------------------\n")

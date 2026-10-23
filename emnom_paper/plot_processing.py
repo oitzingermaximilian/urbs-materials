@@ -12,6 +12,11 @@ from matplotlib.ticker import (
 )
 import numpy as np
 import pandas as pd
+from scenario_config import (
+    LEARNING_RATES,
+    MATERIAL_SCENARIOS,
+    scenario_file,
+)
 
 # ==========================================
 # Setup matplotlib style (Science / IEEE)
@@ -32,13 +37,12 @@ plt.rcParams["pdf.fonttype"] = 42
 plt.rcParams["ps.fonttype"] = 42
 
 # ================= KONFIGURATION =================
-BASE_DIR = Path("result/results_server_201026")
-SCENARIO_LR4 = "LR4_nzia_40_crma_25_materials_base"
-FILE_PATH = BASE_DIR / SCENARIO_LR4 / f"{SCENARIO_LR4}.xlsx"
+PROJECT_DIR = Path(__file__).resolve().parent
+BASE_DIR = PROJECT_DIR / "result" / "results_server_201026"
 
-PLOT_OUTPUT_DIR = Path("plots/processing")
+PLOT_OUTPUT_DIR = PROJECT_DIR / "plots/processing"
 
-YEARS_TO_PLOT = [2030, 2035, 2040]
+YEARS_TO_PLOT = [2030, 2035, 2040, 2045, 2050]
 SHEET_NAME = "processing_capacities"
 
 # Tech -> Stage mapping
@@ -58,9 +62,9 @@ SCENARIO_COLORS = {
 }
 
 SCENARIO_LABELS = {
-    "LR1_Slow": "LR1 (Slow)",
-    "LR4_Base": "LR4 (Base)",
-    "LR7_Fast": "LR7 (Fast)",
+    "LR1_Slow": "LR1",
+    "LR4_Base": "LR4",
+    "LR7_Fast": "LR7",
 }
 
 
@@ -103,7 +107,13 @@ def get_pivot_for_tech(df, tech, stages):
 
 # ================= OPTION 1: TRAJECTORY GRID =================
 def create_trajectory_plot(
-    tech_name, scenario_data, output_name, stages, output_dir=PLOT_OUTPUT_DIR
+    tech_name,
+    scenario_data,
+    output_name,
+    stages,
+    output_dir=PLOT_OUTPUT_DIR,
+    material_title=None,
+    filename_suffix="",
 ):
     n_cols = len(stages)
     fig, axs = plt.subplots(1, n_cols, figsize=(2.5 * n_cols, 4), sharey=True)
@@ -133,8 +143,8 @@ def create_trajectory_plot(
                 zorder=3,
             )
 
-        ax.set_title(stage, fontweight="bold", fontsize=12)
-        ax.set_xlim(2025, 2040)
+        ax.set_title(stage, fontsize=12)
+        ax.set_xlim(2025, 2050)
         ax.set_ylim(0, y_limit)
 
         # Ticks & Grid
@@ -159,7 +169,7 @@ def create_trajectory_plot(
         ax.xaxis.set_minor_locator(MultipleLocator(1))
 
         if i == 0:
-            ax.set_ylabel("Capacity (GW/yr)", fontsize=11, fontweight="bold")
+            ax.set_ylabel("Capacity (GW/yr)", fontsize=11)
             ax.yaxis.set_major_formatter(StrMethodFormatter("{x:,.0f}"))
 
     # Legend
@@ -183,18 +193,28 @@ def create_trajectory_plot(
         edgecolor="black",
     )
 
+    if material_title:
+        fig.suptitle(material_title, fontsize=14, y=1.02)
+
     plt.tight_layout()
     plt.subplots_adjust(bottom=0.2)
     output_dir.mkdir(parents=True, exist_ok=True)
     plt.savefig(
-        output_dir / f"{output_name}_Option1_Trajectory.pdf", bbox_inches="tight"
+        output_dir / f"{output_name}_Option1_Trajectory{filename_suffix}.pdf",
+        bbox_inches="tight",
     )
     plt.close()
 
 
 # ================= OPTION 2: DUMBBELL / RANGE =================
 def create_dumbbell_plot(
-    tech_name, scenario_data, output_name, stages, output_dir=PLOT_OUTPUT_DIR
+    tech_name,
+    scenario_data,
+    output_name,
+    stages,
+    output_dir=PLOT_OUTPUT_DIR,
+    material_title=None,
+    filename_suffix="",
 ):
     fig, ax = plt.subplots(figsize=(7.5, max(4, len(stages) * 1.5)))
 
@@ -208,7 +228,6 @@ def create_dumbbell_plot(
             y_pos - 1,
             stage,
             transform=ax.get_yaxis_transform(),
-            fontweight="bold",
             fontsize=12,
             ha="right",
             va="center",
@@ -256,7 +275,7 @@ def create_dumbbell_plot(
 
     ax.set_yticks(y_ticks)
     ax.set_yticklabels(y_labels, fontsize=10)
-    ax.set_xlabel("Capacity (GW/yr)", fontsize=11, fontweight="bold")
+    ax.set_xlabel("Capacity (GW/yr)", fontsize=11)
 
     ax.grid(False)
     ax.xaxis.grid(color="gray", linestyle="--", linewidth=0.6, alpha=0.5, zorder=0)
@@ -287,14 +306,26 @@ def create_dumbbell_plot(
         edgecolor="black",
     )
 
+    if material_title:
+        fig.suptitle(material_title, fontsize=14, y=1.02)
+
     plt.tight_layout()
-    plt.savefig(output_dir / f"{output_name}_Option2_Dumbbell.pdf", bbox_inches="tight")
+    plt.savefig(
+        output_dir / f"{output_name}_Option2_Dumbbell{filename_suffix}.pdf",
+        bbox_inches="tight",
+    )
     plt.close()
 
 
 # ================= OPTION 3: CLUSTERED SNAPSHOTS =================
 def create_clustered_bar_plot(
-    tech_name, scenario_data, output_name, stages, output_dir=PLOT_OUTPUT_DIR
+    tech_name,
+    scenario_data,
+    output_name,
+    stages,
+    output_dir=PLOT_OUTPUT_DIR,
+    material_title=None,
+    filename_suffix="",
 ):
     fig, ax = plt.subplots(figsize=(8.5, 5))
 
@@ -335,8 +366,8 @@ def create_clustered_bar_plot(
             )
 
     ax.set_xticks(stage_centers)
-    ax.set_xticklabels(stages, fontweight="bold", fontsize=11)
-    ax.set_ylabel("Capacity (GW/yr)", fontsize=11, fontweight="bold")
+    ax.set_xticklabels(stages, fontsize=11)
+    ax.set_ylabel("Capacity (GW/yr)", fontsize=11)
 
     ax.grid(False)
     major_yticks = ax.yaxis.get_majorticklocs()
@@ -365,48 +396,95 @@ def create_clustered_bar_plot(
         edgecolor="black",
     )
 
+    if material_title:
+        fig.suptitle(material_title, fontsize=14, y=1.02)
+
     plt.tight_layout()
     plt.subplots_adjust(bottom=0.2)
     plt.savefig(
-        output_dir / f"{output_name}_Option3_ClusteredBars.pdf", bbox_inches="tight"
+        output_dir / f"{output_name}_Option3_ClusteredBars{filename_suffix}.pdf",
+        bbox_inches="tight",
     )
     plt.close()
 
 
 # ================= EXECUTION =================
 if __name__ == "__main__":
-    if not FILE_PATH.exists():
-        print(f"❌ Datei nicht gefunden: {FILE_PATH}\nBitte Pfad prüfen.")
-    else:
-        df_raw = load_processing_data(FILE_PATH)
+    for material in MATERIAL_SCENARIOS:
+        files = [
+            scenario_file(BASE_DIR, learning_rate, material)
+            for learning_rate in LEARNING_RATES
+        ]
+        missing = [str(path) for path in files if not path.exists()]
+        if missing:
+            print(f"❌ Missing {material} scenario files: {', '.join(missing)}")
+            continue
 
+        loaded_data = [load_processing_data(path) for path in files]
+        material_output_dir = PLOT_OUTPUT_DIR / material
         for tech, stages in TECH_STAGE_MAP.items():
-            df_base_pivot = get_pivot_for_tech(df_raw, tech, stages)
-
-            if df_base_pivot.empty:
-                print(f"   ⚠ Data empty for {tech} after pivot! Check stage names.")
+            scenario_data_dict = {
+                key: get_pivot_for_tech(data, tech, stages)
+                for key, data in zip(
+                    SCENARIO_ORDER,
+                    loaded_data,
+                )
+            }
+            if any(frame.empty for frame in scenario_data_dict.values()):
+                print(f"   ⚠ Data incomplete for {material}/{tech}; skipping.")
                 continue
 
-            # MOCK DATA SHIFTS
-            df_lr1_pivot = df_base_pivot.copy()
-            df_lr7_pivot = df_base_pivot.copy()
-            for col in df_lr1_pivot.columns:
-                df_lr1_pivot[col] = df_lr1_pivot[col] * 0.85
-                df_lr7_pivot[col] = df_lr7_pivot[col] * 1.20
-
-            scenario_data_dict = {
-                "LR1_Slow": df_lr1_pivot,
-                "LR4_Base": df_base_pivot,
-                "LR7_Fast": df_lr7_pivot,
-            }
-
             base_output_name = f"Fig_Processing_Capacities_{tech}"
-
-            # Generate all 3 options
-            create_trajectory_plot(tech, scenario_data_dict, base_output_name, stages)
-            create_dumbbell_plot(tech, scenario_data_dict, base_output_name, stages)
+            create_trajectory_plot(
+                tech,
+                scenario_data_dict,
+                base_output_name,
+                stages,
+                material_output_dir,
+                material_title=material,
+                filename_suffix="_WithMaterialTitle",
+            )
+            create_dumbbell_plot(
+                tech,
+                scenario_data_dict,
+                base_output_name,
+                stages,
+                material_output_dir,
+                material_title=material,
+                filename_suffix="_WithMaterialTitle",
+            )
             create_clustered_bar_plot(
-                tech, scenario_data_dict, base_output_name, stages
+                tech,
+                scenario_data_dict,
+                base_output_name,
+                stages,
+                material_output_dir,
+                material_title=material,
+                filename_suffix="_WithMaterialTitle",
+            )
+            create_trajectory_plot(
+                tech,
+                scenario_data_dict,
+                base_output_name,
+                stages,
+                material_output_dir,
+                filename_suffix="_NoMaterialTitle",
+            )
+            create_dumbbell_plot(
+                tech,
+                scenario_data_dict,
+                base_output_name,
+                stages,
+                material_output_dir,
+                filename_suffix="_NoMaterialTitle",
+            )
+            create_clustered_bar_plot(
+                tech,
+                scenario_data_dict,
+                base_output_name,
+                stages,
+                material_output_dir,
+                filename_suffix="_NoMaterialTitle",
             )
 
-        print("\n✅ All 3 layout options generated in plots/processing!")
+    print("\n✅ All processing-capacity layouts generated for every material scenario!")

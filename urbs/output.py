@@ -82,6 +82,10 @@ def get_constants(instance):
     bd_scrap_solar = get_entity(instance, "BD_scrap_solar")
     bd_scrap_wind = get_entity(instance, "BD_scrap_wind")
     scrap_processed = get_entity(instance, "capacity_scrap_rec")
+    stock_domestic = get_entity(instance, "stock_domestic")
+    stock_imported = get_entity(instance, "stock_imported")
+    scrap_magnet_route = get_entity(instance, "capacity_scrap_magnet_route")
+    scrap_bulk_route = get_entity(instance, "capacity_scrap_bulk_route")
     costs_extension = get_entities(
         instance,
         [
@@ -248,6 +252,10 @@ def get_constants(instance):
         bd_scrap_solar,
         bd_scrap_wind,
         scrap_processed,
+        stock_domestic,
+        stock_imported,
+        scrap_magnet_route,
+        scrap_bulk_route,
         bd_one_tech_base,
         costs_extension,
         new_balance,

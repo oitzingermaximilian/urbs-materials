@@ -76,24 +76,6 @@ class capacity_scrap_dec_rule(AbstractConstraint):
         )
         return expr
 
-
-class capacity_scrap_rec_rule(AbstractConstraint):  # INACTIVE
-    def apply_rule(self, m, stf, location, tech):
-        # CON: Scrap for Recycling | Calculates scrap input required for secondary production
-        lhs = (
-            m.f_scrap[location, tech]
-            / m.f_recycling[
-                location, tech
-            ]  # switchd f_mining to f_scrap cause same values and f_mining not working
-        ) * m.capacity_ext_eusecondary[stf, location, tech]
-
-        rhs = m.capacity_scrap_rec[stf, location, tech]
-        debug_print(
-            f"[scrap_rec] STF={stf}, loc={location}, tech={tech}  ➞ SCRAP_REC ==  {lhs}"
-        )
-        return lhs == rhs
-
-
 class capacity_scrap_total_rule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
         # CON: Total Scrap Accumulation | Tracks cumulative scrap availability
