@@ -132,13 +132,22 @@ class cost_scrap_rule(AbstractConstraint):
             if mat not in magnet_mats and (tech, mat) in m.scrap_content
         )
 
+        total_weight = magnet_weight + bulk_weight
+        total_weight = total_weight if total_weight > 0 else 1.0
+
+        # Dimensionless mass fractions for routing under Option A (tonnage-based scrap in kt):
+        # capacity_scrap_magnet_route and capacity_scrap_bulk_route are in kt of turbine scrap.
+        # w_mag and w_bulk are the mass fractions of magnet vs bulk in the decommissioned turbine.
+        w_mag = magnet_weight / total_weight if total_weight > 0 else 0.0
+        w_bulk = bulk_weight / total_weight if total_weight > 0 else 1.0
+
         # 2. Base Cost = Variable OPEX + CAPEX + Fixed OPEX
         if tech in ["windon", "windoff"]:
             # Magnet Route: Pays Magnet costs on magnet fraction + Bulk costs on bulk fraction
             magnet_route_opex = (
-                m.f_scrap_rec_magnet[stf, location, tech] * magnet_weight
-            ) + (m.f_scrap_rec_bulk[stf, location, tech] * bulk_weight)
-            bulk_route_opex = m.f_scrap_rec_bulk[stf, location, tech] * bulk_weight
+                m.f_scrap_rec_magnet[stf, location, tech] * w_mag
+            ) + (m.f_scrap_rec_bulk[stf, location, tech] * w_bulk)
+            bulk_route_opex = m.f_scrap_rec_bulk[stf, location, tech] * w_bulk
 
             opex_cost = (
                 magnet_route_opex * m.capacity_scrap_magnet_route[stf, location, tech]
@@ -146,9 +155,9 @@ class cost_scrap_rule(AbstractConstraint):
             )
 
             magnet_route_capex = (
-                m.f_scrap_capex_magnet[stf, location, tech] * magnet_weight
-            ) + (m.f_scrap_capex_bulk[stf, location, tech] * bulk_weight)
-            bulk_route_capex = m.f_scrap_capex_bulk[stf, location, tech] * bulk_weight
+                m.f_scrap_capex_magnet[stf, location, tech] * w_mag
+            ) + (m.f_scrap_capex_bulk[stf, location, tech] * w_bulk)
+            bulk_route_capex = m.f_scrap_capex_bulk[stf, location, tech] * w_bulk
 
             capex_cost = (
                 m.scraphandling_cap_new_magnet[stf, location, tech]
@@ -161,9 +170,9 @@ class cost_scrap_rule(AbstractConstraint):
             )
 
             magnet_route_fom = (
-                m.f_scrap_fom_magnet[stf, location, tech] * magnet_weight
-            ) + (m.f_scrap_fom_bulk[stf, location, tech] * bulk_weight)
-            bulk_route_fom = m.f_scrap_fom_bulk[stf, location, tech] * bulk_weight
+                m.f_scrap_fom_magnet[stf, location, tech] * w_mag
+            ) + (m.f_scrap_fom_bulk[stf, location, tech] * w_bulk)
+            bulk_route_fom = m.f_scrap_fom_bulk[stf, location, tech] * w_bulk
 
             fom_cost = (
                 magnet_route_fom
@@ -182,51 +191,47 @@ class cost_scrap_rule(AbstractConstraint):
                 if tech == "windon":
                     savings = (
                         m.PRICEREDUCTION_SCRAP_WINDON_CAP_BASED[stf, location]
-                        * magnet_weight
+                        * w_mag
                     )
                     savings_capex = (
                         m.PRICEREDUCTION_SCRAP_WINDON_CAPEX_CAP_BASED[stf, location]
-                        * magnet_weight
+                        * w_mag
                         * (f_inv - f_over)
                     )
                     savings_fom = (
                         m.PRICEREDUCTION_SCRAP_WINDON_FOM_CAP_BASED[stf, location]
-                        * magnet_weight
+                        * w_mag
                     )
                 elif tech == "windoff":
                     savings = (
                         m.PRICEREDUCTION_SCRAP_WINDOFF_CAP_BASED[stf, location]
-                        * magnet_weight
+                        * w_mag
                     )
                     savings_capex = (
                         m.PRICEREDUCTION_SCRAP_WINDOFF_CAPEX_CAP_BASED[stf, location]
-                        * magnet_weight
+                        * w_mag
                         * (f_inv - f_over)
                     )
                     savings_fom = (
                         m.PRICEREDUCTION_SCRAP_WINDOFF_FOM_CAP_BASED[stf, location]
-                        * magnet_weight
+                        * w_mag
                     )
 
         else:
-            total_weight = magnet_weight + bulk_weight
-            # Fallback to 1.0 if no intensities are defined so costs don't vanish
-            total_weight = total_weight if total_weight > 0 else 1.0
-
+            # Solar / Non-wind: Variables capacity_scrap_rec and capacity_scrap_handling_total
+            # are ALREADY in physical kt scrap (derived via f_scrap * capacity_dec).
+            # Multiplying by total_weight again caused a massive 69x double-weight penalty.
             opex_cost = (
                 m.f_scrap_rec[stf, location, tech]
-                * total_weight
                 * m.capacity_scrap_rec[stf, location, tech]
             )
             capex_cost = (
                 m.scraphandling_cap_new[stf, location, tech]
                 * m.f_scrap_capex[stf, location, tech]
-                * total_weight
                 * (f_inv - f_over)
             )
             fom_cost = (
                 m.f_scrap_fom[stf, location, tech]
-                * total_weight
                 * m.capacity_scrap_handling_total[stf, location, tech]
             )
 
@@ -238,16 +243,14 @@ class cost_scrap_rule(AbstractConstraint):
             savings_fom = 0
             if tech == "solarPV" and hasattr(m, "PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED"):
                 savings = (
-                    m.PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED[stf, location] * total_weight
+                    m.PRICEREDUCTION_SCRAP_SOLAR_CAP_BASED[stf, location]
                 )
                 savings_capex = (
                     m.PRICEREDUCTION_SCRAP_SOLAR_CAPEX_CAP_BASED[stf, location]
-                    * total_weight
                     * (f_inv - f_over)
                 )
                 savings_fom = (
                     m.PRICEREDUCTION_SCRAP_SOLAR_FOM_CAP_BASED[stf, location]
-                    * total_weight
                 )
 
         # 3. Final Equation
