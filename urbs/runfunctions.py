@@ -375,9 +375,22 @@ def process_gas_block_sheet(sheet_data):
         stf = row["stf"]
         block = str(row["block"])
 
-        # SCALING APPLIED
-        block_limits[(stf, block)] = float(row["limit"]) * GW_SCALE
-        block_prices[(stf, block)] = float(row["price"]) * COST_SCALE
+        # SCALING APPLIED with fallback if Excel formula cache is empty
+        lim = row["limit"]
+        if pd.isna(lim):
+            prev_val = block_limits.get((stf - 1, block))
+            if prev_val is not None:
+                if "pipe" in block.lower():
+                    block_limits[(stf, block)] = prev_val * (1.0 - 0.04052)
+                else:
+                    block_limits[(stf, block)] = prev_val
+            else:
+                block_limits[(stf, block)] = 0.0
+        else:
+            block_limits[(stf, block)] = float(lim) * GW_SCALE
+
+        prc = row["price"]
+        block_prices[(stf, block)] = float(prc) * COST_SCALE if pd.notna(prc) else 0.0
 
     print(f"Gas Blocks Processed. Scaled Limits to GWh.")
     return block_names, block_limits, block_prices

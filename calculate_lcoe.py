@@ -361,11 +361,13 @@ def compute_recycling_sweep(
         "windon":  0.300 * 8760.0,  # 2,628 h
         "windoff": 0.481 * 8760.0,  # 4,213.56 h
     }
-    lifetimes = {
-        "solarPV": 25.0,
-        "windon":  20.0,
-        "windoff": 20.0,
-    }
+    df_tech = wb_data.get("technologies", pd.DataFrame())
+    lifetimes = {"solarPV": 25.0, "windon": 20.0, "windoff": 20.0}
+    if not df_tech.empty and "l" in df_tech.columns:
+        for _, r in df_tech.iterrows():
+            t_name = str(r.get("Technologies", "")).split(".")[-1]
+            if t_name in lifetimes and pd.notna(r["l"]):
+                lifetimes[t_name] = float(r["l"])
 
     sweep_records = []
 
@@ -434,9 +436,10 @@ def compute_urbs_cost_driver_analysis(wb_data: dict, discount_rate: float = 0.03
     bess_import_2050 = float(row_2050.get("Batteries_Assembly", 164356.52)) / 1000.0  # EUR/kW
     factor_bess = 0.118  # from Technologies sheet / stockpile.py
 
-    # Battery coupling cost per kW solar
-    bess_add_2024 = bess_import_2024 * factor_bess  # ~33.09 EUR/kW solar
-    bess_add_2050 = bess_import_2050 * factor_bess  # ~19.39 EUR/kW solar
+    # Battery coupling cost per kW solar (Currently decoupled in URBS: factor_bess = 0.0)
+    factor_bess = 0.0
+    bess_add_2024 = bess_import_2024 * factor_bess
+    bess_add_2050 = bess_import_2050 * factor_bess
 
     alpha_bess = annuity_factor(discount_rate, 15.0)  # 15-year battery lifetime
     solar_flh = 0.125 * 8760.0  # 1,095 h
@@ -535,11 +538,19 @@ def calculate_comprehensive_lcoe(wb_data: dict, discount_rate: float = 0.03):
         if df_import_stage[col].notna().any():
             df_import_stage[col] = df_import_stage[col].interpolate(method="linear").bfill().ffill()
 
+    df_tech = wb_data.get("technologies", pd.DataFrame())
+    lt_dict = {"solarPV": 25.0, "windon": 20.0, "windoff": 20.0}
+    if not df_tech.empty and "l" in df_tech.columns:
+        for _, r in df_tech.iterrows():
+            t_name = str(r.get("Technologies", "")).split(".")[-1]
+            if t_name in lt_dict and pd.notna(r["l"]):
+                lt_dict[t_name] = float(r["l"])
+
     tech_specs = {
         "solarPV": {
             "name": "Solar PV",
             "import_col": "solarPV_Module",
-            "lifetime": 25.0,
+            "lifetime": lt_dict.get("solarPV", 25.0),
             "load_factor": 0.125,
             "flh": 0.125 * 8760.0,  # 1,095 h
             "color": "#d97706",     # Amber
@@ -547,7 +558,7 @@ def calculate_comprehensive_lcoe(wb_data: dict, discount_rate: float = 0.03):
         "windon": {
             "name": "Wind Onshore",
             "import_col": "windon_AssemblyOn",
-            "lifetime": 20.0,
+            "lifetime": lt_dict.get("windon", 20.0),
             "load_factor": 0.300,
             "flh": 0.300 * 8760.0,  # 2,628 h
             "color": "#0284c7",     # Sky Blue
@@ -555,7 +566,7 @@ def calculate_comprehensive_lcoe(wb_data: dict, discount_rate: float = 0.03):
         "windoff": {
             "name": "Wind Offshore",
             "import_col": "windoff_AssemblyOff",
-            "lifetime": 20.0,
+            "lifetime": lt_dict.get("windoff", 20.0),
             "load_factor": 0.481,
             "flh": 0.481 * 8760.0,  # 4,213.56 h
             "color": "#0d9488",     # Teal
@@ -564,7 +575,7 @@ def calculate_comprehensive_lcoe(wb_data: dict, discount_rate: float = 0.03):
 
     alpha_plant = annuity_factor(discount_rate, 25.0)
     alpha_bess = annuity_factor(discount_rate, 15.0)  # 15y battery lifetime
-    factor_bess = 0.118
+    factor_bess = 0.0  # Batteries decoupled / deactivated by user
 
     timeseries = []
 
@@ -746,13 +757,13 @@ def plot_comparison_svg(
 
     # Main Title
     sb.append(f'  <text x="{width/2}" y="32" text-anchor="middle" font-size="19" font-weight="700" fill="#0f172a">LCOE Analysis: Import vs. Domestic Manufacturing with 25% Recycling Quota</text>')
-    sb.append(f'  <text x="{width/2}" y="54" text-anchor="middle" font-size="12" fill="#64748b">Fixed r = 3.0% | CRMA 25% Recycled Origin Benchmark | Cross-Tech Scrap Pooling (Wind Al/Cu -> Solar) | URBS BESS Coupling</text>')
+    sb.append(f'  <text x="{width/2}" y="54" text-anchor="middle" font-size="12" fill="#64748b">Fixed r = 3.0% | CRMA 25% Recycled Origin Benchmark | Cross-Tech Scrap Pooling (Wind Al/Cu -> Solar) | Standalone (BESS Decoupled)</text>')
 
     tech_keys = list(tech_specs.keys())
     years = df["Year"].values
     min_x, max_x = 2024, 2050
 
-    max_y_dict = {"solarPV": 16.0, "windon": 30.0, "windoff": 30.0}
+    max_y_dict = {"solarPV": 55.0, "windon": 55.0, "windoff": 80.0}
 
     for idx, t in enumerate(tech_keys):
         cfg = tech_specs[t]
@@ -807,12 +818,13 @@ def plot_comparison_svg(
         p_imp = " ".join([f'{"M" if i==0 else "L"} {to_x(years[i]):.1f} {to_y(imp_vals[i]):.1f}' for i in range(len(years))])
         sb.append(f'  <path d="{p_imp}" fill="none" stroke="{cfg["color"]}" stroke-width="3" stroke-linecap="round" />')
 
-        # Special for Solar PV: Add URBS BESS Coupling line (+11.8% battery)
-        if t == "solarPV":
-            solar_bess_vals = df["solarPV_import_with_bess_lcoe_eur_mwh"].values
-            p_bess = " ".join([f'{"M" if i==0 else "L"} {to_x(years[i]):.1f} {to_y(solar_bess_vals[i]):.1f}' for i in range(len(years))])
-            sb.append(f'  <path d="{p_bess}" fill="none" stroke="#8b5cf6" stroke-width="2.2" stroke-dasharray="5,3" />')
-            sb.append(f'  <text x="{to_x(2024)+4}" y="{to_y(solar_bess_vals[0])-6}" font-size="9" font-weight="700" fill="#8b5cf6">+BESS: {solar_bess_vals[0]:.2f}€</text>')
+        # Special for Solar PV: Add URBS BESS Coupling line only if active
+        if t == "solarPV" and "bess_coupling_penalty_eur_mwh" in df.columns:
+            if df["bess_coupling_penalty_eur_mwh"].max() > 0.05:
+                solar_bess_vals = df["solarPV_import_with_bess_lcoe_eur_mwh"].values
+                p_bess = " ".join([f'{"M" if i==0 else "L"} {to_x(years[i]):.1f} {to_y(solar_bess_vals[i]):.1f}' for i in range(len(years))])
+                sb.append(f'  <path d="{p_bess}" fill="none" stroke="#8b5cf6" stroke-width="2.2" stroke-dasharray="5,3" />')
+                sb.append(f'  <text x="{to_x(2024)+4}" y="{to_y(solar_bess_vals[0])-6}" font-size="9" font-weight="700" fill="#8b5cf6">+BESS: {solar_bess_vals[0]:.2f}€</text>')
 
         # Endpoint Callouts
         sb.append(f'  <text x="{to_x(2024)+4}" y="{to_y(imp_vals[0])-6}" font-size="9" font-weight="700" fill="{cfg["color"]}">Imp: {imp_vals[0]:.2f}€</text>')
@@ -857,9 +869,9 @@ def main():
     parser.add_argument("--file", "-f", default="Input_urbsextensionv1.xlsx", help="Input workbook path")
     parser.add_argument("--discount-rate", "-r", type=float, default=0.03, help="Discount rate (default: 0.03)")
     parser.add_argument("--quota", "-q", type=float, default=0.25, help="Benchmark recycling quota (default: 0.25)")
-    parser.add_argument("--out-excel", default="lcoe_domestic_vs_import.xlsx", help="Output Excel tracking file")
-    parser.add_argument("--out-svg", default="lcoe_domestic_vs_import.svg", help="Output SVG comparison plot")
-    parser.add_argument("--out-csv", default="lcoe_results.csv", help="Output CSV timeseries file")
+    parser.add_argument("--out-excel", default="lcoe_analysis/lcoe_domestic_vs_import.xlsx", help="Output Excel tracking file")
+    parser.add_argument("--out-svg", default="lcoe_analysis/lcoe_domestic_vs_import.svg", help="Output SVG comparison plot")
+    parser.add_argument("--out-csv", default="lcoe_analysis/lcoe_results.csv", help="Output CSV timeseries file")
     args = parser.parse_args()
 
     print(f"Loading input workbook from: {args.file}")

@@ -103,8 +103,10 @@ def compute_recycling_parameters(wb_data: dict):
     solar_mats = df_mat_int[df_mat_int["Technology"] == "solarPV"]
     solar_scrap_t = solar_mats["scrap_content"].sum()  # 68.997 tons per MW
     solar_rec_row = df_rec[df_rec["Technology"] == "solarPV"].iloc[0] if not df_rec.empty else {}
-    solar_opex_var = float(solar_rec_row.get("opex_var", 165.1429))  # EUR/t scrap
-    solar_cost_per_mw = solar_scrap_t * solar_opex_var  # 11,394.45 EUR/MW
+    solar_opex_var = float(solar_rec_row.get("opex_var", 670.0))
+    solar_opex_fix = float(solar_rec_row.get("opex_fixed", 75.0))
+    solar_opex_total = solar_opex_var + solar_opex_fix  # Total OPEX per ton (745 EUR/t)
+    solar_cost_per_mw = solar_scrap_t * solar_opex_total
 
     # Market value of recovered materials from 1 MW solar scrap at virgin prices
     solar_recovered_val = sum(
@@ -115,10 +117,10 @@ def compute_recycling_parameters(wb_data: dict):
 
     # Wind bulk & magnet route economics
     wind_rec_row = df_rec[df_rec["Technology"] == "windon"].iloc[0] if not df_rec.empty else {}
-    wind_bulk_opex = float(wind_rec_row.get("opex_var_bulk", 245.0))   # 245 EUR/t scrap
-    wind_bulk_capex = float(wind_rec_row.get("capex_bulk", 450.0))     # 450 EUR/t
-    wind_mag_opex = float(wind_rec_row.get("opex_var_magnet", 5776.0)) # 5776 EUR/t magnet
-    wind_mag_capex = float(wind_rec_row.get("capex_magnet", 1687.77))  # 1687.77 EUR/t
+    wind_bulk_opex = float(wind_rec_row.get("opex_var_bulk", 122.5)) + float(wind_rec_row.get("opex_fixed_bulk", 122.5))
+    wind_bulk_capex = float(wind_rec_row.get("capex_bulk", 450.0))
+    wind_mag_opex = float(wind_rec_row.get("opex_var_magnet", 5776.0)) + float(wind_rec_row.get("opex_fixed_magnet", 450.0))
+    wind_mag_capex = float(wind_rec_row.get("capex_magnet", 1687.77))
 
     magnet_mats = ["dysprosium", "neodymium", "praseodymium", "terbium"]
 
@@ -139,6 +141,7 @@ def compute_domestic_cost_breakdown(
     discount_rate: float = 0.03,
     recycling_quota: float = 0.0,
     cross_tech: bool = False,
+    year: int = 2024,
 ):
     """
     Computes stage-by-stage and total 100% domestic manufacturing costs for Solar PV,
@@ -263,6 +266,49 @@ def compute_domestic_cost_breakdown(
         tech_totals[t]["capex"] += capex
         tech_totals[t]["energy_mwh"] += e_mwh
 
+    # 3b. Balance of System (BOS) timeseries from Import_Cost_Stage
+    df_import_stage = wb_data.get("import_stage", pd.DataFrame())
+    year_col = "Stf" if "Stf" in df_import_stage.columns else "Year"
+    if year_col in df_import_stage.columns and not df_import_stage.empty:
+        row_year = df_import_stage[df_import_stage[year_col] == year]
+        if row_year.empty:
+            row_year = df_import_stage.iloc[0:1]
+        if not row_year.empty:
+            r0 = row_year.iloc[0]
+            for t in tech_totals.keys():
+                v_c = r0.get(f"capex_{t}_bos", 0.0)
+                capex_bos = float(v_c) if pd.notna(v_c) else 0.0
+                v_f = r0.get(f"opexf_{t}_bos", 0.0)
+                opexf_bos = float(v_f) if pd.notna(v_f) else 0.0
+                v_v = r0.get(f"opexv_{t}_bos", 0.0)
+                opexv_bos = float(v_v) if pd.notna(v_v) else 0.0
+
+                if capex_bos > 0 or opexf_bos > 0 or opexv_bos > 0:
+                    opt1_bos = opexv_bos + opexf_bos
+                    opt2_bos_ann = opt1_bos + capex_bos * alpha_plant
+                    opt2_bos_overnight = opt1_bos + capex_bos
+
+                    stage_breakdown.append({
+                        "Technology": t,
+                        "Stage": "Balance_of_System",
+                        "Recycling_Quota": recycling_quota,
+                        "Cross_Tech": cross_tech,
+                        "Raw_Materials_EUR_per_MW": 0.0,
+                        "Downstream_Bulk_Mfg_EUR_per_MW": 0.0,
+                        "Variable_OPEX_EUR_per_MW": opexv_bos,
+                        "Electricity_Needs_MWh_per_MW": 0.0,
+                        "Electricity_Cost_EUR_per_MW": 0.0,
+                        "Fixed_Overhead_EUR_per_MW_yr": opexf_bos,
+                        "Facility_CAPEX_EUR_per_MW": capex_bos,
+                        "Option1_Existing_Cap_EUR_per_MW": opt1_bos,
+                        "Option2_Annualized_Cap_EUR_per_MW": opt2_bos_ann,
+                        "Option2_Overnight_Cap_EUR_per_MW": opt2_bos_overnight,
+                    })
+
+                    tech_totals[t]["capex"] += capex_bos
+                    tech_totals[t]["opex_fix"] += opexf_bos
+                    tech_totals[t]["opex_var"] += opexv_bos
+
     df_stages = pd.DataFrame(stage_breakdown)
 
     # 4. Technology Summary
@@ -315,11 +361,13 @@ def compute_recycling_sweep(
         "windon":  0.300 * 8760.0,  # 2,628 h
         "windoff": 0.481 * 8760.0,  # 4,213.56 h
     }
-    lifetimes = {
-        "solarPV": 25.0,
-        "windon":  20.0,
-        "windoff": 20.0,
-    }
+    df_tech = wb_data.get("technologies", pd.DataFrame())
+    lifetimes = {"solarPV": 25.0, "windon": 20.0, "windoff": 20.0}
+    if not df_tech.empty and "l" in df_tech.columns:
+        for _, r in df_tech.iterrows():
+            t_name = str(r.get("Technologies", "")).split(".")[-1]
+            if t_name in lifetimes and pd.notna(r["l"]):
+                lifetimes[t_name] = float(r["l"])
 
     sweep_records = []
 
@@ -388,9 +436,10 @@ def compute_urbs_cost_driver_analysis(wb_data: dict, discount_rate: float = 0.03
     bess_import_2050 = float(row_2050.get("Batteries_Assembly", 164356.52)) / 1000.0  # EUR/kW
     factor_bess = 0.118  # from Technologies sheet / stockpile.py
 
-    # Battery coupling cost per kW solar
-    bess_add_2024 = bess_import_2024 * factor_bess  # ~33.09 EUR/kW solar
-    bess_add_2050 = bess_import_2050 * factor_bess  # ~19.39 EUR/kW solar
+    # Battery coupling cost per kW solar (Currently decoupled in URBS: factor_bess = 0.0)
+    factor_bess = 0.0
+    bess_add_2024 = bess_import_2024 * factor_bess
+    bess_add_2050 = bess_import_2050 * factor_bess
 
     alpha_bess = annuity_factor(discount_rate, 15.0)  # 15-year battery lifetime
     solar_flh = 0.125 * 8760.0  # 1,095 h
@@ -476,16 +525,32 @@ def calculate_comprehensive_lcoe(wb_data: dict, discount_rate: float = 0.03):
         wb_data, discount_rate=discount_rate, recycling_quota=0.25, cross_tech=True
     )
 
-    df_import_stage = wb_data["import_stage"]
+    df_import_stage = wb_data["import_stage"].copy()
+    df_import_stage.columns = [str(c).strip() for c in df_import_stage.columns]
     year_col = "Stf" if "Stf" in df_import_stage.columns else "Year"
     df_import_stage[year_col] = df_import_stage[year_col].ffill().astype(int)
     df_import_stage = df_import_stage[(df_import_stage[year_col] >= 2024) & (df_import_stage[year_col] <= 2050)]
+
+    # Interpolate any milestone-only BOS timeseries across 2024-2050
+    bos_cols = [c for c in df_import_stage.columns if "bos" in c.lower()]
+    for col in bos_cols:
+        df_import_stage[col] = pd.to_numeric(df_import_stage[col], errors="coerce")
+        if df_import_stage[col].notna().any():
+            df_import_stage[col] = df_import_stage[col].interpolate(method="linear").bfill().ffill()
+
+    df_tech = wb_data.get("technologies", pd.DataFrame())
+    lt_dict = {"solarPV": 25.0, "windon": 20.0, "windoff": 20.0}
+    if not df_tech.empty and "l" in df_tech.columns:
+        for _, r in df_tech.iterrows():
+            t_name = str(r.get("Technologies", "")).split(".")[-1]
+            if t_name in lt_dict and pd.notna(r["l"]):
+                lt_dict[t_name] = float(r["l"])
 
     tech_specs = {
         "solarPV": {
             "name": "Solar PV",
             "import_col": "solarPV_Module",
-            "lifetime": 25.0,
+            "lifetime": lt_dict.get("solarPV", 25.0),
             "load_factor": 0.125,
             "flh": 0.125 * 8760.0,  # 1,095 h
             "color": "#d97706",     # Amber
@@ -493,7 +558,7 @@ def calculate_comprehensive_lcoe(wb_data: dict, discount_rate: float = 0.03):
         "windon": {
             "name": "Wind Onshore",
             "import_col": "windon_AssemblyOn",
-            "lifetime": 20.0,
+            "lifetime": lt_dict.get("windon", 20.0),
             "load_factor": 0.300,
             "flh": 0.300 * 8760.0,  # 2,628 h
             "color": "#0284c7",     # Sky Blue
@@ -501,7 +566,7 @@ def calculate_comprehensive_lcoe(wb_data: dict, discount_rate: float = 0.03):
         "windoff": {
             "name": "Wind Offshore",
             "import_col": "windoff_AssemblyOff",
-            "lifetime": 20.0,
+            "lifetime": lt_dict.get("windoff", 20.0),
             "load_factor": 0.481,
             "flh": 0.481 * 8760.0,  # 4,213.56 h
             "color": "#0d9488",     # Teal
@@ -510,7 +575,7 @@ def calculate_comprehensive_lcoe(wb_data: dict, discount_rate: float = 0.03):
 
     alpha_plant = annuity_factor(discount_rate, 25.0)
     alpha_bess = annuity_factor(discount_rate, 15.0)  # 15y battery lifetime
-    factor_bess = 0.118
+    factor_bess = 0.0  # Batteries decoupled / deactivated by user
 
     timeseries = []
 
@@ -528,30 +593,39 @@ def calculate_comprehensive_lcoe(wb_data: dict, discount_rate: float = 0.03):
             alpha_tech = annuity_factor(discount_rate, cfg["lifetime"])
             flh = cfg["flh"]
 
+            # Balance of System (BOS) timeseries
+            v_c = row.get(f"capex_{t}_bos", 0.0)
+            capex_bos = float(v_c) if pd.notna(v_c) else 0.0
+            v_f = row.get(f"opexf_{t}_bos", 0.0)
+            opexf_bos = float(v_f) if pd.notna(v_f) else 0.0
+            v_v = row.get(f"opexv_{t}_bos", 0.0)
+            opexv_bos = float(v_v) if pd.notna(v_v) else 0.0
+
             # 1. Pure Import
             import_capex = float(row.get(cfg["import_col"], 0.0))  # €/MW
-            import_lcoe = (import_capex * alpha_tech) / flh
+            import_plant_capex = import_capex + capex_bos
+            import_lcoe = (import_plant_capex * alpha_tech + opexf_bos) / flh + opexv_bos
 
             # 2. Domestic 0% Quota (Baseline)
             t0 = tech_totals_0[t]
             opt1_0 = t0["mat"] + t0["downstream"] + t0["opex_var"] + t0["elec"] + t0["opex_fix"]
             opt2_0 = opt1_0 + t0["capex"] * alpha_plant
-            lcoe1_0 = (opt1_0 * alpha_tech) / flh
-            lcoe2_0 = (opt2_0 * alpha_tech) / flh
+            lcoe1_0 = ((opt1_0 + capex_bos) * alpha_tech + opexf_bos) / flh + opexv_bos
+            lcoe2_0 = ((opt2_0 + capex_bos) * alpha_tech + opexf_bos) / flh + opexv_bos
 
             # 3. Domestic 25% Quota (Tech-Specific)
             t25_spec = tech_totals_25_spec[t]
             opt1_25_spec = t25_spec["mat"] + t25_spec["downstream"] + t25_spec["opex_var"] + t25_spec["elec"] + t25_spec["opex_fix"]
             opt2_25_spec = opt1_25_spec + t25_spec["capex"] * alpha_plant
-            lcoe1_25_spec = (opt1_25_spec * alpha_tech) / flh
-            lcoe2_25_spec = (opt2_25_spec * alpha_tech) / flh
+            lcoe1_25_spec = ((opt1_25_spec + capex_bos) * alpha_tech + opexf_bos) / flh + opexv_bos
+            lcoe2_25_spec = ((opt2_25_spec + capex_bos) * alpha_tech + opexf_bos) / flh + opexv_bos
 
             # 4. Domestic 25% Quota (Cross-Tech)
             t25_cross = tech_totals_25_cross[t]
             opt1_25_cross = t25_cross["mat"] + t25_cross["downstream"] + t25_cross["opex_var"] + t25_cross["elec"] + t25_cross["opex_fix"]
             opt2_25_cross = opt1_25_cross + t25_cross["capex"] * alpha_plant
-            lcoe1_25_cross = (opt1_25_cross * alpha_tech) / flh
-            lcoe2_25_cross = (opt2_25_cross * alpha_tech) / flh
+            lcoe1_25_cross = ((opt1_25_cross + capex_bos) * alpha_tech + opexf_bos) / flh + opexv_bos
+            lcoe2_25_cross = ((opt2_25_cross + capex_bos) * alpha_tech + opexf_bos) / flh + opexv_bos
 
             prefix = t
             rec[f"{prefix}_import_capex_eur_kw"] = import_capex / 1000.0
@@ -683,13 +757,13 @@ def plot_comparison_svg(
 
     # Main Title
     sb.append(f'  <text x="{width/2}" y="32" text-anchor="middle" font-size="19" font-weight="700" fill="#0f172a">LCOE Analysis: Import vs. Domestic Manufacturing with 25% Recycling Quota</text>')
-    sb.append(f'  <text x="{width/2}" y="54" text-anchor="middle" font-size="12" fill="#64748b">Fixed r = 3.0% | CRMA 25% Recycled Origin Benchmark | Cross-Tech Scrap Pooling (Wind Al/Cu -> Solar) | URBS BESS Coupling</text>')
+    sb.append(f'  <text x="{width/2}" y="54" text-anchor="middle" font-size="12" fill="#64748b">Fixed r = 3.0% | CRMA 25% Recycled Origin Benchmark | Cross-Tech Scrap Pooling (Wind Al/Cu -> Solar) | Standalone (BESS Decoupled)</text>')
 
     tech_keys = list(tech_specs.keys())
     years = df["Year"].values
     min_x, max_x = 2024, 2050
 
-    max_y_dict = {"solarPV": 16.0, "windon": 30.0, "windoff": 30.0}
+    max_y_dict = {"solarPV": 55.0, "windon": 55.0, "windoff": 80.0}
 
     for idx, t in enumerate(tech_keys):
         cfg = tech_specs[t]
@@ -744,12 +818,13 @@ def plot_comparison_svg(
         p_imp = " ".join([f'{"M" if i==0 else "L"} {to_x(years[i]):.1f} {to_y(imp_vals[i]):.1f}' for i in range(len(years))])
         sb.append(f'  <path d="{p_imp}" fill="none" stroke="{cfg["color"]}" stroke-width="3" stroke-linecap="round" />')
 
-        # Special for Solar PV: Add URBS BESS Coupling line (+11.8% battery)
-        if t == "solarPV":
-            solar_bess_vals = df["solarPV_import_with_bess_lcoe_eur_mwh"].values
-            p_bess = " ".join([f'{"M" if i==0 else "L"} {to_x(years[i]):.1f} {to_y(solar_bess_vals[i]):.1f}' for i in range(len(years))])
-            sb.append(f'  <path d="{p_bess}" fill="none" stroke="#8b5cf6" stroke-width="2.2" stroke-dasharray="5,3" />')
-            sb.append(f'  <text x="{to_x(2024)+4}" y="{to_y(solar_bess_vals[0])-6}" font-size="9" font-weight="700" fill="#8b5cf6">+BESS: {solar_bess_vals[0]:.2f}€</text>')
+        # Special for Solar PV: Add URBS BESS Coupling line only if active
+        if t == "solarPV" and "bess_coupling_penalty_eur_mwh" in df.columns:
+            if df["bess_coupling_penalty_eur_mwh"].max() > 0.05:
+                solar_bess_vals = df["solarPV_import_with_bess_lcoe_eur_mwh"].values
+                p_bess = " ".join([f'{"M" if i==0 else "L"} {to_x(years[i]):.1f} {to_y(solar_bess_vals[i]):.1f}' for i in range(len(years))])
+                sb.append(f'  <path d="{p_bess}" fill="none" stroke="#8b5cf6" stroke-width="2.2" stroke-dasharray="5,3" />')
+                sb.append(f'  <text x="{to_x(2024)+4}" y="{to_y(solar_bess_vals[0])-6}" font-size="9" font-weight="700" fill="#8b5cf6">+BESS: {solar_bess_vals[0]:.2f}€</text>')
 
         # Endpoint Callouts
         sb.append(f'  <text x="{to_x(2024)+4}" y="{to_y(imp_vals[0])-6}" font-size="9" font-weight="700" fill="{cfg["color"]}">Imp: {imp_vals[0]:.2f}€</text>')
@@ -794,9 +869,9 @@ def main():
     parser.add_argument("--file", "-f", default="Input_urbsextensionv1.xlsx", help="Input workbook path")
     parser.add_argument("--discount-rate", "-r", type=float, default=0.03, help="Discount rate (default: 0.03)")
     parser.add_argument("--quota", "-q", type=float, default=0.25, help="Benchmark recycling quota (default: 0.25)")
-    parser.add_argument("--out-excel", default="lcoe_domestic_vs_import.xlsx", help="Output Excel tracking file")
-    parser.add_argument("--out-svg", default="lcoe_domestic_vs_import.svg", help="Output SVG comparison plot")
-    parser.add_argument("--out-csv", default="lcoe_results.csv", help="Output CSV timeseries file")
+    parser.add_argument("--out-excel", default="lcoe_analysis/lcoe_domestic_vs_import.xlsx", help="Output Excel tracking file")
+    parser.add_argument("--out-svg", default="lcoe_analysis/lcoe_domestic_vs_import.svg", help="Output SVG comparison plot")
+    parser.add_argument("--out-csv", default="lcoe_analysis/lcoe_results.csv", help="Output CSV timeseries file")
     args = parser.parse_args()
 
     print(f"Loading input workbook from: {args.file}")

@@ -71,9 +71,13 @@ def apply_material_block_pricing(m, data):
 
         # Convert to DataFrame and export
         df = pd.DataFrame(rows)
-        df.to_excel(output_filename, index=False)
-
-        print(f"✅ Successfully exported {len(df)} parameter rows to {output_filename}")
+        try:
+            df.to_excel(output_filename, index=False)
+            print(f"✅ Successfully exported {len(df)} parameter rows to {output_filename}")
+        except PermissionError:
+            print(f"⚠️ Warning: Could not write {output_filename} because it is currently open in Excel. Skipping export.")
+        except Exception as e:
+            print(f"⚠️ Warning: Could not write {output_filename}: {e}")
         return df
 
     export_block_params_to_excel(m, "mat_blocks_debug.xlsx")

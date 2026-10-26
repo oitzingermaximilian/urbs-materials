@@ -548,37 +548,44 @@ class ElecNeedsProductionRule(AbstractConstraint):
 
 class CapexCostRule(AbstractConstraint):
     def apply_rule(self, m, stf):
-        j, i, n = 0.03, 0.071, 25
+        from pyomo.environ import value
+        j, i, n_mfg = 0.03, 0.071, 25
         stf_min, stf_end = min(m.stf), max(m.stf)
-        f_inv = (
-            (1 + j) ** (1 - (stf - stf_min))
-            * (i * (1 + i) ** n * ((1 + j) ** n - 1))
-            / (j * (1 + j) ** n * ((1 + i) ** n - 1))
-        )
-        op_time = (stf + n) - stf_end - 1
-        f_over = 0
-        if op_time > 0:
-            f_over = (
+
+        def calc_finv_fover(n_years):
+            f_inv_val = (
                 (1 + j) ** (1 - (stf - stf_min))
-                * (i * (1 + i) ** n * ((1 + j) ** op_time - 1))
-                / (j * (1 + j) ** n * ((1 + i) ** n - 1))
+                * (i * (1 + i) ** n_years * ((1 + j) ** n_years - 1))
+                / (j * (1 + j) ** n_years * ((1 + i) ** n_years - 1))
             )
+            op_t = (stf + n_years) - stf_end - 1
+            f_over_val = 0
+            if op_t > 0:
+                f_over_val = (
+                    (1 + j) ** (1 - (stf - stf_min))
+                    * (i * (1 + i) ** n_years * ((1 + j) ** op_t - 1))
+                    / (j * (1 + j) ** n_years * ((1 + i) ** n_years - 1))
+                )
+            return f_inv_val - f_over_val
+
+        f_inv_f_over = calc_finv_fover(n_mfg)
 
         gross = sum(
             m.processing_cap_new[stf, loc, tech, stage]
             * m.cost_capex[stf, loc, tech, stage]
-            * (f_inv - f_over)
+            * f_inv_f_over
             for loc in m.location
             for (tech, stage) in m.tech_stage_combinations
         )
 
         # Balance of System (BOS) CAPEX for newly installed generation capacity
+        # Uses technology-specific lifetime m.l[loc, tech] (e.g. 40y for solar, 30y for wind)
         has_bos_windoff = False
         if hasattr(m, "cost_bos_capex"):
             gross += sum(
                 m.capacity_ext_new[stf, loc, tech]
                 * m.cost_bos_capex[stf, loc, tech]
-                * (f_inv - f_over)
+                * calc_finv_fover(int(value(m.l[loc, tech])) if hasattr(m, "l") and (loc, tech) in m.l else 25)
                 for loc in m.location
                 for tech in m.tech
             )
@@ -588,7 +595,7 @@ class CapexCostRule(AbstractConstraint):
         # Fallback legacy grid connection fee for offshore wind only if not supplied via BOS
         if not has_bos_windoff and "windoff" in m.tech:
             gross += sum(
-                m.capacity_ext_new[stf, loc, "windoff"] * 250000 * (f_inv - f_over)
+                m.capacity_ext_new[stf, loc, "windoff"] * 250000 * calc_finv_fover(int(value(m.l[loc, "windoff"])) if hasattr(m, "l") and (loc, "windoff") in m.l else 25)
                 for loc in m.location
             )
 
@@ -602,9 +609,7 @@ class CapexCostRule(AbstractConstraint):
                 if (stf, loc, tech, stage) in m.PRICEREDUCTION_CAPEX_ONETECH_TOTAL
             )
 
-        return m.cost_capex_total_extension[stf] == gross - savings_capex * (
-            f_inv - f_over
-        )
+        return m.cost_capex_total_extension[stf] == gross - savings_capex * f_inv_f_over
 
 
 class OpexCostRule(AbstractConstraint):

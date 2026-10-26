@@ -179,14 +179,26 @@ cython_debug/
 .idea/
 
 # Results
+
 .results/
+
+result/
+
+results/
+
+# Temporary solver dumps and caches
+
+*.lp
+
+*.ilp
+
+mat_blocks_debug.xlsx
+
+*.pkl
 
 #local conference stuff
 .presentation_iew/
 .plot_iew/
-
-
-
 
 *.txt
 !requirements.txt
