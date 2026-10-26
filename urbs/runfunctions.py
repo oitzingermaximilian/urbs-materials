@@ -684,9 +684,12 @@ def load_data_from_excel(file_path):
             proc_cost_data["material_downstream_manufacturing"] * COST_SCALE
         ).to_dict()
 
-        # E. Import Cost Stage
+        # E. Import Cost Stage & Balance of System (BOS) Timeseries
         proc_part_import_dict = {}
         forbidden_part_imports = set()
+        bos_capex_dict = {}
+        bos_opexf_dict = {}
+        bos_opexv_dict = {}
         sheet_name = "Import_Cost_Stage"
 
         if sheet_name in xls.sheet_names:
@@ -696,6 +699,17 @@ def load_data_from_excel(file_path):
                 import_ts_data.rename(columns={"Stf": "Year"}, inplace=True)
 
             import_ts_data.dropna(subset=["Year"], inplace=True)
+            # Strip column names so leading/trailing spaces don't disrupt matching
+            import_ts_data.columns = [str(c).strip() for c in import_ts_data.columns]
+            # Interpolate missing years in BOS timeseries if milestone years were given
+            bos_cols = [c for c in import_ts_data.columns if "bos" in c.lower()]
+            if bos_cols:
+                import_ts_data.sort_values("Year", inplace=True)
+                for col in bos_cols:
+                    import_ts_data[col] = pd.to_numeric(import_ts_data[col], errors="coerce")
+                    if import_ts_data[col].notna().any():
+                        import_ts_data[col] = import_ts_data[col].interpolate(method="linear").bfill().ffill()
+
             df_melt = import_ts_data.melt(
                 id_vars=["Year"], var_name="Header", value_name="Cost"
             )
@@ -710,6 +724,31 @@ def load_data_from_excel(file_path):
                     cost = float(str(row["Cost"]).replace(",", "."))
                 except:
                     continue  # Skip non-numeric
+
+                h_lower = header.lower()
+                # Check for Balance of System (BOS) timeseries columns:
+                # e.g. capex_solarPV_bos, opexf_windon_bos, opexv_windoff_bos
+                if h_lower.endswith("_bos") or "_bos" in h_lower:
+                    clean_h = header
+                    if clean_h.lower().endswith("_bos"):
+                        clean_h = clean_h[:-4]
+                    parts = clean_h.split("_")
+                    cost_type = parts[0].lower()
+                    tech_raw = parts[1] if len(parts) > 1 else ""
+                    tech = tech_raw
+                    for valid_tech in ["solarPV", "windon", "windoff", "Batteries"]:
+                        if valid_tech.lower() == tech_raw.lower():
+                            tech = valid_tech
+                            break
+                    scaled_cost = cost * COST_SCALE
+                    bos_key = (int(row["Year"]), "EU27", tech)
+                    if "capex" in cost_type:
+                        bos_capex_dict[bos_key] = scaled_cost
+                    elif "opexf" in cost_type or "fixed" in cost_type:
+                        bos_opexf_dict[bos_key] = scaled_cost
+                    elif "opexv" in cost_type or "var" in cost_type:
+                        bos_opexv_dict[bos_key] = scaled_cost
+                    continue
 
                 # Logic: Split 'solarPV_Polysilicon' into ['solarPV', 'Polysilicon']
                 if "_" in header:
@@ -868,6 +907,9 @@ def load_data_from_excel(file_path):
         "valid_tech_stage_list": valid_tech_stage_list,
         "mining_energy_share_dict": mat_energy_transision_factor_dict,
         "conversion_factor_mat": mat_conversion_dict,
+        "bos_capex_dict": bos_capex_dict,
+        "bos_opexf_dict": bos_opexf_dict,
+        "bos_opexv_dict": bos_opexv_dict,
     }
 
     print("✅ EXTENSION Data loading complete. All units scaled to GW / k€ / kton.")

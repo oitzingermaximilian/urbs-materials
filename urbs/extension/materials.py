@@ -572,8 +572,21 @@ class CapexCostRule(AbstractConstraint):
             for (tech, stage) in m.tech_stage_combinations
         )
 
-        # Hardcoded grid connection fee for offshore wind (500,000 kEUR/GW)
-        if "windoff" in m.tech:
+        # Balance of System (BOS) CAPEX for newly installed generation capacity
+        has_bos_windoff = False
+        if hasattr(m, "cost_bos_capex"):
+            gross += sum(
+                m.capacity_ext_new[stf, loc, tech]
+                * m.cost_bos_capex[stf, loc, tech]
+                * (f_inv - f_over)
+                for loc in m.location
+                for tech in m.tech
+            )
+            if any(m.cost_bos_capex[stf, loc, "windoff"] > 0 for loc in m.location if (stf, loc, "windoff") in m.cost_bos_capex):
+                has_bos_windoff = True
+
+        # Fallback legacy grid connection fee for offshore wind only if not supplied via BOS
+        if not has_bos_windoff and "windoff" in m.tech:
             gross += sum(
                 m.capacity_ext_new[stf, loc, "windoff"] * 250000 * (f_inv - f_over)
                 for loc in m.location
@@ -625,6 +638,28 @@ class OpexCostRule(AbstractConstraint):
                 for mat in m.materials
             )
         )
+
+        # Balance of System (BOS) Fixed OPEX on total active installed capacity
+        if hasattr(m, "cost_bos_opexf"):
+            total_opex += sum(
+                m.capacity_ext[stf, loc, tech] * m.cost_bos_opexf[stf, loc, tech]
+                for loc in m.location
+                for tech in m.tech
+                if (stf, loc, tech) in m.cost_bos_opexf
+            )
+        # Balance of System (BOS) Variable OPEX on electricity generated (balance_ext)
+        if hasattr(m, "cost_bos_opexv") and hasattr(m, "balance_ext"):
+            weight = getattr(m, "weight", 1.0)
+            total_opex += sum(
+                m.balance_ext[tm, stf, loc, tech]
+                * weight
+                * m.cost_bos_opexv[stf, loc, tech]
+                for loc in m.location
+                for tech in m.tech
+                for tm in getattr(m, "timesteps_ext", [])
+                if (tm, stf, loc, tech) in m.balance_ext
+                and (stf, loc, tech) in m.cost_bos_opexv
+            )
 
         # EoS-Einsparungen für bulk material downstream manufacturing abziehen
         savings_bulkmat = 0

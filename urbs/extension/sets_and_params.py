@@ -372,6 +372,32 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         initialize=data_urbsextensionv1.get("part_import_cost_dict", {}),
         default=0,
     )
+
+    # Balance of System (BOS) parameters from Danish Energy Agency data catalogue
+    m.cost_bos_capex = pyomo.Param(
+        m.stf,
+        m.location,
+        m.tech,
+        initialize=data_urbsextensionv1.get("bos_capex_dict", {}),
+        default=0.0,
+        doc="Balance of System (BOS) CAPEX (kEUR/GW)",
+    )
+    m.cost_bos_opexf = pyomo.Param(
+        m.stf,
+        m.location,
+        m.tech,
+        initialize=data_urbsextensionv1.get("bos_opexf_dict", {}),
+        default=0.0,
+        doc="Balance of System (BOS) Fixed OPEX (kEUR/GW/yr)",
+    )
+    m.cost_bos_opexv = pyomo.Param(
+        m.stf,
+        m.location,
+        m.tech,
+        initialize=data_urbsextensionv1.get("bos_opexv_dict", {}),
+        default=0.0,
+        doc="Balance of System (BOS) Variable OPEX (kEUR/GW/yr)",
+    )
     m.forbidden_part_imports = pyomo.Set(
         dimen=4,
         initialize=data_urbsextensionv1.get("forbidden_part_imports", set()),

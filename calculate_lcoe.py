@@ -103,8 +103,10 @@ def compute_recycling_parameters(wb_data: dict):
     solar_mats = df_mat_int[df_mat_int["Technology"] == "solarPV"]
     solar_scrap_t = solar_mats["scrap_content"].sum()  # 68.997 tons per MW
     solar_rec_row = df_rec[df_rec["Technology"] == "solarPV"].iloc[0] if not df_rec.empty else {}
-    solar_opex_var = float(solar_rec_row.get("opex_var", 165.1429))  # EUR/t scrap
-    solar_cost_per_mw = solar_scrap_t * solar_opex_var  # 11,394.45 EUR/MW
+    solar_opex_var = float(solar_rec_row.get("opex_var", 670.0))
+    solar_opex_fix = float(solar_rec_row.get("opex_fixed", 75.0))
+    solar_opex_total = solar_opex_var + solar_opex_fix  # Total OPEX per ton (745 EUR/t)
+    solar_cost_per_mw = solar_scrap_t * solar_opex_total
 
     # Market value of recovered materials from 1 MW solar scrap at virgin prices
     solar_recovered_val = sum(
@@ -115,10 +117,10 @@ def compute_recycling_parameters(wb_data: dict):
 
     # Wind bulk & magnet route economics
     wind_rec_row = df_rec[df_rec["Technology"] == "windon"].iloc[0] if not df_rec.empty else {}
-    wind_bulk_opex = float(wind_rec_row.get("opex_var_bulk", 245.0))   # 245 EUR/t scrap
-    wind_bulk_capex = float(wind_rec_row.get("capex_bulk", 450.0))     # 450 EUR/t
-    wind_mag_opex = float(wind_rec_row.get("opex_var_magnet", 5776.0)) # 5776 EUR/t magnet
-    wind_mag_capex = float(wind_rec_row.get("capex_magnet", 1687.77))  # 1687.77 EUR/t
+    wind_bulk_opex = float(wind_rec_row.get("opex_var_bulk", 122.5)) + float(wind_rec_row.get("opex_fixed_bulk", 122.5))
+    wind_bulk_capex = float(wind_rec_row.get("capex_bulk", 450.0))
+    wind_mag_opex = float(wind_rec_row.get("opex_var_magnet", 5776.0)) + float(wind_rec_row.get("opex_fixed_magnet", 450.0))
+    wind_mag_capex = float(wind_rec_row.get("capex_magnet", 1687.77))
 
     magnet_mats = ["dysprosium", "neodymium", "praseodymium", "terbium"]
 
@@ -139,6 +141,7 @@ def compute_domestic_cost_breakdown(
     discount_rate: float = 0.03,
     recycling_quota: float = 0.0,
     cross_tech: bool = False,
+    year: int = 2024,
 ):
     """
     Computes stage-by-stage and total 100% domestic manufacturing costs for Solar PV,
@@ -262,6 +265,49 @@ def compute_domestic_cost_breakdown(
         tech_totals[t]["opex_fix"] += opex_fix
         tech_totals[t]["capex"] += capex
         tech_totals[t]["energy_mwh"] += e_mwh
+
+    # 3b. Balance of System (BOS) timeseries from Import_Cost_Stage
+    df_import_stage = wb_data.get("import_stage", pd.DataFrame())
+    year_col = "Stf" if "Stf" in df_import_stage.columns else "Year"
+    if year_col in df_import_stage.columns and not df_import_stage.empty:
+        row_year = df_import_stage[df_import_stage[year_col] == year]
+        if row_year.empty:
+            row_year = df_import_stage.iloc[0:1]
+        if not row_year.empty:
+            r0 = row_year.iloc[0]
+            for t in tech_totals.keys():
+                v_c = r0.get(f"capex_{t}_bos", 0.0)
+                capex_bos = float(v_c) if pd.notna(v_c) else 0.0
+                v_f = r0.get(f"opexf_{t}_bos", 0.0)
+                opexf_bos = float(v_f) if pd.notna(v_f) else 0.0
+                v_v = r0.get(f"opexv_{t}_bos", 0.0)
+                opexv_bos = float(v_v) if pd.notna(v_v) else 0.0
+
+                if capex_bos > 0 or opexf_bos > 0 or opexv_bos > 0:
+                    opt1_bos = opexv_bos + opexf_bos
+                    opt2_bos_ann = opt1_bos + capex_bos * alpha_plant
+                    opt2_bos_overnight = opt1_bos + capex_bos
+
+                    stage_breakdown.append({
+                        "Technology": t,
+                        "Stage": "Balance_of_System",
+                        "Recycling_Quota": recycling_quota,
+                        "Cross_Tech": cross_tech,
+                        "Raw_Materials_EUR_per_MW": 0.0,
+                        "Downstream_Bulk_Mfg_EUR_per_MW": 0.0,
+                        "Variable_OPEX_EUR_per_MW": opexv_bos,
+                        "Electricity_Needs_MWh_per_MW": 0.0,
+                        "Electricity_Cost_EUR_per_MW": 0.0,
+                        "Fixed_Overhead_EUR_per_MW_yr": opexf_bos,
+                        "Facility_CAPEX_EUR_per_MW": capex_bos,
+                        "Option1_Existing_Cap_EUR_per_MW": opt1_bos,
+                        "Option2_Annualized_Cap_EUR_per_MW": opt2_bos_ann,
+                        "Option2_Overnight_Cap_EUR_per_MW": opt2_bos_overnight,
+                    })
+
+                    tech_totals[t]["capex"] += capex_bos
+                    tech_totals[t]["opex_fix"] += opexf_bos
+                    tech_totals[t]["opex_var"] += opexv_bos
 
     df_stages = pd.DataFrame(stage_breakdown)
 
@@ -476,10 +522,18 @@ def calculate_comprehensive_lcoe(wb_data: dict, discount_rate: float = 0.03):
         wb_data, discount_rate=discount_rate, recycling_quota=0.25, cross_tech=True
     )
 
-    df_import_stage = wb_data["import_stage"]
+    df_import_stage = wb_data["import_stage"].copy()
+    df_import_stage.columns = [str(c).strip() for c in df_import_stage.columns]
     year_col = "Stf" if "Stf" in df_import_stage.columns else "Year"
     df_import_stage[year_col] = df_import_stage[year_col].ffill().astype(int)
     df_import_stage = df_import_stage[(df_import_stage[year_col] >= 2024) & (df_import_stage[year_col] <= 2050)]
+
+    # Interpolate any milestone-only BOS timeseries across 2024-2050
+    bos_cols = [c for c in df_import_stage.columns if "bos" in c.lower()]
+    for col in bos_cols:
+        df_import_stage[col] = pd.to_numeric(df_import_stage[col], errors="coerce")
+        if df_import_stage[col].notna().any():
+            df_import_stage[col] = df_import_stage[col].interpolate(method="linear").bfill().ffill()
 
     tech_specs = {
         "solarPV": {
@@ -528,30 +582,39 @@ def calculate_comprehensive_lcoe(wb_data: dict, discount_rate: float = 0.03):
             alpha_tech = annuity_factor(discount_rate, cfg["lifetime"])
             flh = cfg["flh"]
 
+            # Balance of System (BOS) timeseries
+            v_c = row.get(f"capex_{t}_bos", 0.0)
+            capex_bos = float(v_c) if pd.notna(v_c) else 0.0
+            v_f = row.get(f"opexf_{t}_bos", 0.0)
+            opexf_bos = float(v_f) if pd.notna(v_f) else 0.0
+            v_v = row.get(f"opexv_{t}_bos", 0.0)
+            opexv_bos = float(v_v) if pd.notna(v_v) else 0.0
+
             # 1. Pure Import
             import_capex = float(row.get(cfg["import_col"], 0.0))  # €/MW
-            import_lcoe = (import_capex * alpha_tech) / flh
+            import_plant_capex = import_capex + capex_bos
+            import_lcoe = (import_plant_capex * alpha_tech + opexf_bos) / flh + opexv_bos
 
             # 2. Domestic 0% Quota (Baseline)
             t0 = tech_totals_0[t]
             opt1_0 = t0["mat"] + t0["downstream"] + t0["opex_var"] + t0["elec"] + t0["opex_fix"]
             opt2_0 = opt1_0 + t0["capex"] * alpha_plant
-            lcoe1_0 = (opt1_0 * alpha_tech) / flh
-            lcoe2_0 = (opt2_0 * alpha_tech) / flh
+            lcoe1_0 = ((opt1_0 + capex_bos) * alpha_tech + opexf_bos) / flh + opexv_bos
+            lcoe2_0 = ((opt2_0 + capex_bos) * alpha_tech + opexf_bos) / flh + opexv_bos
 
             # 3. Domestic 25% Quota (Tech-Specific)
             t25_spec = tech_totals_25_spec[t]
             opt1_25_spec = t25_spec["mat"] + t25_spec["downstream"] + t25_spec["opex_var"] + t25_spec["elec"] + t25_spec["opex_fix"]
             opt2_25_spec = opt1_25_spec + t25_spec["capex"] * alpha_plant
-            lcoe1_25_spec = (opt1_25_spec * alpha_tech) / flh
-            lcoe2_25_spec = (opt2_25_spec * alpha_tech) / flh
+            lcoe1_25_spec = ((opt1_25_spec + capex_bos) * alpha_tech + opexf_bos) / flh + opexv_bos
+            lcoe2_25_spec = ((opt2_25_spec + capex_bos) * alpha_tech + opexf_bos) / flh + opexv_bos
 
             # 4. Domestic 25% Quota (Cross-Tech)
             t25_cross = tech_totals_25_cross[t]
             opt1_25_cross = t25_cross["mat"] + t25_cross["downstream"] + t25_cross["opex_var"] + t25_cross["elec"] + t25_cross["opex_fix"]
             opt2_25_cross = opt1_25_cross + t25_cross["capex"] * alpha_plant
-            lcoe1_25_cross = (opt1_25_cross * alpha_tech) / flh
-            lcoe2_25_cross = (opt2_25_cross * alpha_tech) / flh
+            lcoe1_25_cross = ((opt1_25_cross + capex_bos) * alpha_tech + opexf_bos) / flh + opexv_bos
+            lcoe2_25_cross = ((opt2_25_cross + capex_bos) * alpha_tech + opexf_bos) / flh + opexv_bos
 
             prefix = t
             rec[f"{prefix}_import_capex_eur_kw"] = import_capex / 1000.0
