@@ -82,10 +82,10 @@ for country, color in my_colors.items():
 scenarios = []
 learning_rates = ["LR4"]#["LR1", "LR4", "LR7"]
 industry_levels = [
-    #("nzia_0_crma_0", 0.00, 0.00),
+    ("nzia_0_crma_0", 0.00, 0.00),
     #("nzia_15_crma_10", 0.15, 0.10),
     #("nzia_30_crma_20", 0.30, 0.20),
-    ("nzia_40_crma_25", 0.40, 0.25),
+    #("nzia_40_crma_35", 0.40, 0.35),
 ]
 material_levels = [
     ("materials_base", 1.00, 1.00, 1.00),
@@ -112,6 +112,19 @@ def make_matrix_scenario(
         extension_data["learning_rate"] = learning_rate
         extension_data["nzia_quota"] = nzia_quota
         extension_data["crma_quota"] = crma_quota
+
+        # Explicitly control constraint activation when quotas are 0
+        if nzia_quota == 0:
+            extension_data["nzia_mode"] = "disabled"
+        else:
+            extension_data["nzia_mode"] = "strict"
+
+        if crma_quota == 0:
+            extension_data["crma_active"] = False
+            extension_data["recycling_quota"] = 0.0
+        else:
+            extension_data["crma_active"] = True
+            extension_data["recycling_quota"] = 0.25
         extension_data["mat_prices"] = {
             key: value * price_multiplier
             for key, value in extension_data["mat_prices"].items()

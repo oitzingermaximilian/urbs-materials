@@ -72,7 +72,7 @@ class nzia_flex_rule(AbstractConstraint):
 # 3. CRMA CONSTRAINTS (Per Material with Dynamic Geology Check)
 # ==============================================================================
 class eu_extraction_constraint(AbstractConstraint):
-    def apply_rule(self, m, stf, mat):
+    def apply_rule(self, m, stf, mat, target_quota=0.10):
         if stf < 2030:
             return pyomo.Constraint.Skip
 
@@ -95,7 +95,7 @@ class eu_extraction_constraint(AbstractConstraint):
 
 
 class eu_recycling_constraint(AbstractConstraint):
-    def apply_rule(self, m, stf, mat):
+    def apply_rule(self, m, stf, mat, target_quota=0.25):
         if stf < 2030:
             return pyomo.Constraint.Skip
 
@@ -103,7 +103,7 @@ class eu_recycling_constraint(AbstractConstraint):
             return pyomo.Constraint.Skip
 
         # 25% Recycling (from End-of-Life Streams)
-        return m.material_recycled[stf, mat] >= 0.25 * m.demand_material_total[stf, mat]
+        return m.material_recycled[stf, mat] >= target_quota * m.demand_material_total[stf, mat]
 
 
 class crma_combined_independence_constraint(AbstractConstraint):
@@ -135,6 +135,7 @@ def apply_scenario_constraints(
     target_techs=None,
     nzia_quota=0.40,
     crma_quota=0.35,
+    recycling_quota=0.25,
 ):
     if target_techs is None:
         target_techs = ["solarPV", "windon", "windoff", "Batteries"]
@@ -142,7 +143,7 @@ def apply_scenario_constraints(
     print(f"\n--- Initializing Policy Constraints ---")
 
     # ---------------------------------------------------------
-    # A. NZIA CONSTRAINTS
+    # A. NZIA CONSTRAINTS                                
     # ---------------------------------------------------------
     strict_logic = nzia_strict_rule()
     m.nzia_strict_constraint = pyomo.Constraint(
@@ -194,7 +195,7 @@ def apply_scenario_constraints(
 
     recycling_logic = eu_recycling_constraint()
     m.eu_recycling_constraint = pyomo.Constraint(
-        m.stf, m.materials, rule=lambda m, y, mat: recycling_logic.apply_rule(m, y, mat)
+        m.stf, m.materials, rule=lambda m, y, mat: recycling_logic.apply_rule(m, y, mat, recycling_quota)
     )
 
     # 2. Instantiate the COMBINED rule (Dynamic >= target_quota Independence)

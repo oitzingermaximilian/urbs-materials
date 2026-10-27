@@ -430,11 +430,12 @@ def create_model(
 
     apply_scenario_constraints(
         m,
-        nzia_mode="strict",
-        crma_mode="combined",
-        crma_active=True,
+        nzia_mode=data_urbsextensionv1.get("nzia_mode", "strict"),
+        crma_mode=data_urbsextensionv1.get("crma_mode", "combined"),
+        crma_active=data_urbsextensionv1.get("crma_active", True),
         nzia_quota=data_urbsextensionv1.get("nzia_quota", 0.40),
         crma_quota=data_urbsextensionv1.get("crma_quota", 0.35),
+        recycling_quota=data_urbsextensionv1.get("recycling_quota", 0.25),
     )
 
     apply_scrap_constraints(m)

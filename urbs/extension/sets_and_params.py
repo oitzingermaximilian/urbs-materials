@@ -202,7 +202,22 @@ def apply_sets_and_params(m, data_urbsextensionv1):
         m.stf,
         m.location,
         m.tech,
-        initialize=data_urbsextensionv1["installable_capacity_dict"],
+        initialize=data_urbsextensionv1.get("installable_capacity_dict", {}),
+        default=float("inf"),
+    )
+    m.Q_ext_new_low = pyomo.Param(
+        m.stf,
+        m.location,
+        m.tech,
+        initialize=data_urbsextensionv1.get("installable_capacity_low_dict", {}),
+        default=0.0,
+    )
+    m.Q_ext_new_high = pyomo.Param(
+        m.stf,
+        m.location,
+        m.tech,
+        initialize=data_urbsextensionv1.get("installable_capacity_high_dict", data_urbsextensionv1.get("installable_capacity_dict", {})),
+        default=float("inf"),
     )
     m.DCR_solar = pyomo.Param(
         m.stf, m.location, m.tech, initialize=data_urbsextensionv1["dcr_dict"]

@@ -42,16 +42,32 @@ class CapacityExtGrowthRule(AbstractConstraint):
             )
 
 
-class CapacityExtNewLimitRule(AbstractConstraint):
+class CapacityExtMinLimitRule(AbstractConstraint):
     def apply_rule(self, m, stf, location, tech):
-        # CON: New Capacity Limit | Restricts annual new capacity to defined installable limits
-        cap_val = m.capacity_ext_new[stf, location, tech]
-        if stf == 2024:
+        # CON: Minimum Total Installed Capacity Limit | Restricts total operational capacity to be at least defined lower threshold
+        cap_val = m.capacity_ext[stf, location, tech]
+        if hasattr(m, "Q_ext_new_low") and (stf, location, tech) in m.Q_ext_new_low:
+            min_val = m.Q_ext_new_low[stf, location, tech]
+            if min_val > 0:
+                return cap_val >= min_val
+        return pyomo.Constraint.Skip
+
+
+class CapacityExtMaxLimitRule(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech):
+        # CON: Maximum Total Installed Capacity Limit | Restricts total operational capacity to be at most defined upper threshold
+        cap_val = m.capacity_ext[stf, location, tech]
+        if hasattr(m, "Q_ext_new_high") and (stf, location, tech) in m.Q_ext_new_high:
+            ext_val = m.Q_ext_new_high[stf, location, tech]
+        elif hasattr(m, "Q_ext_new") and (stf, location, tech) in m.Q_ext_new:
             ext_val = m.Q_ext_new[stf, location, tech]
-            return cap_val <= ext_val
         else:
-            ext_val = m.Q_ext_new[stf, location, tech]
-            return cap_val <= ext_val
+            return pyomo.Constraint.Skip
+
+        if ext_val == float("inf"):
+            return pyomo.Constraint.Skip
+
+        return cap_val <= ext_val
 
 
 class ConstraintBatteryDemandRule(AbstractConstraint):
@@ -76,7 +92,7 @@ class ConstraintBatteryCapRule(AbstractConstraint):
         debug_print(
             f"Battery cap constraint for {stf}, {location}: lhs demand = {lhs}, rhs battery cap = {rhs}"
         )
-        return lhs == rhs
+        return lhs <= rhs
 
 
 def apply_stockpiling_constraints(m):
@@ -85,7 +101,8 @@ def apply_stockpiling_constraints(m):
     """
     constraints = [
         CapacityExtGrowthRule(),
-        CapacityExtNewLimitRule(),
+        CapacityExtMinLimitRule(),
+        CapacityExtMaxLimitRule(),
         ConstraintBatteryDemandRule(),
         ConstraintBatteryCapRule(),
     ]
@@ -100,7 +117,7 @@ def apply_stockpiling_constraints(m):
                 m.stf,
                 m.location,
                 m.tech,
-                rule=lambda m, stf, loc, tech: constraint_obj.apply_rule(
+                rule=lambda m, stf, loc, tech, obj=constraint_obj: obj.apply_rule(
                     m, stf, loc, tech
                 ),
             ),

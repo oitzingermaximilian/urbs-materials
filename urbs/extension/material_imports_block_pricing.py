@@ -20,13 +20,19 @@ def apply_material_block_pricing(m, data):
     # ==========================================
     # PARAMETERS
     # ==========================================
+    def _safe_limit(stf, mat, blk):
+        val = data["mat_limits"].get((stf, mat, blk), 0.0)
+        return 0.0 if (val is None or pd.isna(val)) else max(0.0, float(val))
+
+    def _safe_price(stf, mat, blk):
+        val = data["mat_prices"].get((stf, mat, blk), 0.0)
+        return 0.0 if (val is None or pd.isna(val)) else max(0.0, float(val))
+
     m.mat_block_limits = pyomo.Param(
         m.stf,
         m.materials,
         m.price_blocks,
-        initialize=lambda m, stf, mat, blk: data["mat_limits"].get(
-            (stf, mat, blk), 0.0
-        ),
+        initialize=lambda m, stf, mat, blk: _safe_limit(stf, mat, blk),
         within=pyomo.NonNegativeReals,
         doc="Maximum import volume per block per year",
     )
@@ -35,9 +41,7 @@ def apply_material_block_pricing(m, data):
         m.stf,
         m.materials,
         m.price_blocks,
-        initialize=lambda m, stf, mat, blk: data["mat_prices"].get(
-            (stf, mat, blk), 0.0
-        ),
+        initialize=lambda m, stf, mat, blk: _safe_price(stf, mat, blk),
         within=pyomo.NonNegativeReals,
         doc="Price per unit for a specific block",
     )

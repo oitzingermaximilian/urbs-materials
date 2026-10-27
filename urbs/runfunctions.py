@@ -39,9 +39,11 @@ def setup_solver(optim, logfile="solver.log"):
         optim.set_options("logfile={}".format(logfile))
         optim.set_options("DualReductions=0")
         optim.set_options("MIPGap=1e-4")
-        # optim.set_options("NumericFocus=2")  # Can cause solver crashes on hard MIPs
-        # optim.set_options("ScaleFlag=2")     # Can cause solver crashes on hard MIPs
-        optim.set_options("FeasibilityTol=1e-9")
+        # Enable Barrier (Interior Point Method) for 3-5x faster LP solving
+        optim.set_options("Method=2")
+        optim.set_options("Crossover=-1")     # Automatic crossover to basic solution for shadow prices
+        optim.set_options("BarConvTol=1e-8")
+        optim.set_options("FeasibilityTol=1e-8")
         optim.set_options("IntFeasTol=1e-6")
         optim.set_options("OptimalityTol=1e-6")
 
@@ -272,8 +274,10 @@ def process_stocklvl_sheet(sheet_data):
 
 
 def process_installable_capacity_sheet(sheet_data):
-    """Processes installable capacity. SCALING: MW -> GW"""
-    installable_capacity_dict = {}
+    """Processes installable capacity (supports both _low and _high thresholds, as well as legacy single column format). SCALING: MW -> GW"""
+    low_dict = {}
+    high_dict = {}
+    legacy_dict = {}
     sheet_data = sheet_data.set_index("Stf")
 
     for col in sheet_data.columns:
@@ -282,13 +286,49 @@ def process_installable_capacity_sheet(sheet_data):
             continue
 
         location = parts[0]
-        tech = "_".join(parts[1:])
+        suffix = parts[-1].lower()
 
-        for year, value in sheet_data[col].items():
-            # SCALE: MW -> GW
-            installable_capacity_dict[(year, location, tech)] = value * GW_SCALE
+        if len(parts) >= 3 and suffix in ["low", "min"]:
+            tech = "_".join(parts[1:-1])
+            for year, value in sheet_data[col].items():
+                val_num = 0.0 if pd.isna(value) else float(value)
+                low_dict[(year, location, tech)] = val_num * GW_SCALE
+        elif len(parts) >= 3 and suffix in ["high", "max"]:
+            tech = "_".join(parts[1:-1])
+            for year, value in sheet_data[col].items():
+                val_num = float("inf") if pd.isna(value) else float(value)
+                high_dict[(year, location, tech)] = val_num * GW_SCALE
+        else:
+            tech = "_".join(parts[1:])
+            for year, value in sheet_data[col].items():
+                val_num = float("inf") if pd.isna(value) else float(value)
+                legacy_dict[(year, location, tech)] = val_num * GW_SCALE
 
-    return installable_capacity_dict
+    # If only legacy columns were present without _low / _high
+    if not high_dict and legacy_dict:
+        high_dict = legacy_dict.copy()
+
+    # Fill defaults: if high exists without low, low is 0.0; if low exists without high, high is inf
+    for k in high_dict:
+        if k not in low_dict:
+            low_dict[k] = 0.0
+    for k in low_dict:
+        if k not in high_dict:
+            high_dict[k] = float("inf")
+
+    # Maintain legacy_dict compatibility
+    for k in high_dict:
+        if k not in legacy_dict:
+            legacy_dict[k] = high_dict[k]
+
+    # Safety buffer: If low == high (exact equality), add a 0.5% (or min 100 MW) buffer to high
+    # to prevent numerical degeneracy and extreme simplex/barrier stalling
+    for k in high_dict:
+        if k in low_dict and low_dict[k] > 0 and high_dict[k] == low_dict[k]:
+            buffer = max(0.1, low_dict[k] * 0.005)
+            high_dict[k] = low_dict[k] + buffer
+
+    return low_dict, high_dict, legacy_dict
 
 
 def process_dcr_sheet(sheet_data):
@@ -439,10 +479,14 @@ def process_material_block_sheet(sheet_data):
         hds_curve = np.interp(years, anchor_years, hds_anchors)
 
         # Prices (Add * COST_SCALE here if your model requires it globally!)
+        p1 = float(row["price_t1"]) if pd.notna(row["price_t1"]) else 0.0
+        p2 = float(row["price_t2"]) if pd.notna(row["price_t2"]) else p1 * 1.25
+        p3 = float(row["price_t3"]) if pd.notna(row["price_t3"]) else p1 * 1.875
+
         prices = {
-            "Tier1": float(row["price_t1"]),
-            "Tier2": float(row["price_t2"]),
-            "Tier3": float(row["price_t3"]),
+            "Tier1": p1,
+            "Tier2": p2,
+            "Tier3": p3,
         }
 
         # Calculate limits and map them
@@ -554,9 +598,11 @@ def load_data_from_excel(file_path):
     technologies_dict = process_technology_sheet(technologies_data)
     stocklvl_dict = process_stocklvl_sheet(stocklvl_data)
     dcr_dict = process_dcr_sheet(dcr_data)
-    installable_capacity_dict = process_installable_capacity_sheet(
-        installable_capacity_data
-    )
+    (
+        installable_capacity_low_dict,
+        installable_capacity_high_dict,
+        installable_capacity_dict,
+    ) = process_installable_capacity_sheet(installable_capacity_data)
     loadfactors_dict = process_loadfactors_sheet(loadfactors_data)
 
     base_params = {
@@ -894,7 +940,9 @@ def load_data_from_excel(file_path):
         "technologies": technologies_dict,
         "dcr_dict": dcr_dict,
         "stocklvl_dict": stocklvl_dict,  # GW
-        "installable_capacity_dict": installable_capacity_dict,  # GW
+        "installable_capacity_dict": installable_capacity_dict,  # GW (legacy / high)
+        "installable_capacity_low_dict": installable_capacity_low_dict,  # GW
+        "installable_capacity_high_dict": installable_capacity_high_dict,  # GW
         "decommissioned_cap_dict": decommissioned_cap_dict,  # GW
         "block_limits": block_limits_dict,  # GWh
         "block_price": block_price_dict,  # k€/GWh
