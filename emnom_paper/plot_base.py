@@ -1,5 +1,8 @@
 import os
 import re
+import ctypes
+import shutil
+import tempfile
 from pathlib import Path
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
@@ -31,28 +34,24 @@ plt.rcParams["pdf.fonttype"] = 42
 plt.rcParams["ps.fonttype"] = 42
 
 # ================= KONFIGURATION =================
-BASE_DIR = Path("result/results_server_201026")
-SCENARIO = "LR4_nzia_40_crma_25_materials_base"
+PROJECT_DIR = Path(__file__).resolve().parent
+BASE_DIR = PROJECT_DIR / "result" / "results_server_201026"
+if not BASE_DIR.exists():
+    BASE_DIR = Path("result/results_server_201026")
+SCENARIO = "LR4_nzia_40_crma_35_materials_base"
 FILE_PATH = BASE_DIR / SCENARIO / f"{SCENARIO}.xlsx"
-PLOT_OUTPUT_DIR = Path("plots/baseline")
+PLOT_OUTPUT_DIR = PROJECT_DIR / "plots" / "baseline" 
 
 # ================= DISTINCT COLOR PALETTE =================
 TECH_COLORS = {
     "Solar PV": "#E69F00",
     "Onshore Wind": "#66C2A5",
     "Offshore Wind": "#00876C",
-    "Hydro (ror)": "#56B4E9",
-    "Hydro (reservoir)": "#0072B2",
+    "Hydropower": "#0072B2",
+    "Other RES": "#27AE60",
     "Nuclear": "#8E44AD",
-    "Gas (CCGT)": "#C0392B",
-    "Gas (CCGT) CCUS": "#922B21",
-    "Biomass": "#27AE60",
-    "Coal": "#333333",
-    "Coal CCUS": "#595959",
-    "Lignite": "#5D4037",
-    "Lignite CCUS": "#3E2723",
-    "Oil": "#78281F",
-    "Other non-res": "#BDC3C7",
+    "Fossil": "#C0392B",
+    "Fossil w/ CCS": "#922B21",
 }
 
 # ================= SORTIERUNG STACK =================
@@ -60,89 +59,128 @@ TECH_ORDER = [
     "Solar PV",
     "Onshore Wind",
     "Offshore Wind",
-    "Hydro (ror)",
-    "Hydro (reservoir)",
+    "Hydropower",
+    "Other RES",
     "Nuclear",
-    "Gas (CCGT)",
-    "Gas (CCGT) CCUS",
-    "Coal",
-    "Coal CCUS",
-    "Lignite",
-    "Lignite CCUS",
-    "Oil",
-    "Biomass",
-    "Other non-res",
+    "Fossil",
+    "Fossil w/ CCS",
 ]
 
-# ================= SORTIERUNG LEGENDE (Spaltenweise) =================
+# ================= SORTIERUNG LEGENDE (2 Zeilen à 4 Einträge) =================
+# Zeile 1: Solar PV, Onshore Wind, Offshore Wind, Hydropower
+# Zeile 2: Other RES, Nuclear, Fossil, Fossil w/ CCS
 LEGEND_ORDER = [
     "Solar PV",
     "Onshore Wind",
     "Offshore Wind",
-    "Hydro (ror)",
-    "Hydro (reservoir)",
-    "Biomass",
+    "Hydropower",
+    "Other RES",
     "Nuclear",
-    "Gas (CCGT)",
-    "Gas (CCGT) CCUS",
-    "Oil",
-    "Coal",
-    "Coal CCUS",
-    "Lignite",
-    "Lignite CCUS",
-    "Other non-res",
+    "Fossil",
+    "Fossil w/ CCS",
 ]
 
 
 # ================= HILFSFUNKTIONEN =================
+def read_excel_safe(path, **kwargs):
+    src = Path(path).resolve()
+    if not src.exists():
+        raise FileNotFoundError(f"Datei existiert nicht: {src}")
+
+    tmp = Path(tempfile.gettempdir()) / f"plot_base_{src.name}"
+    try:
+        ok = ctypes.windll.kernel32.CopyFileW(str(src), str(tmp), False)
+        if not ok:
+            shutil.copy2(src, tmp)
+    except Exception:
+        shutil.copy2(src, tmp)
+
+    try:
+        df = pd.read_excel(tmp, **kwargs)
+    finally:
+        try:
+            if tmp.exists():
+                tmp.unlink()
+        except Exception:
+            pass
+    return df
+
+
 def clean_technology_name(tech_name):
     if pd.isna(tech_name):
         return tech_name
 
-    cleaned = re.sub(r"_\d{4}$", "", str(tech_name))
+    s = str(tech_name).strip()
 
-    mapping = {
-        "solarPV": "Solar PV",
-        "windon": "Onshore Wind",
-        "windoff": "Offshore Wind",
-        "Hydro_(run-of-river)": "Hydro (ror)",
-        "Hydro_(reservoir)": "Hydro (reservoir)",
-        "Coal_Plant_CCUS": "Coal CCUS",
-        "Gas_Plant_(CCGT)_CCUS": "Gas (CCGT) CCUS",
-        "Biomass_Plant": "Biomass",
-        "Coal_Plant": "Coal",
-        "Gas_Plant_(CCGT)": "Gas (CCGT)",
-        "Lignite_Plant": "Lignite",
-        "Lignite_Plant_CCUS": "Lignite CCUS",
-        "Nuclear_Plant": "Nuclear",
-        "Oil_Plant": "Oil",
-        "Other_non-res": "Other non-res",
-    }
+    # Nuclear
+    if s.lower().startswith("nuclear"):
+        return "Nuclear"
 
-    if cleaned in mapping:
-        return mapping[cleaned]
+    # Hydropower (merge RoR, pumped, and reservoir)
+    if "hydro" in s.lower():
+        return "Hydropower"
 
-    return cleaned.replace("_", " ").strip()
+    # Solar PV
+    if "solarpv" in s.lower() or s == "Solar PV":
+        return "Solar PV"
+
+    # Wind
+    if "windon" in s.lower() or "onshore" in s.lower():
+        return "Onshore Wind"
+    if "windoff" in s.lower() or "offshore" in s.lower():
+        return "Offshore Wind"
+
+    # Other RES (Biomass)
+    if "biomass" in s.lower() or "other res" in s.lower():
+        return "Other RES"
+
+    # Batteries (filtered out in load functions)
+    if "batteries" in s.lower() or "battery" in s.lower():
+        return "Batteries"
+
+    # Fossil w/ CCS
+    if "ccus" in s.lower() or "ccs" in s.lower():
+        return "Fossil w/ CCS"
+
+    # Everything else is unabated Fossil (Gas CCGT, Coal, Lignite, Oil, Other non-res)
+    return "Fossil"
 
 
 def get_color(tech):
     for key, color in TECH_COLORS.items():
         if key.lower() == tech.lower():
             return color
-    return TECH_COLORS["Other non-res"]
+    return TECH_COLORS.get("Fossil", "#C0392B")
 
 
-def sort_legend_handles(handles, labels):
+def sort_legend_handles(handles, labels, ncol=4):
+    """
+    Sorts handles and labels according to LEGEND_ORDER and reorders them
+    into column-major order so that matplotlib's column-first filling
+    renders row 1 and row 2 in the exact row-wise order requested:
+      Row 1: Solar PV, Onshore Wind, Offshore Wind, Hydropower
+      Row 2: Other RES, Nuclear, Fossil, Fossil w/ CCS
+    """
     order_dict = {name: i for i, name in enumerate(LEGEND_ORDER)}
     hl_sorted = sorted(zip(handles, labels), key=lambda x: order_dict.get(x[1], 999))
     if not hl_sorted:
         return [], []
-    return zip(*hl_sorted)
+
+    n = len(hl_sorted)
+    nrows = (n + ncol - 1) // ncol
+    grid = [hl_sorted[r * ncol : (r + 1) * ncol] for r in range(nrows)]
+    col_major = []
+    for c in range(ncol):
+        for r in range(nrows):
+            if c < len(grid[r]):
+                col_major.append(grid[r][c])
+
+    return zip(*col_major)
 
 
 # ================= DATEN LADEN =================
 def load_baseline_generation(file_path, start_year=2025, end_year=2050):
-    df_bal = pd.read_excel(file_path, sheet_name="extension_balance")
+    df_bal = read_excel_safe(file_path, sheet_name="extension_balance")
     df_bal.columns = df_bal.columns.str.lower()
     df_bal[["stf", "process"]] = df_bal[["stf", "process"]].ffill()
     df_bal["stf"] = pd.to_numeric(df_bal["stf"], errors="coerce")
@@ -161,7 +199,7 @@ def load_baseline_generation(file_path, start_year=2025, end_year=2050):
 
 
 def load_capacity_data(file_path, start_year=2025, end_year=2050):
-    df_proc = pd.read_excel(file_path, sheet_name="Process caps")
+    df_proc = read_excel_safe(file_path, sheet_name="Process caps")
     df_proc.columns = df_proc.columns.str.lower()
     df_proc["stf"] = df_proc["stf"].ffill()
     df_proc["stf"] = pd.to_numeric(df_proc["stf"], errors="coerce")
@@ -170,7 +208,7 @@ def load_capacity_data(file_path, start_year=2025, end_year=2050):
     df_proc["tech"] = df_proc["pro"].apply(clean_technology_name)
     df_proc = df_proc[["stf", "tech", "cap_pro"]].rename(columns={"cap_pro": "value"})
 
-    df_ext = pd.read_excel(file_path, sheet_name="extension_only_totalcapacity")
+    df_ext = read_excel_safe(file_path, sheet_name="extension_only_totalcapacity")
     df_ext.columns = df_ext.columns.str.lower()
     df_ext["stf"] = df_ext["stf"].ffill()
     df_ext["stf"] = pd.to_numeric(df_ext["stf"], errors="coerce")
@@ -191,7 +229,6 @@ def load_capacity_data(file_path, start_year=2025, end_year=2050):
     df_cap_grouped = df_cap[mask].groupby(["stf", "tech"])["value"].sum().reset_index()
     return df_cap_grouped
 
-
 # ================= PLOTTING =================
 def plot_electricity_generation(
     df,
@@ -201,16 +238,16 @@ def plot_electricity_generation(
 ):
     df_pivot = df.pivot(index="stf", columns="tech", values="value_twh").fillna(0)
 
-    sorted_techs = [t for t in TECH_ORDER if t in df_pivot.columns]
-    for t in df_pivot.columns:
-        if t not in sorted_techs:
-            sorted_techs.append(t)
+    for t in TECH_ORDER:
+        if t not in df_pivot.columns:
+            df_pivot[t] = 0.0
 
+    sorted_techs = [t for t in TECH_ORDER if t in df_pivot.columns]
     df_pivot = df_pivot[sorted_techs]
     years = df_pivot.index.astype(int)
     colors = [get_color(t) for t in df_pivot.columns]
 
-    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    fig, ax = plt.subplots(figsize=(8.0, 4.5))
 
     # 1. FORCE DATA INTO Z-ORDER = 1
     if chart_type == "area":
@@ -227,14 +264,14 @@ def plot_electricity_generation(
         )
         ax.set_xlim(years.min(), years.max())
         for stack, label in zip(stacks, df_pivot.columns):
-            if "CCUS" in label:
+            if "CCS" in label or "CCUS" in label:
                 stack.set_hatch("//")
     else:
         bottom = np.zeros(len(df_pivot))
         width = 0.55 if len(years) > 10 else 1.2
         for tech in df_pivot.columns:
             values = df_pivot[tech].values
-            hatch_pattern = "//" if "CCUS" in tech else None
+            hatch_pattern = "//" if ("CCS" in tech or "CCUS" in tech) else None
             ax.bar(
                 years,
                 values,
@@ -295,20 +332,19 @@ def plot_electricity_generation(
     # ==============================
 
     raw_handles, raw_labels = ax.get_legend_handles_labels()
-    sorted_handles, sorted_labels = sort_legend_handles(raw_handles, raw_labels)
+    sorted_handles, sorted_labels = sort_legend_handles(raw_handles, raw_labels, ncol=4)
 
     ax.legend(
         sorted_handles,
         sorted_labels,
         loc="upper center",
         bbox_to_anchor=(0.5, -0.15),
-        ncol=5,
+        ncol=4,
         frameon=False,
         fontsize=8.5,
-        framealpha=1.0,
-        edgecolor="black",
-        columnspacing=1.2,
-        handlelength=1.4,
+        columnspacing=1.5,
+        handletextpad=0.4,
+        handlelength=1.2,
     )
 
     plt.tight_layout()
@@ -316,7 +352,7 @@ def plot_electricity_generation(
     out_path = PLOT_OUTPUT_DIR / output_filename
     plt.savefig(out_path, format="pdf", bbox_inches="tight")
     plt.close()
-    print(f"✔ Erzeugungsplot ({chart_type.upper()}) gespeichert: {out_path}")
+    print(f"[OK] Erzeugungsplot ({chart_type.upper()}) gespeichert: {out_path}")
 
 
 def plot_capacity_bar(
@@ -326,15 +362,15 @@ def plot_capacity_bar(
 ):
     df_pivot = df.pivot(index="stf", columns="tech", values="value").fillna(0)
 
-    sorted_techs = [t for t in TECH_ORDER if t in df_pivot.columns]
-    for t in df_pivot.columns:
-        if t not in sorted_techs:
-            sorted_techs.append(t)
+    for t in TECH_ORDER:
+        if t not in df_pivot.columns:
+            df_pivot[t] = 0.0
 
+    sorted_techs = [t for t in TECH_ORDER if t in df_pivot.columns]
     df_pivot = df_pivot[sorted_techs]
     years = df_pivot.index.astype(int)
 
-    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    fig, ax = plt.subplots(figsize=(8.0, 4.5))
 
     bottom = np.zeros(len(df_pivot))
     width = 0.55 if len(years) > 10 else 1.2
@@ -342,7 +378,7 @@ def plot_capacity_bar(
     # 1. FORCE DATA INTO Z-ORDER = 1
     for tech in df_pivot.columns:
         values = df_pivot[tech].values
-        hatch_pattern = "//" if "CCUS" in tech else None
+        hatch_pattern = "//" if ("CCS" in tech or "CCUS" in tech) else None
 
         ax.bar(
             years,
@@ -409,20 +445,19 @@ def plot_capacity_bar(
     # ==============================
 
     raw_handles, raw_labels = ax.get_legend_handles_labels()
-    sorted_handles, sorted_labels = sort_legend_handles(raw_handles, raw_labels)
+    sorted_handles, sorted_labels = sort_legend_handles(raw_handles, raw_labels, ncol=4)
 
     ax.legend(
         sorted_handles,
         sorted_labels,
         loc="upper center",
         bbox_to_anchor=(0.5, -0.15),
-        ncol=5,
+        ncol=4,
         frameon=False,
         fontsize=8.5,
-        framealpha=1.0,
-        edgecolor="black",
-        columnspacing=1.2,
-        handlelength=1.4,
+        columnspacing=1.5,
+        handletextpad=0.4,
+        handlelength=1.2,
     )
 
     plt.tight_layout()
@@ -430,13 +465,13 @@ def plot_capacity_bar(
     out_path = PLOT_OUTPUT_DIR / output_filename
     plt.savefig(out_path, format="pdf", bbox_inches="tight")
     plt.close()
-    print(f"✔ Kapazitätsplot (BAR) gespeichert: {out_path}")
+    print(f"[OK] Kapazitätsplot (BAR) gespeichert: {out_path}")
 
 
 # ================= EXECUTION =================
 if __name__ == "__main__":
     if not FILE_PATH.exists():
-        print(f"❌ Datei nicht gefunden: {FILE_PATH}\nBitte Pfad (BASE_DIR) prüfen.")
+        print(f"[ERROR] Datei nicht gefunden: {FILE_PATH}\nBitte Pfad (BASE_DIR) prüfen.")
     else:
         df_gen = load_baseline_generation(FILE_PATH, start_year=2025, end_year=2050)
         if not df_gen.empty:

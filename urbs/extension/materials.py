@@ -165,7 +165,7 @@ class StockpileTotalRule(AbstractConstraint):
         )
 
 
-obsolescence_factor = 0.041
+obsolescence_factor = 0.015
 
 
 class StockpileDomesticRule(AbstractConstraint):
@@ -209,6 +209,42 @@ class StockpileImportedRule(AbstractConstraint):
                 * (1 - obsolescence_factor)
                 + m.capacity_imported_storage[stf, location, tech, stage]
                 - m.capacity_imported_stockout[stf, location, tech, stage]
+            )
+
+
+class StockoutDomesticLimitRule(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage):
+        if not check_valid_indices(m, tech, stage):
+            return pyomo.Constraint.Skip
+
+        if stf == 2024 or (stf - 1, location, tech, stage) not in m.stock_domestic:
+            return (
+                m.capacity_produced_stockout[stf, location, tech, stage]
+                <= m.stock_domestic_init[location, tech, stage]
+            )
+        else:
+            return (
+                m.capacity_produced_stockout[stf, location, tech, stage]
+                <= m.stock_domestic[stf - 1, location, tech, stage]
+                * (1 - obsolescence_factor)
+            )
+
+
+class StockoutImportedLimitRule(AbstractConstraint):
+    def apply_rule(self, m, stf, location, tech, stage):
+        if not check_valid_indices(m, tech, stage):
+            return pyomo.Constraint.Skip
+
+        if stf == 2024 or (stf - 1, location, tech, stage) not in m.stock_imported:
+            return (
+                m.capacity_imported_stockout[stf, location, tech, stage]
+                <= m.stock_imported_init[location, tech, stage]
+            )
+        else:
+            return (
+                m.capacity_imported_stockout[stf, location, tech, stage]
+                <= m.stock_imported[stf - 1, location, tech, stage]
+                * (1 - obsolescence_factor)
             )
 
 
@@ -770,6 +806,8 @@ def apply_material_constraints(m):
         StockpileTotalRule(),
         StockpileDomesticRule(),
         StockpileImportedRule(),
+        StockoutDomesticLimitRule(),
+        StockoutImportedLimitRule(),
         MaximumStockpileImportsRule(),
         MaximumStockpileDomesticRule(),
         TurnoverStockDomesticNewRule(),

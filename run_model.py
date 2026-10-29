@@ -82,10 +82,10 @@ for country, color in my_colors.items():
 scenarios = []
 learning_rates = ["LR4"]#["LR1", "LR4", "LR7"]
 industry_levels = [
-    ("nzia_0_crma_0", 0.00, 0.00),
+    #("nzia_0_crma_0", 0.00, 0.00),
     #("nzia_15_crma_10", 0.15, 0.10),
     #("nzia_30_crma_20", 0.30, 0.20),
-    #("nzia_40_crma_35", 0.40, 0.35),
+    ("nzia_40_crma_35", 0.40, 0.35),
 ]
 material_levels = [
     ("materials_base", 1.00, 1.00, 1.00),
