@@ -281,7 +281,13 @@ def plot_basecase_materials(df, start_year=2025, end_year=2050, suffix=""):
             linewidth=1.6,
             label="Annual demand",
         )
-        axis.set_title(f"{material.capitalize()} ({unit})")
+
+        # Clean title without the unit, regular font weight
+        axis.set_title(f"{material.capitalize()}", fontsize=16)
+
+        # Local labels for both axes on every subplot
+        axis.set_ylabel(f"Material Demand ({unit})", fontsize=16)
+
         axis.set_xlim(start_year, end_year)
         axis.set_xticks(xticks)
         axis.yaxis.set_major_locator(MaxNLocator(nbins=4))
@@ -289,8 +295,10 @@ def plot_basecase_materials(df, start_year=2025, end_year=2050, suffix=""):
         axis.grid(axis="y", linestyle="--", alpha=0.35)
         axis.set_axisbelow(True)
 
+        # Readable tick parameters without being bold
+        axis.tick_params(axis="both", which="major", labelsize=12)
+
     handles = [
-        plt.Line2D([], [], color=MATERIAL_COLORS["Demand"], lw=2, label="Annual demand"),
         plt.Rectangle(
             (0, 0), 1, 1, facecolor=MATERIAL_COLORS["Imported"], edgecolor="black",
             label="Imported",
@@ -303,12 +311,15 @@ def plot_basecase_materials(df, start_year=2025, end_year=2050, suffix=""):
             (0, 0), 1, 1, facecolor=MATERIAL_COLORS["Recycled"], edgecolor="black",
             label="Recycled",
         ),
+        plt.Line2D([], [], color=MATERIAL_COLORS["Demand"], lw=2, label="Annual demand")
     ]
-    fig.legend(handles=handles, loc="lower center", ncol=4, frameon=True)
-    fig.suptitle(f"LR4 Base Case Material Demand and Sourcing ({start_year}–{end_year})")
-    fig.supxlabel("Year")
-    fig.supylabel("Material quantity (scaled per material unit)")
-    fig.tight_layout(rect=(0.04, 0.08, 1, 0.95))
+
+    # Legend remains large and clean with no border
+    fig.legend(handles=handles, loc="lower center", ncol=4, frameon=False, fontsize=13)
+
+    # Adjusted the layout rectangle to account for the legend at the bottom and lack of main title
+    fig.tight_layout(rect=(0.02, 0.08, 0.98, 0.98))
+
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     out_name = f"Fig_Basecase_Materials_Selected{suffix}.pdf"
     fig.savefig(OUTPUT_DIR / out_name, bbox_inches="tight")
@@ -383,7 +394,7 @@ def plot_basecase_materials_unit_group(df, unit_label, materials_in_group, start
         ax.set_visible(False)
 
     handles = [
-        plt.Line2D([], [], color=MATERIAL_COLORS["Demand"], lw=2, label="Annual demand"),
+
         plt.Rectangle(
             (0, 0), 1, 1, facecolor=MATERIAL_COLORS["Imported"], edgecolor="black",
             label="Imported",
@@ -396,6 +407,7 @@ def plot_basecase_materials_unit_group(df, unit_label, materials_in_group, start
             (0, 0), 1, 1, facecolor=MATERIAL_COLORS["Recycled"], edgecolor="black",
             label="Recycled",
         ),
+        plt.Line2D([], [], color=MATERIAL_COLORS["Demand"], lw=2, label="Annual demand")
     ]
     fig.legend(handles=handles, loc="lower center", ncol=4, frameon=True, fontsize=10)
     fig.suptitle(f"Material Demand and Sourcing – {unit_label.upper()} Materials ({start_year}–{end_year})", fontsize=13)
@@ -584,7 +596,7 @@ def plot_material_scrap_selected(df_scrap, df_minerals, df_fractions, start_year
             unused,
             utilized,
             colors=[UNUSED_SCRAP_COLOR, UTILIZED_SCRAP_COLOR],
-            labels=["Unused Scrap Stockpile", "Utilized Scrap"],
+            labels=["Unused Scrap", "Utilized Scrap"],
             edgecolor="black",
             linewidth=0.3,
         )
@@ -595,7 +607,13 @@ def plot_material_scrap_selected(df_scrap, df_minerals, df_fractions, start_year
             linewidth=1.2,
             label="Total Available Scrap Pool",
         )
-        axis.set_title(f"{material.capitalize()} ({unit})")
+
+        # Clean title without the unit, regular font weight
+        axis.set_title(f"{material.capitalize()}", fontsize=16)
+
+        # Local labels for both axes on every subplot
+        axis.set_ylabel(f"Scrap ({unit})", fontsize=16)
+
         axis.set_xlim(start_year, end_year)
         axis.set_xticks(xticks)
         axis.yaxis.set_major_locator(MaxNLocator(nbins=4))
@@ -603,10 +621,14 @@ def plot_material_scrap_selected(df_scrap, df_minerals, df_fractions, start_year
         axis.grid(axis="y", linestyle="--", alpha=0.35)
         axis.set_axisbelow(True)
 
+        # Readable tick parameters without being bold
+        axis.tick_params(axis="both", which="major", labelsize=12)
+
+    # Reverted handles back to the original variables
     handles = [
         plt.Rectangle(
             (0, 0), 1, 1, facecolor=UNUSED_SCRAP_COLOR, edgecolor="black",
-            label="Unused Scrap Stockpile",
+            label="Unused Scrap",
         ),
         plt.Rectangle(
             (0, 0), 1, 1, facecolor=UTILIZED_SCRAP_COLOR, edgecolor="black",
@@ -614,11 +636,13 @@ def plot_material_scrap_selected(df_scrap, df_minerals, df_fractions, start_year
         ),
         plt.Line2D([], [], color=TOTAL_SCRAP_LINE_COLOR, lw=1.5, label="Total Available Scrap Pool"),
     ]
-    fig.legend(handles=handles, loc="lower center", ncol=3, frameon=True)
-    fig.suptitle(f"Cumulative Available Scrap and Recycling by Material ({start_year}–{end_year})")
-    fig.supxlabel("Year")
-    fig.supylabel("Material quantity (scaled per material unit)")
-    fig.tight_layout(rect=(0.04, 0.08, 1, 0.95))
+
+    # Legend remains large and clean with no border
+    fig.legend(handles=handles, loc="lower center", ncol=3, frameon=False, fontsize=13)
+
+    # Adjusted the layout rectangle to account for the legend at the bottom
+    fig.tight_layout(rect=(0.02, 0.08, 0.98, 0.98))
+
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     out_name = f"Fig_Basecase_Material_Scrap_Selected{suffix}.pdf"
     fig.savefig(OUTPUT_DIR / out_name, bbox_inches="tight")
@@ -669,7 +693,7 @@ def plot_material_scrap_unit_group(df_scrap, df_minerals, df_fractions, unit_lab
             unused,
             utilized,
             colors=[UNUSED_SCRAP_COLOR, UTILIZED_SCRAP_COLOR],
-            labels=["Unused Scrap Stockpile", "Utilized Scrap"],
+            labels=["Unused Scrap", "Utilized Scrap"],
             edgecolor="black",
             linewidth=0.3,
         )
@@ -694,7 +718,7 @@ def plot_material_scrap_unit_group(df_scrap, df_minerals, df_fractions, unit_lab
     handles = [
         plt.Rectangle(
             (0, 0), 1, 1, facecolor=UNUSED_SCRAP_COLOR, edgecolor="black",
-            label="Unused Scrap Stockpile",
+            label="Unused Scrap",
         ),
         plt.Rectangle(
             (0, 0), 1, 1, facecolor=UTILIZED_SCRAP_COLOR, edgecolor="black",
@@ -749,7 +773,7 @@ def plot_material_scrap_all(df_scrap, df_minerals, df_fractions, materials, star
             unused,
             utilized,
             colors=[UNUSED_SCRAP_COLOR, UTILIZED_SCRAP_COLOR],
-            labels=["Unused Scrap Stockpile", "Utilized Scrap"],
+            labels=["Unused Scrap", "Utilized Scrap"],
             edgecolor="black",
             linewidth=0.3,
         )
@@ -774,7 +798,7 @@ def plot_material_scrap_all(df_scrap, df_minerals, df_fractions, materials, star
     handles = [
         plt.Rectangle(
             (0, 0), 1, 1, facecolor=UNUSED_SCRAP_COLOR, edgecolor="black",
-            label="Unused Scrap Stockpile",
+            label="Unused Scrap",
         ),
         plt.Rectangle(
             (0, 0), 1, 1, facecolor=UTILIZED_SCRAP_COLOR, edgecolor="black",
@@ -817,10 +841,11 @@ def plot_material_scrap(df_scrap, df_minerals, df_fractions_or_intensity, materi
 
 
 # =====================================================================
-# 4. SOURCING / SUPPLY MIX ABSOLUTE BARS (SOLARPV, WINDON, WINDOFF)
+# 4. SOURCING / SUPPLY MIX HELPER FUNCTION
 # =====================================================================
 def load_supply_mix_data(file_path):
     """Load and merge supply_mix, net_domestic_production, and net_domestic_stockout sheets."""
+
     def load_sheet(sheet_name, value_col_name):
         df = read_excel_safe(file_path, sheet_name=sheet_name)
         df.columns = df.columns.str.lower()
@@ -842,109 +867,150 @@ def load_supply_mix_data(file_path):
 
     merged = pd.merge(df_total, df_prod, on=["stf", "tech", "stages"], how="outer")
     merged = pd.merge(merged, df_stock, on=["stf", "tech", "stages"], how="outer").fillna(0)
-    merged["Imported"] = (merged["Total"] - merged["capacity_produced_flow"] - merged["capacity_produced_stockout"]).clip(lower=0)
+
+    # Merge flow and stockout into a single Domestic Production variable
+    merged["Domestic Production"] = merged["capacity_produced_flow"] + merged["capacity_produced_stockout"]
+
+    # Calculate Imported as Total minus Domestic
+    merged["Imported"] = (merged["Total"] - merged["Domestic Production"]).clip(lower=0)
+
     return merged
 
 
-def plot_supply_mix_tech_absolute_bars(df_supply, tech, stages, start_year=2025, end_year=2050, suffix=""):
-    """Plot AbsoluteBars for a single technology (solarPV, windon, or windoff) across its stages."""
-    years_to_plot = [y for y in [2025, 2030, 2035, 2040, 2045, 2050] if start_year <= y <= end_year]
-    bar_width = 2.5
+def plot_supply_mix_tech_periods(df_supply, tech, stages, suffix=""):
+    """Plot a 2-row grid (Top: Absolute, Bottom: Relative 100%) for a single technology across its periods."""
+    # Dropped 2046-2050 to avoid end-of-horizon effects
+    period_labels = ["2025-2030", "2031-2035", "2036-2040", "2041-2045"]
+    x_indices = np.arange(len(period_labels))
+    bar_width = 0.6
+
+    # 1. Helper function to map individual years to your specific periods
+    def map_year_to_period(y):
+        if 2025 <= y <= 2030:
+            return "2025-2030"
+        elif 2031 <= y <= 2035:
+            return "2031-2035"
+        elif 2036 <= y <= 2040:
+            return "2036-2040"
+        elif 2041 <= y <= 2045:
+            return "2041-2045"
+        # 2046 and beyond will return None and be filtered out
+        return None
+
+    # 2. Filter for tech, map years to periods, and SUM the data
+    df_plot = df_supply[(df_supply["tech"] == tech) & (df_supply["stages"].isin(stages))].copy()
+    df_plot["period"] = df_plot["stf"].apply(map_year_to_period)
+
+    # Drop years outside our scope (including 2046-2050), then group by stage and period, and sum
+    df_grouped = (
+        df_plot.dropna(subset=["period"])
+        .groupby(["stages", "period"])[["Domestic Production", "Imported"]]
+        .sum()
+        .reset_index()
+    )
 
     n_stages = len(stages)
-    if n_stages == 4:
-        ncols = 2
-        nrows = 2
-        figsize = (12, 8)
-    else:
-        ncols = 3
-        nrows = 1
-        figsize = (14, 4.5)
+    ncols = n_stages
+    nrows = 2
+    figsize = (4.5 * ncols, 7.5)
 
-    fig, axes = plt.subplots(nrows, ncols, figsize=figsize, squeeze=False)
-    axes_flat = axes.flat
-
+    fig, axes = plt.subplots(nrows, ncols, figsize=figsize, sharex=True, squeeze=False)
     tech_title = TECH_DISPLAY_NAMES.get(tech, tech)
 
-    for idx, stage in enumerate(stages):
-        ax = axes_flat[idx]
+    for col_idx, stage in enumerate(stages):
+        ax_abs = axes[0, col_idx]
+        ax_rel = axes[1, col_idx]
+
+        # Extract summed data for this stage and enforce period order
         df_stage = (
-            df_supply[(df_supply["tech"] == tech) & (df_supply["stages"] == stage)]
-            .set_index("stf")
-            .reindex(years_to_plot)
+            df_grouped[df_grouped["stages"] == stage]
+            .set_index("period")
+            .reindex(period_labels)
             .fillna(0)
         )
 
-        prod = df_stage["capacity_produced_flow"].values
-        stock = df_stage["capacity_produced_stockout"].values
+        dom = df_stage["Domestic Production"].values
         imp = df_stage["Imported"].values
+        total = dom + imp
 
-        ax.bar(
-            years_to_plot,
-            prod,
-            width=bar_width,
-            color=SUPPLY_MIX_COLORS["capacity_produced_flow"],
-            edgecolor="black",
-            linewidth=0.5,
-            zorder=2,
-            label=SUPPLY_MIX_LABELS["capacity_produced_flow"],
+        # ==========================================
+        # TOP ROW: Absolute Capacity (Summed)
+        # ==========================================
+        ax_abs.bar(
+            x_indices, dom, width=bar_width,
+            color=SUPPLY_MIX_COLORS.get("Domestic Production", "#AA96DA"),
+            edgecolor="black", linewidth=0.5
         )
-        ax.bar(
-            years_to_plot,
-            stock,
-            bottom=prod,
-            width=bar_width,
-            color=SUPPLY_MIX_COLORS["capacity_produced_stockout"],
-            edgecolor="black",
-            linewidth=0.5,
-            zorder=2,
-            label=SUPPLY_MIX_LABELS["capacity_produced_stockout"],
-        )
-        ax.bar(
-            years_to_plot,
-            imp,
-            bottom=prod + stock,
-            width=bar_width,
-            color=SUPPLY_MIX_COLORS["Imported"],
-            edgecolor="black",
-            linewidth=0.5,
-            zorder=2,
-            label=SUPPLY_MIX_LABELS["Imported"],
+        ax_abs.bar(
+            x_indices, imp, bottom=dom, width=bar_width,
+            color=SUPPLY_MIX_COLORS.get("Imported", "#ff7f0e"),
+            edgecolor="black", linewidth=0.5
         )
 
         stage_name = STAGE_LABELS.get(stage, stage)
-        ax.set_title(stage_name, fontsize=12)
-        ax.set_xlim(start_year - 2.5, end_year + 2.5)
-        ax.set_xticks(years_to_plot)
-        ax.set_ylabel("Capacity (GW)")
-        ax.yaxis.set_major_locator(MaxNLocator(nbins=4))
-        ax.yaxis.set_major_formatter(StrMethodFormatter("{x:,.1f}"))
-        ax.grid(axis="y", linestyle="--", alpha=0.35)
-        ax.set_axisbelow(True)
+        ax_abs.set_title(stage_name, fontsize=14)
+
+        if col_idx == 0:
+            ax_abs.set_ylabel("Capacity (GW)", fontsize=13)
+
+        ax_abs.yaxis.set_major_locator(MaxNLocator(nbins=5))
+        ax_abs.yaxis.set_major_formatter(StrMethodFormatter("{x:,.1f}"))
+        ax_abs.grid(axis="y", linestyle="--", alpha=0.35)
+        ax_abs.set_axisbelow(True)
+
+        # ==========================================
+        # BOTTOM ROW: Relative Share (%)
+        # ==========================================
+        pct_dom = np.zeros(len(period_labels))
+        pct_imp = np.zeros(len(period_labels))
+
+        for j in range(len(total)):
+            if total[j] > 0:
+                pct_dom[j] = (dom[j] / total[j]) * 100.0
+                pct_imp[j] = (imp[j] / total[j]) * 100.0
+
+        ax_rel.bar(
+            x_indices, pct_dom, width=bar_width,
+            color=SUPPLY_MIX_COLORS.get("Domestic Production", "#AA96DA"),
+            edgecolor="black", linewidth=0.5
+        )
+        ax_rel.bar(
+            x_indices, pct_imp, bottom=pct_dom, width=bar_width,
+            color=SUPPLY_MIX_COLORS.get("Imported", "#ff7f0e"),
+            edgecolor="black", linewidth=0.5
+        )
+
+        # NZIA Benchmark line
+        ax_rel.axhline(40, color="red", linestyle="--", linewidth=1.8, zorder=5)
+
+        if col_idx == 0:
+            ax_rel.set_ylabel("% of Total Additions", fontsize=13)
+
+        ax_rel.set_ylim(0, 100)
+        ax_rel.yaxis.set_major_formatter(PercentFormatter())
+        ax_rel.yaxis.set_major_locator(MultipleLocator(20))
+        ax_rel.grid(axis="y", linestyle="--", alpha=0.35)
+        ax_rel.set_axisbelow(True)
+
+        # Bottom axis labels
+        ax_rel.set_xticks(x_indices)
+        ax_rel.set_xticklabels(period_labels, rotation=45, ha="right", fontsize=11)
 
     handles = [
-        plt.Rectangle(
-            (0, 0), 1, 1, facecolor=SUPPLY_MIX_COLORS["capacity_produced_flow"], edgecolor="black",
-            label=SUPPLY_MIX_LABELS["capacity_produced_flow"],
-        ),
-        plt.Rectangle(
-            (0, 0), 1, 1, facecolor=SUPPLY_MIX_COLORS["capacity_produced_stockout"], edgecolor="black",
-            label=SUPPLY_MIX_LABELS["capacity_produced_stockout"],
-        ),
-        plt.Rectangle(
-            (0, 0), 1, 1, facecolor=SUPPLY_MIX_COLORS["Imported"], edgecolor="black",
-            label=SUPPLY_MIX_LABELS["Imported"],
-        ),
+        plt.Rectangle((0, 0), 1, 1, facecolor=SUPPLY_MIX_COLORS.get("Domestic Production", "#AA96DA"),
+                      edgecolor="black", label="Domestic Production"),
+        plt.Rectangle((0, 0), 1, 1, facecolor=SUPPLY_MIX_COLORS.get("Imported", "#ff7f0e"), edgecolor="black",
+                      label="Imported"),
+        plt.Line2D([0], [0], color="red", linestyle="--", linewidth=1.8, label="NZIA Benchmark")
     ]
-    fig.legend(handles=handles, loc="lower center", ncol=3, frameon=True, fontsize=11)
-    fig.suptitle(f"{tech_title} Component Sourcing Mix ({start_year}–{end_year})", fontsize=14)
-    fig.supxlabel("Year", fontsize=12)
-    fig.tight_layout(rect=(0.04, 0.08, 1, 0.95))
+
+    fig.legend(handles=handles, loc="lower center", ncol=3, frameon=False, fontsize=13)
+    fig.tight_layout(rect=(0.02, 0.12, 0.98, 0.98))
+
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    out_name = f"Fig_Basecase_SupplyMix_AbsoluteBars_{tech}{suffix}.pdf"
+    out_name = f"Fig_Basecase_SupplyMix_Stacked_{tech}{suffix}.pdf"
     fig.savefig(OUTPUT_DIR / out_name, bbox_inches="tight")
     plt.close(fig)
-
 
 def plot_supply_mix_all_technologies(df_supply, start_year=2025, end_year=2050, suffix=""):
     """Plot combined AbsoluteBars for all three core technologies (solarPV, windon, windoff) in a unified layout."""
@@ -1290,12 +1356,11 @@ if __name__ == "__main__":
     df_supply = load_supply_mix_data(FILE_PATH)
     for tech, stages in TECH_STAGE_MAP.items():
         # AbsoluteBars (GW)
-        plot_supply_mix_tech_absolute_bars(df_supply, tech, stages, start_year=2025, end_year=2040, suffix="_2040")
-        # 100% Stacked Bars (%) with 40% Benchmark Line
-        plot_supply_mix_tech_100bars(df_supply, tech, stages, start_year=2025, end_year=2040, suffix="_2040")
+        plot_supply_mix_tech_periods(df_supply, tech, stages,suffix="_2040")
+
 
     # Combined Multi-Panel Figures (All Technologies until 2040)
-    plot_supply_mix_all_technologies(df_supply, start_year=2025, end_year=2040, suffix="_2040")
-    plot_supply_mix_all_100bars(df_supply, start_year=2025, end_year=2040, suffix="_2040")
+    #plot_supply_mix_all_technologies(df_supply, start_year=2025, end_year=2040, suffix="_2040")
+    #plot_supply_mix_all_100bars(df_supply, start_year=2025, end_year=2040, suffix="_2040")
 
     print("All basecase final plots generated successfully in:", OUTPUT_DIR)

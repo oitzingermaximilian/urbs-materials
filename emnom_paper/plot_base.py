@@ -48,7 +48,7 @@ TECH_COLORS = {
     "Onshore Wind": "#66C2A5",
     "Offshore Wind": "#00876C",
     "Hydropower": "#0072B2",
-    "Other RES": "#27AE60",
+    "Other RES": "#A6761D",
     "Nuclear": "#8E44AD",
     "Fossil": "#C0392B",
     "Fossil w/ CCS": "#922B21",
