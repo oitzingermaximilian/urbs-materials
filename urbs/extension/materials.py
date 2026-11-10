@@ -166,6 +166,7 @@ class StockpileTotalRule(AbstractConstraint):
 
 
 obsolescence_factor = 0.015
+STOCKPILE_MATERIAL_START_YEAR = 2030  # Raw material strategic stockpiling starts in 2030 (CRMA timeline)
 
 
 class StockpileDomesticRule(AbstractConstraint):
@@ -454,6 +455,24 @@ class ProcessingOutputMaterialRule(AbstractConstraint):
         return m.demand_material_total[stf, material] == total_demand
 
 
+class MaterialExtractionSplitRule(AbstractConstraint):
+    def apply_rule(self, m, stf, material):
+        return (
+            m.material_extraction[stf, material]
+            == m.material_mined_flow[stf, material]
+            + m.material_mined_storage[stf, material]
+        )
+
+
+class MaterialMinedDeliveryRule(AbstractConstraint):
+    def apply_rule(self, m, stf, material):
+        return (
+            m.material_mined[stf, material]
+            == m.material_mined_flow[stf, material]
+            + m.material_mined_stockout[stf, material]
+        )
+
+
 class MaterialDemandBalanceRule(AbstractConstraint):
     def apply_rule(self, m, stf, material):
         return (
@@ -507,7 +526,7 @@ class ScrapMaterialLinkageRule(AbstractConstraint):
 
 class MiningLimit(AbstractConstraint):
     def apply_rule(self, m, stf, material):
-        lhs = m.material_mined[stf, material]
+        lhs = m.material_extraction[stf, material]
         rhs = (
             m.primary_material_availability[stf, material]
             * m.mining_energy_transission_share[stf, material]
@@ -534,11 +553,24 @@ class MiningQuantityIncreaseRule(AbstractConstraint):
         if prev_stf not in m.stf:
             return pyomo.Constraint.Skip
 
-        current_mining = m.material_mined[stf, material]
-        previous_mining = m.material_mined[prev_stf, material]
+        current_mining = m.material_extraction[stf, material]
+        previous_mining = m.material_extraction[prev_stf, material]
 
-        # Rule: Current <= Previous * 1.30
-        return current_mining <= previous_mining * (1 + max_increase_rate)
+        # Additive seed capacity allowing dormant or new mines to start up in any year
+        # Scaled to 2% of baseline demand (Block 1 limit) with a floor of 0.0001 kton (100 kg)
+        seed_capacity = 0.0001
+        if hasattr(m, "mat_block_limits") and (stf, material, 1) in m.mat_block_limits:
+            base_vol = pyomo.value(m.mat_block_limits[stf, material, 1])
+            if base_vol < 500000:
+                seed_capacity = max(0.02 * base_vol, 0.0001)
+            else:
+                seed_capacity = 1.0
+        elif hasattr(m, "primary_material_availability") and (stf, material) in m.primary_material_availability:
+            avail = pyomo.value(m.primary_material_availability[stf, material])
+            seed_capacity = max(0.005 * avail, 0.0001)
+
+        # Rule: Current <= Previous * 1.30 + seed_capacity
+        return current_mining <= previous_mining * (1 + max_increase_rate) + seed_capacity
 
 
 class MiningQuantityDecreaseRule(AbstractConstraint):
@@ -549,11 +581,50 @@ class MiningQuantityDecreaseRule(AbstractConstraint):
         if prev_stf not in m.stf:
             return pyomo.Constraint.Skip
 
-        current_mining = m.material_mined[stf, material]
-        previous_mining = m.material_mined[prev_stf, material]
+        current_mining = m.material_extraction[stf, material]
+        previous_mining = m.material_extraction[prev_stf, material]
 
         # Rule: Current >= Previous * 0.70
         return current_mining >= previous_mining * (1 - max_decrease_rate)
+
+
+class StockpileMaterialRule(AbstractConstraint):
+    def apply_rule(self, m, stf, material):
+        if stf < STOCKPILE_MATERIAL_START_YEAR:
+            return m.stock_material[stf, material] == 0
+        elif stf == STOCKPILE_MATERIAL_START_YEAR:
+            return (
+                m.stock_material[stf, material]
+                == m.material_mined_storage[stf, material]
+                - m.material_mined_stockout[stf, material]
+            )
+        else:
+            return (
+                m.stock_material[stf, material]
+                == m.stock_material[stf - 1, material] * (1 - obsolescence_factor)
+                + m.material_mined_storage[stf, material]
+                - m.material_mined_stockout[stf, material]
+            )
+
+
+class StockoutMaterialLimitRule(AbstractConstraint):
+    def apply_rule(self, m, stf, material):
+        if stf <= STOCKPILE_MATERIAL_START_YEAR or (stf - 1, material) not in m.stock_material:
+            # No withdrawals allowed in or before the first active year of stockpiling
+            return m.material_mined_stockout[stf, material] <= 0
+        else:
+            # Withdrawals strictly limited to prior-year inventory brought forward
+            return (
+                m.material_mined_stockout[stf, material]
+                <= m.stock_material[stf - 1, material] * (1 - obsolescence_factor)
+            )
+
+
+class StorageMaterialPre2030LimitRule(AbstractConstraint):
+    def apply_rule(self, m, stf, material):
+        if stf < STOCKPILE_MATERIAL_START_YEAR:
+            return m.material_mined_storage[stf, material] == 0
+        return pyomo.Constraint.Skip
 
 
 class FactoryEnergyAnnualRule(AbstractConstraint):
@@ -675,7 +746,7 @@ class OpexCostRule(AbstractConstraint):
             )
             + sum(m.cost_scrap[stf, loc, tech] for loc in m.location for tech in m.tech)
             + sum(
-                m.material_mined[stf, mat] * m.cost_mining[stf, mat]
+                m.material_extraction[stf, mat] * m.cost_mining[stf, mat]
                 for mat in m.materials
             )
         )
@@ -774,15 +845,25 @@ class StockpileHoldingCostRule(AbstractConstraint):
         j, stf_min = 0.03, min(m.stf)
         f_cost = (1 + j) ** (1 - (stf - stf_min))
         HOLDING_COST = 27500  # k€/GW
-        total_stock = sum(
+        equipment_stock_cost = sum(
             (
                 m.stock_domestic[stf, loc, tech, stage]
                 + m.stock_imported[stf, loc, tech, stage]
             )
             for loc in m.location
             for (tech, stage) in m.tech_stage_combinations
-        )
-        return m.cost_stockpile_holding[stf] == total_stock * HOLDING_COST * f_cost
+        ) * HOLDING_COST
+
+        # Raw material holding cost (~2% of annual mining cost per year)
+        material_stock_cost = 0
+        if hasattr(m, "stock_material") and hasattr(m, "cost_mining"):
+            material_stock_cost = sum(
+                m.stock_material[stf, mat] * (0.02 * m.cost_mining[stf, mat])
+                for mat in m.materials
+                if (stf, mat) in m.stock_material and (stf, mat) in m.cost_mining
+            )
+
+        return m.cost_stockpile_holding[stf] == (equipment_stock_cost + material_stock_cost) * f_cost
 
 
 ##################################################################################
@@ -865,12 +946,17 @@ def apply_material_constraints(m):
     # GROUP 4: (stf, material)
     material_constraints = [
         ProcessingOutputMaterialRule(),
+        MaterialExtractionSplitRule(),
+        MaterialMinedDeliveryRule(),
         MaterialDemandBalanceRule(),
         ScrapMaterialLinkageRule(),
         MiningLimit(),
         # LimitResourceExistanceRule(),
         MiningQuantityDecreaseRule(),
         MiningQuantityIncreaseRule(),
+        StockpileMaterialRule(),
+        StockoutMaterialLimitRule(),
+        StorageMaterialPre2030LimitRule(),
     ]
     for constraint_obj in material_constraints:
         name = constraint_obj.__class__.__name__

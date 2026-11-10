@@ -65,6 +65,11 @@ def get_constants(instance):
             "demand_material_total",
             "material_imported",
             "material_mined",
+            "material_extraction",
+            "material_mined_flow",
+            "material_mined_storage",
+            "material_mined_stockout",
+            "stock_material",
             "material_recycled",
         ],
     )

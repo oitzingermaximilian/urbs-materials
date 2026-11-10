@@ -91,7 +91,7 @@ class eu_extraction_constraint(AbstractConstraint):
                 return pyomo.Constraint.Skip
 
         # Enforce the 10% benchmark
-        return m.material_mined[stf, mat] >= 0.10 * m.demand_material_total[stf, mat]
+        return m.material_extraction[stf, mat] >= 0.10 * m.demand_material_total[stf, mat]
 
 
 class eu_recycling_constraint(AbstractConstraint):

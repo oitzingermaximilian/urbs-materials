@@ -312,8 +312,33 @@ def apply_variables(m):
         m.stf, m.materials, domain=pyomo.NonNegativeReals
     )
 
-    # NOM: M^{mined}_{y,m} | Material Mined | t
+    # NOM: M^{mined}_{y,m} | Net Mined Material Delivered to Demand | t
     m.material_mined = pyomo.Var(m.stf, m.materials, domain=pyomo.NonNegativeReals)
+
+    # NOM: M^{ext}_{y,m} | Gross Material Extracted from Mines | t
+    m.material_extraction = pyomo.Var(
+        m.stf, m.materials, domain=pyomo.NonNegativeReals
+    )
+
+    # NOM: M^{mined,flow}_{y,m} | Mined material routed directly to demand | t
+    m.material_mined_flow = pyomo.Var(
+        m.stf, m.materials, domain=pyomo.NonNegativeReals
+    )
+
+    # NOM: M^{mined,sto}_{y,m} | Mined material added to raw stockpile | t
+    m.material_mined_storage = pyomo.Var(
+        m.stf, m.materials, domain=pyomo.NonNegativeReals
+    )
+
+    # NOM: M^{mined,out}_{y,m} | Mined material withdrawn from raw stockpile | t
+    m.material_mined_stockout = pyomo.Var(
+        m.stf, m.materials, domain=pyomo.NonNegativeReals
+    )
+
+    # NOM: Sto^{mat}_{y,m} | Raw material stockpile inventory level | t
+    m.stock_material = pyomo.Var(
+        m.stf, m.materials, domain=pyomo.NonNegativeReals
+    )
 
     # NOM: M^{imp}_{y,m} | Material Imported | t
     m.material_imported = pyomo.Var(m.stf, m.materials, domain=pyomo.NonNegativeReals)
